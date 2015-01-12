@@ -88,6 +88,15 @@
             </modules>
         </profile>
         <profile>
+            <id>flink</id>
+            <modules>
+                <module>samoa-instances</module>
+                <module>samoa-api</module>
+                <module>samoa-flink</module>
+                <module>samoa-test</module>
+            </modules>
+        </profile>
+        <profile>
             <id>samza</id>
             <modules>
                 <module>samoa-instances</module>
@@ -104,6 +113,7 @@
                 <module>samoa-local</module>
                 <module>samoa-threads</module>
                 <module>samoa-storm</module>
+                <module>samoa-flink</module>
                 <module>samoa-s4</module>
                 <module>samoa-samza</module>
                 <module>samoa-test</module>
@@ -130,6 +140,7 @@
         <miniball.version>1.0.3</miniball.version>
         <s4.version>0.6.0-incubating</s4.version>
         <samza.version>0.7.0</samza.version>
+        <flink.version>0.9-incubating-SNAPSHOT</flink.version>
         <slf4j-log4j12.version>1.7.2</slf4j-log4j12.version>
         <slf4j-simple.version>1.7.5</slf4j-simple.version>
         <maven-surefire-plugin.version>2.18</maven-surefire-plugin.version>
@@ -211,6 +222,7 @@
                         <root>samoa-local</root>
                         <root>samoa-storm</root>
                         <root>samoa-s4</root>
+                        <root>samoa-flink</root>
                         <root>samoa-samza</root>
                         <root>bin</root>
                     </roots>

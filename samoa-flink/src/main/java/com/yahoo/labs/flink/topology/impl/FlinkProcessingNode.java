@@ -21,33 +21,12 @@ package com.yahoo.labs.flink.topology.impl;
  */
 
 
-import com.yahoo.labs.samoa.topology.AbstractTopology;
 import com.yahoo.labs.samoa.topology.IProcessingItem;
-import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 /**
- * A SAMOA topology on Apache Flink
+ * Common interface of FlinkEntranceProcessingItem and FlinkProcessingItem
  */
-public class FlinkTopology extends AbstractTopology {
+public interface FlinkProcessingNode extends IProcessingItem {
 
-	private StreamExecutionEnvironment environment;
 
-	public FlinkTopology(String name) {
-		super(name);
-		this.environment = StreamExecutionEnvironment.getExecutionEnvironment();
-	}
-
-	@Override
-	public void addProcessingItem(IProcessingItem procItem) {
-		super.addProcessingItem(procItem);
-	}
-
-	@Override
-	public void addProcessingItem(IProcessingItem procItem, int parallelismHint) {
-		super.addProcessingItem(procItem, parallelismHint);
-	}
-
-	public StreamExecutionEnvironment getEnvironment() {
-		return environment;
-	}
 }
