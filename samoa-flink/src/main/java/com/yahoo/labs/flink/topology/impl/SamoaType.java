@@ -21,12 +21,20 @@ package com.yahoo.labs.flink.topology.impl;
  */
 
 
-import com.yahoo.labs.samoa.topology.IProcessingItem;
+import com.yahoo.labs.samoa.core.ContentEvent;
+import org.apache.flink.api.java.tuple.Tuple3;
 
-/**
- * Common interface of FlinkEntranceProcessingItem and FlinkProcessingItem
- */
-public interface FlinkProcessingNode extends IProcessingItem {
+public class SamoaType extends Tuple3<String, ContentEvent, String> {
+	public SamoaType() {
+		super();
+	}
 
+	private SamoaType(String key, ContentEvent event, String streamId) {
+		super(key, event, streamId);
+	}
 
+	public static SamoaType of(ContentEvent event, String streamId) {
+		String key = event.getKey() == null ? "none" : event.getKey();
+		return new SamoaType(key, event, streamId);
+	}
 }

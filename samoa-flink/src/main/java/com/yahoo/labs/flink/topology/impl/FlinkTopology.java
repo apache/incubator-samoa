@@ -21,8 +21,15 @@ package com.yahoo.labs.flink.topology.impl;
  */
 
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.yahoo.labs.samoa.topology.AbstractTopology;
-import com.yahoo.labs.samoa.topology.IProcessingItem;
+import com.yahoo.labs.samoa.topology.EntranceProcessingItem;
+import org.apache.flink.streaming.api.collector.OutputSelector;
+import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
+import org.apache.flink.streaming.api.datastream.SplitDataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 /**
@@ -30,24 +37,50 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
  */
 public class FlinkTopology extends AbstractTopology {
 
-	private StreamExecutionEnvironment environment;
+	public static StreamExecutionEnvironment env;
 
-	public FlinkTopology(String name) {
+	public FlinkTopology(String name, StreamExecutionEnvironment env) {
 		super(name);
-		this.environment = StreamExecutionEnvironment.getExecutionEnvironment();
-	}
-
-	@Override
-	public void addProcessingItem(IProcessingItem procItem) {
-		super.addProcessingItem(procItem);
-	}
-
-	@Override
-	public void addProcessingItem(IProcessingItem procItem, int parallelismHint) {
-		super.addProcessingItem(procItem, parallelismHint);
+		this.env = env;
 	}
 
 	public StreamExecutionEnvironment getEnvironment() {
-		return environment;
+		return env;
 	}
+
+	public void build() {
+		for (EntranceProcessingItem src : getEntranceProcessingItems()) {
+			((FlinkEntranceProcessingItem) src).initialise();
+		}
+		initPIs(ImmutableList.copyOf(Iterables.filter(getProcessingItems(), FlinkProcessingItem.class)));
+	}
+
+	private static void initPIs(ImmutableList<FlinkProcessingItem> flinkComponents) {
+		if (flinkComponents.isEmpty()) return;
+
+		for (FlinkComponent comp : flinkComponents) {
+			if (comp.canBeInitialised()) {
+				comp.initialise();
+				SplitDataStream outStream = ((SingleOutputStreamOperator) comp.getOutStream())
+						.split(new OutputSelector<SamoaType>() {
+							@Override
+							public Iterable<String> select(SamoaType samoaType) {
+								return Lists.newArrayList(samoaType.f2);
+							}
+						});
+				((FlinkProcessingItem) comp).setOutStream(outStream);
+
+				for (FlinkStream stream : ((FlinkProcessingItem) comp).getOutputStreams()) {
+					stream.initialise();
+				}
+			}
+		}
+		initPIs(ImmutableList.copyOf(Iterables.filter(flinkComponents, new Predicate<FlinkProcessingItem>() {
+			@Override
+			public boolean apply(FlinkProcessingItem flinkComponent) {
+				return !flinkComponent.isInitialised();
+			}
+		})));
+	}
+
 }

@@ -22,19 +22,52 @@ package com.yahoo.labs.flink.topology.impl;
 
 import com.yahoo.labs.samoa.core.ContentEvent;
 import com.yahoo.labs.samoa.topology.AbstractStream;
-import com.yahoo.labs.samoa.topology.IProcessingItem;
+import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.SplitDataStream;
 
 
 /**
  * A stream for SAMOA based on Apache Flink's DataStream
  */
-public class FlinkStream extends AbstractStream {
+public class FlinkStream extends AbstractStream implements FlinkComponent {
 
-	public FlinkStream(IProcessingItem sourcePi) {
+	private static int outputCounter = 0;
+	private FlinkComponent procItem;
+	private DataStream dataStream;
+
+	public FlinkStream(FlinkComponent sourcePi) {
+		this.procItem = sourcePi;
+		setStreamId("stream-" + Integer.toString(outputCounter++));
 	}
 
 	@Override
-	public void put(ContentEvent event) {
-
+	public void initialise() {
+		if (procItem instanceof FlinkProcessingItem) {
+			dataStream = ((SplitDataStream<SamoaType>) (((FlinkProcessingItem) procItem)
+					.getOutStream())).select(getStreamId());
+		} else
+			dataStream = procItem.getOutStream();
 	}
+
+	@Override
+	public boolean canBeInitialised() {
+		return procItem.isInitialised();
+	}
+
+	@Override
+	public boolean isInitialised() {
+		return dataStream != null;
+	}
+
+	@Override
+	public DataStream getOutStream() {
+		return dataStream;
+	}
+
+
+	@Override
+	public void put(ContentEvent event) {
+		((FlinkProcessingItem) procItem).putToStream(event, this);
+	}
+
 }

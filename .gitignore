@@ -11,4 +11,5 @@ target/
 
 #intellij
 .idea/
-.iml
+*.iml
+*.iws
