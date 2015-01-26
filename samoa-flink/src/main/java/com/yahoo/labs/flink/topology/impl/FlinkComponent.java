@@ -40,4 +40,6 @@ public interface FlinkComponent {
 
 	public DataStream getOutStream();
 
+	public int getId();
+
 }

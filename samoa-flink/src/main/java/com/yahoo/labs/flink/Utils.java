@@ -39,7 +39,7 @@ public class Utils {
 	public static String flinkMaster;
 	public static int flinkPort;
 	public static String[] dependecyJars;
-	public static int parallelism = 1;
+	public static int parallelism = 2;
 
 	public enum Partitioning {SHUFFLE, ALL, GROUP}
 
@@ -56,7 +56,7 @@ public class Utils {
 	}
 
 	public static void extractFlinkArguments(List<String> tmpargs) {
-		for (int i = 1; i < tmpargs.size() - 1; i = i + 2) {
+/*		for (int i = 1; i < tmpargs.size() - 1; i = i + 2) {
 			String choice = tmpargs.get(i).trim();
 			String value = tmpargs.get(i + 1).trim();
 			switch (choice) {
@@ -69,6 +69,6 @@ public class Utils {
 				case "-i":
 					//TODO::refactor to take into consideration all possible arguments.
 			}
-		}
+		}*/
 	}
 }
