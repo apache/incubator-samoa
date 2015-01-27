@@ -31,89 +31,89 @@ import com.yahoo.labs.samoa.moa.tasks.TaskMonitor;
 
 /**
  * InstanceStream for ARFF file
+ * 
  * @author Casey
  */
 public class ArffFileStream extends FileStream {
 
-	public FileOption arffFileOption = new FileOption("arffFile", 'f',
-		       "ARFF File(s) to load.", null, null, false);
+  public FileOption arffFileOption = new FileOption("arffFile", 'f',
+      "ARFF File(s) to load.", null, null, false);
 
-	public IntOption classIndexOption = new IntOption("classIndex", 'c',
-		       "Class index of data. 0 for none or -1 for last attribute in file.",
-		       -1, -1, Integer.MAX_VALUE);
-		   
-	protected InstanceExample lastInstanceRead;
+  public IntOption classIndexOption = new IntOption("classIndex", 'c',
+      "Class index of data. 0 for none or -1 for last attribute in file.",
+      -1, -1, Integer.MAX_VALUE);
 
-	@Override
-	public void prepareForUseImpl(TaskMonitor monitor, ObjectRepository repository) {
-		super.prepareForUseImpl(monitor, repository);
-		String filePath = this.arffFileOption.getFile().getAbsolutePath();
-		this.fileSource.init(filePath, "arff");
-		this.lastInstanceRead = null;
-	}
-	
-	@Override
-	protected void reset() {
-		try {
-			if (this.fileReader != null)
-				this.fileReader.close();
+  protected InstanceExample lastInstanceRead;
 
-			fileSource.reset();
-		}
-		catch (IOException ioe) {
-			throw new RuntimeException("FileStream restart failed.", ioe);
-		}
+  @Override
+  public void prepareForUseImpl(TaskMonitor monitor, ObjectRepository repository) {
+    super.prepareForUseImpl(monitor, repository);
+    String filePath = this.arffFileOption.getFile().getAbsolutePath();
+    this.fileSource.init(filePath, "arff");
+    this.lastInstanceRead = null;
+  }
 
-		if (!getNextFileReader()) {
-			hitEndOfStream = true;
-			throw new RuntimeException("FileStream is empty.");
-		}
-	}
-	
-	@Override
-	protected boolean getNextFileReader() {
-		boolean ret = super.getNextFileReader();
-		if (ret) {
-			this.instances = new Instances(this.fileReader, 1, -1);
-			if (this.classIndexOption.getValue() < 0) {
-				this.instances.setClassIndex(this.instances.numAttributes() - 1);
-			} else if (this.classIndexOption.getValue() > 0) {
-				this.instances.setClassIndex(this.classIndexOption.getValue() - 1);
-			}
-		}
-		return ret;
-	}
-	
-	@Override
-	protected boolean readNextInstanceFromFile() {
-		try {
-            if (this.instances.readInstance(this.fileReader)) {
-                this.lastInstanceRead = new InstanceExample(this.instances.instance(0));
-                this.instances.delete(); // keep instances clean
-							return true;
-            }
-            if (this.fileReader != null) {
-                this.fileReader.close();
-                this.fileReader = null;
-            }
-            return false;
-        } catch (IOException ioe) {
-            throw new RuntimeException(
-                    "ArffFileStream failed to read instance from stream.", ioe);
-        }
+  @Override
+  protected void reset() {
+    try {
+      if (this.fileReader != null)
+        this.fileReader.close();
 
-	}
-	
-	@Override
-	protected InstanceExample getLastInstanceRead() {
-		return this.lastInstanceRead;
-	}
-	
-	/*
-     * extend com.yahoo.labs.samoa.moa.MOAObject
-     */
-    @Override
-    public void getDescription(StringBuilder sb, int indent) {
-    	// TODO Auto-generated method stub
+      fileSource.reset();
+    } catch (IOException ioe) {
+      throw new RuntimeException("FileStream restart failed.", ioe);
     }
+
+    if (!getNextFileReader()) {
+      hitEndOfStream = true;
+      throw new RuntimeException("FileStream is empty.");
+    }
+  }
+
+  @Override
+  protected boolean getNextFileReader() {
+    boolean ret = super.getNextFileReader();
+    if (ret) {
+      this.instances = new Instances(this.fileReader, 1, -1);
+      if (this.classIndexOption.getValue() < 0) {
+        this.instances.setClassIndex(this.instances.numAttributes() - 1);
+      } else if (this.classIndexOption.getValue() > 0) {
+        this.instances.setClassIndex(this.classIndexOption.getValue() - 1);
+      }
+    }
+    return ret;
+  }
+
+  @Override
+  protected boolean readNextInstanceFromFile() {
+    try {
+      if (this.instances.readInstance(this.fileReader)) {
+        this.lastInstanceRead = new InstanceExample(this.instances.instance(0));
+        this.instances.delete(); // keep instances clean
+        return true;
+      }
+      if (this.fileReader != null) {
+        this.fileReader.close();
+        this.fileReader = null;
+      }
+      return false;
+    } catch (IOException ioe) {
+      throw new RuntimeException(
+          "ArffFileStream failed to read instance from stream.", ioe);
+    }
+
+  }
+
+  @Override
+  protected InstanceExample getLastInstanceRead() {
+    return this.lastInstanceRead;
+  }
+
+  /*
+   * extend com.yahoo.labs.samoa.moa.MOAObject
+   */
+  @Override
+  public void getDescription(StringBuilder sb, int indent) {
+    // TODO Auto-generated method stub
+  }
 }

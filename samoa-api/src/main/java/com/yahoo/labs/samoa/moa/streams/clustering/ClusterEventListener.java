@@ -1,4 +1,3 @@
-
 package com.yahoo.labs.samoa.moa.streams.clustering;
 
 /*
@@ -28,4 +27,3 @@ public interface ClusterEventListener extends EventListener {
   public void changeCluster(ClusterEvent e);
 
 }
-

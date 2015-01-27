@@ -30,71 +30,72 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Multithreaded engine.
+ * 
  * @author Anh Thu Vu
- *
+ * 
  */
 public class ThreadsEngine {
-	
-	private static final List<ExecutorService> threadPool = new ArrayList<ExecutorService>();
-	
-	/*
-	 * Create and manage threads
-	 */
-	public static void setNumberOfThreads(int numThreads) {
-		if (numThreads < 1)
-			throw new IllegalStateException("Number of threads must be a positive integer.");
-		
-		if (threadPool.size() > numThreads)
-			throw new IllegalStateException("You cannot set a numThreads smaller than the current size of the threads pool.");
-		
-		if (threadPool.size() < numThreads) {
-			for (int i=threadPool.size(); i<numThreads; i++) {
-				threadPool.add(Executors.newSingleThreadExecutor());
-			}
-		}
-	}
-	
-	public static int getNumberOfThreads() {
-		return threadPool.size();
-	}
-	
-	public static ExecutorService getThreadWithIndex(int index) {
-		if (threadPool.size() <= 0 )
-			throw new IllegalStateException("Try to get ExecutorService from an empty pool.");
-		index %= threadPool.size();
-		return threadPool.get(index);
-	}
-	
-	/*
-	 * Submit topology and start
-	 */
-	private static void submitTopology(Topology topology) {
-		ThreadsTopology tTopology = (ThreadsTopology) topology;
-		tTopology.run();
-	}
-	
-	public static void submitTopology(Topology topology, int numThreads) {
-		ThreadsEngine.setNumberOfThreads(numThreads);
-		ThreadsEngine.submitTopology(topology);
-	}
-	
-	/* 
-	 * Stop
-	 */
-	public static void clearThreadPool() {
-		for (ExecutorService pool:threadPool) {
-			pool.shutdown();
-		}
-		
-		for (ExecutorService pool:threadPool) {
-			try {
-				pool.awaitTermination(10, TimeUnit.SECONDS);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		threadPool.clear();
-	}
+
+  private static final List<ExecutorService> threadPool = new ArrayList<ExecutorService>();
+
+  /*
+   * Create and manage threads
+   */
+  public static void setNumberOfThreads(int numThreads) {
+    if (numThreads < 1)
+      throw new IllegalStateException("Number of threads must be a positive integer.");
+
+    if (threadPool.size() > numThreads)
+      throw new IllegalStateException("You cannot set a numThreads smaller than the current size of the threads pool.");
+
+    if (threadPool.size() < numThreads) {
+      for (int i = threadPool.size(); i < numThreads; i++) {
+        threadPool.add(Executors.newSingleThreadExecutor());
+      }
+    }
+  }
+
+  public static int getNumberOfThreads() {
+    return threadPool.size();
+  }
+
+  public static ExecutorService getThreadWithIndex(int index) {
+    if (threadPool.size() <= 0)
+      throw new IllegalStateException("Try to get ExecutorService from an empty pool.");
+    index %= threadPool.size();
+    return threadPool.get(index);
+  }
+
+  /*
+   * Submit topology and start
+   */
+  private static void submitTopology(Topology topology) {
+    ThreadsTopology tTopology = (ThreadsTopology) topology;
+    tTopology.run();
+  }
+
+  public static void submitTopology(Topology topology, int numThreads) {
+    ThreadsEngine.setNumberOfThreads(numThreads);
+    ThreadsEngine.submitTopology(topology);
+  }
+
+  /*
+   * Stop
+   */
+  public static void clearThreadPool() {
+    for (ExecutorService pool : threadPool) {
+      pool.shutdown();
+    }
+
+    for (ExecutorService pool : threadPool) {
+      try {
+        pool.awaitTermination(10, TimeUnit.SECONDS);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
+
+    threadPool.clear();
+  }
 
 }

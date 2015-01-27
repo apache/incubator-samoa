@@ -24,31 +24,32 @@ import com.yahoo.labs.samoa.core.ContentEvent;
 import com.yahoo.labs.samoa.core.Processor;
 
 /**
- * Lightweight replicas of ThreadProcessingItem.
- * ThreadsProcessingItem manages a list of these objects and 
- * assigns each incoming message to be processed by one of them. 
+ * Lightweight replicas of ThreadProcessingItem. ThreadsProcessingItem manages a
+ * list of these objects and assigns each incoming message to be processed by
+ * one of them.
+ * 
  * @author Anh Thu Vu
- *
+ * 
  */
 public class ThreadsProcessingItemInstance {
 
-	private Processor processor;
-	private int threadIndex;
-	
-	public ThreadsProcessingItemInstance(Processor processor, int threadIndex) {
-		this.processor = processor;
-		this.threadIndex = threadIndex;
-	}
-	
-	public int getThreadIndex() {
-		return this.threadIndex;
-	}
-	
-	public Processor getProcessor() {
-		return this.processor;
-	}
+  private Processor processor;
+  private int threadIndex;
 
-	public void processEvent(ContentEvent event) {
-		this.processor.process(event);
-	}
+  public ThreadsProcessingItemInstance(Processor processor, int threadIndex) {
+    this.processor = processor;
+    this.threadIndex = threadIndex;
+  }
+
+  public int getThreadIndex() {
+    return this.threadIndex;
+  }
+
+  public Processor getProcessor() {
+    return this.processor;
+  }
+
+  public void processEvent(ContentEvent event) {
+    this.processor.process(event);
+  }
 }

@@ -27,48 +27,67 @@ package com.yahoo.labs.samoa.instances;
 import java.io.Serializable;
 
 /**
- *
+ * 
  * @author abifet
  */
 
-public interface Instance extends Serializable{
+public interface Instance extends Serializable {
 
-    double weight();
-    void setWeight(double weight);
-    
-    //Attributes
-    Attribute attribute(int instAttIndex);
-    void deleteAttributeAt(int i);
-    void insertAttributeAt(int i);
-    int numAttributes();
-    public void addSparseValues(int[] indexValues, double[] attributeValues, int numberAttributes);
-    
+  double weight();
 
-    //Values
-    int numValues();
-    String stringValue(int i);
-    double value(int instAttIndex);
-    double value(Attribute attribute);
-    void setValue(int m_numAttributes, double d);
-    boolean isMissing(int instAttIndex);
-    int index(int i);
-    double valueSparse(int i);
-    boolean isMissingSparse(int p1);
-    double[] toDoubleArray();
-    
-    //Class
-    Attribute classAttribute();
-    int classIndex();
-    boolean classIsMissing();
-    double classValue();
-    int numClasses();
-    void setClassValue(double d);
+  void setWeight(double weight);
 
-    Instance copy();
+  // Attributes
+  Attribute attribute(int instAttIndex);
 
-    //Dataset
-    void setDataset(Instances dataset);
-    Instances dataset();
-    String toString();
+  void deleteAttributeAt(int i);
+
+  void insertAttributeAt(int i);
+
+  int numAttributes();
+
+  public void addSparseValues(int[] indexValues, double[] attributeValues, int numberAttributes);
+
+  // Values
+  int numValues();
+
+  String stringValue(int i);
+
+  double value(int instAttIndex);
+
+  double value(Attribute attribute);
+
+  void setValue(int m_numAttributes, double d);
+
+  boolean isMissing(int instAttIndex);
+
+  int index(int i);
+
+  double valueSparse(int i);
+
+  boolean isMissingSparse(int p1);
+
+  double[] toDoubleArray();
+
+  // Class
+  Attribute classAttribute();
+
+  int classIndex();
+
+  boolean classIsMissing();
+
+  double classValue();
+
+  int numClasses();
+
+  void setClassValue(double d);
+
+  Instance copy();
+
+  // Dataset
+  void setDataset(Instances dataset);
+
+  Instances dataset();
+
+  String toString();
 }
-

@@ -32,68 +32,69 @@ import com.google.inject.assistedinject.Assisted;
 import com.yahoo.labs.samoa.learners.classifiers.trees.AttributeContentEvent;
 import com.yahoo.labs.samoa.learners.classifiers.trees.ComputeContentEvent;
 
-public class SamoaSerializer implements SerializerDeserializer{
+public class SamoaSerializer implements SerializerDeserializer {
 
-	private ThreadLocal<Kryo> kryoThreadLocal;
-    private ThreadLocal<Output> outputThreadLocal;
+  private ThreadLocal<Kryo> kryoThreadLocal;
+  private ThreadLocal<Output> outputThreadLocal;
 
-    private int initialBufferSize = 2048;
-    private int maxBufferSize = 256 * 1024;
+  private int initialBufferSize = 2048;
+  private int maxBufferSize = 256 * 1024;
 
-    public void setMaxBufferSize(int maxBufferSize) {
-        this.maxBufferSize = maxBufferSize;
+  public void setMaxBufferSize(int maxBufferSize) {
+    this.maxBufferSize = maxBufferSize;
+  }
+
+  /**
+   * 
+   * @param classLoader
+   *          classloader able to handle classes to serialize/deserialize. For
+   *          instance, application-level events can only be handled by the
+   *          application classloader.
+   */
+  @Inject
+  public SamoaSerializer(@Assisted final ClassLoader classLoader) {
+    kryoThreadLocal = new ThreadLocal<Kryo>() {
+
+      @Override
+      protected Kryo initialValue() {
+        Kryo kryo = new Kryo();
+        kryo.setClassLoader(classLoader);
+        kryo.register(AttributeContentEvent.class, new AttributeContentEvent.AttributeCEFullPrecSerializer());
+        kryo.register(ComputeContentEvent.class, new ComputeContentEvent.ComputeCEFullPrecSerializer());
+        kryo.setRegistrationRequired(false);
+        return kryo;
+      }
+    };
+
+    outputThreadLocal = new ThreadLocal<Output>() {
+      @Override
+      protected Output initialValue() {
+        Output output = new Output(initialBufferSize, maxBufferSize);
+        return output;
+      }
+    };
+
+  }
+
+  @Override
+  public Object deserialize(ByteBuffer rawMessage) {
+    Input input = new Input(rawMessage.array());
+    try {
+      return kryoThreadLocal.get().readClassAndObject(input);
+    } finally {
+      input.close();
     }
+  }
 
-    /**
-     * 
-     * @param classLoader
-     *            classloader able to handle classes to serialize/deserialize. For instance, application-level events
-     *            can only be handled by the application classloader.
-     */
-    @Inject
-    public SamoaSerializer(@Assisted final ClassLoader classLoader) {
-        kryoThreadLocal = new ThreadLocal<Kryo>() {
-
-            @Override
-            protected Kryo initialValue() {
-                Kryo kryo = new Kryo();
-                kryo.setClassLoader(classLoader);
-                kryo.register(AttributeContentEvent.class, new AttributeContentEvent.AttributeCEFullPrecSerializer());
-                kryo.register(ComputeContentEvent.class, new ComputeContentEvent.ComputeCEFullPrecSerializer());
-                kryo.setRegistrationRequired(false);
-                return kryo;
-            }
-        };
-
-        outputThreadLocal = new ThreadLocal<Output>() {
-            @Override
-            protected Output initialValue() {
-                Output output = new Output(initialBufferSize, maxBufferSize);
-                return output;
-            }
-        };
-
+  @SuppressWarnings("resource")
+  @Override
+  public ByteBuffer serialize(Object message) {
+    Output output = outputThreadLocal.get();
+    try {
+      kryoThreadLocal.get().writeClassAndObject(output, message);
+      return ByteBuffer.wrap(output.toBytes());
+    } finally {
+      output.clear();
     }
-
-    @Override
-    public Object deserialize(ByteBuffer rawMessage) {
-        Input input = new Input(rawMessage.array());
-        try {
-            return kryoThreadLocal.get().readClassAndObject(input);
-        } finally {
-            input.close();
-        }
-    }
-
-    @SuppressWarnings("resource")
-    @Override
-    public ByteBuffer serialize(Object message) {
-        Output output = outputThreadLocal.get();
-        try {
-            kryoThreadLocal.get().writeClassAndObject(output, message);
-            return ByteBuffer.wrap(output.toBytes());
-        } finally {
-            output.clear();
-        }
-    }
+  }
 }

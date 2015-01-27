@@ -25,16 +25,17 @@ import com.yahoo.labs.samoa.topology.LocalEntranceProcessingItem;
 
 /**
  * EntranceProcessingItem for multithreaded engine.
+ * 
  * @author Anh Thu Vu
- *
+ * 
  */
 public class ThreadsEntranceProcessingItem extends LocalEntranceProcessingItem {
-	
-	public ThreadsEntranceProcessingItem(EntranceProcessor processor) {
-        super(processor);
-    }
-    
-    // The default waiting time when there is no available events is 100ms
-    // Override waitForNewEvents() to change it
+
+  public ThreadsEntranceProcessingItem(EntranceProcessor processor) {
+    super(processor);
+  }
+
+  // The default waiting time when there is no available events is 100ms
+  // Override waitForNewEvents() to change it
 
 }

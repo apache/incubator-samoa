@@ -24,69 +24,70 @@ import com.yahoo.labs.samoa.instances.InstancesHeader;
 import com.yahoo.labs.samoa.instances.Instance;
 
 /**
- * Numeric binary conditional test for instances to use to split nodes in Hoeffding trees.
- *
+ * Numeric binary conditional test for instances to use to split nodes in
+ * Hoeffding trees.
+ * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $
  */
 public class NumericAttributeBinaryTest extends InstanceConditionalBinaryTest {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    protected int attIndex;
+  protected int attIndex;
 
-    protected double attValue;
+  protected double attValue;
 
-    protected boolean equalsPassesTest;
+  protected boolean equalsPassesTest;
 
-    public NumericAttributeBinaryTest(int attIndex, double attValue,
-            boolean equalsPassesTest) {
-        this.attIndex = attIndex;
-        this.attValue = attValue;
-        this.equalsPassesTest = equalsPassesTest;
+  public NumericAttributeBinaryTest(int attIndex, double attValue,
+      boolean equalsPassesTest) {
+    this.attIndex = attIndex;
+    this.attValue = attValue;
+    this.equalsPassesTest = equalsPassesTest;
+  }
+
+  @Override
+  public int branchForInstance(Instance inst) {
+    int instAttIndex = this.attIndex; // < inst.classIndex() ? this.attIndex
+    // : this.attIndex + 1;
+    if (inst.isMissing(instAttIndex)) {
+      return -1;
     }
-
-    @Override
-    public int branchForInstance(Instance inst) {
-        int instAttIndex = this.attIndex ; // < inst.classIndex() ? this.attIndex
-               // : this.attIndex + 1;
-        if (inst.isMissing(instAttIndex)) {
-            return -1;
-        }
-        double v = inst.value(instAttIndex);
-        if (v == this.attValue) {
-            return this.equalsPassesTest ? 0 : 1;
-        }
-        return v < this.attValue ? 0 : 1;
+    double v = inst.value(instAttIndex);
+    if (v == this.attValue) {
+      return this.equalsPassesTest ? 0 : 1;
     }
+    return v < this.attValue ? 0 : 1;
+  }
 
-    @Override
-    public String describeConditionForBranch(int branch, InstancesHeader context) {
-        if ((branch == 0) || (branch == 1)) {
-            char compareChar = branch == 0 ? '<' : '>';
-            int equalsBranch = this.equalsPassesTest ? 0 : 1;
-            return InstancesHeader.getAttributeNameString(context,
-                    this.attIndex)
-                    + ' '
-                    + compareChar
-                    + (branch == equalsBranch ? "= " : " ")
-                    + InstancesHeader.getNumericValueString(context,
-                    this.attIndex, this.attValue);
-        }
-        throw new IndexOutOfBoundsException();
+  @Override
+  public String describeConditionForBranch(int branch, InstancesHeader context) {
+    if ((branch == 0) || (branch == 1)) {
+      char compareChar = branch == 0 ? '<' : '>';
+      int equalsBranch = this.equalsPassesTest ? 0 : 1;
+      return InstancesHeader.getAttributeNameString(context,
+          this.attIndex)
+          + ' '
+          + compareChar
+          + (branch == equalsBranch ? "= " : " ")
+          + InstancesHeader.getNumericValueString(context,
+              this.attIndex, this.attValue);
     }
+    throw new IndexOutOfBoundsException();
+  }
 
-    @Override
-    public void getDescription(StringBuilder sb, int indent) {
-        // TODO Auto-generated method stub
-    }
+  @Override
+  public void getDescription(StringBuilder sb, int indent) {
+    // TODO Auto-generated method stub
+  }
 
-    @Override
-    public int[] getAttsTestDependsOn() {
-        return new int[]{this.attIndex};
-    }
+  @Override
+  public int[] getAttsTestDependsOn() {
+    return new int[] { this.attIndex };
+  }
 
-    public double getSplitValue() {
-        return this.attValue;
-    }
+  public double getSplitValue() {
+    return this.attValue;
+  }
 }

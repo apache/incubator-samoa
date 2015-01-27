@@ -40,41 +40,43 @@ import com.yahoo.labs.samoa.utils.StreamDestination;
 
 /**
  * @author Anh Thu Vu
- *
+ * 
  */
 @RunWith(Parameterized.class)
 public class StreamDestinationTest {
 
-	@Tested private StreamDestination destination;
-	
-	@Mocked private IProcessingItem pi;
-	private final int parallelism;
-	private final PartitioningScheme scheme;
-	
-	@Parameters
-	public static Collection<Object[]> generateParameters() {
-		return Arrays.asList(new Object[][] {
-			 { 3, PartitioningScheme.SHUFFLE },
-			 { 2, PartitioningScheme.GROUP_BY_KEY },
-			 { 5, PartitioningScheme.BROADCAST }
-		});
-	}
-	
-	public StreamDestinationTest(int parallelism, PartitioningScheme scheme) {
-		this.parallelism = parallelism;
-		this.scheme = scheme;
-	}
-	
-	@Before
-	public void setUp() throws Exception {
-		destination = new StreamDestination(pi, parallelism, scheme);
-	}
+  @Tested
+  private StreamDestination destination;
 
-	@Test
-	public void testContructor() {
-		assertSame("The IProcessingItem is not set correctly.", pi, destination.getProcessingItem());
-		assertEquals("Parallelism value is not set correctly.", parallelism, destination.getParallelism(), 0);
-		assertEquals("EventAllocationType is not set correctly.", scheme, destination.getPartitioningScheme());
-	}
+  @Mocked
+  private IProcessingItem pi;
+  private final int parallelism;
+  private final PartitioningScheme scheme;
+
+  @Parameters
+  public static Collection<Object[]> generateParameters() {
+    return Arrays.asList(new Object[][] {
+        { 3, PartitioningScheme.SHUFFLE },
+        { 2, PartitioningScheme.GROUP_BY_KEY },
+        { 5, PartitioningScheme.BROADCAST }
+    });
+  }
+
+  public StreamDestinationTest(int parallelism, PartitioningScheme scheme) {
+    this.parallelism = parallelism;
+    this.scheme = scheme;
+  }
+
+  @Before
+  public void setUp() throws Exception {
+    destination = new StreamDestination(pi, parallelism, scheme);
+  }
+
+  @Test
+  public void testContructor() {
+    assertSame("The IProcessingItem is not set correctly.", pi, destination.getProcessingItem());
+    assertEquals("Parallelism value is not set correctly.", parallelism, destination.getParallelism(), 0);
+    assertEquals("EventAllocationType is not set correctly.", scheme, destination.getPartitioningScheme());
+  }
 
 }

@@ -24,26 +24,27 @@ import com.yahoo.labs.samoa.core.ContentEvent;
 import com.yahoo.labs.samoa.core.Processor;
 
 /**
- * Example {@link Processor} that simply prints the received events to standard output.
+ * Example {@link Processor} that simply prints the received events to standard
+ * output.
  */
 public class HelloWorldDestinationProcessor implements Processor {
 
-    private static final long serialVersionUID = -6042613438148776446L;
-    private int processorId;
+  private static final long serialVersionUID = -6042613438148776446L;
+  private int processorId;
 
-    @Override
-    public boolean process(ContentEvent event) {
-        System.out.println(processorId + ": " + event);
-        return true;
-    }
+  @Override
+  public boolean process(ContentEvent event) {
+    System.out.println(processorId + ": " + event);
+    return true;
+  }
 
-    @Override
-    public void onCreate(int id) {
-        this.processorId = id;
-    }
+  @Override
+  public void onCreate(int id) {
+    this.processorId = id;
+  }
 
-    @Override
-    public Processor newProcessor(Processor p) {
-        return new HelloWorldDestinationProcessor();
-    }
+  @Override
+  public Processor newProcessor(Processor p) {
+    return new HelloWorldDestinationProcessor();
+  }
 }

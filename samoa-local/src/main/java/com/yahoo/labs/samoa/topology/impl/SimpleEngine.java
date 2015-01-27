@@ -28,10 +28,10 @@ import com.yahoo.labs.samoa.topology.Topology;
 
 public class SimpleEngine {
 
-    public static void submitTopology(Topology topology) {
-        SimpleTopology simpleTopology = (SimpleTopology) topology;
-        simpleTopology.run();
-        // runs until completion
-    }
+  public static void submitTopology(Topology topology) {
+    SimpleTopology simpleTopology = (SimpleTopology) topology;
+    simpleTopology.run();
+    // runs until completion
+  }
 
 }

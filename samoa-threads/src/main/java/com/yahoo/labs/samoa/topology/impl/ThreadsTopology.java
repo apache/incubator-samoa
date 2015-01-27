@@ -25,38 +25,42 @@ import com.yahoo.labs.samoa.topology.IProcessingItem;
 
 /**
  * Topology for multithreaded engine.
+ * 
  * @author Anh Thu Vu
- *
+ * 
  */
 public class ThreadsTopology extends AbstractTopology {
-	ThreadsTopology(String name) {
-		super(name);
-	}
+  ThreadsTopology(String name) {
+    super(name);
+  }
 
-	public void run() {
-    	if (this.getEntranceProcessingItems() == null)
-    		throw new IllegalStateException("You need to set entrance PI before running the topology.");
-    	if (this.getEntranceProcessingItems().size() != 1)
-    		throw new IllegalStateException("ThreadsTopology supports 1 entrance PI only. Number of entrance PIs is "+this.getEntranceProcessingItems().size());
-    	
-    	this.setupProcessingItemInstances();
-    	ThreadsEntranceProcessingItem entrancePi = (ThreadsEntranceProcessingItem) this.getEntranceProcessingItems().toArray()[0];
-    	if (entrancePi == null)
-            throw new IllegalStateException("You need to set entrance PI before running the topology.");
-    	entrancePi.getProcessor().onCreate(0); // id=0 as it is not used in simple mode
-        entrancePi.startSendingEvents();
+  public void run() {
+    if (this.getEntranceProcessingItems() == null)
+      throw new IllegalStateException("You need to set entrance PI before running the topology.");
+    if (this.getEntranceProcessingItems().size() != 1)
+      throw new IllegalStateException("ThreadsTopology supports 1 entrance PI only. Number of entrance PIs is "
+          + this.getEntranceProcessingItems().size());
+
+    this.setupProcessingItemInstances();
+    ThreadsEntranceProcessingItem entrancePi = (ThreadsEntranceProcessingItem) this.getEntranceProcessingItems()
+        .toArray()[0];
+    if (entrancePi == null)
+      throw new IllegalStateException("You need to set entrance PI before running the topology.");
+    entrancePi.getProcessor().onCreate(0); // id=0 as it is not used in simple
+                                           // mode
+    entrancePi.startSendingEvents();
+  }
+
+  /*
+   * Tell all the ThreadsProcessingItems to create & init their replicas
+   * (ThreadsProcessingItemInstance)
+   */
+  private void setupProcessingItemInstances() {
+    for (IProcessingItem pi : this.getProcessingItems()) {
+      if (pi instanceof ThreadsProcessingItem) {
+        ThreadsProcessingItem tpi = (ThreadsProcessingItem) pi;
+        tpi.setupInstances();
+      }
     }
-	
-	/*
-	 * Tell all the ThreadsProcessingItems to create & init their
-	 * replicas (ThreadsProcessingItemInstance)
-	 */
-	private void setupProcessingItemInstances() {
-		for (IProcessingItem pi:this.getProcessingItems()) {
-			if (pi instanceof ThreadsProcessingItem) {
-				ThreadsProcessingItem tpi = (ThreadsProcessingItem) pi;
-				tpi.setupInstances();
-			}
-		}
-	}
+  }
 }

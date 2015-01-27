@@ -36,55 +36,57 @@ import com.yahoo.labs.samoa.core.ContentEvent;
 @Immutable
 final public class S4Event extends Event {
 
-	private String key;
-	
-	public String getKey() {
-		return key;
-	}
+  private String key;
 
-	public void setKey(String key) {
-		this.key = key;
-	}
+  public String getKey() {
+    return key;
+  }
 
-	/** The content event. */
-	private ContentEvent contentEvent;
-	
-	/**
-	 * Instantiates a new instance event.
-	 */
-	public S4Event() {
-		// Needed for serialization of kryo
-	}
+  public void setKey(String key) {
+    this.key = key;
+  }
 
-	/**
-	 * Instantiates a new instance event.
-	 *
-	 * @param contentEvent the content event
-	 */
-	public S4Event(ContentEvent contentEvent) {
-		if (contentEvent != null) {
-			this.contentEvent = contentEvent;
-			this.key = contentEvent.getKey();
-			
-		}
-	}
+  /** The content event. */
+  private ContentEvent contentEvent;
 
-	/**
-	 * Gets the content event.
-	 *
-	 * @return the content event
-	 */
-	public ContentEvent getContentEvent() {
-		return contentEvent;
-	}
+  /**
+   * Instantiates a new instance event.
+   */
+  public S4Event() {
+    // Needed for serialization of kryo
+  }
 
-	/**
-	 * Sets the content event.
-	 *
-	 * @param contentEvent the new content event
-	 */
-	public void setContentEvent(ContentEvent contentEvent) {
-		this.contentEvent = contentEvent;
-	}
+  /**
+   * Instantiates a new instance event.
+   * 
+   * @param contentEvent
+   *          the content event
+   */
+  public S4Event(ContentEvent contentEvent) {
+    if (contentEvent != null) {
+      this.contentEvent = contentEvent;
+      this.key = contentEvent.getKey();
+
+    }
+  }
+
+  /**
+   * Gets the content event.
+   * 
+   * @return the content event
+   */
+  public ContentEvent getContentEvent() {
+    return contentEvent;
+  }
+
+  /**
+   * Sets the content event.
+   * 
+   * @param contentEvent
+   *          the new content event
+   */
+  public void setContentEvent(ContentEvent contentEvent) {
+    this.contentEvent = contentEvent;
+  }
 
 }

@@ -1,4 +1,3 @@
-
 package com.yahoo.labs.samoa.learners;
 
 /*
@@ -29,8 +28,8 @@ import com.yahoo.labs.samoa.core.ContentEvent;
 import com.yahoo.labs.samoa.core.SerializableInstance;
 import net.jcip.annotations.Immutable;
 import com.yahoo.labs.samoa.instances.Instance;
-//import weka.core.Instance;
 
+//import weka.core.Instance;
 
 /**
  * The Class InstanceEvent.
@@ -38,170 +37,178 @@ import com.yahoo.labs.samoa.instances.Instance;
 @Immutable
 final public class InstanceContentEvent implements ContentEvent {
 
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = -8620668863064613845L;
-	private long instanceIndex;
-	private int classifierIndex;
-	private int evaluationIndex;
-	private SerializableInstance instance;
-	private boolean isTraining;
-	private boolean isTesting;
-	private boolean isLast = false;
-	
-	public InstanceContentEvent() {
-		
-	}
+  private static final long serialVersionUID = -8620668863064613845L;
+  private long instanceIndex;
+  private int classifierIndex;
+  private int evaluationIndex;
+  private SerializableInstance instance;
+  private boolean isTraining;
+  private boolean isTesting;
+  private boolean isLast = false;
 
-	/**
-	 * Instantiates a new instance event.
-	 *
-	 * @param index the index
-	 * @param instance the instance
-	 * @param isTraining the is training
-	 */
-	public InstanceContentEvent(long index, Instance instance, 
-			boolean isTraining, boolean isTesting) {
-		if (instance != null) {
-			this.instance = new SerializableInstance(instance);
-		}
-		this.instanceIndex = index;
-		this.isTraining = isTraining;
-		this.isTesting = isTesting;
-	}
+  public InstanceContentEvent() {
 
-	/**
-	 * Gets the single instance of InstanceEvent.
-	 * 
-	 * @return the instance.
-	 */
-	public Instance getInstance() {
-		return instance;
-	}
+  }
 
-	/**
-	 * Gets the instance index.
-	 *
-	 * @return the index of the data vector.
-	 */
-	public long getInstanceIndex() {
-		return instanceIndex;
-	}
+  /**
+   * Instantiates a new instance event.
+   * 
+   * @param index
+   *          the index
+   * @param instance
+   *          the instance
+   * @param isTraining
+   *          the is training
+   */
+  public InstanceContentEvent(long index, Instance instance,
+      boolean isTraining, boolean isTesting) {
+    if (instance != null) {
+      this.instance = new SerializableInstance(instance);
+    }
+    this.instanceIndex = index;
+    this.isTraining = isTraining;
+    this.isTesting = isTesting;
+  }
 
-	/**
-	 * Gets the class id.
-	 *
-	 * @return the true class of the vector.
-	 */
-	public int getClassId() {
-		// return classId;
-		return (int) instance.classValue();
-	}
+  /**
+   * Gets the single instance of InstanceEvent.
+   * 
+   * @return the instance.
+   */
+  public Instance getInstance() {
+    return instance;
+  }
 
-	/**
-	 * Checks if is training.
-	 *
-	 * @return true if this is training data.
-	 */
-	public boolean isTraining() {
-		return isTraining;
-	}
-	
-	/**
-	 * Set training flag.
-	 *
-	 * @param training flag.
-	 */
-	public void setTraining(boolean training) {
-		this.isTraining = training;
-	}
-	
-	/**
-	 * Checks if is testing.
-	 *
-	 * @return true if this is testing data.
-	 */
-	public boolean isTesting(){
-		return isTesting;
-	}
-	
-	/**
-	 * Set testing flag.
-	 *
-	 * @param testing flag.
-	 */
-	public void setTesting(boolean testing) {
-		this.isTesting = testing;
-	}
+  /**
+   * Gets the instance index.
+   * 
+   * @return the index of the data vector.
+   */
+  public long getInstanceIndex() {
+    return instanceIndex;
+  }
 
-	/**
-	 * Gets the classifier index.
-	 *
-	 * @return the classifier index
-	 */
-	public int getClassifierIndex() {
-		return classifierIndex;
-	}
+  /**
+   * Gets the class id.
+   * 
+   * @return the true class of the vector.
+   */
+  public int getClassId() {
+    // return classId;
+    return (int) instance.classValue();
+  }
 
-	/**
-	 * Sets the classifier index.
-	 *
-	 * @param classifierIndex the new classifier index
-	 */
-	public void setClassifierIndex(int classifierIndex) {
-		this.classifierIndex = classifierIndex;
-	}
+  /**
+   * Checks if is training.
+   * 
+   * @return true if this is training data.
+   */
+  public boolean isTraining() {
+    return isTraining;
+  }
 
-	/**
-	 * Gets the evaluation index.
-	 *
-	 * @return the evaluation index
-	 */
-	public int getEvaluationIndex() {
-		return evaluationIndex;
-	}
+  /**
+   * Set training flag.
+   * 
+   * @param training
+   *          flag.
+   */
+  public void setTraining(boolean training) {
+    this.isTraining = training;
+  }
 
-	/**
-	 * Sets the evaluation index.
-	 *
-	 * @param evaluationIndex the new evaluation index
-	 */
-	public void setEvaluationIndex(int evaluationIndex) {
-		this.evaluationIndex = evaluationIndex;
-	}
+  /**
+   * Checks if is testing.
+   * 
+   * @return true if this is testing data.
+   */
+  public boolean isTesting() {
+    return isTesting;
+  }
 
-	/* (non-Javadoc)
-	 * @see samoa.core.ContentEvent#getKey(int)
-	 */
-	public String getKey(int key) {
-		if (key == 0) 
-			return Long.toString(this.getEvaluationIndex());
-		else return Long.toString(10000
-				* this.getEvaluationIndex()
-				+ this.getClassifierIndex());
-	}
+  /**
+   * Set testing flag.
+   * 
+   * @param testing
+   *          flag.
+   */
+  public void setTesting(boolean testing) {
+    this.isTesting = testing;
+  }
 
-	@Override
-	public String getKey() {
-		//System.out.println("InstanceContentEvent "+Long.toString(this.instanceIndex));
-		return Long.toString(this.getClassifierIndex());
-	}
+  /**
+   * Gets the classifier index.
+   * 
+   * @return the classifier index
+   */
+  public int getClassifierIndex() {
+    return classifierIndex;
+  }
 
-	@Override
-	public void setKey(String str) {
-		this.instanceIndex = Long.parseLong(str);
-	}
+  /**
+   * Sets the classifier index.
+   * 
+   * @param classifierIndex
+   *          the new classifier index
+   */
+  public void setClassifierIndex(int classifierIndex) {
+    this.classifierIndex = classifierIndex;
+  }
 
-	@Override
-	public boolean isLastEvent() {
-		return isLast;
-	}
+  /**
+   * Gets the evaluation index.
+   * 
+   * @return the evaluation index
+   */
+  public int getEvaluationIndex() {
+    return evaluationIndex;
+  }
 
-	public void setLast(boolean isLast) {
-		this.isLast = isLast;
-	}
+  /**
+   * Sets the evaluation index.
+   * 
+   * @param evaluationIndex
+   *          the new evaluation index
+   */
+  public void setEvaluationIndex(int evaluationIndex) {
+    this.evaluationIndex = evaluationIndex;
+  }
 
-	
-	
+  /*
+   * (non-Javadoc)
+   * 
+   * @see samoa.core.ContentEvent#getKey(int)
+   */
+  public String getKey(int key) {
+    if (key == 0)
+      return Long.toString(this.getEvaluationIndex());
+    else
+      return Long.toString(10000
+          * this.getEvaluationIndex()
+          + this.getClassifierIndex());
+  }
+
+  @Override
+  public String getKey() {
+    // System.out.println("InstanceContentEvent "+Long.toString(this.instanceIndex));
+    return Long.toString(this.getClassifierIndex());
+  }
+
+  @Override
+  public void setKey(String str) {
+    this.instanceIndex = Long.parseLong(str);
+  }
+
+  @Override
+  public boolean isLastEvent() {
+    return isLast;
+  }
+
+  public void setLast(boolean isLast) {
+    this.isLast = isLast;
+  }
+
 }

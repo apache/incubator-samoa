@@ -27,43 +27,43 @@ import com.yahoo.labs.samoa.core.ContentEvent;
  */
 public class HelloWorldContentEvent implements ContentEvent {
 
-    private static final long serialVersionUID = -2406968925730298156L;
-    private final boolean isLastEvent;
-    private final int helloWorldData;
+  private static final long serialVersionUID = -2406968925730298156L;
+  private final boolean isLastEvent;
+  private final int helloWorldData;
 
-    public HelloWorldContentEvent(int helloWorldData, boolean isLastEvent) {
-        this.isLastEvent = isLastEvent;
-        this.helloWorldData = helloWorldData;
-    }
-    
-    /*
-     * No-argument constructor for Kryo
-     */
-    public HelloWorldContentEvent() {
-    	this(0,false);
-    }
+  public HelloWorldContentEvent(int helloWorldData, boolean isLastEvent) {
+    this.isLastEvent = isLastEvent;
+    this.helloWorldData = helloWorldData;
+  }
 
-    @Override
-    public String getKey() {
-        return null;
-    }
+  /*
+   * No-argument constructor for Kryo
+   */
+  public HelloWorldContentEvent() {
+    this(0, false);
+  }
 
-    @Override
-    public void setKey(String str) {
-        // do nothing, it's key-less content event
-    }
+  @Override
+  public String getKey() {
+    return null;
+  }
 
-    @Override
-    public boolean isLastEvent() {
-        return isLastEvent;
-    }
+  @Override
+  public void setKey(String str) {
+    // do nothing, it's key-less content event
+  }
 
-    public int getHelloWorldData() {
-        return helloWorldData;
-    }
+  @Override
+  public boolean isLastEvent() {
+    return isLastEvent;
+  }
 
-    @Override
-    public String toString() {
-        return "HelloWorldContentEvent [helloWorldData=" + helloWorldData + "]";
-    }
+  public int getHelloWorldData() {
+    return helloWorldData;
+  }
+
+  @Override
+  public String toString() {
+    return "HelloWorldContentEvent [helloWorldData=" + helloWorldData + "]";
+  }
 }

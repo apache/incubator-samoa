@@ -25,118 +25,118 @@ package com.yahoo.labs.samoa.instances;
  */
 
 /**
- *
+ * 
  * @author abifet
  */
-public class SparseInstanceData implements InstanceData{
-    
-    public SparseInstanceData(double[] attributeValues, int[] indexValues, int numberAttributes) {
-       this.attributeValues = attributeValues;
-       this.indexValues = indexValues;
-       this.numberAttributes = numberAttributes;
-    }
-    
-    public SparseInstanceData(int length) {
-       this.attributeValues = new double[length];
-       this.indexValues =  new int[length];
-    }
-    
-    
-    protected double[] attributeValues;
+public class SparseInstanceData implements InstanceData {
 
-    public double[] getAttributeValues() {
-        return attributeValues;
-    }
+  public SparseInstanceData(double[] attributeValues, int[] indexValues, int numberAttributes) {
+    this.attributeValues = attributeValues;
+    this.indexValues = indexValues;
+    this.numberAttributes = numberAttributes;
+  }
 
-    public void setAttributeValues(double[] attributeValues) {
-        this.attributeValues = attributeValues;
-    }
+  public SparseInstanceData(int length) {
+    this.attributeValues = new double[length];
+    this.indexValues = new int[length];
+  }
 
-    public int[] getIndexValues() {
-        return indexValues;
-    }
+  protected double[] attributeValues;
 
-    public void setIndexValues(int[] indexValues) {
-        this.indexValues = indexValues;
-    }
+  public double[] getAttributeValues() {
+    return attributeValues;
+  }
 
-    public int getNumberAttributes() {
-        return numberAttributes;
-    }
+  public void setAttributeValues(double[] attributeValues) {
+    this.attributeValues = attributeValues;
+  }
 
-    public void setNumberAttributes(int numberAttributes) {
-        this.numberAttributes = numberAttributes;
-    }
-    protected int[] indexValues;
-    protected int numberAttributes;
+  public int[] getIndexValues() {
+    return indexValues;
+  }
 
-    @Override
-    public int numAttributes() {
-        return this.numberAttributes;
-    }
+  public void setIndexValues(int[] indexValues) {
+    this.indexValues = indexValues;
+  }
 
-    @Override
-    public double value(int indexAttribute) {
-        int location = locateIndex(indexAttribute);
-        //return location == -1 ? 0 : this.attributeValues[location];
-      //      int index = locateIndex(attIndex);
+  public int getNumberAttributes() {
+    return numberAttributes;
+  }
+
+  public void setNumberAttributes(int numberAttributes) {
+    this.numberAttributes = numberAttributes;
+  }
+
+  protected int[] indexValues;
+  protected int numberAttributes;
+
+  @Override
+  public int numAttributes() {
+    return this.numberAttributes;
+  }
+
+  @Override
+  public double value(int indexAttribute) {
+    int location = locateIndex(indexAttribute);
+    // return location == -1 ? 0 : this.attributeValues[location];
+    // int index = locateIndex(attIndex);
     if ((location >= 0) && (indexValues[location] == indexAttribute)) {
       return attributeValues[location];
     } else {
       return 0.0;
     }
-    }
+  }
 
-    @Override
-    public boolean isMissing(int indexAttribute) {
-        return Double.isNaN(this.value(indexAttribute));
-    }
+  @Override
+  public boolean isMissing(int indexAttribute) {
+    return Double.isNaN(this.value(indexAttribute));
+  }
 
-    @Override
-    public int numValues() {
-        return this.attributeValues.length;
-    }
+  @Override
+  public int numValues() {
+    return this.attributeValues.length;
+  }
 
-    @Override
-    public int index(int indexAttribute) {
-        return this.indexValues[indexAttribute];
-    }
+  @Override
+  public int index(int indexAttribute) {
+    return this.indexValues[indexAttribute];
+  }
 
-    @Override
-    public double valueSparse(int indexAttribute) {
-        return this.attributeValues[indexAttribute];
-    }
+  @Override
+  public double valueSparse(int indexAttribute) {
+    return this.attributeValues[indexAttribute];
+  }
 
-    @Override
-    public boolean isMissingSparse(int indexAttribute) {
-        return Double.isNaN(this.valueSparse(indexAttribute));
-    }
+  @Override
+  public boolean isMissingSparse(int indexAttribute) {
+    return Double.isNaN(this.valueSparse(indexAttribute));
+  }
 
-    /*@Override
-    public double value(Attribute attribute) {
-        return value(attribute.index());
-    }*/
+  /*
+   * @Override public double value(Attribute attribute) { return
+   * value(attribute.index()); }
+   */
 
-    @Override
-    public double[] toDoubleArray() {
-        double[] array = new double[numAttributes()];
-        for (int i=0; i<numValues() ; i++) {
-            array[index(i)] = valueSparse(i);
-        }
-        return array;
+  @Override
+  public double[] toDoubleArray() {
+    double[] array = new double[numAttributes()];
+    for (int i = 0; i < numValues(); i++) {
+      array[index(i)] = valueSparse(i);
     }
+    return array;
+  }
 
-    @Override
-    public void setValue(int attributeIndex, double d) {
-        int index = locateIndex(attributeIndex);
-        if (index(index) == attributeIndex) {
-            this.attributeValues[index] = d;
-        } else {
-            // We need to add the value
-        }
+  @Override
+  public void setValue(int attributeIndex, double d) {
+    int index = locateIndex(attributeIndex);
+    if (index(index) == attributeIndex) {
+      this.attributeValues[index] = d;
+    } else {
+      // We need to add the value
     }
-    
-    /**
+  }
+
+  /**
    * Locates the greatest index that is not greater than the given index.
    * 
    * @return the internal index of the attribute index. Returns -1 if no index
@@ -168,5 +168,5 @@ public class SparseInstanceData implements InstanceData{
       return min - 1;
     }
   }
-    
+
 }

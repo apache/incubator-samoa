@@ -23,34 +23,33 @@ package com.yahoo.labs.samoa.learners.classifiers.trees;
 import com.yahoo.labs.samoa.instances.Instance;
 
 /**
- * Class that represents inactive learning node. Inactive learning node is
- * a node which only keeps track of the observed class distribution. It does 
- * not store the statistic for splitting the node.
+ * Class that represents inactive learning node. Inactive learning node is a
+ * node which only keeps track of the observed class distribution. It does not
+ * store the statistic for splitting the node.
  * 
  * @author Arinto Murdopo
- *
+ * 
  */
 final class InactiveLearningNode extends LearningNode {
 
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = -814552382883472302L;
-	
-	
-	InactiveLearningNode(double[] initialClassObservation) {
-		super(initialClassObservation);
-	}
+  private static final long serialVersionUID = -814552382883472302L;
 
-	@Override
-	void learnFromInstance(Instance inst, ModelAggregatorProcessor proc) {
-		this.observedClassDistribution.addToValue(
-				(int)inst.classValue(), inst.weight());
-	}
+  InactiveLearningNode(double[] initialClassObservation) {
+    super(initialClassObservation);
+  }
 
-	@Override
-	double[] getClassVotes(Instance inst, ModelAggregatorProcessor map) {
-		return this.observedClassDistribution.getArrayCopy();	
-	}
+  @Override
+  void learnFromInstance(Instance inst, ModelAggregatorProcessor proc) {
+    this.observedClassDistribution.addToValue(
+        (int) inst.classValue(), inst.weight());
+  }
+
+  @Override
+  double[] getClassVotes(Instance inst, ModelAggregatorProcessor map) {
+    return this.observedClassDistribution.getArrayCopy();
+  }
 
 }

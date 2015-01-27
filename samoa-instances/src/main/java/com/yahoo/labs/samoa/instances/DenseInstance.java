@@ -25,48 +25,50 @@ package com.yahoo.labs.samoa.instances;
  */
 
 /**
- *
+ * 
  * @author abifet
  */
 public class DenseInstance extends SingleLabelInstance {
 
-	private static final long serialVersionUID = 280360594027716737L;
+  private static final long serialVersionUID = 280360594027716737L;
 
-	public DenseInstance() {
-		// necessary for kryo serializer
-	}
-	
-    public DenseInstance(double weight, double[] res) {
-         super(weight,res);
-    }
-    public DenseInstance(SingleLabelInstance inst) {
-        super(inst);
-    }
-    
-    public DenseInstance(Instance inst) {
-        super((SingleLabelInstance) inst);
-    }
-    public DenseInstance(double numberAttributes) {
-         super((int) numberAttributes);
-         //super(1, new double[(int) numberAttributes-1]); 
-         //Add missing values
-         //for (int i = 0; i < numberAttributes-1; i++) {
-          //   //this.setValue(i, Double.NaN);
-        //}
-         
-    }
-    
-    @Override
-    public String toString() {
-    	 StringBuffer text = new StringBuffer();
+  public DenseInstance() {
+    // necessary for kryo serializer
+  }
 
-    	    for (int i = 0; i < this.instanceInformation.numAttributes(); i++) {
-    	      if (i > 0)
-    	        text.append(",");
-    	      text.append(this.value(i));
-    	    }
-    	    text.append(",").append(this.weight());
-  	      
-    	    return text.toString();
+  public DenseInstance(double weight, double[] res) {
+    super(weight, res);
+  }
+
+  public DenseInstance(SingleLabelInstance inst) {
+    super(inst);
+  }
+
+  public DenseInstance(Instance inst) {
+    super((SingleLabelInstance) inst);
+  }
+
+  public DenseInstance(double numberAttributes) {
+    super((int) numberAttributes);
+    // super(1, new double[(int) numberAttributes-1]);
+    // Add missing values
+    // for (int i = 0; i < numberAttributes-1; i++) {
+    // //this.setValue(i, Double.NaN);
+    // }
+
+  }
+
+  @Override
+  public String toString() {
+    StringBuffer text = new StringBuffer();
+
+    for (int i = 0; i < this.instanceInformation.numAttributes(); i++) {
+      if (i > 0)
+        text.append(",");
+      text.append(this.value(i));
     }
+    text.append(",").append(this.weight());
+
+    return text.toString();
+  }
 }

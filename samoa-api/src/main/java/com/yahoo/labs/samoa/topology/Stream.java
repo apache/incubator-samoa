@@ -24,39 +24,38 @@ import com.yahoo.labs.samoa.core.ContentEvent;
 
 /**
  * Stream interface.
- *
+ * 
  * @author severien
- *
+ * 
  */
 public interface Stream {
-	
-	/**
-	 * Puts events into a platform specific data stream.
-	 * 
-	 * @param event
-	 */
-	public void put(ContentEvent event);
-	
-	/**
-	 * Sets the stream id which is represented by a name.
-	 * 
-	 * @param stream
-	 */
-	//public void setStreamId(String stream);
-	
-	
-	/**
-	 * Gets stream id.
-	 * 
-	 * @return id
-	 */
-	public String getStreamId();
-	
-	/**
-	 * Set batch size
-	 *
-	 * @param batchSize
-	 *                  the suggested size for batching messages on this stream
-	 */
-	public void setBatchSize(int batchsize);
+
+  /**
+   * Puts events into a platform specific data stream.
+   * 
+   * @param event
+   */
+  public void put(ContentEvent event);
+
+  /**
+   * Sets the stream id which is represented by a name.
+   * 
+   * @param stream
+   */
+  // public void setStreamId(String stream);
+
+  /**
+   * Gets stream id.
+   * 
+   * @return id
+   */
+  public String getStreamId();
+
+  /**
+   * Set batch size
+   * 
+   * @param batchSize
+   *          the suggested size for batching messages on this stream
+   */
+  public void setBatchSize(int batchsize);
 }

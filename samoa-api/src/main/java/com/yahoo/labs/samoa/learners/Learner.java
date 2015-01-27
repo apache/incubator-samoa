@@ -29,34 +29,36 @@ import java.io.Serializable;
 import java.util.Set;
 
 /**
- * The Interface Classifier.
- * Initializing Classifier should initalize PI to connect the Classifier with the input stream 
- * and initialize result stream so that other PI can connect to the classification result of this classifier
+ * The Interface Classifier. Initializing Classifier should initalize PI to
+ * connect the Classifier with the input stream and initialize result stream so
+ * that other PI can connect to the classification result of this classifier
  */
 
-public interface Learner extends Serializable{
+public interface Learner extends Serializable {
 
-	/**
-	 * Inits the Learner object.
-	 *
-	 * @param topologyBuilder the topology builder
-	 * @param dataset the dataset
-         * @param parallelism the parallelism
-	 */	
-	public void init(TopologyBuilder topologyBuilder, Instances dataset, int parallelism);
-	
-    /**
-	 * Gets the input processing item.
-	 *
-	 * @return the input processing item
-	 */
-	public Processor getInputProcessor();
+  /**
+   * Inits the Learner object.
+   * 
+   * @param topologyBuilder
+   *          the topology builder
+   * @param dataset
+   *          the dataset
+   * @param parallelism
+   *          the parallelism
+   */
+  public void init(TopologyBuilder topologyBuilder, Instances dataset, int parallelism);
 
-	
-	/**
-	 * Gets the result streams
-	 *
-	 * @return the set of result streams
-	 */
-	public Set<Stream> getResultStreams();
+  /**
+   * Gets the input processing item.
+   * 
+   * @return the input processing item
+   */
+  public Processor getInputProcessor();
+
+  /**
+   * Gets the result streams
+   * 
+   * @return the set of result streams
+   */
+  public Set<Stream> getResultStreams();
 }

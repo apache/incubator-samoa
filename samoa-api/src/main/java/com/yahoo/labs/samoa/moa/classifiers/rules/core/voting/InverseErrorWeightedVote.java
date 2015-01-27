@@ -21,79 +21,81 @@ package com.yahoo.labs.samoa.moa.classifiers.rules.core.voting;
  */
 
 /**
- * InverseErrorWeightedVote class for weighted votes based on estimates of errors. 
- *
+ * InverseErrorWeightedVote class for weighted votes based on estimates of
+ * errors.
+ * 
  * @author Joao Duarte (jmduarte@inescporto.pt)
  * @version $Revision: 1 $
  */
 public class InverseErrorWeightedVote extends AbstractErrorWeightedVote {
 
-	/**
+  /**
 	 * 
 	 */
-	private static final double EPS = 0.000000001; //just to prevent divide by 0 in 1/X -> 1/(x+EPS)
-	private static final long serialVersionUID = 6359349250620616482L;
+  private static final double EPS = 0.000000001; // just to prevent divide by 0
+                                                 // in 1/X -> 1/(x+EPS)
+  private static final long serialVersionUID = 6359349250620616482L;
 
-	public InverseErrorWeightedVote() {
-		super();
-	}
-	
-	public InverseErrorWeightedVote(AbstractErrorWeightedVote aewv) {
-		super(aewv);
-	}
-	
-	@Override
-	public double[] computeWeightedVote() {
-		int n=votes.size();
-		weights=new double[n];
-		double [] weightedVote=null;
-		if (n>0){
-			int d=votes.get(0).length;
-			weightedVote=new double[d];
-			double sumError=0;
-			//weights are 1/(error+eps)
-			for (int i=0; i<n; ++i){
-				if(errors.get(i)<Double.MAX_VALUE){
-					weights[i]=1.0/(errors.get(i)+EPS);
-					sumError+=weights[i];
-				}
-				else
-					weights[i]=0;
+  public InverseErrorWeightedVote() {
+    super();
+  }
 
-			}
+  public InverseErrorWeightedVote(AbstractErrorWeightedVote aewv) {
+    super(aewv);
+  }
 
-			if(sumError>0)
-				for (int i=0; i<n; ++i)
-				{
-					//normalize so that weights sum 1
-					weights[i]/=sumError;
-					//compute weighted vote
-					for(int j=0; j<d; j++)
-						weightedVote[j]+=votes.get(i)[j]*weights[i];
-				}
-			//Only occurs if all errors=Double.MAX_VALUE
-			else
-			{
-				//compute arithmetic vote
-				for (int i=0; i<n; ++i)
-				{
-					for(int j=0; j<d; j++)
-						weightedVote[j]+=votes.get(i)[j]/n;
-				}
-			}
-		}
-		return weightedVote;
-	}
+  @Override
+  public double[] computeWeightedVote() {
+    int n = votes.size();
+    weights = new double[n];
+    double[] weightedVote = null;
+    if (n > 0) {
+      int d = votes.get(0).length;
+      weightedVote = new double[d];
+      double sumError = 0;
+      // weights are 1/(error+eps)
+      for (int i = 0; i < n; ++i) {
+        if (errors.get(i) < Double.MAX_VALUE) {
+          weights[i] = 1.0 / (errors.get(i) + EPS);
+          sumError += weights[i];
+        }
+        else
+          weights[i] = 0;
 
-	@Override
-	public void getDescription(StringBuilder sb, int indent) {
-		// TODO Auto-generated method stub
+      }
 
-	}
-	
-	@Override
-	public InverseErrorWeightedVote getACopy() {
-		return new InverseErrorWeightedVote(this);
-	}
+      if (sumError > 0)
+        for (int i = 0; i < n; ++i)
+        {
+          // normalize so that weights sum 1
+          weights[i] /= sumError;
+          // compute weighted vote
+          for (int j = 0; j < d; j++)
+            weightedVote[j] += votes.get(i)[j] * weights[i];
+        }
+      // Only occurs if all errors=Double.MAX_VALUE
+      else
+      {
+        // compute arithmetic vote
+        for (int i = 0; i < n; ++i)
+        {
+          for (int j = 0; j < d; j++)
+            weightedVote[j] += votes.get(i)[j] / n;
+        }
+      }
+    }
+    return weightedVote;
+  }
+
+  @Override
+  public void getDescription(StringBuilder sb, int indent) {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public InverseErrorWeightedVote getACopy() {
+    return new InverseErrorWeightedVote(this);
+  }
 
 }

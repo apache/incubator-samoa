@@ -35,148 +35,150 @@ import java.util.zip.ZipEntry;
 
 /**
  * Utils class for building and deploying applications programmatically.
+ * 
  * @author severien
- *
+ * 
  */
 public class Utils {
 
-	public static void buildSamoaPackage() {
-		try {
-			String output = "/tmp/samoa/samoa.jar";// System.getProperty("user.home") + "/samoa.jar";
-			Manifest manifest = createManifest();
+  public static void buildSamoaPackage() {
+    try {
+      String output = "/tmp/samoa/samoa.jar";// System.getProperty("user.home")
+                                             // + "/samoa.jar";
+      Manifest manifest = createManifest();
 
-			BufferedOutputStream bo;
+      BufferedOutputStream bo;
 
-			bo = new BufferedOutputStream(new FileOutputStream(output));
-			JarOutputStream jo = new JarOutputStream(bo, manifest);
+      bo = new BufferedOutputStream(new FileOutputStream(output));
+      JarOutputStream jo = new JarOutputStream(bo, manifest);
 
-			String baseDir = System.getProperty("user.dir");
-			System.out.println(baseDir);
-			
-			File samoaJar = new File(baseDir+"/target/samoa-0.0.1-SNAPSHOT.jar");
-			addEntry(jo,samoaJar,baseDir+"/target/","/app/");
-			addLibraries(jo);
-			
-			jo.close();
-			bo.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+      String baseDir = System.getProperty("user.dir");
+      System.out.println(baseDir);
 
-	}
-	
-	// TODO should get the modules file from the parameters
-	public static void buildModulesPackage(List<String> modulesNames) {
-		System.out.println(System.getProperty("user.dir"));
-		try {
-			String baseDir = System.getProperty("user.dir");
-			List<File> filesArray = new ArrayList<>();
-			for (String module : modulesNames) {
-				module = "/"+module.replace(".", "/")+".class";
-				filesArray.add(new File(baseDir+module));
-			}
-			String output = System.getProperty("user.home") + "/modules.jar";
+      File samoaJar = new File(baseDir + "/target/samoa-0.0.1-SNAPSHOT.jar");
+      addEntry(jo, samoaJar, baseDir + "/target/", "/app/");
+      addLibraries(jo);
 
-			Manifest manifest = new Manifest();
-			manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION,
-					"1.0");
-			manifest.getMainAttributes().put(Attributes.Name.IMPLEMENTATION_URL,
-					"http://samoa.yahoo.com");
-			manifest.getMainAttributes().put(
-					Attributes.Name.IMPLEMENTATION_VERSION, "0.1");
-			manifest.getMainAttributes().put(Attributes.Name.IMPLEMENTATION_VENDOR,
-					"Yahoo");
-			manifest.getMainAttributes().put(
-					Attributes.Name.IMPLEMENTATION_VENDOR_ID, "SAMOA");
+      jo.close();
+      bo.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 
-			BufferedOutputStream bo;
+  }
 
-			bo = new BufferedOutputStream(new FileOutputStream(output));
-			JarOutputStream jo = new JarOutputStream(bo, manifest);
+  // TODO should get the modules file from the parameters
+  public static void buildModulesPackage(List<String> modulesNames) {
+    System.out.println(System.getProperty("user.dir"));
+    try {
+      String baseDir = System.getProperty("user.dir");
+      List<File> filesArray = new ArrayList<>();
+      for (String module : modulesNames) {
+        module = "/" + module.replace(".", "/") + ".class";
+        filesArray.add(new File(baseDir + module));
+      }
+      String output = System.getProperty("user.home") + "/modules.jar";
 
-			File[] files = filesArray.toArray(new File[filesArray.size()]);
-			addEntries(jo,files, baseDir, "");
+      Manifest manifest = new Manifest();
+      manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION,
+          "1.0");
+      manifest.getMainAttributes().put(Attributes.Name.IMPLEMENTATION_URL,
+          "http://samoa.yahoo.com");
+      manifest.getMainAttributes().put(
+          Attributes.Name.IMPLEMENTATION_VERSION, "0.1");
+      manifest.getMainAttributes().put(Attributes.Name.IMPLEMENTATION_VENDOR,
+          "Yahoo");
+      manifest.getMainAttributes().put(
+          Attributes.Name.IMPLEMENTATION_VENDOR_ID, "SAMOA");
 
-			jo.close();
-			bo.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+      BufferedOutputStream bo;
 
-	}
+      bo = new BufferedOutputStream(new FileOutputStream(output));
+      JarOutputStream jo = new JarOutputStream(bo, manifest);
 
-	private static void addLibraries(JarOutputStream jo) {
-		try {
-			String baseDir = System.getProperty("user.dir");
-			String libDir = baseDir+"/target/lib";
-			File inputFile = new File(libDir);
-			
-			File[] files = inputFile.listFiles();
-			for (File file : files) {
-				addEntry(jo, file, baseDir, "lib");
-			}
-			jo.close();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private static void addEntries(JarOutputStream jo, File[] files, String baseDir, String rootDir){
-		for (File file : files) {
+      File[] files = filesArray.toArray(new File[filesArray.size()]);
+      addEntries(jo, files, baseDir, "");
 
-			if (!file.isDirectory()) {
-				addEntry(jo, file, baseDir, rootDir);
-			} else {
-				File dir = new File(file.getAbsolutePath());
-				addEntries(jo, dir.listFiles(), baseDir, rootDir);
-			}
-		}
-	}
-	
-	private static void addEntry(JarOutputStream jo, File file, String baseDir, String rootDir) {
-		try {
-			BufferedInputStream bi = new BufferedInputStream(new FileInputStream(file));
+      jo.close();
+      bo.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 
-			String path = file.getAbsolutePath().replaceFirst(baseDir, rootDir);
-			jo.putNextEntry(new ZipEntry(path));
+  }
 
-			byte[] buf = new byte[1024];
-			int anz;
-			while ((anz = bi.read(buf)) != -1) {
-				jo.write(buf, 0, anz);
-			}
-			bi.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+  private static void addLibraries(JarOutputStream jo) {
+    try {
+      String baseDir = System.getProperty("user.dir");
+      String libDir = baseDir + "/target/lib";
+      File inputFile = new File(libDir);
 
-	public static Manifest createManifest() {
-		Manifest manifest = new Manifest();
-		manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
-		manifest.getMainAttributes().put(Attributes.Name.IMPLEMENTATION_URL, "http://samoa.yahoo.com");
-		manifest.getMainAttributes().put(Attributes.Name.IMPLEMENTATION_VERSION, "0.1");
-		manifest.getMainAttributes().put(Attributes.Name.IMPLEMENTATION_VENDOR, "Yahoo");
-		manifest.getMainAttributes().put(Attributes.Name.IMPLEMENTATION_VENDOR_ID, "SAMOA");
-		Attributes s4Attributes = new Attributes();
-		s4Attributes.putValue("S4-App-Class", "path.to.Class");
-		Attributes.Name name = new Attributes.Name("S4-App-Class");
-		Attributes.Name S4Version = new Attributes.Name("S4-Version");
-		manifest.getMainAttributes().put(name, "samoa.topology.impl.DoTaskApp");
-		manifest.getMainAttributes().put(S4Version, "0.6.0-incubating");
-		return manifest;
-	}
-	
-	public static Object getInstance(String className) {
+      File[] files = inputFile.listFiles();
+      for (File file : files) {
+        addEntry(jo, file, baseDir, "lib");
+      }
+      jo.close();
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private static void addEntries(JarOutputStream jo, File[] files, String baseDir, String rootDir) {
+    for (File file : files) {
+
+      if (!file.isDirectory()) {
+        addEntry(jo, file, baseDir, rootDir);
+      } else {
+        File dir = new File(file.getAbsolutePath());
+        addEntries(jo, dir.listFiles(), baseDir, rootDir);
+      }
+    }
+  }
+
+  private static void addEntry(JarOutputStream jo, File file, String baseDir, String rootDir) {
+    try {
+      BufferedInputStream bi = new BufferedInputStream(new FileInputStream(file));
+
+      String path = file.getAbsolutePath().replaceFirst(baseDir, rootDir);
+      jo.putNextEntry(new ZipEntry(path));
+
+      byte[] buf = new byte[1024];
+      int anz;
+      while ((anz = bi.read(buf)) != -1) {
+        jo.write(buf, 0, anz);
+      }
+      bi.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static Manifest createManifest() {
+    Manifest manifest = new Manifest();
+    manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
+    manifest.getMainAttributes().put(Attributes.Name.IMPLEMENTATION_URL, "http://samoa.yahoo.com");
+    manifest.getMainAttributes().put(Attributes.Name.IMPLEMENTATION_VERSION, "0.1");
+    manifest.getMainAttributes().put(Attributes.Name.IMPLEMENTATION_VENDOR, "Yahoo");
+    manifest.getMainAttributes().put(Attributes.Name.IMPLEMENTATION_VENDOR_ID, "SAMOA");
+    Attributes s4Attributes = new Attributes();
+    s4Attributes.putValue("S4-App-Class", "path.to.Class");
+    Attributes.Name name = new Attributes.Name("S4-App-Class");
+    Attributes.Name S4Version = new Attributes.Name("S4-Version");
+    manifest.getMainAttributes().put(name, "samoa.topology.impl.DoTaskApp");
+    manifest.getMainAttributes().put(S4Version, "0.6.0-incubating");
+    return manifest;
+  }
+
+  public static Object getInstance(String className) {
     Class<?> cls;
-		Object obj = null;
-		try {
-			cls = Class.forName(className); 
-			obj = cls.newInstance();
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		return obj;
-	}
+    Object obj = null;
+    try {
+      cls = Class.forName(className);
+      obj = cls.newInstance();
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+      e.printStackTrace();
+    }
+    return obj;
+  }
 }

@@ -25,93 +25,95 @@ import com.yahoo.labs.samoa.moa.core.ObjectRepository;
 import com.yahoo.labs.samoa.moa.tasks.TaskMonitor;
 
 /**
- *  Drift detection method based in DDM method of Joao Gama SBIA 2004.
- *
- *  <p>João Gama, Pedro Medas, Gladys Castillo, Pedro Pereira Rodrigues: Learning
- * with Drift Detection. SBIA 2004: 286-295 </p>
- *
- *  @author Manuel Baena (mbaena@lcc.uma.es)
- *  @version $Revision: 7 $
+ * Drift detection method based in DDM method of Joao Gama SBIA 2004.
+ * 
+ * <p>
+ * João Gama, Pedro Medas, Gladys Castillo, Pedro Pereira Rodrigues: Learning
+ * with Drift Detection. SBIA 2004: 286-295
+ * </p>
+ * 
+ * @author Manuel Baena (mbaena@lcc.uma.es)
+ * @version $Revision: 7 $
  */
 public class DDM extends AbstractChangeDetector {
 
-    private static final long serialVersionUID = -3518369648142099719L;
+  private static final long serialVersionUID = -3518369648142099719L;
 
-    //private static final int DDM_MINNUMINST = 30;
-    public IntOption minNumInstancesOption = new IntOption(
-            "minNumInstances",
-            'n',
-            "The minimum number of instances before permitting detecting change.",
-            30, 0, Integer.MAX_VALUE);
-    private int m_n;
+  // private static final int DDM_MINNUMINST = 30;
+  public IntOption minNumInstancesOption = new IntOption(
+      "minNumInstances",
+      'n',
+      "The minimum number of instances before permitting detecting change.",
+      30, 0, Integer.MAX_VALUE);
+  private int m_n;
 
-    private double m_p;
+  private double m_p;
 
-    private double m_s;
+  private double m_s;
 
-    private double m_psmin;
+  private double m_psmin;
 
-    private double m_pmin;
+  private double m_pmin;
 
-    private double m_smin;
+  private double m_smin;
 
-    public DDM() {
-        resetLearning();
+  public DDM() {
+    resetLearning();
+  }
+
+  @Override
+  public void resetLearning() {
+    m_n = 1;
+    m_p = 1;
+    m_s = 0;
+    m_psmin = Double.MAX_VALUE;
+    m_pmin = Double.MAX_VALUE;
+    m_smin = Double.MAX_VALUE;
+  }
+
+  @Override
+  public void input(double prediction) {
+    // prediction must be 1 or 0
+    // It monitors the error rate
+    if (this.isChangeDetected) {
+      resetLearning();
+    }
+    m_p = m_p + (prediction - m_p) / (double) m_n;
+    m_s = Math.sqrt(m_p * (1 - m_p) / (double) m_n);
+
+    m_n++;
+
+    // System.out.print(prediction + " " + m_n + " " + (m_p+m_s) + " ");
+    this.estimation = m_p;
+    this.isChangeDetected = false;
+    this.isWarningZone = false;
+    this.delay = 0;
+
+    if (m_n < this.minNumInstancesOption.getValue()) {
+      return;
     }
 
-    @Override
-    public void resetLearning() {
-        m_n = 1;
-        m_p = 1;
-        m_s = 0;
-        m_psmin = Double.MAX_VALUE;
-        m_pmin = Double.MAX_VALUE;
-        m_smin = Double.MAX_VALUE;
+    if (m_p + m_s <= m_psmin) {
+      m_pmin = m_p;
+      m_smin = m_s;
+      m_psmin = m_p + m_s;
     }
 
-    @Override
-    public void input(double prediction) {
-        // prediction must be 1 or 0
-        // It monitors the error rate
-        if (this.isChangeDetected) {
-            resetLearning();
-        }
-        m_p = m_p + (prediction - m_p) / (double) m_n;
-        m_s = Math.sqrt(m_p * (1 - m_p) / (double) m_n);
+    if (m_n > this.minNumInstancesOption.getValue() && m_p + m_s > m_pmin + 3 * m_smin) {
+      this.isChangeDetected = true;
+      // resetLearning();
+    } else
+      this.isWarningZone = m_p + m_s > m_pmin + 2 * m_smin;
+  }
 
-        m_n++;
+  @Override
+  public void getDescription(StringBuilder sb, int indent) {
+    // TODO Auto-generated method stub
+  }
 
-        // System.out.print(prediction + " " + m_n + " " + (m_p+m_s) + " ");
-        this.estimation = m_p;
-        this.isChangeDetected = false;
-        this.isWarningZone = false;
-        this.delay = 0;
-
-        if (m_n < this.minNumInstancesOption.getValue()) {
-            return;
-        }
-
-        if (m_p + m_s <= m_psmin) {
-            m_pmin = m_p;
-            m_smin = m_s;
-            m_psmin = m_p + m_s;
-        }
-
-        if (m_n > this.minNumInstancesOption.getValue() && m_p + m_s > m_pmin + 3 * m_smin) {
-            this.isChangeDetected = true;
-            //resetLearning();
-        } else
-            this.isWarningZone = m_p + m_s > m_pmin + 2 * m_smin;
-    }
-
-    @Override
-    public void getDescription(StringBuilder sb, int indent) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    protected void prepareForUseImpl(TaskMonitor monitor,
-            ObjectRepository repository) {
-        // TODO Auto-generated method stub
-    }
+  @Override
+  protected void prepareForUseImpl(TaskMonitor monitor,
+      ObjectRepository repository) {
+    // TODO Auto-generated method stub
+  }
 }

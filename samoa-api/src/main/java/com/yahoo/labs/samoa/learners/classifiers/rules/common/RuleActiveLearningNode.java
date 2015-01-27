@@ -21,14 +21,14 @@ package com.yahoo.labs.samoa.learners.classifiers.rules.common;
  */
 
 /**
- * Interface for Rule's LearningNode that updates both statistics 
- * for expanding rule and computing predictions.
+ * Interface for Rule's LearningNode that updates both statistics for expanding
+ * rule and computing predictions.
  * 
  * @author Anh Thu Vu
- *
+ * 
  */
 public interface RuleActiveLearningNode extends RulePassiveLearningNode {
 
-	public boolean tryToExpand(double splitConfidence, double tieThreshold);
-	
+  public boolean tryToExpand(double splitConfidence, double tieThreshold);
+
 }

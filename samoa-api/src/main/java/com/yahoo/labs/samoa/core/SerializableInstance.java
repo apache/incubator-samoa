@@ -31,37 +31,39 @@ import com.yahoo.labs.samoa.instances.Instance;
 //import weka.core.Instance;
 
 /**
- * The Class SerializableInstance.
- * This class is needed for serialization of kryo
+ * The Class SerializableInstance. This class is needed for serialization of
+ * kryo
  */
 public class SerializableInstance extends DenseInstance {
 
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = -3659459626274566468L;
+  /** The Constant serialVersionUID. */
+  private static final long serialVersionUID = -3659459626274566468L;
 
-	/**
-	 * Instantiates a new serializable instance.
-	 */
-	public SerializableInstance() {
-		super(0);
-	}
+  /**
+   * Instantiates a new serializable instance.
+   */
+  public SerializableInstance() {
+    super(0);
+  }
 
-	/**
-	 * Instantiates a new serializable instance.
-	 *
-	 * @param arg0 the arg0
-	 */
-	public SerializableInstance(int arg0) {
-		super(arg0);
-	}
+  /**
+   * Instantiates a new serializable instance.
+   * 
+   * @param arg0
+   *          the arg0
+   */
+  public SerializableInstance(int arg0) {
+    super(arg0);
+  }
 
-	/**
-	 * Instantiates a new serializable instance.
-	 *
-	 * @param inst the inst
-	 */
-	public SerializableInstance(Instance inst) {
-		super(inst);
-	}
+  /**
+   * Instantiates a new serializable instance.
+   * 
+   * @param inst
+   *          the inst
+   */
+  public SerializableInstance(Instance inst) {
+    super(inst);
+  }
 
 }

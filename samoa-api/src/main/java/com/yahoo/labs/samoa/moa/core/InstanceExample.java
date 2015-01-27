@@ -25,26 +25,26 @@ import java.io.Serializable;
 
 public class InstanceExample implements Example<Instance>, Serializable {
 
-	public Instance instance;
+  public Instance instance;
 
-  	public InstanceExample (Instance inst)
-   	{                             
-		this.instance = inst;    
-  	}  
+  public InstanceExample(Instance inst)
+  {
+    this.instance = inst;
+  }
 
-	@Override
-	public Instance getData() {
-		return this.instance;
-	}
-	
-	@Override
-	public double weight() {
-		return this.instance.weight();
-	}
+  @Override
+  public Instance getData() {
+    return this.instance;
+  }
 
-	@Override
-	public void setWeight(double w) {
-		this.instance.setWeight(w);
-	}
+  @Override
+  public double weight() {
+    return this.instance.weight();
+  }
 
-} 
+  @Override
+  public void setWeight(double w) {
+    this.instance.setWeight(w);
+  }
+
+}

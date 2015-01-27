@@ -22,62 +22,67 @@ package com.yahoo.labs.samoa.moa.classifiers.rules.driftdetection;
 
 /**
  * Page-Hinkley Test with more weight for recent instances.
- *
+ * 
  */
 
 public class PageHinkleyFading extends PageHinkleyTest {
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = 7110953184708812339L;
-	private double fadingFactor=0.99;
+  private static final long serialVersionUID = 7110953184708812339L;
+  private double fadingFactor = 0.99;
 
-	public PageHinkleyFading() {
-		super();
-	}
-	
-	public PageHinkleyFading(double threshold, double alpha) {
-		super(threshold, alpha);
-	}
-	protected double instancesSeen;
+  public PageHinkleyFading() {
+    super();
+  }
 
-	@Override
-	public void reset() {
+  public PageHinkleyFading(double threshold, double alpha) {
+    super(threshold, alpha);
+  }
 
-		super.reset();
-		this.instancesSeen=0;
+  protected double instancesSeen;
 
-	}
+  @Override
+  public void reset() {
 
-	@Override
-	public boolean update(double error) {
-		this.instancesSeen=1+fadingFactor*this.instancesSeen;
-		double absolutError = Math.abs(error);
+    super.reset();
+    this.instancesSeen = 0;
 
-		this.sumAbsolutError = fadingFactor*this.sumAbsolutError + absolutError;
-		if (this.instancesSeen > 30) {
-			double mT = absolutError - (this.sumAbsolutError / this.instancesSeen) - this.alpha;
-			this.cumulativeSum = this.cumulativeSum + mT; // Update the cumulative mT sum
-			if (this.cumulativeSum < this.minimumValue) { // Update the minimum mT value if the new mT is smaller than the current minimum
-				this.minimumValue = this.cumulativeSum;
-			}
-			return (((this.cumulativeSum - this.minimumValue) > this.threshold));
-		}
-		return false;
-	}
-	
-	@Override
-	public PageHinkleyTest getACopy() {
-		PageHinkleyFading newTest = new PageHinkleyFading(this.threshold, this.alpha);
-		this.copyFields(newTest);
-		return newTest;
-	}
-	
-	@Override
-	protected void copyFields(PageHinkleyTest newTest) {
-		super.copyFields(newTest);
-		PageHinkleyFading newFading = (PageHinkleyFading) newTest;
-		newFading.fadingFactor = this.fadingFactor;
-		newFading.instancesSeen = this.instancesSeen;
-	}
+  }
+
+  @Override
+  public boolean update(double error) {
+    this.instancesSeen = 1 + fadingFactor * this.instancesSeen;
+    double absolutError = Math.abs(error);
+
+    this.sumAbsolutError = fadingFactor * this.sumAbsolutError + absolutError;
+    if (this.instancesSeen > 30) {
+      double mT = absolutError - (this.sumAbsolutError / this.instancesSeen) - this.alpha;
+      this.cumulativeSum = this.cumulativeSum + mT; // Update the cumulative mT
+                                                    // sum
+      if (this.cumulativeSum < this.minimumValue) { // Update the minimum mT
+                                                    // value if the new mT is
+                                                    // smaller than the current
+                                                    // minimum
+        this.minimumValue = this.cumulativeSum;
+      }
+      return (((this.cumulativeSum - this.minimumValue) > this.threshold));
+    }
+    return false;
+  }
+
+  @Override
+  public PageHinkleyTest getACopy() {
+    PageHinkleyFading newTest = new PageHinkleyFading(this.threshold, this.alpha);
+    this.copyFields(newTest);
+    return newTest;
+  }
+
+  @Override
+  protected void copyFields(PageHinkleyTest newTest) {
+    super.copyFields(newTest);
+    PageHinkleyFading newFading = (PageHinkleyFading) newTest;
+    newFading.fadingFactor = this.fadingFactor;
+    newFading.instancesSeen = this.instancesSeen;
+  }
 }

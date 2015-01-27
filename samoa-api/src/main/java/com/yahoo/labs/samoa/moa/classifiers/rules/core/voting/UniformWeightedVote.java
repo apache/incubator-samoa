@@ -20,54 +20,52 @@ package com.yahoo.labs.samoa.moa.classifiers.rules.core.voting;
  * #L%
  */
 
-
 /**
- * UniformWeightedVote class for weighted votes based on estimates of errors. 
- *
+ * UniformWeightedVote class for weighted votes based on estimates of errors.
+ * 
  * @author Joao Duarte (jmduarte@inescporto.pt)
  * @version $Revision: 1 $
  */
 public class UniformWeightedVote extends AbstractErrorWeightedVote {
 
+  private static final long serialVersionUID = 6359349250620616482L;
 
-	private static final long serialVersionUID = 6359349250620616482L;
+  public UniformWeightedVote() {
+    super();
+  }
 
-	public UniformWeightedVote() {
-		super();
-	}
-	
-	public UniformWeightedVote(AbstractErrorWeightedVote aewv) {
-		super(aewv);
-	}
-	
-	@Override
-	public double[] computeWeightedVote() {
-		int n=votes.size();
-		weights=new double[n];
-		double [] weightedVote=null;
-		if (n>0){
-			int d=votes.get(0).length;
-			weightedVote=new double[d];                                     
-			for (int i=0; i<n; i++)
-			{
-				weights[i]=1.0/n;
-				for(int j=0; j<d; j++)
-					weightedVote[j]+=(votes.get(i)[j]*weights[i]);
-			}
+  public UniformWeightedVote(AbstractErrorWeightedVote aewv) {
+    super(aewv);
+  }
 
-		}
-		return weightedVote;
-	}
+  @Override
+  public double[] computeWeightedVote() {
+    int n = votes.size();
+    weights = new double[n];
+    double[] weightedVote = null;
+    if (n > 0) {
+      int d = votes.get(0).length;
+      weightedVote = new double[d];
+      for (int i = 0; i < n; i++)
+      {
+        weights[i] = 1.0 / n;
+        for (int j = 0; j < d; j++)
+          weightedVote[j] += (votes.get(i)[j] * weights[i]);
+      }
 
-	@Override
-	public void getDescription(StringBuilder sb, int indent) {
-		// TODO Auto-generated method stub
+    }
+    return weightedVote;
+  }
 
-	}
-	
-	@Override
-	public UniformWeightedVote getACopy() {
-		return new UniformWeightedVote(this);
-	}
+  @Override
+  public void getDescription(StringBuilder sb, int indent) {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public UniformWeightedVote getACopy() {
+    return new UniformWeightedVote(this);
+  }
 
 }

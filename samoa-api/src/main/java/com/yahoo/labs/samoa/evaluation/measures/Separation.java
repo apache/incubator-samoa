@@ -31,88 +31,88 @@ import java.util.List;
 
 public class Separation extends MeasureCollection {
 
-    public Separation() {
-        super();
+  public Separation() {
+    super();
+  }
+
+  @Override
+  protected String[] getNames() {
+    return new String[] { "BSS", "BSS-GT", "BSS-Ratio" };
+  }
+
+  // @Override
+  public void evaluateClusteringSamoa(Clustering clustering,
+      Clustering trueClustering, ArrayList<Instance> points)
+      throws Exception {
+
+    double BSS_GT = 1.0;
+    double BSS;
+    int dimension = points.get(0).numAttributes() - 1;
+    SphereCluster sc = new SphereCluster(points, dimension);
+
+    // DO INTERNAL EVALUATION
+    // clustering.getClustering().get(0).getCenter();
+
+    BSS = getBSS(clustering, sc.getCenter());
+
+    if (trueClustering != null) {
+      List<Instance> listInstances = new ArrayList<>();
+      for (Cluster c : trueClustering.getClustering()) {
+        DenseInstance inst = new DenseInstance(c.getWeight(), c.getCenter());
+        listInstances.add(inst);
+      }
+      SphereCluster gt = new SphereCluster(listInstances, dimension);
+      BSS_GT = getBSS(trueClustering, gt.getCenter());
     }
 
-    @Override
-    protected String[] getNames() {
-        return new String[]{"BSS", "BSS-GT", "BSS-Ratio"};
+    addValue("BSS", BSS);
+    addValue("BSS-GT", BSS_GT);
+    addValue("BSS-Ratio", BSS / BSS_GT);
+
+  }
+
+  private double getBSS(Clustering clustering, double[] mean) {
+    double bss = 0.0;
+    for (int i = 0; i < clustering.size(); i++) {
+      double weight = clustering.get(i).getWeight();
+      double sum = 0.0;
+      for (int j = 0; j < mean.length; j++) {
+        sum += Math.pow((mean[j] - clustering.get(i).getCenter()[j]), 2);
+      }
+      bss += weight * sum;
     }
 
-    //@Override
-    public void evaluateClusteringSamoa(Clustering clustering,
-            Clustering trueClustering, ArrayList<Instance> points)
-            throws Exception {
+    return bss;
+  }
 
-        double BSS_GT = 1.0;
-        double BSS;
-        int dimension = points.get(0).numAttributes() - 1;
-        SphereCluster sc = new SphereCluster(points, dimension);
+  @Override
+  protected void evaluateClustering(Clustering clustering,
+      Clustering trueClustering, ArrayList<DataPoint> points)
+      throws Exception {
+    double BSS_GT = 1.0;
+    double BSS;
+    int dimension = points.get(0).numAttributes() - 1;
+    SphereCluster sc = new SphereCluster(points, dimension);
 
-        // DO INTERNAL EVALUATION
-        //clustering.getClustering().get(0).getCenter();
+    // DO INTERNAL EVALUATION
+    // clustering.getClustering().get(0).getCenter();
 
-        BSS = getBSS(clustering, sc.getCenter());
+    BSS = getBSS(clustering, sc.getCenter());
 
-        if (trueClustering != null) {
-            List<Instance> listInstances = new ArrayList<>();
-            for (Cluster c : trueClustering.getClustering()) {
-                DenseInstance inst = new DenseInstance(c.getWeight(), c.getCenter());
-                listInstances.add(inst);
-            }
-            SphereCluster gt = new SphereCluster(listInstances, dimension);
-            BSS_GT = getBSS(trueClustering, gt.getCenter());
-        }
-
-        addValue("BSS", BSS);
-        addValue("BSS-GT", BSS_GT);
-        addValue("BSS-Ratio", BSS / BSS_GT);
-
+    if (trueClustering != null) {
+      String s = "";
+      List<Instance> listInstances = new ArrayList<>();
+      for (Cluster c : trueClustering.getClustering()) {
+        DenseInstance inst = new DenseInstance(c.getWeight(), c.getCenter());
+        listInstances.add(inst);
+        s += " " + c.getWeight();
+      }
+      SphereCluster gt = new SphereCluster(listInstances, dimension);
+      BSS_GT = getBSS(trueClustering, gt.getCenter());
     }
 
-    private double getBSS(Clustering clustering, double[] mean) {
-        double bss = 0.0;
-        for (int i = 0; i < clustering.size(); i++) {
-            double weight = clustering.get(i).getWeight();
-            double sum = 0.0;
-            for (int j = 0; j < mean.length; j++) {
-                sum += Math.pow((mean[j] - clustering.get(i).getCenter()[j]), 2);
-            }
-            bss += weight * sum;
-        }
-
-        return bss;
-    }
-
-    @Override
-    protected void evaluateClustering(Clustering clustering,
-            Clustering trueClustering, ArrayList<DataPoint> points)
-            throws Exception {
-        double BSS_GT = 1.0;
-        double BSS;
-        int dimension = points.get(0).numAttributes() - 1;
-        SphereCluster sc = new SphereCluster(points, dimension);
-
-        // DO INTERNAL EVALUATION
-        //clustering.getClustering().get(0).getCenter();
-
-        BSS = getBSS(clustering, sc.getCenter());
-
-        if (trueClustering != null) {
-            String s = "";
-            List<Instance> listInstances = new ArrayList<>();
-            for (Cluster c : trueClustering.getClustering()) {
-                DenseInstance inst = new DenseInstance(c.getWeight(), c.getCenter());
-                listInstances.add(inst);
-                s += " " + c.getWeight();
-            }
-            SphereCluster gt = new SphereCluster(listInstances, dimension);
-            BSS_GT = getBSS(trueClustering, gt.getCenter());
-        }
-
-        addValue("BSS", BSS);
-        addValue("BSS-GT", BSS_GT);
-        addValue("BSS-Ratio", BSS / BSS_GT);
-    }
+    addValue("BSS", BSS);
+    addValue("BSS-GT", BSS_GT);
+    addValue("BSS-Ratio", BSS / BSS_GT);
+  }
 }

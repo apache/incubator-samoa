@@ -47,103 +47,105 @@ import com.yahoo.labs.samoa.topology.TopologyBuilder;
  * The Bagging Classifier by Oza and Russell.
  */
 public class AdaptiveBagging implements Learner, Configurable {
-    
-	/** Logger */
+
+  /** Logger */
   private static final Logger logger = LoggerFactory.getLogger(AdaptiveBagging.class);
 
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = -2971850264864952099L;
-	
-	/** The base learner option. */
-	public ClassOption baseLearnerOption = new ClassOption("baseLearner", 'l',
-			"Classifier to train.", Learner.class, VerticalHoeffdingTree.class.getName());
+  /** The Constant serialVersionUID. */
+  private static final long serialVersionUID = -2971850264864952099L;
 
-	/** The ensemble size option. */
-	public IntOption ensembleSizeOption = new IntOption("ensembleSize", 's',
-			"The number of models in the bag.", 10, 1, Integer.MAX_VALUE);
+  /** The base learner option. */
+  public ClassOption baseLearnerOption = new ClassOption("baseLearner", 'l',
+      "Classifier to train.", Learner.class, VerticalHoeffdingTree.class.getName());
 
-	public ClassOption driftDetectionMethodOption = new ClassOption("driftDetectionMethod", 'd',
+  /** The ensemble size option. */
+  public IntOption ensembleSizeOption = new IntOption("ensembleSize", 's',
+      "The number of models in the bag.", 10, 1, Integer.MAX_VALUE);
+
+  public ClassOption driftDetectionMethodOption = new ClassOption("driftDetectionMethod", 'd',
       "Drift detection method to use.", ChangeDetector.class, ADWINChangeDetector.class.getName());
 
-	/** The distributor processor. */
-	private BaggingDistributorProcessor distributorP;
+  /** The distributor processor. */
+  private BaggingDistributorProcessor distributorP;
 
-	/** The result stream. */
-	protected Stream resultStream;
-	
-	/** The dataset. */
-	private Instances dataset;
-        
-	protected Learner classifier;
-        
+  /** The result stream. */
+  protected Stream resultStream;
+
+  /** The dataset. */
+  private Instances dataset;
+
+  protected Learner classifier;
+
   protected int parallelism;
 
-	/**
-	 * Sets the layout.
-	 */
-	protected void setLayout() {
+  /**
+   * Sets the layout.
+   */
+  protected void setLayout() {
 
-		int sizeEnsemble = this.ensembleSizeOption.getValue();
+    int sizeEnsemble = this.ensembleSizeOption.getValue();
 
-		distributorP = new BaggingDistributorProcessor();
-		distributorP.setSizeEnsemble(sizeEnsemble);
-                this.builder.addProcessor(distributorP, 1);
-		        
-		//instantiate classifier
-		classifier = this.baseLearnerOption.getValue();
-		if (classifier instanceof AdaptiveLearner) {
-				// logger.info("Building an AdaptiveLearner {}", classifier.getClass().getName());
-				AdaptiveLearner ada = (AdaptiveLearner) classifier;
-				ada.setChangeDetector((ChangeDetector) this.driftDetectionMethodOption.getValue());
-		}
-		classifier.init(builder, this.dataset, sizeEnsemble);
-        
-		PredictionCombinerProcessor predictionCombinerP= new PredictionCombinerProcessor();
-		predictionCombinerP.setSizeEnsemble(sizeEnsemble);
-		this.builder.addProcessor(predictionCombinerP, 1);
-		
-		//Streams
-		resultStream = this.builder.createStream(predictionCombinerP);
-		predictionCombinerP.setOutputStream(resultStream);
+    distributorP = new BaggingDistributorProcessor();
+    distributorP.setSizeEnsemble(sizeEnsemble);
+    this.builder.addProcessor(distributorP, 1);
 
-		for (Stream subResultStream:classifier.getResultStreams()) {
-			this.builder.connectInputKeyStream(subResultStream, predictionCombinerP);
-		}
-		
-		/* The training stream. */
-		Stream testingStream = this.builder.createStream(distributorP);
-                this.builder.connectInputKeyStream(testingStream, classifier.getInputProcessor());
-	
-		/* The prediction stream. */
-		Stream predictionStream = this.builder.createStream(distributorP);
-                this.builder.connectInputKeyStream(predictionStream, classifier.getInputProcessor());
-		
-		distributorP.setOutputStream(testingStream);
-		distributorP.setPredictionStream(predictionStream);
-	}
+    // instantiate classifier
+    classifier = this.baseLearnerOption.getValue();
+    if (classifier instanceof AdaptiveLearner) {
+      // logger.info("Building an AdaptiveLearner {}",
+      // classifier.getClass().getName());
+      AdaptiveLearner ada = (AdaptiveLearner) classifier;
+      ada.setChangeDetector((ChangeDetector) this.driftDetectionMethodOption.getValue());
+    }
+    classifier.init(builder, this.dataset, sizeEnsemble);
 
-	/** The builder. */
-	private TopologyBuilder builder;
-		
-	
-	@Override
-	public void init(TopologyBuilder builder, Instances dataset, int parallelism) {
-		this.builder = builder;
-		this.dataset = dataset;
-                this.parallelism = parallelism;
-		this.setLayout();
-	}
+    PredictionCombinerProcessor predictionCombinerP = new PredictionCombinerProcessor();
+    predictionCombinerP.setSizeEnsemble(sizeEnsemble);
+    this.builder.addProcessor(predictionCombinerP, 1);
 
-        @Override
-	public Processor getInputProcessor() {
-		return distributorP;
-	}
-        
-	/* (non-Javadoc)
-	 * @see samoa.learners.Learner#getResultStreams()
-	 */
-	@Override
-	public Set<Stream> getResultStreams() {
-		return ImmutableSet.of(this.resultStream);
-	}
+    // Streams
+    resultStream = this.builder.createStream(predictionCombinerP);
+    predictionCombinerP.setOutputStream(resultStream);
+
+    for (Stream subResultStream : classifier.getResultStreams()) {
+      this.builder.connectInputKeyStream(subResultStream, predictionCombinerP);
+    }
+
+    /* The training stream. */
+    Stream testingStream = this.builder.createStream(distributorP);
+    this.builder.connectInputKeyStream(testingStream, classifier.getInputProcessor());
+
+    /* The prediction stream. */
+    Stream predictionStream = this.builder.createStream(distributorP);
+    this.builder.connectInputKeyStream(predictionStream, classifier.getInputProcessor());
+
+    distributorP.setOutputStream(testingStream);
+    distributorP.setPredictionStream(predictionStream);
+  }
+
+  /** The builder. */
+  private TopologyBuilder builder;
+
+  @Override
+  public void init(TopologyBuilder builder, Instances dataset, int parallelism) {
+    this.builder = builder;
+    this.dataset = dataset;
+    this.parallelism = parallelism;
+    this.setLayout();
+  }
+
+  @Override
+  public Processor getInputProcessor() {
+    return distributorP;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see samoa.learners.Learner#getResultStreams()
+   */
+  @Override
+  public Set<Stream> getResultStreams() {
+    return ImmutableSet.of(this.resultStream);
+  }
 }

@@ -43,63 +43,57 @@ package com.yahoo.labs.samoa.moa.classifiers.rules.core.splitcriteria;
 import com.yahoo.labs.samoa.moa.classifiers.core.splitcriteria.SDRSplitCriterion;
 import com.yahoo.labs.samoa.moa.classifiers.core.splitcriteria.SplitCriterion;
 
-
 public class SDRSplitCriterionAMRules extends SDRSplitCriterion implements SplitCriterion {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
+  @Override
+  public double getMeritOfSplit(double[] preSplitDist, double[][] postSplitDists) {
+    double SDR = 0.0;
+    double N = preSplitDist[0];
+    int count = 0;
 
-	@Override
-	public double getMeritOfSplit(double[] preSplitDist, double[][] postSplitDists) {
-		double SDR=0.0;
-		double N = preSplitDist[0];
-		int count = 0; 
+    for (int i = 0; i < postSplitDists.length; i++)
+    {
+      double Ni = postSplitDists[i][0];
+      if (Ni >= 0.05 * preSplitDist[0]) {
+        count = count + 1;
+      }
+    }
+    if (count == postSplitDists.length) {
+      SDR = computeSD(preSplitDist);
 
-		for(int i = 0; i < postSplitDists.length; i++)
-		{
-			double Ni = postSplitDists[i][0];
-			if(Ni >=0.05*preSplitDist[0]){
-				count = count +1;
-			}
-		}
-		if(count == postSplitDists.length){
-			SDR = computeSD(preSplitDist);
+      for (int i = 0; i < postSplitDists.length; i++)
+      {
+        double Ni = postSplitDists[i][0];
+        SDR -= (Ni / N) * computeSD(postSplitDists[i]);
 
-			for(int i = 0; i < postSplitDists.length; i++)
-			{
-				double Ni = postSplitDists[i][0];
-				SDR -= (Ni/N)*computeSD(postSplitDists[i]);
+      }
+    }
+    return SDR;
+  }
 
-			}
-		}
-		return SDR;
-	}
+  @Override
+  public double getRangeOfMerit(double[] preSplitDist) {
+    return 1;
+  }
 
+  public static double[] computeBranchSplitMerits(double[][] postSplitDists) {
+    double[] SDR = new double[postSplitDists.length];
+    double N = 0;
 
+    for (int i = 0; i < postSplitDists.length; i++)
+    {
+      double Ni = postSplitDists[i][0];
+      N += Ni;
+    }
+    for (int i = 0; i < postSplitDists.length; i++)
+    {
+      double Ni = postSplitDists[i][0];
+      SDR[i] = (Ni / N) * computeSD(postSplitDists[i]);
+    }
+    return SDR;
 
-	@Override
-	public double getRangeOfMerit(double[] preSplitDist) {
-		return 1;
-	}
-
-	public static double[] computeBranchSplitMerits(double[][] postSplitDists) {
-		double[] SDR = new double[postSplitDists.length];
-		double N = 0;
-
-		for(int i = 0; i < postSplitDists.length; i++)
-		{
-			double Ni = postSplitDists[i][0];
-			N += Ni;
-		}
-		for(int i = 0; i < postSplitDists.length; i++)
-		{
-			double Ni = postSplitDists[i][0];
-			SDR[i] = (Ni/N)*computeSD(postSplitDists[i]);
-		}
-		return SDR;
-
-	}
-
+  }
 
 }
-

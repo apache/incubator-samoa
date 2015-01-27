@@ -34,29 +34,29 @@ import com.yahoo.labs.samoa.instances.Instance;
  */
 public interface PerformanceEvaluator extends MOAObject {
 
-	/**
-	 * Resets this evaluator. It must be similar to starting a new evaluator
-	 * from scratch.
-	 * 
-	 */
-	public void reset();
+  /**
+   * Resets this evaluator. It must be similar to starting a new evaluator from
+   * scratch.
+   * 
+   */
+  public void reset();
 
-	/**
-	 * Adds a learning result to this evaluator.
-	 * 
-	 * @param inst
-	 *            the instance to be classified
-	 * @param classVotes
-	 *            an array containing the estimated membership probabilities of
-	 *            the test instance in each class
-	 * @return an array of measurements monitored in this evaluator
-	 */
-	public void addResult(Instance inst, double[] classVotes);
+  /**
+   * Adds a learning result to this evaluator.
+   * 
+   * @param inst
+   *          the instance to be classified
+   * @param classVotes
+   *          an array containing the estimated membership probabilities of the
+   *          test instance in each class
+   * @return an array of measurements monitored in this evaluator
+   */
+  public void addResult(Instance inst, double[] classVotes);
 
-	/**
-	 * Gets the current measurements monitored by this evaluator.
-	 * 
-	 * @return an array of measurements monitored by this evaluator
-	 */
-	public Measurement[] getPerformanceMeasurements();
+  /**
+   * Gets the current measurements monitored by this evaluator.
+   * 
+   * @return an array of measurements monitored by this evaluator
+   */
+  public Measurement[] getPerformanceMeasurements();
 }

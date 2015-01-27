@@ -45,127 +45,167 @@ import com.yahoo.labs.samoa.moa.streams.clustering.RandomRBFGeneratorEvents;
  */
 public final class ClusteringEntranceProcessor implements EntranceProcessor {
 
-    private static final long serialVersionUID = 4169053337917578558L;
+  private static final long serialVersionUID = 4169053337917578558L;
 
-    private static final Logger logger = LoggerFactory.getLogger(ClusteringEntranceProcessor.class);
+  private static final Logger logger = LoggerFactory.getLogger(ClusteringEntranceProcessor.class);
 
-    private StreamSource streamSource;
-    private Instance firstInstance;
-    private boolean isInited = false;
-    private Random random = new Random();
-    private double samplingThreshold;
-    private int numberInstances;
-    private int numInstanceSent = 0;
+  private StreamSource streamSource;
+  private Instance firstInstance;
+  private boolean isInited = false;
+  private Random random = new Random();
+  private double samplingThreshold;
+  private int numberInstances;
+  private int numInstanceSent = 0;
 
-    private int groundTruthSamplingFrequency;
+  private int groundTruthSamplingFrequency;
 
-    @Override
-    public boolean process(ContentEvent event) {
-        // TODO: possible refactor of the super-interface implementation
-        // of source processor does not need this method
-        return false;
+  @Override
+  public boolean process(ContentEvent event) {
+    // TODO: possible refactor of the super-interface implementation
+    // of source processor does not need this method
+    return false;
+  }
+
+  @Override
+  public void onCreate(int id) {
+    logger.debug("Creating ClusteringSourceProcessor with id {}", id);
+  }
+
+  @Override
+  public Processor newProcessor(Processor p) {
+    ClusteringEntranceProcessor newProcessor = new ClusteringEntranceProcessor();
+    ClusteringEntranceProcessor originProcessor = (ClusteringEntranceProcessor) p;
+    if (originProcessor.getStreamSource() != null) {
+      newProcessor.setStreamSource(originProcessor.getStreamSource().getStream());
+    }
+    return newProcessor;
+  }
+
+  @Override
+  public boolean hasNext() {
+    return (!isFinished());
+  }
+
+  @Override
+  public boolean isFinished() {
+    return (!streamSource.hasMoreInstances() || (numberInstances >= 0 && numInstanceSent >= numberInstances));
+  }
+
+  // /**
+  // * Method to send instances via input stream
+  // *
+  // * @param inputStream
+  // * @param numberInstances
+  // */
+  // public void sendInstances(Stream inputStream, Stream evaluationStream, int
+  // numberInstances, double samplingThreshold) {
+  // int numInstanceSent = 0;
+  // this.samplingThreshold = samplingThreshold;
+  // while (streamSource.hasMoreInstances() && numInstanceSent <
+  // numberInstances) {
+  // numInstanceSent++;
+  // DataPoint nextDataPoint = new DataPoint(nextInstance(), numInstanceSent);
+  // ClusteringContentEvent contentEvent = new
+  // ClusteringContentEvent(numInstanceSent, nextDataPoint);
+  // inputStream.put(contentEvent);
+  // sendPointsAndGroundTruth(streamSource, evaluationStream, numInstanceSent,
+  // nextDataPoint);
+  // }
+  //
+  // sendEndEvaluationInstance(inputStream);
+  // }
+
+  public double getSamplingThreshold() {
+    return samplingThreshold;
+  }
+
+  public void setSamplingThreshold(double samplingThreshold) {
+    this.samplingThreshold = samplingThreshold;
+  }
+
+  public int getGroundTruthSamplingFrequency() {
+    return groundTruthSamplingFrequency;
+  }
+
+  public void setGroundTruthSamplingFrequency(int groundTruthSamplingFrequency) {
+    this.groundTruthSamplingFrequency = groundTruthSamplingFrequency;
+  }
+
+  public StreamSource getStreamSource() {
+    return streamSource;
+  }
+
+  public void setStreamSource(InstanceStream stream) {
+    if (stream instanceof AbstractOptionHandler) {
+      ((AbstractOptionHandler) (stream)).prepareForUse();
     }
 
-    @Override
-    public void onCreate(int id) {
-        logger.debug("Creating ClusteringSourceProcessor with id {}", id);
+    this.streamSource = new StreamSource(stream);
+    firstInstance = streamSource.nextInstance().getData();
+  }
+
+  public Instances getDataset() {
+    return firstInstance.dataset();
+  }
+
+  private Instance nextInstance() {
+    if (this.isInited) {
+      return streamSource.nextInstance().getData();
+    } else {
+      this.isInited = true;
+      return firstInstance;
     }
+  }
 
-    @Override
-    public Processor newProcessor(Processor p) {
-        ClusteringEntranceProcessor newProcessor = new ClusteringEntranceProcessor();
-        ClusteringEntranceProcessor originProcessor = (ClusteringEntranceProcessor) p;
-        if (originProcessor.getStreamSource() != null) {
-            newProcessor.setStreamSource(originProcessor.getStreamSource().getStream());
-        }
-        return newProcessor;
-    }
+  // private void sendEndEvaluationInstance(Stream inputStream) {
+  // ClusteringContentEvent contentEvent = new ClusteringContentEvent(-1,
+  // firstInstance);
+  // contentEvent.setLast(true);
+  // inputStream.put(contentEvent);
+  // }
 
-    @Override
-    public boolean hasNext() {
-        return (!isFinished());
-    }
+  // private void sendPointsAndGroundTruth(StreamSource sourceStream, Stream
+  // evaluationStream, int numInstanceSent, DataPoint nextDataPoint) {
+  // boolean sendEvent = false;
+  // DataPoint instance = null;
+  // Clustering gtClustering = null;
+  // int samplingFrequency = ((ClusteringStream)
+  // sourceStream.getStream()).getDecayHorizon();
+  // if (random.nextDouble() < samplingThreshold) {
+  // // Add instance
+  // sendEvent = true;
+  // instance = nextDataPoint;
+  // }
+  // if (numInstanceSent > 0 && numInstanceSent % samplingFrequency == 0) {
+  // // Add GroundTruth
+  // sendEvent = true;
+  // gtClustering = ((RandomRBFGeneratorEvents)
+  // sourceStream.getStream()).getGeneratingClusters();
+  // }
+  // if (sendEvent == true) {
+  // ClusteringEvaluationContentEvent evalEvent;
+  // evalEvent = new ClusteringEvaluationContentEvent(gtClustering, instance,
+  // false);
+  // evaluationStream.put(evalEvent);
+  // }
+  // }
 
-    @Override
-    public boolean isFinished() {
-        return (!streamSource.hasMoreInstances() || (numberInstances >= 0 && numInstanceSent >= numberInstances));
-    }
+  public void setMaxNumInstances(int value) {
+    numberInstances = value;
+  }
 
-    // /**
-    // * Method to send instances via input stream
-    // *
-    // * @param inputStream
-    // * @param numberInstances
-    // */
-    // public void sendInstances(Stream inputStream, Stream evaluationStream, int numberInstances, double samplingThreshold) {
-    // int numInstanceSent = 0;
-    // this.samplingThreshold = samplingThreshold;
-    // while (streamSource.hasMoreInstances() && numInstanceSent < numberInstances) {
-    // numInstanceSent++;
-    // DataPoint nextDataPoint = new DataPoint(nextInstance(), numInstanceSent);
-    // ClusteringContentEvent contentEvent = new ClusteringContentEvent(numInstanceSent, nextDataPoint);
-    // inputStream.put(contentEvent);
-    // sendPointsAndGroundTruth(streamSource, evaluationStream, numInstanceSent, nextDataPoint);
-    // }
-    //
-    // sendEndEvaluationInstance(inputStream);
-    // }
+  public int getMaxNumInstances() {
+    return this.numberInstances;
+  }
 
-    public double getSamplingThreshold() {
-        return samplingThreshold;
-    }
+  @Override
+  public ContentEvent nextEvent() {
 
-    public void setSamplingThreshold(double samplingThreshold) {
-        this.samplingThreshold = samplingThreshold;
-    }
-    
-    
-
-    public int getGroundTruthSamplingFrequency() {
-        return groundTruthSamplingFrequency;
-    }
-
-    public void setGroundTruthSamplingFrequency(int groundTruthSamplingFrequency) {
-        this.groundTruthSamplingFrequency = groundTruthSamplingFrequency;
-    }
-
-    public StreamSource getStreamSource() {
-        return streamSource;
-    }
-
-    public void setStreamSource(InstanceStream stream) {
-        if (stream instanceof AbstractOptionHandler) {
-            ((AbstractOptionHandler) (stream)).prepareForUse();
-        }
-
-        this.streamSource = new StreamSource(stream);
-        firstInstance = streamSource.nextInstance().getData();
-    }
-
-    public Instances getDataset() {
-        return firstInstance.dataset();
-    }
-
-    private Instance nextInstance() {
-        if (this.isInited) {
-            return streamSource.nextInstance().getData();
-        } else {
-            this.isInited = true;
-            return firstInstance;
-        }
-    }
-
-    // private void sendEndEvaluationInstance(Stream inputStream) {
-    // ClusteringContentEvent contentEvent = new ClusteringContentEvent(-1, firstInstance);
-    // contentEvent.setLast(true);
-    // inputStream.put(contentEvent);
-    // }
-
-    // private void sendPointsAndGroundTruth(StreamSource sourceStream, Stream evaluationStream, int numInstanceSent, DataPoint nextDataPoint) {
     // boolean sendEvent = false;
     // DataPoint instance = null;
     // Clustering gtClustering = null;
-    // int samplingFrequency = ((ClusteringStream) sourceStream.getStream()).getDecayHorizon();
+    // int samplingFrequency = ((ClusteringStream)
+    // sourceStream.getStream()).getDecayHorizon();
     // if (random.nextDouble() < samplingThreshold) {
     // // Add instance
     // sendEvent = true;
@@ -174,68 +214,52 @@ public final class ClusteringEntranceProcessor implements EntranceProcessor {
     // if (numInstanceSent > 0 && numInstanceSent % samplingFrequency == 0) {
     // // Add GroundTruth
     // sendEvent = true;
-    // gtClustering = ((RandomRBFGeneratorEvents) sourceStream.getStream()).getGeneratingClusters();
+    // gtClustering = ((RandomRBFGeneratorEvents)
+    // sourceStream.getStream()).getGeneratingClusters();
     // }
     // if (sendEvent == true) {
     // ClusteringEvaluationContentEvent evalEvent;
-    // evalEvent = new ClusteringEvaluationContentEvent(gtClustering, instance, false);
+    // evalEvent = new ClusteringEvaluationContentEvent(gtClustering, instance,
+    // false);
     // evaluationStream.put(evalEvent);
     // }
-    // }
 
-    public void setMaxNumInstances(int value) {
-        numberInstances = value;
-    }
-
-    public int getMaxNumInstances() {
-        return this.numberInstances;
-    }
-
-    @Override
-    public ContentEvent nextEvent() {
-
-        // boolean sendEvent = false;
-        // DataPoint instance = null;
-        // Clustering gtClustering = null;
-        // int samplingFrequency = ((ClusteringStream) sourceStream.getStream()).getDecayHorizon();
-        // if (random.nextDouble() < samplingThreshold) {
-        // // Add instance
-        // sendEvent = true;
-        // instance = nextDataPoint;
-        // }
-        // if (numInstanceSent > 0 && numInstanceSent % samplingFrequency == 0) {
-        // // Add GroundTruth
-        // sendEvent = true;
-        // gtClustering = ((RandomRBFGeneratorEvents) sourceStream.getStream()).getGeneratingClusters();
-        // }
-        // if (sendEvent == true) {
-        // ClusteringEvaluationContentEvent evalEvent;
-        // evalEvent = new ClusteringEvaluationContentEvent(gtClustering, instance, false);
-        // evaluationStream.put(evalEvent);
-        // }
-
-        groundTruthSamplingFrequency = ((ClusteringStream) streamSource.getStream()).getDecayHorizon(); // FIXME should it be taken from the ClusteringEvaluation -f option instead?
-        if (isFinished()) {
-            // send ending event
-            ClusteringContentEvent contentEvent = new ClusteringContentEvent(-1, firstInstance);
-            contentEvent.setLast(true);
-            return contentEvent;
-        } else {
-            DataPoint nextDataPoint = new DataPoint(nextInstance(), numInstanceSent);
-            numInstanceSent++;
-            if (numInstanceSent % groundTruthSamplingFrequency == 0) {
-                // TODO implement an interface ClusteringGroundTruth with a getGeneratingClusters() method, check if the source implements the interface
-                // send a clustering evaluation event for external measures (distance from the gt clusters)
-                Clustering gtClustering = ((RandomRBFGeneratorEvents) streamSource.getStream()).getGeneratingClusters();
-                return new ClusteringEvaluationContentEvent(gtClustering, nextDataPoint, false);
-            } else {
-                ClusteringContentEvent contentEvent = new ClusteringContentEvent(numInstanceSent, nextDataPoint);
-                if (random.nextDouble() < samplingThreshold) {
-                    // send a clustering content event for internal measures (cohesion, separation)
-                    contentEvent.setSample(true);
-                }
-                return contentEvent;
-            }
+    groundTruthSamplingFrequency = ((ClusteringStream) streamSource.getStream()).getDecayHorizon(); // FIXME
+                                                                                                    // should
+                                                                                                    // it
+                                                                                                    // be
+                                                                                                    // taken
+                                                                                                    // from
+                                                                                                    // the
+                                                                                                    // ClusteringEvaluation
+                                                                                                    // -f
+                                                                                                    // option
+                                                                                                    // instead?
+    if (isFinished()) {
+      // send ending event
+      ClusteringContentEvent contentEvent = new ClusteringContentEvent(-1, firstInstance);
+      contentEvent.setLast(true);
+      return contentEvent;
+    } else {
+      DataPoint nextDataPoint = new DataPoint(nextInstance(), numInstanceSent);
+      numInstanceSent++;
+      if (numInstanceSent % groundTruthSamplingFrequency == 0) {
+        // TODO implement an interface ClusteringGroundTruth with a
+        // getGeneratingClusters() method, check if the source implements the
+        // interface
+        // send a clustering evaluation event for external measures (distance
+        // from the gt clusters)
+        Clustering gtClustering = ((RandomRBFGeneratorEvents) streamSource.getStream()).getGeneratingClusters();
+        return new ClusteringEvaluationContentEvent(gtClustering, nextDataPoint, false);
+      } else {
+        ClusteringContentEvent contentEvent = new ClusteringContentEvent(numInstanceSent, nextDataPoint);
+        if (random.nextDouble() < samplingThreshold) {
+          // send a clustering content event for internal measures (cohesion,
+          // separation)
+          contentEvent.setSample(true);
         }
+        return contentEvent;
+      }
     }
+  }
 }

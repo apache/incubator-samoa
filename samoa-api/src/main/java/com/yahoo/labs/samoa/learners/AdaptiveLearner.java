@@ -24,30 +24,30 @@ package com.yahoo.labs.samoa.learners;
  * License
  */
 
-
 import com.yahoo.labs.samoa.moa.classifiers.core.driftdetection.ChangeDetector;
 import com.yahoo.labs.samoa.topology.Stream;
 
 /**
- * The Interface Adaptive Learner.
- * Initializing Classifier should initalize PI to connect the Classifier with the input stream 
- * and initialize result stream so that other PI can connect to the classification result of this classifier
+ * The Interface Adaptive Learner. Initializing Classifier should initalize PI
+ * to connect the Classifier with the input stream and initialize result stream
+ * so that other PI can connect to the classification result of this classifier
  */
 
 public interface AdaptiveLearner {
 
-        /**
-	 * Gets the change detector item.
-	 *
-	 * @return the change detector item
-	 */
-	public ChangeDetector getChangeDetector();
+  /**
+   * Gets the change detector item.
+   * 
+   * @return the change detector item
+   */
+  public ChangeDetector getChangeDetector();
 
-        /**
-	 * Sets the change detector item.
-	 *
-         * @param cd the change detector item
-	 */
-	public void setChangeDetector(ChangeDetector cd);
-        
+  /**
+   * Sets the change detector item.
+   * 
+   * @param cd
+   *          the change detector item
+   */
+  public void setChangeDetector(ChangeDetector cd);
+
 }

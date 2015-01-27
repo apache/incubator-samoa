@@ -24,28 +24,28 @@ package com.yahoo.labs.samoa.learners.classifiers.rules.common;
  * The most basic rule: inherit from Rule the ID and list of features.
  * 
  * @author Anh Thu Vu
- *
+ * 
  */
 /*
  * This branch (Non-learning rule) was created for an old implementation.
- * Probably should remove None-Learning and Learning Rule classes,
- * merge Rule with LearningRule.
+ * Probably should remove None-Learning and Learning Rule classes, merge Rule
+ * with LearningRule.
  */
 public class NonLearningRule extends Rule {
 
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = -1210907339230307784L;
+  private static final long serialVersionUID = -1210907339230307784L;
 
-	public NonLearningRule(ActiveRule rule) {
-		this.nodeList = rule.nodeList;
-		this.ruleNumberID = rule.ruleNumberID;
-	}
+  public NonLearningRule(ActiveRule rule) {
+    this.nodeList = rule.nodeList;
+    this.ruleNumberID = rule.ruleNumberID;
+  }
 
-	@Override
-	public void getDescription(StringBuilder sb, int indent) {
-		// do nothing
-	}
+  @Override
+  public void getDescription(StringBuilder sb, int indent) {
+    // do nothing
+  }
 
 }

@@ -26,40 +26,41 @@ import com.yahoo.labs.samoa.core.ContentEvent;
 
 /**
  * Storm Stream that connects into Bolt. It wraps Storm's outputCollector class
+ * 
  * @author Arinto Murdopo
- *
+ * 
  */
-class StormBoltStream extends StormStream{
-	
-	/**
+class StormBoltStream extends StormStream {
+
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = -5712513402991550847L;
-	
-	private OutputCollector outputCollector;
+  private static final long serialVersionUID = -5712513402991550847L;
 
-	StormBoltStream(String stormComponentId){
-		super(stormComponentId);
-	}
+  private OutputCollector outputCollector;
 
-	@Override
-	public void put(ContentEvent contentEvent) {
-		outputCollector.emit(this.outputStreamId, new Values(contentEvent, contentEvent.getKey()));
-	}
-	
-	public void setCollector(OutputCollector outputCollector){
-		this.outputCollector = outputCollector;
-	}
+  StormBoltStream(String stormComponentId) {
+    super(stormComponentId);
+  }
 
-//	@Override
-//	public void setStreamId(String streamId) {
-//		// TODO Auto-generated method stub
-//		//this.outputStreamId = streamId;
-//	}
+  @Override
+  public void put(ContentEvent contentEvent) {
+    outputCollector.emit(this.outputStreamId, new Values(contentEvent, contentEvent.getKey()));
+  }
 
-	@Override
-	public String getStreamId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  public void setCollector(OutputCollector outputCollector) {
+    this.outputCollector = outputCollector;
+  }
+
+  // @Override
+  // public void setStreamId(String streamId) {
+  // // TODO Auto-generated method stub
+  // //this.outputStreamId = streamId;
+  // }
+
+  @Override
+  public String getStreamId() {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }

@@ -32,89 +32,89 @@ import com.yahoo.labs.samoa.topology.Stream;
 
 public class S4EntranceProcessingItem extends ProcessingElement implements EntranceProcessingItem {
 
-    private EntranceProcessor entranceProcessor;
-    // private S4DoTask app;
-    private int parallelism;
-    protected Stream outputStream;
+  private EntranceProcessor entranceProcessor;
+  // private S4DoTask app;
+  private int parallelism;
+  protected Stream outputStream;
 
-    /**
-     * Constructor of an S4 entrance processing item.
-     * 
-     * @param app
-     *            : S4 application
-     */
-    public S4EntranceProcessingItem(EntranceProcessor entranceProcessor, App app) {
-        super(app);
-        this.entranceProcessor = entranceProcessor;
-        // this.app = (S4DoTask) app;
-        // this.setSingleton(true);
+  /**
+   * Constructor of an S4 entrance processing item.
+   * 
+   * @param app
+   *          : S4 application
+   */
+  public S4EntranceProcessingItem(EntranceProcessor entranceProcessor, App app) {
+    super(app);
+    this.entranceProcessor = entranceProcessor;
+    // this.app = (S4DoTask) app;
+    // this.setSingleton(true);
+  }
+
+  public void setParallelism(int parallelism) {
+    this.parallelism = parallelism;
+  }
+
+  public int getParallelism() {
+    return this.parallelism;
+  }
+
+  @Override
+  public EntranceProcessor getProcessor() {
+    return this.entranceProcessor;
+  }
+
+  //
+  // @Override
+  // public void put(Instance inst) {
+  // // do nothing
+  // // may not needed
+  // }
+
+  @Override
+  protected void onCreate() {
+    // was commented
+    if (this.entranceProcessor != null) {
+      // TODO revisit if we need to change it to a clone() call
+      this.entranceProcessor = (EntranceProcessor) this.entranceProcessor.newProcessor(this.entranceProcessor);
+      this.entranceProcessor.onCreate(Integer.parseInt(getId()));
     }
+  }
 
-    public void setParallelism(int parallelism) {
-        this.parallelism = parallelism;
-    }
+  @Override
+  protected void onRemove() {
+    // do nothing
+  }
 
-    public int getParallelism() {
-        return this.parallelism;
-    }
+  //
+  // /**
+  // * Sets the entrance processing item processor.
+  // *
+  // * @param processor
+  // */
+  // public void setProcessor(Processor processor) {
+  // this.entranceProcessor = processor;
+  // }
 
-    @Override
-    public EntranceProcessor getProcessor() {
-        return this.entranceProcessor;
-    }
+  @Override
+  public void setName(String name) {
+    super.setName(name);
+  }
 
-    //
-    // @Override
-    // public void put(Instance inst) {
-    // // do nothing
-    // // may not needed
-    // }
+  @Override
+  public EntranceProcessingItem setOutputStream(Stream stream) {
+    if (this.outputStream != null)
+      throw new IllegalStateException("Output stream for an EntrancePI sohuld be initialized only once");
+    this.outputStream = stream;
+    return this;
+  }
 
-    @Override
-    protected void onCreate() {
-        // was commented
-        if (this.entranceProcessor != null) {
-            // TODO revisit if we need to change it to a clone() call
-            this.entranceProcessor = (EntranceProcessor) this.entranceProcessor.newProcessor(this.entranceProcessor);
-            this.entranceProcessor.onCreate(Integer.parseInt(getId()));
-        }
-    }
-
-    @Override
-    protected void onRemove() {
-        // do nothing
-    }
-
-    //
-    // /**
-    // * Sets the entrance processing item processor.
-    // *
-    // * @param processor
-    // */
-    // public void setProcessor(Processor processor) {
-    // this.entranceProcessor = processor;
-    // }
-
-    @Override
-    public void setName(String name) {
-        super.setName(name);
-    }
-
-    @Override
-    public EntranceProcessingItem setOutputStream(Stream stream) {
-        if (this.outputStream != null)
-            throw new IllegalStateException("Output stream for an EntrancePI sohuld be initialized only once");
-        this.outputStream = stream;
-        return this;
-    }
-
-    public boolean injectNextEvent() {
-        if (entranceProcessor.hasNext()) {
-            ContentEvent nextEvent = this.entranceProcessor.nextEvent();
-            outputStream.put(nextEvent);
-            return entranceProcessor.hasNext();
-        } else
-            return false;
-        // return !nextEvent.isLastEvent();
-    }
+  public boolean injectNextEvent() {
+    if (entranceProcessor.hasNext()) {
+      ContentEvent nextEvent = this.entranceProcessor.nextEvent();
+      outputStream.put(nextEvent);
+      return entranceProcessor.hasNext();
+    } else
+      return false;
+    // return !nextEvent.isLastEvent();
+  }
 }

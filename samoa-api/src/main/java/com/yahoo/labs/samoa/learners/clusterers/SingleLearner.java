@@ -42,56 +42,59 @@ import com.yahoo.labs.samoa.topology.TopologyBuilder;
  */
 public final class SingleLearner implements Learner, Configurable {
 
-	private static final long serialVersionUID = 684111382631697031L;
-	
-	private LocalClustererProcessor  learnerP;
-		
-	private Stream resultStream;
-	
-	private Instances dataset;
+  private static final long serialVersionUID = 684111382631697031L;
 
-	public ClassOption learnerOption = new ClassOption("learner", 'l',
-			"Learner to train.", LocalClustererAdapter.class, ClustreamClustererAdapter.class.getName());
-	
-	private TopologyBuilder builder;
+  private LocalClustererProcessor learnerP;
 
-        private int parallelism;
+  private Stream resultStream;
 
-	@Override
-	public void init(TopologyBuilder builder, Instances dataset, int parallelism){
-		this.builder = builder;
-		this.dataset = dataset;
-                this.parallelism = parallelism;
-		this.setLayout();
-	}
+  private Instances dataset;
 
+  public ClassOption learnerOption = new ClassOption("learner", 'l',
+      "Learner to train.", LocalClustererAdapter.class, ClustreamClustererAdapter.class.getName());
 
-	protected void setLayout() {		
-		learnerP = new LocalClustererProcessor();
-                LocalClustererAdapter learner = (LocalClustererAdapter) this.learnerOption.getValue();
-                learner.setDataset(this.dataset);
-		learnerP.setLearner(learner);
-                
-		this.builder.addProcessor(learnerP, this.parallelism);
-		resultStream = this.builder.createStream(learnerP);
-		
-		learnerP.setOutputStream(resultStream);
-	}
+  private TopologyBuilder builder;
 
-	/* (non-Javadoc)
-	 * @see samoa.classifiers.Classifier#getInputProcessingItem()
-	 */
-       @Override
-	public Processor getInputProcessor() {
-		return learnerP;
-	}
-		
-    /* (non-Javadoc)
-     * @see samoa.learners.Learner#getResultStreams()
-     */
-    @Override
-    public Set<Stream> getResultStreams() {
-    	Set<Stream> streams = ImmutableSet.of(this.resultStream);
-		return streams;
-    }
+  private int parallelism;
+
+  @Override
+  public void init(TopologyBuilder builder, Instances dataset, int parallelism) {
+    this.builder = builder;
+    this.dataset = dataset;
+    this.parallelism = parallelism;
+    this.setLayout();
+  }
+
+  protected void setLayout() {
+    learnerP = new LocalClustererProcessor();
+    LocalClustererAdapter learner = (LocalClustererAdapter) this.learnerOption.getValue();
+    learner.setDataset(this.dataset);
+    learnerP.setLearner(learner);
+
+    this.builder.addProcessor(learnerP, this.parallelism);
+    resultStream = this.builder.createStream(learnerP);
+
+    learnerP.setOutputStream(resultStream);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see samoa.classifiers.Classifier#getInputProcessingItem()
+   */
+  @Override
+  public Processor getInputProcessor() {
+    return learnerP;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see samoa.learners.Learner#getResultStreams()
+   */
+  @Override
+  public Set<Stream> getResultStreams() {
+    Set<Stream> streams = ImmutableSet.of(this.resultStream);
+    return streams;
+  }
 }

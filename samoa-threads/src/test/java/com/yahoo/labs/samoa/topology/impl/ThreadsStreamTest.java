@@ -41,87 +41,95 @@ import com.yahoo.labs.samoa.utils.StreamDestination;
 
 /**
  * @author Anh Thu Vu
- *
+ * 
  */
 @RunWith(Parameterized.class)
 public class ThreadsStreamTest {
-	
-	@Tested private ThreadsStream stream;
-	
-	@Mocked private ThreadsProcessingItem sourcePi, destPi;
-	@Mocked private ContentEvent event;
-	@Mocked private StreamDestination destination;
 
-	private final String eventKey = "eventkey";
-	private final int parallelism;
-	private final PartitioningScheme scheme;
-	
-	
-	@Parameters
-	public static Collection<Object[]> generateParameters() {
-		return Arrays.asList(new Object[][] {
-			 { 2, PartitioningScheme.SHUFFLE },
-			 { 3, PartitioningScheme.GROUP_BY_KEY },
-			 { 4, PartitioningScheme.BROADCAST }
-		});
-	}
-	
-	public ThreadsStreamTest(int parallelism, PartitioningScheme scheme) {
-		this.parallelism = parallelism;
-		this.scheme = scheme;
-	}
-	
-	@Before
-	public void setUp() throws Exception {
-		stream = new ThreadsStream(sourcePi);
-		stream.addDestination(destination);
-	}
-	
-	@Test
-	public void testAddDestination() {
-		boolean found = false;
-		for (StreamDestination sd:stream.getDestinations()) {
-			if (sd == destination) {
-				found = true;
-				break;
-			}
-		}
-		assertTrue("Destination object was not added in stream's destinations set.",found);
-	}
+  @Tested
+  private ThreadsStream stream;
 
-	@Test
-	public void testPut() {
-		new NonStrictExpectations() {
-			{
-				event.getKey(); result=eventKey;
-				destination.getProcessingItem(); result=destPi;
-				destination.getPartitioningScheme(); result=scheme;
-				destination.getParallelism(); result=parallelism;
-				
-			}
-		};
-		switch(this.scheme) {
-		case SHUFFLE: case GROUP_BY_KEY:
-			new Expectations() {
-				{
-					
-					// TODO: restrict the range of counter value
-					destPi.processEvent(event, anyInt); times=1;
-				}
-			};
-			break;
-		case BROADCAST:
-			new Expectations() {
-				{
-					// TODO: restrict the range of counter value
-					destPi.processEvent(event, anyInt); times=parallelism;
-				}
-			};
-			break;
-		}
-		stream.put(event);
-	}
-	
-	
+  @Mocked
+  private ThreadsProcessingItem sourcePi, destPi;
+  @Mocked
+  private ContentEvent event;
+  @Mocked
+  private StreamDestination destination;
+
+  private final String eventKey = "eventkey";
+  private final int parallelism;
+  private final PartitioningScheme scheme;
+
+  @Parameters
+  public static Collection<Object[]> generateParameters() {
+    return Arrays.asList(new Object[][] {
+        { 2, PartitioningScheme.SHUFFLE },
+        { 3, PartitioningScheme.GROUP_BY_KEY },
+        { 4, PartitioningScheme.BROADCAST }
+    });
+  }
+
+  public ThreadsStreamTest(int parallelism, PartitioningScheme scheme) {
+    this.parallelism = parallelism;
+    this.scheme = scheme;
+  }
+
+  @Before
+  public void setUp() throws Exception {
+    stream = new ThreadsStream(sourcePi);
+    stream.addDestination(destination);
+  }
+
+  @Test
+  public void testAddDestination() {
+    boolean found = false;
+    for (StreamDestination sd : stream.getDestinations()) {
+      if (sd == destination) {
+        found = true;
+        break;
+      }
+    }
+    assertTrue("Destination object was not added in stream's destinations set.", found);
+  }
+
+  @Test
+  public void testPut() {
+    new NonStrictExpectations() {
+      {
+        event.getKey();
+        result = eventKey;
+        destination.getProcessingItem();
+        result = destPi;
+        destination.getPartitioningScheme();
+        result = scheme;
+        destination.getParallelism();
+        result = parallelism;
+
+      }
+    };
+    switch (this.scheme) {
+    case SHUFFLE:
+    case GROUP_BY_KEY:
+      new Expectations() {
+        {
+
+          // TODO: restrict the range of counter value
+          destPi.processEvent(event, anyInt);
+          times = 1;
+        }
+      };
+      break;
+    case BROADCAST:
+      new Expectations() {
+        {
+          // TODO: restrict the range of counter value
+          destPi.processEvent(event, anyInt);
+          times = parallelism;
+        }
+      };
+      break;
+    }
+    stream.put(event);
+  }
 
 }

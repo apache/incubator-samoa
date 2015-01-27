@@ -21,14 +21,14 @@ package com.yahoo.labs.samoa.moa.classifiers.core.attributeclassobservers;
  */
 
 /**
- * Interface for observing the class data distribution for a discrete (nominal) attribute.
- * This observer monitors the class distribution of a given attribute.
- * Used in naive Bayes and decision trees to monitor data statistics on leaves.
- *
+ * Interface for observing the class data distribution for a discrete (nominal)
+ * attribute. This observer monitors the class distribution of a given
+ * attribute. Used in naive Bayes and decision trees to monitor data statistics
+ * on leaves.
+ * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
- * @version $Revision: 7 $ 
+ * @version $Revision: 7 $
  */
 public interface DiscreteAttributeClassObserver extends AttributeClassObserver {
 
-   
 }

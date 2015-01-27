@@ -46,7 +46,7 @@ import com.yahoo.labs.samoa.topology.TopologyBuilder;
  * Vertical Hoeffding Tree (VHT) classifier is a distributed classifier that
  * utilizes vertical parallelism on top of Very Fast Decision Tree (VFDT)
  * classifier.
- *
+ * 
  * @author Arinto Murdopo
  */
 public final class VerticalHoeffdingTree implements ClassificationLearner, AdaptiveLearner, Configurable {
@@ -109,7 +109,6 @@ public final class VerticalHoeffdingTree implements ClassificationLearner, Adapt
 
     Stream filterStream = topologyBuilder.createStream(filterProc);
     this.filterProc.setOutputStream(filterStream);
-
 
     ModelAggregatorProcessor modelAggrProc = new ModelAggregatorProcessor.Builder(dataset)
         .splitCriterion((SplitCriterion) this.splitCriterionOption.getValue())
@@ -175,7 +174,7 @@ public final class VerticalHoeffdingTree implements ClassificationLearner, Adapt
 
   static class LearningNodeIdGenerator {
 
-    //TODO: add code to warn user of when value reaches Long.MAX_VALUES
+    // TODO: add code to warn user of when value reaches Long.MAX_VALUES
     private static long id = 0;
 
     static synchronized long generate() {

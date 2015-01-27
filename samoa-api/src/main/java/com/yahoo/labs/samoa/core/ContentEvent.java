@@ -24,20 +24,21 @@ package com.yahoo.labs.samoa.core;
  * The Interface ContentEvent.
  */
 public interface ContentEvent extends java.io.Serializable {
-	
-	/**
-	 * Gets the content event key.
-	 *
-	 * @return the key
-	 */
-	public String getKey();
-	
-	/**
-	 * Sets the content event key.
-	 * 
-	 * @param key string
-	 */
-	public void setKey(String key);
-	
-	public boolean isLastEvent();
+
+  /**
+   * Gets the content event key.
+   * 
+   * @return the key
+   */
+  public String getKey();
+
+  /**
+   * Sets the content event key.
+   * 
+   * @param key
+   *          string
+   */
+  public void setKey(String key);
+
+  public boolean isLastEvent();
 }

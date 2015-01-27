@@ -27,48 +27,48 @@ import com.yahoo.labs.samoa.instances.Instance;
  * Forwarded instances from Model Agrregator to Learners/Default Rule Learner.
  * 
  * @author Anh Thu Vu
- *
+ * 
  */
 public class AssignmentContentEvent implements ContentEvent {
 
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1031695762172836629L;
+  private static final long serialVersionUID = 1031695762172836629L;
 
-	private int ruleNumberID;
-	private Instance instance;
-	
-	public AssignmentContentEvent() {
-		this(0, null);
-	}
-	
-	public AssignmentContentEvent(int ruleID, Instance instance) {
-		this.ruleNumberID = ruleID;
-		this.instance = instance;
-	}
-	
-	@Override
-	public String getKey() {
-		return Integer.toString(this.ruleNumberID);
-	}
+  private int ruleNumberID;
+  private Instance instance;
 
-	@Override
-	public void setKey(String key) {
-		// do nothing
-	}
+  public AssignmentContentEvent() {
+    this(0, null);
+  }
 
-	@Override
-	public boolean isLastEvent() {
-		return false;
-	}
-	
-	public Instance getInstance() {
-		return this.instance;
-	}
-	
-	public int getRuleNumberID() {
-		return this.ruleNumberID;
-	}
+  public AssignmentContentEvent(int ruleID, Instance instance) {
+    this.ruleNumberID = ruleID;
+    this.instance = instance;
+  }
+
+  @Override
+  public String getKey() {
+    return Integer.toString(this.ruleNumberID);
+  }
+
+  @Override
+  public void setKey(String key) {
+    // do nothing
+  }
+
+  @Override
+  public boolean isLastEvent() {
+    return false;
+  }
+
+  public Instance getInstance() {
+    return this.instance;
+  }
+
+  public int getRuleNumberID() {
+    return this.ruleNumberID;
+  }
 
 }

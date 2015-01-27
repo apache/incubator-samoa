@@ -25,73 +25,73 @@ package com.yahoo.labs.samoa.instances;
  */
 
 /**
- *
+ * 
  * @author abifet
  */
-public class DenseInstanceData implements InstanceData{
+public class DenseInstanceData implements InstanceData {
 
-    public DenseInstanceData(double[] array) {
-       this.attributeValues = array;
-    }
-    
-    public DenseInstanceData(int length) {
-       this.attributeValues = new double[length];
-    }
-    
-    public DenseInstanceData() {
-       this(0);
-    }
-    
-    protected double[] attributeValues;
+  public DenseInstanceData(double[] array) {
+    this.attributeValues = array;
+  }
 
-    @Override
-    public int numAttributes() {
-        return this.attributeValues.length;
-    }
+  public DenseInstanceData(int length) {
+    this.attributeValues = new double[length];
+  }
 
-    @Override
-    public double value(int indexAttribute) {
-        return this.attributeValues[indexAttribute];
-    }
+  public DenseInstanceData() {
+    this(0);
+  }
 
-    @Override
-    public boolean isMissing(int indexAttribute) {
-       return Double.isNaN(this.value(indexAttribute));
-    }
+  protected double[] attributeValues;
 
-    @Override
-    public int numValues() {
-        return numAttributes();
-    }
+  @Override
+  public int numAttributes() {
+    return this.attributeValues.length;
+  }
 
-    @Override
-    public int index(int indexAttribute) {
-        return indexAttribute;
-    }
+  @Override
+  public double value(int indexAttribute) {
+    return this.attributeValues[indexAttribute];
+  }
 
-    @Override
-    public double valueSparse(int indexAttribute) {
-        return value(indexAttribute);
-    }
+  @Override
+  public boolean isMissing(int indexAttribute) {
+    return Double.isNaN(this.value(indexAttribute));
+  }
 
-    @Override
-    public boolean isMissingSparse(int indexAttribute) {
-        return isMissing(indexAttribute);
-    }
+  @Override
+  public int numValues() {
+    return numAttributes();
+  }
 
-    /*@Override
-    public double value(Attribute attribute) {
-        return value(attribute.index());
-    }*/
+  @Override
+  public int index(int indexAttribute) {
+    return indexAttribute;
+  }
 
-    @Override
-    public double[] toDoubleArray() {
-        return attributeValues.clone();
-    }
+  @Override
+  public double valueSparse(int indexAttribute) {
+    return value(indexAttribute);
+  }
 
-    @Override
-    public void setValue(int attributeIndex, double d) {
-        this.attributeValues[attributeIndex] = d;
-    }
-    
+  @Override
+  public boolean isMissingSparse(int indexAttribute) {
+    return isMissing(indexAttribute);
+  }
+
+  /*
+   * @Override public double value(Attribute attribute) { return
+   * value(attribute.index()); }
+   */
+
+  @Override
+  public double[] toDoubleArray() {
+    return attributeValues.clone();
+  }
+
+  @Override
+  public void setValue(int attributeIndex, double d) {
+    this.attributeValues[attributeIndex] = d;
+  }
+
 }

@@ -29,35 +29,35 @@ import java.util.List;
 
 /**
  * Class that stores an array of evaluation measurements.
- *
+ * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $
  */
 public class LearningEvaluation extends AbstractMOAObject {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    protected Measurement[] measurements;
+  protected Measurement[] measurements;
 
-    public LearningEvaluation(Measurement[] measurements) {
-        this.measurements = measurements.clone();
-    }
+  public LearningEvaluation(Measurement[] measurements) {
+    this.measurements = measurements.clone();
+  }
 
-    public LearningEvaluation(Measurement[] evaluationMeasurements,
-            LearningPerformanceEvaluator cpe, Learner model) {
-        List<Measurement> measurementList = new LinkedList<Measurement>();
-        measurementList.addAll(Arrays.asList(evaluationMeasurements));
-        measurementList.addAll(Arrays.asList(cpe.getPerformanceMeasurements()));
-        measurementList.addAll(Arrays.asList(model.getModelMeasurements()));
-        this.measurements = measurementList.toArray(new Measurement[measurementList.size()]);
-    }
+  public LearningEvaluation(Measurement[] evaluationMeasurements,
+      LearningPerformanceEvaluator cpe, Learner model) {
+    List<Measurement> measurementList = new LinkedList<Measurement>();
+    measurementList.addAll(Arrays.asList(evaluationMeasurements));
+    measurementList.addAll(Arrays.asList(cpe.getPerformanceMeasurements()));
+    measurementList.addAll(Arrays.asList(model.getModelMeasurements()));
+    this.measurements = measurementList.toArray(new Measurement[measurementList.size()]);
+  }
 
-    public Measurement[] getMeasurements() {
-        return this.measurements.clone();
-    }
+  public Measurement[] getMeasurements() {
+    return this.measurements.clone();
+  }
 
-    @Override
-    public void getDescription(StringBuilder sb, int indent) {
-        Measurement.getMeasurementsDescription(this.measurements, sb, indent);
-    }
+  @Override
+  public void getDescription(StringBuilder sb, int indent) {
+    Measurement.getMeasurementsDescription(this.measurements, sb, indent);
+  }
 }

@@ -37,138 +37,139 @@ import com.yahoo.labs.samoa.moa.tasks.TaskMonitor;
 import com.yahoo.labs.samoa.streams.fs.FileStreamSource;
 
 /**
- * InstanceStream for files 
- * (Abstract class: subclass this class for different file formats)
+ * InstanceStream for files (Abstract class: subclass this class for different
+ * file formats)
+ * 
  * @author Casey
  */
 public abstract class FileStream extends AbstractOptionHandler implements InstanceStream {
-	/**
+  /**
     *
     */
-   private static final long serialVersionUID = 3028905554604259130L;
+  private static final long serialVersionUID = 3028905554604259130L;
 
-   public ClassOption sourceTypeOption = new ClassOption("sourceType",
-           's', "Source Type (HDFS, local FS)", FileStreamSource.class,
-           "LocalFileStreamSource");
-   
-   protected transient FileStreamSource fileSource;
-   protected transient Reader fileReader;
-   protected Instances instances;
-   
-   protected boolean hitEndOfStream;
-   private boolean hasStarted;
+  public ClassOption sourceTypeOption = new ClassOption("sourceType",
+      's', "Source Type (HDFS, local FS)", FileStreamSource.class,
+      "LocalFileStreamSource");
 
-   /*
-    * Constructors
-    */
-   public FileStream() {
-	   this.hitEndOfStream = false;
-   }
-   
-   /*
-    * implement InstanceStream
-    */
-   @Override
-   public InstancesHeader getHeader() {
-	   return new InstancesHeader(this.instances);
-   }
+  protected transient FileStreamSource fileSource;
+  protected transient Reader fileReader;
+  protected Instances instances;
 
-   @Override
-   public long estimatedRemainingInstances() {
-	   return -1;
-   }
+  protected boolean hitEndOfStream;
+  private boolean hasStarted;
 
-   @Override
-   public boolean hasMoreInstances() {
-	   return !this.hitEndOfStream;
-   }
-   
-   @Override
-   public InstanceExample nextInstance() {
-	   if (this.getLastInstanceRead() == null) {
-		   readNextInstanceFromStream();
-	   }
-	   InstanceExample prevInstance = this.getLastInstanceRead();
-	   readNextInstanceFromStream();
-	   return prevInstance;
-   }
+  /*
+   * Constructors
+   */
+  public FileStream() {
+    this.hitEndOfStream = false;
+  }
 
-   @Override
-   public boolean isRestartable() {
-           return true;
-   }
+  /*
+   * implement InstanceStream
+   */
+  @Override
+  public InstancesHeader getHeader() {
+    return new InstancesHeader(this.instances);
+  }
 
-   @Override
-   public void restart() {
-	   reset();
-	   hasStarted = false;
-   }
+  @Override
+  public long estimatedRemainingInstances() {
+    return -1;
+  }
 
-   protected void reset() {
-	   try {
-		   if (this.fileReader != null)
-			   this.fileReader.close();
-		   
-		   fileSource.reset();
-	   }
-	   catch (IOException ioe) {
-		   throw new RuntimeException("FileStream restart failed.", ioe);
-	   }
-	   
-	   if (!getNextFileReader()) {
-		   hitEndOfStream = true;
-		   throw new RuntimeException("FileStream is empty.");
-	   }
-	   
-       this.instances = new Instances(this.fileReader, 1, -1);
-       this.instances.setClassIndex(this.instances.numAttributes() - 1);
-   }
-   
-   protected boolean getNextFileReader() {
-	   if (this.fileReader != null) 
-		   try {
-			   this.fileReader.close();
-		   } catch (IOException ioe) {
-			   ioe.printStackTrace();
-		   }
-	   
-	   InputStream inputStream = this.fileSource.getNextInputStream();
-	   if (inputStream == null)
-		   return false;
+  @Override
+  public boolean hasMoreInstances() {
+    return !this.hitEndOfStream;
+  }
 
-	   this.fileReader = new BufferedReader(new InputStreamReader(inputStream));
-	   return true;
-   }
-   
-   protected boolean readNextInstanceFromStream() {
-	   if (!hasStarted) {
-		   this.reset();  
-		   hasStarted = true;
-	   }
-	   
-	   while (true) {
-		   if (readNextInstanceFromFile()) return true;
+  @Override
+  public InstanceExample nextInstance() {
+    if (this.getLastInstanceRead() == null) {
+      readNextInstanceFromStream();
+    }
+    InstanceExample prevInstance = this.getLastInstanceRead();
+    readNextInstanceFromStream();
+    return prevInstance;
+  }
 
-		   if (!getNextFileReader()) {
-			   this.hitEndOfStream = true;
-			   return false;
-		   }
-	   }
-   }
-   
-   /**
-    * Read next instance from the current file and assign it to
-    * lastInstanceRead.
-    * @return true if it was able to read next instance and
-    * 		  false if it was at the end of the file
-    */
-   protected abstract boolean readNextInstanceFromFile();
-   
-   protected abstract InstanceExample getLastInstanceRead();
-   
-   @Override
-   public void prepareForUseImpl(TaskMonitor monitor, ObjectRepository repository) {
-	   this.fileSource = sourceTypeOption.getValue();
-	   this.hasStarted = false;
-   }
+  @Override
+  public boolean isRestartable() {
+    return true;
+  }
+
+  @Override
+  public void restart() {
+    reset();
+    hasStarted = false;
+  }
+
+  protected void reset() {
+    try {
+      if (this.fileReader != null)
+        this.fileReader.close();
+
+      fileSource.reset();
+    } catch (IOException ioe) {
+      throw new RuntimeException("FileStream restart failed.", ioe);
+    }
+
+    if (!getNextFileReader()) {
+      hitEndOfStream = true;
+      throw new RuntimeException("FileStream is empty.");
+    }
+
+    this.instances = new Instances(this.fileReader, 1, -1);
+    this.instances.setClassIndex(this.instances.numAttributes() - 1);
+  }
+
+  protected boolean getNextFileReader() {
+    if (this.fileReader != null)
+      try {
+        this.fileReader.close();
+      } catch (IOException ioe) {
+        ioe.printStackTrace();
+      }
+
+    InputStream inputStream = this.fileSource.getNextInputStream();
+    if (inputStream == null)
+      return false;
+
+    this.fileReader = new BufferedReader(new InputStreamReader(inputStream));
+    return true;
+  }
+
+  protected boolean readNextInstanceFromStream() {
+    if (!hasStarted) {
+      this.reset();
+      hasStarted = true;
+    }
+
+    while (true) {
+      if (readNextInstanceFromFile())
+        return true;
+
+      if (!getNextFileReader()) {
+        this.hitEndOfStream = true;
+        return false;
+      }
+    }
+  }
+
+  /**
+   * Read next instance from the current file and assign it to lastInstanceRead.
+   * 
+   * @return true if it was able to read next instance and false if it was at
+   *         the end of the file
+   */
+  protected abstract boolean readNextInstanceFromFile();
+
+  protected abstract InstanceExample getLastInstanceRead();
+
+  @Override
+  public void prepareForUseImpl(TaskMonitor monitor, ObjectRepository repository) {
+    this.fileSource = sourceTypeOption.getValue();
+    this.hasStarted = false;
+  }
 }

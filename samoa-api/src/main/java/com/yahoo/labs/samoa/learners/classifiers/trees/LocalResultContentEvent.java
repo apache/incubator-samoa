@@ -24,69 +24,74 @@ import com.yahoo.labs.samoa.moa.classifiers.core.AttributeSplitSuggestion;
 import com.yahoo.labs.samoa.core.ContentEvent;
 
 /**
- * Local Result Content Event is the content event that represents local 
+ * Local Result Content Event is the content event that represents local
  * calculation of statistic in Local Statistic Processor.
  * 
  * @author Arinto Murdopo
- *
+ * 
  */
-final class LocalResultContentEvent implements ContentEvent{
-    
-	private static final long serialVersionUID = -4206620993777418571L;
-	
-	private final AttributeSplitSuggestion bestSuggestion;
-	private final AttributeSplitSuggestion secondBestSuggestion;
-	private final long splitId;
-	
-	public LocalResultContentEvent(){
-		bestSuggestion = null;
-		secondBestSuggestion = null;
-		splitId = -1;
-	}
-	
-	LocalResultContentEvent(long splitId, AttributeSplitSuggestion best, AttributeSplitSuggestion secondBest){
-		this.splitId = splitId;
-		this.bestSuggestion = best;
-		this.secondBestSuggestion = secondBest;
-	}
-	
-	@Override
-	public String getKey() {
-		return null;
-	}
-	
-	/**
-	 * Method to return the best attribute split suggestion from this local statistic calculation.
-	 * @return The best attribute split suggestion.
-	 */
-	AttributeSplitSuggestion getBestSuggestion(){
-		return this.bestSuggestion;
-	}
-	
-	/**
-	 * Method to return the second best attribute split suggestion from this local statistic calculation.
-	 * @return The second best attribute split suggestion.
-	 */
-	AttributeSplitSuggestion getSecondBestSuggestion(){
-		return this.secondBestSuggestion;
-	}
-	
-	/**
-	 * Method to get the split ID of this local statistic calculation result
-	 * @return The split id of this local calculation result
-	 */
-	long getSplitId(){
-		return this.splitId;
-	}
+final class LocalResultContentEvent implements ContentEvent {
 
-	@Override
-	public void setKey(String str) {
-		//do nothing
-		
-	}
+  private static final long serialVersionUID = -4206620993777418571L;
 
-	@Override
-	public boolean isLastEvent() {
-		return false;
-	}
+  private final AttributeSplitSuggestion bestSuggestion;
+  private final AttributeSplitSuggestion secondBestSuggestion;
+  private final long splitId;
+
+  public LocalResultContentEvent() {
+    bestSuggestion = null;
+    secondBestSuggestion = null;
+    splitId = -1;
+  }
+
+  LocalResultContentEvent(long splitId, AttributeSplitSuggestion best, AttributeSplitSuggestion secondBest) {
+    this.splitId = splitId;
+    this.bestSuggestion = best;
+    this.secondBestSuggestion = secondBest;
+  }
+
+  @Override
+  public String getKey() {
+    return null;
+  }
+
+  /**
+   * Method to return the best attribute split suggestion from this local
+   * statistic calculation.
+   * 
+   * @return The best attribute split suggestion.
+   */
+  AttributeSplitSuggestion getBestSuggestion() {
+    return this.bestSuggestion;
+  }
+
+  /**
+   * Method to return the second best attribute split suggestion from this local
+   * statistic calculation.
+   * 
+   * @return The second best attribute split suggestion.
+   */
+  AttributeSplitSuggestion getSecondBestSuggestion() {
+    return this.secondBestSuggestion;
+  }
+
+  /**
+   * Method to get the split ID of this local statistic calculation result
+   * 
+   * @return The split id of this local calculation result
+   */
+  long getSplitId() {
+    return this.splitId;
+  }
+
+  @Override
+  public void setKey(String str) {
+    // do nothing
+
+  }
+
+  @Override
+  public boolean isLastEvent() {
+    return false;
+  }
 }

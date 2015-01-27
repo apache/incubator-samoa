@@ -29,33 +29,36 @@ import com.github.javacliparser.Configurable;
  */
 public interface Processor extends Serializable, Configurable {
 
-    /**
-     * Entry point for the {@link Processor} code. This method is called once for every event received.
-     * 
-     * @param event
-     *            the event to be processed.
-     * @return true if successful, false otherwise.
-     */
-    boolean process(ContentEvent event);
+  /**
+   * Entry point for the {@link Processor} code. This method is called once for
+   * every event received.
+   * 
+   * @param event
+   *          the event to be processed.
+   * @return true if successful, false otherwise.
+   */
+  boolean process(ContentEvent event);
 
-    /**
-     * Initializes the Processor.
-     * This method is called once after the topology is set up and before any call to the {@link process} method.
-     * 
-     * @param id
-     *            the identifier of the processor.
-     */
-    void onCreate(int id);
+  /**
+   * Initializes the Processor. This method is called once after the topology is
+   * set up and before any call to the {@link process} method.
+   * 
+   * @param id
+   *          the identifier of the processor.
+   */
+  void onCreate(int id);
 
-    /**
-     * Creates a copy of a processor.
-     * This method is used to instantiate multiple instances of the same {@link Processsor}.
-     * 
-     * @param processor
-     *            the processor to be copied.
-     * 
-     * @return a new instance of the {@link Processor}.
-     * */
-    Processor newProcessor(Processor processor); // FIXME there should be no need for the processor as a parameter
-    // TODO can we substitute this with Cloneable?
+  /**
+   * Creates a copy of a processor. This method is used to instantiate multiple
+   * instances of the same {@link Processsor}.
+   * 
+   * @param processor
+   *          the processor to be copied.
+   * 
+   * @return a new instance of the {@link Processor}.
+   * */
+  Processor newProcessor(Processor processor); // FIXME there should be no need
+                                               // for the processor as a
+                                               // parameter
+  // TODO can we substitute this with Cloneable?
 }

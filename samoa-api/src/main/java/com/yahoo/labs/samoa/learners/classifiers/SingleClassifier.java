@@ -36,6 +36,7 @@ import com.yahoo.labs.samoa.learners.Learner;
 import com.yahoo.labs.samoa.moa.classifiers.core.driftdetection.ChangeDetector;
 import com.yahoo.labs.samoa.topology.Stream;
 import com.yahoo.labs.samoa.topology.TopologyBuilder;
+
 /**
  * 
  * Classifier that contain a single classifier.
@@ -43,67 +44,67 @@ import com.yahoo.labs.samoa.topology.TopologyBuilder;
  */
 public final class SingleClassifier implements Learner, AdaptiveLearner, Configurable {
 
-	private static final long serialVersionUID = 684111382631697031L;
-	
-	private LocalLearnerProcessor learnerP;
-		
-	private Stream resultStream;
+  private static final long serialVersionUID = 684111382631697031L;
 
-	private Instances dataset;
+  private LocalLearnerProcessor learnerP;
 
-	public ClassOption learnerOption = new ClassOption("learner", 'l',
-			"Classifier to train.", LocalLearner.class, SimpleClassifierAdapter.class.getName());
-	
-	private TopologyBuilder builder;
+  private Stream resultStream;
 
-	private int parallelism;
+  private Instances dataset;
 
+  public ClassOption learnerOption = new ClassOption("learner", 'l',
+      "Classifier to train.", LocalLearner.class, SimpleClassifierAdapter.class.getName());
 
-	@Override
-	public void init(TopologyBuilder builder, Instances dataset, int parallelism){
-		this.builder = builder;
-		this.dataset = dataset;
-		this.parallelism = parallelism;
-		this.setLayout();
-	}
+  private TopologyBuilder builder;
 
+  private int parallelism;
 
-	protected void setLayout() {		
-		learnerP = new LocalLearnerProcessor();
-		learnerP.setChangeDetector(this.getChangeDetector());
-		LocalLearner learner = this.learnerOption.getValue();
-		learner.setDataset(this.dataset);
-		learnerP.setLearner(learner);
-                
-		//learnerPI = this.builder.createPi(learnerP, 1);
-		this.builder.addProcessor(learnerP, parallelism);
-		resultStream = this.builder.createStream(learnerP);
+  @Override
+  public void init(TopologyBuilder builder, Instances dataset, int parallelism) {
+    this.builder = builder;
+    this.dataset = dataset;
+    this.parallelism = parallelism;
+    this.setLayout();
+  }
 
-		learnerP.setOutputStream(resultStream);
-	}
+  protected void setLayout() {
+    learnerP = new LocalLearnerProcessor();
+    learnerP.setChangeDetector(this.getChangeDetector());
+    LocalLearner learner = this.learnerOption.getValue();
+    learner.setDataset(this.dataset);
+    learnerP.setLearner(learner);
 
-	@Override
-	public Processor getInputProcessor() {
-		return learnerP;
-	}
+    // learnerPI = this.builder.createPi(learnerP, 1);
+    this.builder.addProcessor(learnerP, parallelism);
+    resultStream = this.builder.createStream(learnerP);
 
-	/* (non-Javadoc)
-	 * @see samoa.learners.Learner#getResultStreams()
-	 */
-	@Override
-	public Set<Stream> getResultStreams() {
-		return ImmutableSet.of(this.resultStream);
-	}
+    learnerP.setOutputStream(resultStream);
+  }
 
-	protected ChangeDetector changeDetector;    
+  @Override
+  public Processor getInputProcessor() {
+    return learnerP;
+  }
 
-	@Override
-	public ChangeDetector getChangeDetector() {
-		return this.changeDetector;
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see samoa.learners.Learner#getResultStreams()
+   */
+  @Override
+  public Set<Stream> getResultStreams() {
+    return ImmutableSet.of(this.resultStream);
+  }
 
-	@Override
-	public void setChangeDetector(ChangeDetector cd) {
-		this.changeDetector = cd;
-	}
+  protected ChangeDetector changeDetector;
+
+  @Override
+  public ChangeDetector getChangeDetector() {
+    return this.changeDetector;
+  }
+
+  @Override
+  public void setChangeDetector(ChangeDetector cd) {
+    this.changeDetector = cd;
+  }
 }

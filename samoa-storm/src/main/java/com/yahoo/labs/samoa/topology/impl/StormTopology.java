@@ -27,26 +27,27 @@ import com.yahoo.labs.samoa.topology.AbstractTopology;
 
 /**
  * Adaptation of SAMOA topology in samoa-storm
+ * 
  * @author Arinto Murdopo
- *
+ * 
  */
 public class StormTopology extends AbstractTopology {
-	
-	private TopologyBuilder builder;
-	
-	public StormTopology(String topologyName){
-		super(topologyName);
-		this.builder = new TopologyBuilder();
-	}
-	
-	@Override
-	public void addProcessingItem(IProcessingItem procItem, int parallelismHint){
-		StormTopologyNode stormNode = (StormTopologyNode) procItem;
-		stormNode.addToTopology(this, parallelismHint);
-		super.addProcessingItem(procItem, parallelismHint);
-	}
-	
-	public TopologyBuilder getStormBuilder(){
-		return builder;
-	}
+
+  private TopologyBuilder builder;
+
+  public StormTopology(String topologyName) {
+    super(topologyName);
+    this.builder = new TopologyBuilder();
+  }
+
+  @Override
+  public void addProcessingItem(IProcessingItem procItem, int parallelismHint) {
+    StormTopologyNode stormNode = (StormTopologyNode) procItem;
+    stormNode.addToTopology(this, parallelismHint);
+    super.addProcessingItem(procItem, parallelismHint);
+  }
+
+  public TopologyBuilder getStormBuilder() {
+    return builder;
+  }
 }

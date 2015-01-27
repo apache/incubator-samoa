@@ -29,101 +29,105 @@ import org.junit.Test;
 
 /**
  * @author Anh Thu Vu
- *
+ * 
  */
 public class ThreadsEngineTest {
 
-	@Mocked ThreadsTopology topology;
-	
-	private final int numThreads = 4;
-	private final int numThreadsSmaller = 3;
-	private final int numThreadsLarger = 5;
+  @Mocked
+  ThreadsTopology topology;
 
-	@After
-	public void cleanup() {
-		ThreadsEngine.clearThreadPool();
-	}
-	
-	@Test
-	public void testSetNumberOfThreadsSimple() {
-		ThreadsEngine.setNumberOfThreads(numThreads);
-		assertEquals("Number of threads is not set correctly.", numThreads,
-				ThreadsEngine.getNumberOfThreads(),0);
-	}
-	
-	@Test
-	public void testSetNumberOfThreadsRepeat() {
-		ThreadsEngine.setNumberOfThreads(numThreads);
-		ThreadsEngine.setNumberOfThreads(numThreads);
-		assertEquals("Number of threads is not set correctly.", numThreads,
-				ThreadsEngine.getNumberOfThreads(),0);
-	}
-	
-	@Test
-	public void testSetNumberOfThreadsIncrease() {
-		ThreadsEngine.setNumberOfThreads(numThreads);
-		ThreadsEngine.setNumberOfThreads(numThreadsLarger);
-		assertEquals("Number of threads is not set correctly.", numThreadsLarger,
-				ThreadsEngine.getNumberOfThreads(),0);
-	}
-	
-	@Test(expected=IllegalStateException.class)
-	public void testSetNumberOfThreadsDecrease() {
-		ThreadsEngine.setNumberOfThreads(numThreads);
-		ThreadsEngine.setNumberOfThreads(numThreadsSmaller);
-		// Exception expected
-	}
-	
-	@Test(expected=IllegalStateException.class)
-	public void testSetNumberOfThreadsNegative() {
-		ThreadsEngine.setNumberOfThreads(-1);
-		// Exception expected
-	}
-	
-	@Test(expected=IllegalStateException.class)
-	public void testSetNumberOfThreadsZero() {
-		ThreadsEngine.setNumberOfThreads(0);
-		// Exception expected
-	}
-	
-	@Test
-	public void testClearThreadPool() {
-		ThreadsEngine.setNumberOfThreads(numThreads);
-		ThreadsEngine.clearThreadPool();
-		assertEquals("ThreadsEngine was not shutdown properly.", 0, ThreadsEngine.getNumberOfThreads());
-	}
+  private final int numThreads = 4;
+  private final int numThreadsSmaller = 3;
+  private final int numThreadsLarger = 5;
 
-	@Test
-	public void testGetThreadWithIndexWithinPoolSize() {
-		ThreadsEngine.setNumberOfThreads(numThreads);
-		for (int i=0; i<numThreads; i++) {
-			assertNotNull("ExecutorService is not initialized correctly.", ThreadsEngine.getThreadWithIndex(i));
-		}
-	}
-	
-	@Test
-	public void testGetThreadWithIndexOutOfPoolSize() {
-		ThreadsEngine.setNumberOfThreads(numThreads);
-		for (int i=0; i<numThreads+3; i++) {
-			assertNotNull("ExecutorService is not initialized correctly.", ThreadsEngine.getThreadWithIndex(i));
-		}
-	}
-	
-	@Test(expected=IllegalStateException.class)
-	public void testGetThreadWithIndexFromEmptyPool() {
-		for (int i=0; i<numThreads; i++) {
-			ThreadsEngine.getThreadWithIndex(i);
-		}
-	}
+  @After
+  public void cleanup() {
+    ThreadsEngine.clearThreadPool();
+  }
 
-	@Test
-	public void testSubmitTopology() {
-		ThreadsEngine.submitTopology(topology, numThreads);
-		new Verifications() {{
-		    topology.run(); times=1;
-		}};
-		assertEquals("Number of threads is not set correctly.", numThreads,
-				ThreadsEngine.getNumberOfThreads(),0);
-	}
+  @Test
+  public void testSetNumberOfThreadsSimple() {
+    ThreadsEngine.setNumberOfThreads(numThreads);
+    assertEquals("Number of threads is not set correctly.", numThreads,
+        ThreadsEngine.getNumberOfThreads(), 0);
+  }
+
+  @Test
+  public void testSetNumberOfThreadsRepeat() {
+    ThreadsEngine.setNumberOfThreads(numThreads);
+    ThreadsEngine.setNumberOfThreads(numThreads);
+    assertEquals("Number of threads is not set correctly.", numThreads,
+        ThreadsEngine.getNumberOfThreads(), 0);
+  }
+
+  @Test
+  public void testSetNumberOfThreadsIncrease() {
+    ThreadsEngine.setNumberOfThreads(numThreads);
+    ThreadsEngine.setNumberOfThreads(numThreadsLarger);
+    assertEquals("Number of threads is not set correctly.", numThreadsLarger,
+        ThreadsEngine.getNumberOfThreads(), 0);
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testSetNumberOfThreadsDecrease() {
+    ThreadsEngine.setNumberOfThreads(numThreads);
+    ThreadsEngine.setNumberOfThreads(numThreadsSmaller);
+    // Exception expected
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testSetNumberOfThreadsNegative() {
+    ThreadsEngine.setNumberOfThreads(-1);
+    // Exception expected
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testSetNumberOfThreadsZero() {
+    ThreadsEngine.setNumberOfThreads(0);
+    // Exception expected
+  }
+
+  @Test
+  public void testClearThreadPool() {
+    ThreadsEngine.setNumberOfThreads(numThreads);
+    ThreadsEngine.clearThreadPool();
+    assertEquals("ThreadsEngine was not shutdown properly.", 0, ThreadsEngine.getNumberOfThreads());
+  }
+
+  @Test
+  public void testGetThreadWithIndexWithinPoolSize() {
+    ThreadsEngine.setNumberOfThreads(numThreads);
+    for (int i = 0; i < numThreads; i++) {
+      assertNotNull("ExecutorService is not initialized correctly.", ThreadsEngine.getThreadWithIndex(i));
+    }
+  }
+
+  @Test
+  public void testGetThreadWithIndexOutOfPoolSize() {
+    ThreadsEngine.setNumberOfThreads(numThreads);
+    for (int i = 0; i < numThreads + 3; i++) {
+      assertNotNull("ExecutorService is not initialized correctly.", ThreadsEngine.getThreadWithIndex(i));
+    }
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testGetThreadWithIndexFromEmptyPool() {
+    for (int i = 0; i < numThreads; i++) {
+      ThreadsEngine.getThreadWithIndex(i);
+    }
+  }
+
+  @Test
+  public void testSubmitTopology() {
+    ThreadsEngine.submitTopology(topology, numThreads);
+    new Verifications() {
+      {
+        topology.run();
+        times = 1;
+      }
+    };
+    assertEquals("Number of threads is not set correctly.", numThreads,
+        ThreadsEngine.getNumberOfThreads(), 0);
+  }
 
 }

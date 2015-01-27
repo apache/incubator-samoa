@@ -21,57 +21,57 @@ package com.yahoo.labs.samoa.learners.classifiers.trees;
  */
 
 /**
- * Class that represents the necessary data structure of the node where an instance
- * is routed/filtered through the decision tree model.
+ * Class that represents the necessary data structure of the node where an
+ * instance is routed/filtered through the decision tree model.
  * 
  * @author Arinto Murdopo
- *
+ * 
  */
-final class FoundNode implements java.io.Serializable{
-	
-	/**
+final class FoundNode implements java.io.Serializable {
+
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = -637695387934143293L;
-	
-	private final Node node;
-	private final SplitNode parent;
-	private final int parentBranch;
-	
-	FoundNode(Node node, SplitNode splitNode, int parentBranch){
-		this.node = node;
-		this.parent = splitNode;
-		this.parentBranch = parentBranch;
-	}	
-	
-	/**
-	 * Method to get the node where an instance is routed/filtered through the decision tree
-	 * model for testing and training.
-	 * 
-	 * @return The node where the instance is routed/filtered
-	 */
-	Node getNode(){
-		return this.node;
-	}
-	
-	/**
-	 * Method to get the parent of the node where an instance is routed/filtered through the decision tree
-	 * model for testing and training
-	 * 
-	 * @return The parent of the node
-	 */
-	SplitNode getParent(){
-		return this.parent;
-	}
-	
-	/**
-	 * Method to get the index of the node (where an instance is routed/filtered through the decision tree
-	 * model for testing and training) in its parent. 
-	 * 
-	 * @return The index of the node in its parent node.
-	 */
-	int getParentBranch(){
-		return this.parentBranch;
-	}
-	
+  private static final long serialVersionUID = -637695387934143293L;
+
+  private final Node node;
+  private final SplitNode parent;
+  private final int parentBranch;
+
+  FoundNode(Node node, SplitNode splitNode, int parentBranch) {
+    this.node = node;
+    this.parent = splitNode;
+    this.parentBranch = parentBranch;
+  }
+
+  /**
+   * Method to get the node where an instance is routed/filtered through the
+   * decision tree model for testing and training.
+   * 
+   * @return The node where the instance is routed/filtered
+   */
+  Node getNode() {
+    return this.node;
+  }
+
+  /**
+   * Method to get the parent of the node where an instance is routed/filtered
+   * through the decision tree model for testing and training
+   * 
+   * @return The parent of the node
+   */
+  SplitNode getParent() {
+    return this.parent;
+  }
+
+  /**
+   * Method to get the index of the node (where an instance is routed/filtered
+   * through the decision tree model for testing and training) in its parent.
+   * 
+   * @return The index of the node in its parent node.
+   */
+  int getParentBranch() {
+    return this.parentBranch;
+  }
+
 }

@@ -28,57 +28,58 @@ import com.yahoo.labs.samoa.learners.classifiers.rules.common.RuleSplitNode;
  * New features (of newly expanded rules) from Learners to Model Aggregators.
  * 
  * @author Anh Thu Vu
- *
+ * 
  */
 public class PredicateContentEvent implements ContentEvent {
 
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = 7909435830443732451L;
-	
-	private int ruleNumberID;
-	private RuleSplitNode ruleSplitNode;
-	private RulePassiveRegressionNode learningNode;
-	
-	/*
-	 * Constructor
-	 */
-	public PredicateContentEvent() {
-		this(0, null, null);
-	}
-	
-	public PredicateContentEvent (int ruleID, RuleSplitNode ruleSplitNode, RulePassiveRegressionNode learningNode) {
-		this.ruleNumberID = ruleID;
-		this.ruleSplitNode = ruleSplitNode; // is this is null: this is for updating learningNode only
-		this.learningNode = learningNode;
-	}
-	
-	@Override
-	public String getKey() {
-		return Integer.toString(this.ruleNumberID);
-	}
+  private static final long serialVersionUID = 7909435830443732451L;
 
-	@Override
-	public void setKey(String key) {
-		// do nothing
-	}
+  private int ruleNumberID;
+  private RuleSplitNode ruleSplitNode;
+  private RulePassiveRegressionNode learningNode;
 
-	@Override
-	public boolean isLastEvent() {
-		return false; // N/A
-	}
-	
-	public int getRuleNumberID() {
-		return this.ruleNumberID;
-	}
-	
-	public RuleSplitNode getRuleSplitNode() {
-		return this.ruleSplitNode;
-	}
-	
-	public RulePassiveRegressionNode getLearningNode() {
-		return this.learningNode;
-	}
+  /*
+   * Constructor
+   */
+  public PredicateContentEvent() {
+    this(0, null, null);
+  }
+
+  public PredicateContentEvent(int ruleID, RuleSplitNode ruleSplitNode, RulePassiveRegressionNode learningNode) {
+    this.ruleNumberID = ruleID;
+    this.ruleSplitNode = ruleSplitNode; // is this is null: this is for updating
+                                        // learningNode only
+    this.learningNode = learningNode;
+  }
+
+  @Override
+  public String getKey() {
+    return Integer.toString(this.ruleNumberID);
+  }
+
+  @Override
+  public void setKey(String key) {
+    // do nothing
+  }
+
+  @Override
+  public boolean isLastEvent() {
+    return false; // N/A
+  }
+
+  public int getRuleNumberID() {
+    return this.ruleNumberID;
+  }
+
+  public RuleSplitNode getRuleSplitNode() {
+    return this.ruleSplitNode;
+  }
+
+  public RulePassiveRegressionNode getLearningNode() {
+    return this.learningNode;
+  }
 
 }

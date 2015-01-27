@@ -24,32 +24,36 @@ import com.yahoo.labs.samoa.instances.Instance;
 
 /**
  * Abstract class that represents a learning node
+ * 
  * @author Arinto Murdopo
- *
+ * 
  */
 abstract class LearningNode extends Node {
 
-	private static final long serialVersionUID = 7157319356146764960L;
-	
-	protected LearningNode(double[] classObservation) {
-		super(classObservation);
-	}
-	
-	/**
-	 * Method to process the instance for learning
-	 * @param inst The processed instance
-	 * @param proc The model aggregator processor where this learning node exists
-	 */
-	abstract void learnFromInstance(Instance inst, ModelAggregatorProcessor proc);
-	
-	@Override
-	protected boolean isLeaf(){
-		return true;
-	}
-	
-	@Override
-	protected FoundNode filterInstanceToLeaf(Instance inst, SplitNode parent,
-			int parentBranch) {
-		return new FoundNode(this, parent, parentBranch);
-	}
+  private static final long serialVersionUID = 7157319356146764960L;
+
+  protected LearningNode(double[] classObservation) {
+    super(classObservation);
+  }
+
+  /**
+   * Method to process the instance for learning
+   * 
+   * @param inst
+   *          The processed instance
+   * @param proc
+   *          The model aggregator processor where this learning node exists
+   */
+  abstract void learnFromInstance(Instance inst, ModelAggregatorProcessor proc);
+
+  @Override
+  protected boolean isLeaf() {
+    return true;
+  }
+
+  @Override
+  protected FoundNode filterInstanceToLeaf(Instance inst, SplitNode parent,
+      int parentBranch) {
+    return new FoundNode(this, parent, parentBranch);
+  }
 }

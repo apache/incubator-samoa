@@ -31,43 +31,45 @@ import com.yahoo.labs.samoa.moa.cluster.Clustering;
  */
 final public class ClusteringResultContentEvent implements ContentEvent {
 
-    private static final long serialVersionUID = -7746983521296618922L;
-    private Clustering clustering;
-    private final boolean isLast;
-    private String key = "0";
+  private static final long serialVersionUID = -7746983521296618922L;
+  private Clustering clustering;
+  private final boolean isLast;
+  private String key = "0";
 
-    public ClusteringResultContentEvent() {
-        this.isLast = false;
-    }
+  public ClusteringResultContentEvent() {
+    this.isLast = false;
+  }
 
-    public ClusteringResultContentEvent(boolean isLast) {
-        this.isLast = isLast;
-    }
+  public ClusteringResultContentEvent(boolean isLast) {
+    this.isLast = isLast;
+  }
 
-    /**
-     * Instantiates a new clustering result event.
-     *
-     * @param clustering the clustering result
-     * @param isLast is the last result
-     */
-    public ClusteringResultContentEvent(Clustering clustering, boolean isLast) {
-        this.clustering = clustering;
-        this.isLast = isLast;
-    }
+  /**
+   * Instantiates a new clustering result event.
+   * 
+   * @param clustering
+   *          the clustering result
+   * @param isLast
+   *          is the last result
+   */
+  public ClusteringResultContentEvent(Clustering clustering, boolean isLast) {
+    this.clustering = clustering;
+    this.isLast = isLast;
+  }
 
-    public String getKey() {
-        return key;
-    }
+  public String getKey() {
+    return key;
+  }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
+  public void setKey(String key) {
+    this.key = key;
+  }
 
-    public boolean isLastEvent() {
-        return this.isLast;
-    }
+  public boolean isLastEvent() {
+    return this.isLast;
+  }
 
-    public Clustering getClustering() {
-        return this.clustering;
-    }
+  public Clustering getClustering() {
+    return this.clustering;
+  }
 }

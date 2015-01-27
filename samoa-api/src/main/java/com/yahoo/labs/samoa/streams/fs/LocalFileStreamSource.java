@@ -31,101 +31,103 @@ import java.util.List;
 
 /**
  * Source for FileStream for local files
+ * 
  * @author Casey
  */
 public class LocalFileStreamSource implements FileStreamSource {
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = 3986511547525870698L;
-	
-	private transient InputStream fileStream;
-    private List<String> filePaths;
-    private int currentIndex;
-	
-	public LocalFileStreamSource(){
-		this.currentIndex = -1;
-	}
-	
-	public void init(String path, String ext) {
-		this.filePaths = new ArrayList<String>();
-		File fileAtPath = new File(path);
-		if (fileAtPath.isDirectory()) {
-			File[] filesInDir = fileAtPath.listFiles(new FileExtensionFilter(ext));
-			for (int i=0; i<filesInDir.length; i++) {
-				filePaths.add(filesInDir[i].getAbsolutePath());
-			}
-		}
-		else {
-			this.filePaths.add(path);
-		}
-		this.currentIndex = -1;
-	}
-	
-	public void reset() throws IOException {
-		this.currentIndex = -1;
-		this.closeFileStream();
-	}
-	
-	private void closeFileStream() {
-		if (fileStream != null) {
-			try {
-				fileStream.close();
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-			}
-		}
-	}
+  private static final long serialVersionUID = 3986511547525870698L;
 
-	public InputStream getNextInputStream() {
-		this.closeFileStream();
-		
-		if (this.currentIndex >= (this.filePaths.size()-1)) return null;
-		
-		this.currentIndex++;
-		String filePath = this.filePaths.get(currentIndex);
-		
-		File file = new File(filePath);
-        try {
-        	fileStream = new FileInputStream(file);
-        }
-        catch(IOException ioe) {
-            this.closeFileStream();
-            throw new RuntimeException("Failed opening file:"+filePath,ioe);
-        }
-        
-        return fileStream;
-	}
+  private transient InputStream fileStream;
+  private List<String> filePaths;
+  private int currentIndex;
 
-	public InputStream getCurrentInputStream() {
-		return fileStream;
-	}
-	
-	protected int getFilePathListSize() {
-		if (filePaths != null)
-			return filePaths.size();
-		return 0;
-	}
-	
-	protected String getFilePathAt(int index) {
-		if (filePaths != null && filePaths.size() > index)
-			return filePaths.get(index);
-		return null;
-	}
-	
-	private class FileExtensionFilter implements FilenameFilter {
-		private String extension;
-		FileExtensionFilter(String ext) {
-			extension = ext;
-		}
-		
-		@Override
-		public boolean accept(File dir, String name) {
-			File f = new File(dir,name);
-			if (extension == null)
-				return f.isFile();
-			else
-				return f.isFile() && name.toLowerCase().endsWith("."+extension);
-	    }
-	}
+  public LocalFileStreamSource() {
+    this.currentIndex = -1;
+  }
+
+  public void init(String path, String ext) {
+    this.filePaths = new ArrayList<String>();
+    File fileAtPath = new File(path);
+    if (fileAtPath.isDirectory()) {
+      File[] filesInDir = fileAtPath.listFiles(new FileExtensionFilter(ext));
+      for (int i = 0; i < filesInDir.length; i++) {
+        filePaths.add(filesInDir[i].getAbsolutePath());
+      }
+    }
+    else {
+      this.filePaths.add(path);
+    }
+    this.currentIndex = -1;
+  }
+
+  public void reset() throws IOException {
+    this.currentIndex = -1;
+    this.closeFileStream();
+  }
+
+  private void closeFileStream() {
+    if (fileStream != null) {
+      try {
+        fileStream.close();
+      } catch (IOException ioe) {
+        ioe.printStackTrace();
+      }
+    }
+  }
+
+  public InputStream getNextInputStream() {
+    this.closeFileStream();
+
+    if (this.currentIndex >= (this.filePaths.size() - 1))
+      return null;
+
+    this.currentIndex++;
+    String filePath = this.filePaths.get(currentIndex);
+
+    File file = new File(filePath);
+    try {
+      fileStream = new FileInputStream(file);
+    } catch (IOException ioe) {
+      this.closeFileStream();
+      throw new RuntimeException("Failed opening file:" + filePath, ioe);
+    }
+
+    return fileStream;
+  }
+
+  public InputStream getCurrentInputStream() {
+    return fileStream;
+  }
+
+  protected int getFilePathListSize() {
+    if (filePaths != null)
+      return filePaths.size();
+    return 0;
+  }
+
+  protected String getFilePathAt(int index) {
+    if (filePaths != null && filePaths.size() > index)
+      return filePaths.get(index);
+    return null;
+  }
+
+  private class FileExtensionFilter implements FilenameFilter {
+    private String extension;
+
+    FileExtensionFilter(String ext) {
+      extension = ext;
+    }
+
+    @Override
+    public boolean accept(File dir, String name) {
+      File f = new File(dir, name);
+      if (extension == null)
+        return f.isFile();
+      else
+        return f.isFile() && name.toLowerCase().endsWith("." + extension);
+    }
+  }
 }

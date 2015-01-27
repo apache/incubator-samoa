@@ -1,4 +1,3 @@
-
 package com.yahoo.labs.samoa.moa.streams.clustering;
 
 /*
@@ -36,15 +35,15 @@ public class ClusterEvent extends EventObject {
     this.timestamp = timestamp;
   }
 
-  public String getMessage(){
-      return message;
+  public String getMessage() {
+    return message;
   }
 
-  public long getTimestamp(){
-      return timestamp;
+  public long getTimestamp() {
+    return timestamp;
   }
 
-  public String getType(){
-      return type;
+  public String getType() {
+    return type;
   }
 }

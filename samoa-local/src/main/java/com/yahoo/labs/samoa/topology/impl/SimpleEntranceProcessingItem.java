@@ -24,10 +24,10 @@ import com.yahoo.labs.samoa.core.EntranceProcessor;
 import com.yahoo.labs.samoa.topology.LocalEntranceProcessingItem;
 
 class SimpleEntranceProcessingItem extends LocalEntranceProcessingItem {
-    public SimpleEntranceProcessingItem(EntranceProcessor processor) {
-        super(processor);
-    }
-    
-    // The default waiting time when there is no available events is 100ms
-    // Override waitForNewEvents() to change it
+  public SimpleEntranceProcessingItem(EntranceProcessor processor) {
+    super(processor);
+  }
+
+  // The default waiting time when there is no available events is 100ms
+  // Override waitForNewEvents() to change it
 }

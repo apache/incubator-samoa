@@ -37,210 +37,208 @@ import java.util.Random;
  */
 public class Instances implements Serializable {
 
-	public static final String ARFF_RELATION = "@relation";
-	public static final String ARFF_DATA = "@data";
+  public static final String ARFF_RELATION = "@relation";
+  public static final String ARFF_DATA = "@data";
 
-	
-	protected InstanceInformation instanceInformation;
-	/**
-	 * The instances.
-	 */
-	protected List<Instance> instances;
+  protected InstanceInformation instanceInformation;
+  /**
+   * The instances.
+   */
+  protected List<Instance> instances;
 
-	transient protected ArffLoader arff;
-        
-	protected int classAttribute;
+  transient protected ArffLoader arff;
 
-	public Instances(InstancesHeader modelContext) {
-		throw new UnsupportedOperationException("Not yet implemented");
-	}
+  protected int classAttribute;
 
-	public Instances(Instances chunk) {
-		this.instanceInformation = chunk.instanceInformation();
-		// this.relationName = chunk.relationName;
-		// this.attributes = chunk.attributes;
-		this.instances = chunk.instances;
-	}
+  public Instances(InstancesHeader modelContext) {
+    throw new UnsupportedOperationException("Not yet implemented");
+  }
 
-	public Instances() {
-		// this.instanceInformation = chunk.instanceInformation();
-		// this.relationName = chunk.relationName;
-		// this.attributes = chunk.attributes;
-		// this.instances = chunk.instances;
-	}
+  public Instances(Instances chunk) {
+    this.instanceInformation = chunk.instanceInformation();
+    // this.relationName = chunk.relationName;
+    // this.attributes = chunk.attributes;
+    this.instances = chunk.instances;
+  }
 
-	public Instances(Reader reader, int size, int classAttribute) {
-                this.classAttribute = classAttribute;
-		arff = new ArffLoader(reader, 0, classAttribute);
-		this.instanceInformation = arff.getStructure();
-		this.instances = new ArrayList<>();
-	}
+  public Instances() {
+    // this.instanceInformation = chunk.instanceInformation();
+    // this.relationName = chunk.relationName;
+    // this.attributes = chunk.attributes;
+    // this.instances = chunk.instances;
+  }
 
-	public Instances(Instances chunk, int capacity) {
-		this(chunk);
-	}
+  public Instances(Reader reader, int size, int classAttribute) {
+    this.classAttribute = classAttribute;
+    arff = new ArffLoader(reader, 0, classAttribute);
+    this.instanceInformation = arff.getStructure();
+    this.instances = new ArrayList<>();
+  }
 
-	public Instances(String st, List<Attribute> v, int capacity) {
-		
-		this.instanceInformation = new InstanceInformation(st, v);
-		this.instances = new ArrayList<>();
-	}
+  public Instances(Instances chunk, int capacity) {
+    this(chunk);
+  }
 
-	public Instances(Instances chunk, int i, int j) {
-		throw new UnsupportedOperationException("Not yet implemented");
-	}
+  public Instances(String st, List<Attribute> v, int capacity) {
 
-	public Instances(StringReader st, int v) {
-		throw new UnsupportedOperationException("Not yet implemented");
-	}
+    this.instanceInformation = new InstanceInformation(st, v);
+    this.instances = new ArrayList<>();
+  }
 
-	// Information Instances
-	public void setRelationName(String string) {
-		this.instanceInformation.setRelationName(string);
-	}
+  public Instances(Instances chunk, int i, int j) {
+    throw new UnsupportedOperationException("Not yet implemented");
+  }
 
-	public String getRelationName() {
-		return this.instanceInformation.getRelationName();
-	}
+  public Instances(StringReader st, int v) {
+    throw new UnsupportedOperationException("Not yet implemented");
+  }
 
-	public int classIndex() {
-		return this.instanceInformation.classIndex();
-	}
+  // Information Instances
+  public void setRelationName(String string) {
+    this.instanceInformation.setRelationName(string);
+  }
 
-	public void setClassIndex(int classIndex) {
-		this.instanceInformation.setClassIndex(classIndex);
-	}
+  public String getRelationName() {
+    return this.instanceInformation.getRelationName();
+  }
 
-	public Attribute classAttribute() {
-		return this.instanceInformation.classAttribute();
-	}
+  public int classIndex() {
+    return this.instanceInformation.classIndex();
+  }
 
-	public int numAttributes() {
-		return this.instanceInformation.numAttributes();
-	}
+  public void setClassIndex(int classIndex) {
+    this.instanceInformation.setClassIndex(classIndex);
+  }
 
-	public Attribute attribute(int w) {
-		return this.instanceInformation.attribute(w);
-	}
+  public Attribute classAttribute() {
+    return this.instanceInformation.classAttribute();
+  }
 
-	public int numClasses() {
-		return this.instanceInformation.numClasses();
-	}
+  public int numAttributes() {
+    return this.instanceInformation.numAttributes();
+  }
 
-	public void deleteAttributeAt(Integer integer) {
-		this.instanceInformation.deleteAttributeAt(integer);
-	}
+  public Attribute attribute(int w) {
+    return this.instanceInformation.attribute(w);
+  }
 
-	public void insertAttributeAt(Attribute attribute, int i) {
-		this.instanceInformation.insertAttributeAt(attribute, i);
-	}
+  public int numClasses() {
+    return this.instanceInformation.numClasses();
+  }
 
-	// List of Instances
-	public Instance instance(int num) {
-		return this.instances.get(num);
-	}
+  public void deleteAttributeAt(Integer integer) {
+    this.instanceInformation.deleteAttributeAt(integer);
+  }
 
-	public int numInstances() {
-		return this.instances.size();
-	}
+  public void insertAttributeAt(Attribute attribute, int i) {
+    this.instanceInformation.insertAttributeAt(attribute, i);
+  }
 
-	public void add(Instance inst) {
-		this.instances.add(inst.copy());
-	}
+  // List of Instances
+  public Instance instance(int num) {
+    return this.instances.get(num);
+  }
 
-	public void randomize(Random random) {
-		for (int j = numInstances() - 1; j > 0; j--) {
-			swap(j, random.nextInt(j + 1));
-		}
-	}
+  public int numInstances() {
+    return this.instances.size();
+  }
 
-	public void stratify(int numFolds) {
-		throw new UnsupportedOperationException("Not yet implemented");
-	}
+  public void add(Instance inst) {
+    this.instances.add(inst.copy());
+  }
 
-	public Instances trainCV(int numFolds, int n, Random random) {
-		throw new UnsupportedOperationException("Not yet implemented");
-	}
+  public void randomize(Random random) {
+    for (int j = numInstances() - 1; j > 0; j--) {
+      swap(j, random.nextInt(j + 1));
+    }
+  }
 
-	public Instances testCV(int numFolds, int n) {
-		throw new UnsupportedOperationException("Not yet implemented");
-	}
+  public void stratify(int numFolds) {
+    throw new UnsupportedOperationException("Not yet implemented");
+  }
 
-	/*
-	 * public Instances dataset() { throw new
-	 * UnsupportedOperationException("Not yet implemented"); }
-	 */
-	public double meanOrMode(int j) {
-		throw new UnsupportedOperationException("Not yet implemented"); // CobWeb
-	}
+  public Instances trainCV(int numFolds, int n, Random random) {
+    throw new UnsupportedOperationException("Not yet implemented");
+  }
 
-	public boolean readInstance(Reader fileReader) {
+  public Instances testCV(int numFolds, int n) {
+    throw new UnsupportedOperationException("Not yet implemented");
+  }
 
-		// ArffReader arff = new ArffReader(reader, this, m_Lines, 1);
-            if (arff == null) {
-               arff = new ArffLoader(fileReader,0,this.classAttribute); 
-            }
-		Instance inst = arff.readInstance(fileReader);
-		if (inst != null) {
-			inst.setDataset(this);
-			add(inst);
-			return true;
-		} else {
-			return false;
-		}
-	}
+  /*
+   * public Instances dataset() { throw new
+   * UnsupportedOperationException("Not yet implemented"); }
+   */
+  public double meanOrMode(int j) {
+    throw new UnsupportedOperationException("Not yet implemented"); // CobWeb
+  }
 
-	public void delete() {
-		this.instances = new ArrayList<>();
-	}
+  public boolean readInstance(Reader fileReader) {
 
-	public void swap(int i, int j) {
-		Instance in = instances.get(i);
-		instances.set(i, instances.get(j));
-		instances.set(j, in);
-	}
+    // ArffReader arff = new ArffReader(reader, this, m_Lines, 1);
+    if (arff == null) {
+      arff = new ArffLoader(fileReader, 0, this.classAttribute);
+    }
+    Instance inst = arff.readInstance(fileReader);
+    if (inst != null) {
+      inst.setDataset(this);
+      add(inst);
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-	private InstanceInformation instanceInformation() {
-		return this.instanceInformation;
-	}
+  public void delete() {
+    this.instances = new ArrayList<>();
+  }
 
-	public Attribute attribute(String name) {
+  public void swap(int i, int j) {
+    Instance in = instances.get(i);
+    instances.set(i, instances.get(j));
+    instances.set(j, in);
+  }
 
-		for (int i = 0; i < numAttributes(); i++) {
-			if (attribute(i).name().equals(name)) {
-				return attribute(i);
-			}
-		}
-		return null;
-	}
+  private InstanceInformation instanceInformation() {
+    return this.instanceInformation;
+  }
 
+  public Attribute attribute(String name) {
 
-	@Override
-	public String toString() {
-		StringBuilder text = new StringBuilder();
+    for (int i = 0; i < numAttributes(); i++) {
+      if (attribute(i).name().equals(name)) {
+        return attribute(i);
+      }
+    }
+    return null;
+  }
 
-		for (int i = 0; i < numInstances(); i++) {
-			text.append(instance(i).toString());
-			if (i < numInstances() - 1) {
-				text.append('\n');
-			}
-		}
-		return text.toString();
-	}
+  @Override
+  public String toString() {
+    StringBuilder text = new StringBuilder();
 
-	// toString() with header
-	public String toStringArff() {
-		StringBuilder text = new StringBuilder();
+    for (int i = 0; i < numInstances(); i++) {
+      text.append(instance(i).toString());
+      if (i < numInstances() - 1) {
+        text.append('\n');
+      }
+    }
+    return text.toString();
+  }
 
-		text.append(ARFF_RELATION).append(" ")
-				.append(Utils.quote(getRelationName())).append("\n\n");
-		for (int i = 0; i < numAttributes(); i++) {
-			text.append(attribute(i).toString()).append("\n");
-		}
-		text.append("\n").append(ARFF_DATA).append("\n");
+  // toString() with header
+  public String toStringArff() {
+    StringBuilder text = new StringBuilder();
 
-		text.append(toString());
-		return text.toString();
+    text.append(ARFF_RELATION).append(" ")
+        .append(Utils.quote(getRelationName())).append("\n\n");
+    for (int i = 0; i < numAttributes(); i++) {
+      text.append(attribute(i).toString()).append("\n");
+    }
+    text.append("\n").append(ARFF_DATA).append("\n");
 
-	}
+    text.append(toString());
+    return text.toString();
+
+  }
 }
