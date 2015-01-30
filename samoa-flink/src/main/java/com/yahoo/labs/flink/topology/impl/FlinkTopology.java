@@ -126,6 +126,7 @@ public class FlinkTopology extends AbstractTopology {
 
 		//TODO:: refactor this part to apply in general cases also
 		//initialise source stream of the iteration, so as to use it for the iteration starting point
+		//head.initialiseCircleHead();
 		for (Tuple3<FlinkStream, Utils.Partitioning,Integer> inputStream : head.getInputStreams()) {
 			if (inputStream.f0.isInitialised()){ //if input stream is initialised
 				try{
@@ -143,7 +144,7 @@ public class FlinkTopology extends AbstractTopology {
 			}
 		}
 		IterativeDataStream ids = head.getInStream().iterate(5000);
-		SplitDataStream temp = ids.transform("samoaProcessor", head.getInStream().getType(), head).setParallelism(head.getParallelism())
+		SplitDataStream temp = ids.transform("samoaProcessor",Utils.samoaTypeInfo, head).setParallelism(head.getParallelism())
 				.split(new OutputSelector<SamoaType>() {
 					@Override
 					public Iterable<String> select(SamoaType samoaType) {

@@ -21,10 +21,15 @@ package com.yahoo.labs.flink.topology.impl;
  */
 
 
+import com.yahoo.labs.flink.SamoaTypeInfo;
+import com.yahoo.labs.flink.Utils;
 import com.yahoo.labs.samoa.core.ContentEvent;
 import com.yahoo.labs.samoa.core.EntranceProcessor;
 import com.yahoo.labs.samoa.topology.AbstractEntranceProcessingItem;
+import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.api.java.typeutils.TupleTypeInfo;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -42,6 +47,7 @@ public class FlinkEntranceProcessingItem extends AbstractEntranceProcessingItem
 	private static int numberOfEntrancePIs = 0;
 	private int piID ;
 
+
 	private ContentEvent firstEvent;
 
 	public FlinkEntranceProcessingItem(StreamExecutionEnvironment env, EntranceProcessor proc) {
@@ -55,13 +61,14 @@ public class FlinkEntranceProcessingItem extends AbstractEntranceProcessingItem
 		final EntranceProcessor proc = getProcessor();
 		final String streamId = getOutputStream().getStreamId();
 
+
+		//TypeInformation<Tuple3<String,ContentEvent,String>> ti = new TupleTypeInfo(Tuple3.class, BasicTypeInfo.STRING_TYPE_INFO,TypeExtractor.getForClass(ContentEvent.class),BasicTypeInfo.STRING_TYPE_INFO);
+
 		if (proc.hasNext()) {
 			firstEvent = proc.nextEvent();
-
 			SamoaType t = SamoaType.of(firstEvent, streamId);
 			st = TypeExtractor.getForObject(t); // consider the case that there is no event...how to create an object?
 		}
-
 		outStream = env.addSource(new SourceFunction<SamoaType>() {
 			EntranceProcessor entrProc = proc;
 			String id = streamId;
@@ -74,7 +81,7 @@ public class FlinkEntranceProcessingItem extends AbstractEntranceProcessingItem
 					collector.collect(SamoaType.of(ce, id));
 				}
 			}
-		}, (TypeInformation<SamoaType>) st);
+		}, Utils.samoaTypeInfo);//st);
 
 		((FlinkStream) getOutputStream()).initialise();
 	}

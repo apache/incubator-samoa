@@ -22,6 +22,12 @@ package com.yahoo.labs.flink;
 
 
 import com.yahoo.labs.flink.topology.impl.SamoaType;
+import com.yahoo.labs.samoa.core.ContentEvent;
+import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.api.java.typeutils.TupleTypeInfo;
+import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.streaming.api.datastream.DataStream;
 
 import java.util.List;
@@ -40,6 +46,10 @@ public class Utils {
 	public static int flinkPort;
 	public static String[] dependecyJars;
 	public static int parallelism = 2;
+//	public static TypeInformation[] ti= {BasicTypeInfo.STRING_TYPE_INFO, TypeExtractor.
+//			getForClass(ContentEvent.class), BasicTypeInfo.STRING_TYPE_INFO};
+
+	public static TypeInformation samoaTypeInfo = new SamoaTypeInfo((new SamoaType()).getClass());
 
 	public enum Partitioning {SHUFFLE, ALL, GROUP}
 

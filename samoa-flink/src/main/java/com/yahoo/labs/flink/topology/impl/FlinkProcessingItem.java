@@ -34,12 +34,17 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SplitDataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.invokable.StreamInvokable;
+import org.apache.flink.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.List;
 
 
 public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> implements ProcessingItem, FlinkComponent, Serializable {
+
+	private static final Logger logger = LoggerFactory.getLogger(FlinkProcessingItem.class);
 
 	private final Processor processor;
 	private final transient StreamExecutionEnvironment env;
@@ -91,11 +96,11 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 				} else {
 					inStream = inStream.merge(Utils.subscribe(inputStream.f0.getOutStream(), inputStream.f1));
 				}
-			}catch (Exception e){
+			}catch (RuntimeException e){
 				System.out.println(e);
 			}
 		}
-		outStream = inStream.transform("samoaProcessor", inStream.getType(), this).setParallelism(parallelism);
+		outStream = inStream.transform("samoaProcessor", Utils.samoaTypeInfo, this).setParallelism(parallelism);
 	}
 
 	public void initialiseStreams(){
@@ -126,9 +131,28 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 	public void invoke() throws Exception {
 		System.err.println("piId: " +this.getId()+", "+ this.getProcessor().getClass().getCanonicalName());
 		while (readNext() != null) {
-			System.out.println("Next :: "+nextRecord.getObject().toString() );
-			fun.processEvent(nextRecord.getObject().f1);
+			System.err.println(this.getId());
+			callUserFunctionAndLogException();
 		}
+	}
+
+	protected void callUserFunctionAndLogException() {
+		try {
+			//System.err.println("callUserFunctionAndLogException");
+			callUserFunction();
+		} catch (Exception e) {
+			if (logger.isErrorEnabled()) {
+				logger.error("Calling user function failed due to: {}",
+						StringUtils.stringifyException(e));
+			}
+		}
+	}
+
+	@Override
+	protected void callUserFunction() throws Exception {
+		//System.err.println("CallUserFunction function was called");
+		System.out.println("Next :: " + nextObject.toString());
+		fun.processEvent(nextObject.f1);
 	}
 
 	@Override
