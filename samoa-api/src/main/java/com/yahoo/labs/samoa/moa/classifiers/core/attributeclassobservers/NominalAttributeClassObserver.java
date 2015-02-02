@@ -33,9 +33,8 @@ import com.yahoo.labs.samoa.moa.core.DoubleVector;
 import com.yahoo.labs.samoa.moa.options.AbstractOptionHandler;
 
 /**
- * Class for observing the class data distribution for a nominal attribute. This
- * observer monitors the class distribution of a given attribute. Used in naive
- * Bayes and decision trees to monitor data statistics on leaves.
+ * Class for observing the class data distribution for a nominal attribute. This observer monitors the class
+ * distribution of a given attribute. Used in naive Bayes and decision trees to monitor data statistics on leaves.
  * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $

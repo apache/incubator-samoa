@@ -24,8 +24,7 @@ import com.yahoo.labs.samoa.instances.InstancesHeader;
 import com.yahoo.labs.samoa.instances.Instance;
 
 /**
- * Nominal multi way conditional test for instances to use to split nodes in
- * Hoeffding trees.
+ * Nominal multi way conditional test for instances to use to split nodes in Hoeffding trees.
  * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $

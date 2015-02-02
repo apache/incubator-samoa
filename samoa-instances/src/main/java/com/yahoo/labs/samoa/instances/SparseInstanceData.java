@@ -139,8 +139,7 @@ public class SparseInstanceData implements InstanceData {
   /**
    * Locates the greatest index that is not greater than the given index.
    * 
-   * @return the internal index of the attribute index. Returns -1 if no index
-   *         with this property could be found
+   * @return the internal index of the attribute index. Returns -1 if no index with this property could be found
    */
   public int locateIndex(int index) {
 

@@ -21,8 +21,8 @@ package com.yahoo.labs.samoa.learners.classifiers.rules.common;
  */
 
 /**
- * Interface for Rule's LearningNode that does not update statistics for
- * expanding rule. It only updates statistics for computing predictions.
+ * Interface for Rule's LearningNode that does not update statistics for expanding rule. It only updates statistics for
+ * computing predictions.
  * 
  * @author Anh Thu Vu
  * 

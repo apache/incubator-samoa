@@ -10,8 +10,7 @@ public class TestParams {
    * <li>the sampling size (-f)
    * <li>the delay in ms between input instances (-w) , default is zero
    * </ul>
-   * as well as the maximum number of instances for testing/training (-i) and
-   * the sampling size (-f)
+   * as well as the maximum number of instances for testing/training (-i) and the sampling size (-f)
    */
   public static class Templates {
 

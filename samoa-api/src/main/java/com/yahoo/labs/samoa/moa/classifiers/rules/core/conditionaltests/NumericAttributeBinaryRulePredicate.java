@@ -45,8 +45,7 @@ import com.yahoo.labs.samoa.moa.classifiers.core.conditionaltests.InstanceCondit
 import com.yahoo.labs.samoa.moa.classifiers.rules.core.Predicate;
 
 /**
- * Numeric binary conditional test for instances to use to split nodes in
- * AMRules.
+ * Numeric binary conditional test for instances to use to split nodes in AMRules.
  * 
  * @version $Revision: 1 $
  */

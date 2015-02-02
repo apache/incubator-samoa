@@ -38,8 +38,8 @@ import com.yahoo.labs.samoa.moa.classifiers.rules.core.voting.ErrorWeightedVote;
 import com.yahoo.labs.samoa.topology.Stream;
 
 /**
- * AMRules Regressor Processor is the main (and only) processor for
- * AMRulesRegressor task. It is adapted from the AMRules implementation in MOA.
+ * AMRules Regressor Processor is the main (and only) processor for AMRulesRegressor task. It is adapted from the
+ * AMRules implementation in MOA.
  * 
  * @author Anh Thu Vu
  * 
@@ -138,15 +138,13 @@ public class AMRulesRegressorProcessor implements Processor {
   }
 
   /**
-   * Helper method to generate new ResultContentEvent based on an instance and
-   * its prediction result.
+   * Helper method to generate new ResultContentEvent based on an instance and its prediction result.
    * 
    * @param prediction
    *          The predicted class label from the decision tree model.
    * @param inEvent
    *          The associated instance content event
-   * @return ResultContentEvent to be sent into Evaluator PI or other
-   *         destination PI.
+   * @return ResultContentEvent to be sent into Evaluator PI or other destination PI.
    */
   private ResultContentEvent newResultContentEvent(double[] prediction, InstanceContentEvent inEvent) {
     ResultContentEvent rce = new ResultContentEvent(inEvent.getInstanceIndex(), inEvent.getInstance(),
@@ -157,9 +155,8 @@ public class AMRulesRegressorProcessor implements Processor {
   }
 
   /**
-   * getVotesForInstance extension of the instance method getVotesForInstance in
-   * moa.classifier.java returns the prediction of the instance. Called in
-   * EvaluateModelRegression
+   * getVotesForInstance extension of the instance method getVotesForInstance in moa.classifier.java returns the
+   * prediction of the instance. Called in EvaluateModelRegression
    */
   private double[] getVotesForInstance(Instance instance) {
     ErrorWeightedVote errorWeightedVote = newErrorWeightedVote();
@@ -199,18 +196,29 @@ public class AMRulesRegressorProcessor implements Processor {
   }
 
   public void trainOnInstanceImpl(Instance instance) {
-    /**
-     * AMRules Algorithm
-     * 
-     * //For each rule in the rule set //If rule covers the instance //if the
-     * instance is not an anomaly //Update Change Detection Tests //Compute
-     * prediction error //Call PHTest //If change is detected then //Remove rule
-     * //Else //Update sufficient statistics of rule //If number of examples in
-     * rule > Nmin //Expand rule //If ordered set then //break //If none of the
-     * rule covers the instance //Update sufficient statistics of default rule
-     * //If number of examples in default rule is multiple of Nmin //Expand
-     * default rule and add it to the set of rules //Reset the default rule
-     */
+    /*
+    AMRules Algorithm
+
+    For each rule in the rule set
+       If rule covers the instance
+           if the instance is not an anomaly 
+               Update Change Detection Tests
+               Compute prediction error
+               Call PHTest
+               If change is detected then
+                   Remove rule
+               Else
+                   Update sufficient statistics of rule
+                   If number of examples in rule  > Nmin
+                       Expand rule
+                   If ordered set then
+                       break
+       If none of the rule covers the instance
+           Update sufficient statistics of default rule
+           If number of examples in default rule is multiple of Nmin
+               Expand default rule and add it to the set of rules
+               Reset the default rule
+    */
     boolean rulesCoveringInstance = false;
     Iterator<ActiveRule> ruleIterator = this.ruleSet.iterator();
     while (ruleIterator.hasNext()) {

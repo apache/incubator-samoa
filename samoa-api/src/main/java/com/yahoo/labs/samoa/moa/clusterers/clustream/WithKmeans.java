@@ -214,8 +214,7 @@ public class WithKmeans extends AbstractClusterer {
   }
 
   /**
-   * k-means of (micro)clusters, with ground-truth-aided initialization. (to
-   * produce best results)
+   * k-means of (micro)clusters, with ground-truth-aided initialization. (to produce best results)
    * 
    * @param k
    * @param data
@@ -288,8 +287,7 @@ public class WithKmeans extends AbstractClusterer {
   }
 
   /**
-   * (The Actual Algorithm) k-means of (micro)clusters, with specified
-   * initialization points.
+   * (The Actual Algorithm) k-means of (micro)clusters, with specified initialization points.
    * 
    * @param k
    * @param centers
@@ -351,8 +349,7 @@ public class WithKmeans extends AbstractClusterer {
   }
 
   /**
-   * Rearrange the k-means result into a set of CFClusters, cleaning up the
-   * redundancies.
+   * Rearrange the k-means result into a set of CFClusters, cleaning up the redundancies.
    * 
    * @param kMeansResult
    * @param microclusters
@@ -401,8 +398,7 @@ public class WithKmeans extends AbstractClusterer {
   }
 
   /**
-   * k-means helper: Calculate a wrapping cluster of assigned
-   * points[microclusters].
+   * k-means helper: Calculate a wrapping cluster of assigned points[microclusters].
    * 
    * @param assigned
    * @param dimensions

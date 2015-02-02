@@ -26,9 +26,8 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * A simple implementation of the <code>Cluster</code> interface representing
- * spherical clusters. The inclusion probability is one inside the sphere and
- * zero everywhere else.
+ * A simple implementation of the <code>Cluster</code> interface representing spherical clusters. The inclusion
+ * probability is one inside the sphere and zero everywhere else.
  * 
  */
 public class SphereCluster extends Cluster {
@@ -87,9 +86,8 @@ public class SphereCluster extends Cluster {
   }
 
   /**
-   * Checks whether two <code>SphereCluster</code> overlap based on radius NOTE:
-   * overlapRadiusDegree only calculates the overlap based on the centers and
-   * the radi, so not the real overlap
+   * Checks whether two <code>SphereCluster</code> overlap based on radius NOTE: overlapRadiusDegree only calculates the
+   * overlap based on the centers and the radi, so not the real overlap
    * 
    * TODO: should we do this by MC to get the real overlap???
    * 
@@ -266,14 +264,12 @@ public class SphereCluster extends Cluster {
   }
 
   /*
-	 */
+   */
   /**
-   * When a clusters looses points the new minimal bounding sphere can be partly
-   * outside of the originating cluster. If a another cluster is right next to
-   * the original cluster (without overlapping), the new cluster can be
-   * overlapping with this second cluster. OverlapSave will tell you if the
-   * current cluster can degenerate so much that it overlaps with cluster
-   * 'other'
+   * When a clusters looses points the new minimal bounding sphere can be partly outside of the originating cluster. If
+   * a another cluster is right next to the original cluster (without overlapping), the new cluster can be overlapping
+   * with this second cluster. OverlapSave will tell you if the current cluster can degenerate so much that it overlaps
+   * with cluster 'other'
    * 
    * @param other
    *          the potentially overlapping cluster

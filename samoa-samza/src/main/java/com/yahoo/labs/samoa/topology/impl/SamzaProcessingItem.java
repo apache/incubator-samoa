@@ -46,8 +46,7 @@ import org.apache.samza.task.TaskContext;
 import org.apache.samza.task.TaskCoordinator;
 
 /**
- * ProcessingItem for Samza which is also a Samza task (StreamTask and
- * InitableTask)
+ * ProcessingItem for Samza which is also a Samza task (StreamTask and InitableTask)
  * 
  * @author Anh Thu Vu
  */

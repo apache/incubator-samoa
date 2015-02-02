@@ -28,8 +28,7 @@ import com.yahoo.labs.samoa.moa.AbstractMOAObject;
 import com.yahoo.labs.samoa.moa.classifiers.rules.core.conditionaltests.NumericAttributeBinaryRulePredicate;
 
 /**
- * The base class for "rule". Represents the most basic rule with and ID and a
- * list of features (nodeList).
+ * The base class for "rule". Represents the most basic rule with and ID and a list of features (nodeList).
  * 
  * @author Anh Thu Vu
  * 

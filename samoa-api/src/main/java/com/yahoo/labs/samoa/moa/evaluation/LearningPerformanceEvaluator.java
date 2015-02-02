@@ -25,8 +25,7 @@ import com.yahoo.labs.samoa.moa.core.Example;
 import com.yahoo.labs.samoa.moa.core.Measurement;
 
 /**
- * Interface implemented by learner evaluators to monitor the results of the
- * learning process.
+ * Interface implemented by learner evaluators to monitor the results of the learning process.
  * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $
@@ -34,8 +33,7 @@ import com.yahoo.labs.samoa.moa.core.Measurement;
 public interface LearningPerformanceEvaluator<E extends Example> extends MOAObject {
 
   /**
-   * Resets this evaluator. It must be similar to starting a new evaluator from
-   * scratch.
+   * Resets this evaluator. It must be similar to starting a new evaluator from scratch.
    * 
    */
   public void reset();
@@ -46,8 +44,7 @@ public interface LearningPerformanceEvaluator<E extends Example> extends MOAObje
    * @param example
    *          the example to be classified
    * @param classVotes
-   *          an array containing the estimated membership probabilities of the
-   *          test instance in each class
+   *          an array containing the estimated membership probabilities of the test instance in each class
    * @return an array of measurements monitored in this evaluator
    */
   public void addResult(E example, double[] classVotes);

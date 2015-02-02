@@ -44,8 +44,7 @@ import com.yahoo.labs.samoa.utils.SamzaConfigFactory;
 import com.yahoo.labs.samoa.utils.SystemsUtils;
 
 /**
- * EntranceProcessingItem for Samza which is also a Samza task (StreamTask &
- * InitableTask)
+ * EntranceProcessingItem for Samza which is also a Samza task (StreamTask & InitableTask)
  * 
  * @author Anh Thu Vu
  * 

@@ -31,8 +31,7 @@ import com.yahoo.labs.samoa.moa.options.OptionHandler;
 public interface ChangeDetector extends OptionHandler {
 
   /**
-   * Resets this change detector. It must be similar to starting a new change
-   * detector from scratch.
+   * Resets this change detector. It must be similar to starting a new change detector from scratch.
    * 
    */
   public void resetLearning();
@@ -41,8 +40,7 @@ public interface ChangeDetector extends OptionHandler {
    * Adding a numeric value to the change detector<br>
    * <br>
    * 
-   * The output of the change detector is modified after the insertion of a new
-   * item inside.
+   * The output of the change detector is modified after the insertion of a new item inside.
    * 
    * @param inputValue
    *          the number to insert into the change detector
@@ -57,8 +55,7 @@ public interface ChangeDetector extends OptionHandler {
   public boolean getChange();
 
   /**
-   * Gets whether the change detector is in the warning zone, after a warning
-   * alert and before a change alert.
+   * Gets whether the change detector is in the warning zone, after a warning alert and before a change alert.
    * 
    * @return true if the change detector is in the warning zone
    */
@@ -81,8 +78,7 @@ public interface ChangeDetector extends OptionHandler {
   /**
    * Gets the output state of the change detection.
    * 
-   * @return an array with the number of change detections, number of warnings,
-   *         delay, and estimation.
+   * @return an array with the number of change detections, number of warnings, delay, and estimation.
    */
   public double[] getOutput();
 

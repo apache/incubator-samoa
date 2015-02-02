@@ -73,8 +73,7 @@ public class MiscUtils {
   }
 
   /**
-   * Returns index of maximum element in a given array of doubles. First maximum
-   * is returned.
+   * Returns index of maximum element in a given array of doubles. First maximum is returned.
    * 
    * @param doubles
    *          the array of doubles

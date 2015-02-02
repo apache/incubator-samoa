@@ -25,9 +25,8 @@ import com.yahoo.labs.samoa.core.ContentEvent;
 /**
  * Abstract Stream
  * 
- * Helper for implementation of Stream. It has basic information for a Stream:
- * streamID and source ProcessingItem. Subclass of this class needs to implement
- * {@link #put(ContentEvent)}.
+ * Helper for implementation of Stream. It has basic information for a Stream: streamID and source ProcessingItem.
+ * Subclass of this class needs to implement {@link #put(ContentEvent)}.
  * 
  * @author Anh Thu Vu
  * 

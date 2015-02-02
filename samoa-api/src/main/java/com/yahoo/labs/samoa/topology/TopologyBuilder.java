@@ -71,13 +71,11 @@ public class TopologyBuilder {
   }
 
   /**
-   * Initiates topology with a specific name and a delay between consecutive
-   * instances.
+   * Initiates topology with a specific name and a delay between consecutive instances.
    * 
    * @param topologyName
    * @param delay
-   *          delay between injections of two instances from source (in
-   *          milliseconds)
+   *          delay between injections of two instances from source (in milliseconds)
    */
   public void initTopology(String topologyName, int delay) {
     if (this.topology != null) {
@@ -176,8 +174,7 @@ public class TopologyBuilder {
   }
 
   /**
-   * Creates a processing item with a specific processor and paralellism level
-   * of 1.
+   * Creates a processing item with a specific processor and paralellism level of 1.
    * 
    * @param processor
    * @return ProcessingItem

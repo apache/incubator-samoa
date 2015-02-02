@@ -24,8 +24,7 @@ import com.yahoo.labs.samoa.core.ContentEvent;
 import com.yahoo.labs.samoa.core.Processor;
 
 /**
- * Example {@link Processor} that simply prints the received events to standard
- * output.
+ * Example {@link Processor} that simply prints the received events to standard output.
  */
 public class HelloWorldDestinationProcessor implements Processor {
 

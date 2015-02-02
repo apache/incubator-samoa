@@ -41,19 +41,17 @@ public interface LocalLearner extends Serializable {
   LocalLearner create();
 
   /**
-   * Predicts the class memberships for a given instance. If an instance is
-   * unclassified, the returned array elements must be all zero.
+   * Predicts the class memberships for a given instance. If an instance is unclassified, the returned array elements
+   * must be all zero.
    * 
    * @param inst
    *          the instance to be classified
-   * @return an array containing the estimated membership probabilities of the
-   *         test instance in each class
+   * @return an array containing the estimated membership probabilities of the test instance in each class
    */
   double[] getVotesForInstance(Instance inst);
 
   /**
-   * Resets this classifier. It must be similar to starting a new classifier
-   * from scratch.
+   * Resets this classifier. It must be similar to starting a new classifier from scratch.
    * 
    */
   void resetLearning();

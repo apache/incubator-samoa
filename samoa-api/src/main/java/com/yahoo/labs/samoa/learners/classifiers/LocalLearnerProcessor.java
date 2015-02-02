@@ -124,9 +124,8 @@ final public class LocalLearnerProcessor implements Processor {
   }
 
   /**
-   * Gets whether this classifier correctly classifies an instance. Uses
-   * getVotesForInstance to obtain the prediction and the instance to obtain its
-   * true class.
+   * Gets whether this classifier correctly classifies an instance. Uses getVotesForInstance to obtain the prediction
+   * and the instance to obtain its true class.
    * 
    * 
    * @param inst

@@ -28,21 +28,19 @@ import com.yahoo.labs.samoa.moa.cluster.Clustering;
 import com.yahoo.labs.samoa.moa.cluster.SphereCluster;
 
 /**
- * A kMeans implementation for microclusterings. For now it only uses the real
- * centers of the groundtruthclustering for implementation. There should also be
- * an option to use random centers. TODO: random centers TODO: Create a macro
- * clustering interface to make different macro clustering algorithms available
- * to micro clustering algorithms like clustream, denstream and clustree
+ * A kMeans implementation for microclusterings. For now it only uses the real centers of the groundtruthclustering for
+ * implementation. There should also be an option to use random centers. TODO: random centers TODO: Create a macro
+ * clustering interface to make different macro clustering algorithms available to micro clustering algorithms like
+ * clustream, denstream and clustree
  * 
  */
 public class KMeans {
 
   /**
-   * This kMeans implementation clusters a big number of microclusters into a
-   * smaller amount of macro clusters. To make it comparable to other algorithms
-   * it uses the real centers of the ground truth macro clustering to have the
-   * best possible initialization. The quality of resulting macro clustering
-   * yields an upper bound for kMeans on the underlying microclustering.
+   * This kMeans implementation clusters a big number of microclusters into a smaller amount of macro clusters. To make
+   * it comparable to other algorithms it uses the real centers of the ground truth macro clustering to have the best
+   * possible initialization. The quality of resulting macro clustering yields an upper bound for kMeans on the
+   * underlying microclustering.
    * 
    * @param centers
    *          of the ground truth clustering

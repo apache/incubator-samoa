@@ -28,8 +28,7 @@ import com.yahoo.labs.samoa.moa.classifiers.rules.core.attributeclassobservers.F
 import com.yahoo.labs.samoa.moa.classifiers.rules.core.conditionaltests.NumericAttributeBinaryRulePredicate;
 
 /**
- * ActiveRule is a LearningRule that actively update its LearningNode with
- * incoming instances.
+ * ActiveRule is a LearningRule that actively update its LearningNode with incoming instances.
  * 
  * @author Anh Thu Vu
  * 

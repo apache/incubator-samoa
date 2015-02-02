@@ -62,8 +62,7 @@ public class FIMTDDNumericAttributeClassObserver extends BinaryTreeNumericAttrib
     }
 
     /**
-     * Insert a new value into the tree, updating both the sum of values and sum
-     * of squared values arrays
+     * Insert a new value into the tree, updating both the sum of values and sum of squared values arrays
      */
     public void insertValue(double val, double label, double weight) {
 
@@ -192,16 +191,14 @@ public class FIMTDDNumericAttributeClassObserver extends BinaryTreeNumericAttrib
   }
 
   /**
-   * A method to remove all nodes in the E-BST in which it and all it's children
-   * represent 'bad' split points
+   * A method to remove all nodes in the E-BST in which it and all it's children represent 'bad' split points
    */
   public void removeBadSplits(SplitCriterion criterion, double lastCheckRatio, double lastCheckSDR, double lastCheckE) {
     removeBadSplitNodes(criterion, this.root, lastCheckRatio, lastCheckSDR, lastCheckE);
   }
 
   /**
-   * Recursive method that first checks all of a node's children before deciding
-   * if it is 'bad' and may be removed
+   * Recursive method that first checks all of a node's children before deciding if it is 'bad' and may be removed
    */
   private boolean removeBadSplitNodes(SplitCriterion criterion, Node currentNode, double lastCheckRatio,
       double lastCheckSDR, double lastCheckE) {

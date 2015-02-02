@@ -28,8 +28,7 @@ import com.esotericsoftware.kryo.io.Output;
 import com.yahoo.labs.samoa.core.ContentEvent;
 
 /**
- * Attribute Content Event represents the instances that split vertically based
- * on their attribute
+ * Attribute Content Event represents the instances that split vertically based on their attribute
  * 
  * @author Arinto Murdopo
  * 
@@ -157,8 +156,8 @@ public final class AttributeContentEvent implements ContentEvent {
   }
 
   /**
-   * The Kryo serializer class for AttributeContentEvent when executing on top
-   * of Storm. This class allow us to change the precision of the statistics.
+   * The Kryo serializer class for AttributeContentEvent when executing on top of Storm. This class allow us to change
+   * the precision of the statistics.
    * 
    * @author Arinto Murdopo
    * 
@@ -191,8 +190,8 @@ public final class AttributeContentEvent implements ContentEvent {
   }
 
   /**
-   * The Kryo serializer class for AttributeContentEvent when executing on top
-   * of Storm with full precision of the statistics.
+   * The Kryo serializer class for AttributeContentEvent when executing on top of Storm with full precision of the
+   * statistics.
    * 
    * @author Arinto Murdopo
    * 

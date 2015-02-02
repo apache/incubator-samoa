@@ -35,8 +35,7 @@ import com.yahoo.labs.samoa.utils.SamzaConfigFactory;
 import com.yahoo.labs.samoa.utils.SystemsUtils;
 
 /**
- * This class will submit a list of Samza jobs with the Configs generated from
- * the input topology
+ * This class will submit a list of Samza jobs with the Configs generated from the input topology
  * 
  * @author Anh Thu Vu
  * 

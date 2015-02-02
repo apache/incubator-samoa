@@ -25,9 +25,8 @@ import com.yahoo.labs.samoa.moa.classifiers.core.splitcriteria.SplitCriterion;
 import com.yahoo.labs.samoa.moa.options.OptionHandler;
 
 /**
- * Interface for observing the class data distribution for an attribute. This
- * observer monitors the class distribution of a given attribute. Used in naive
- * Bayes and decision trees to monitor data statistics on leaves.
+ * Interface for observing the class data distribution for an attribute. This observer monitors the class distribution
+ * of a given attribute. Used in naive Bayes and decision trees to monitor data statistics on leaves.
  * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $
@@ -35,8 +34,7 @@ import com.yahoo.labs.samoa.moa.options.OptionHandler;
 public interface AttributeClassObserver extends OptionHandler {
 
   /**
-   * Updates statistics of this observer given an attribute value, a class and
-   * the weight of the instance observed
+   * Updates statistics of this observer given an attribute value, a class and the weight of the instance observed
    * 
    * @param attVal
    *          the value of the attribute

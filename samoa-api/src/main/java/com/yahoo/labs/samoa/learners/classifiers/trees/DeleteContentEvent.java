@@ -21,8 +21,8 @@ package com.yahoo.labs.samoa.learners.classifiers.trees;
  */
 
 /**
- * Delete Content Event is the content event that is sent by Model Aggregator
- * Processor to delete unnecessary statistic in Local Statistic Processor.
+ * Delete Content Event is the content event that is sent by Model Aggregator Processor to delete unnecessary statistic
+ * in Local Statistic Processor.
  * 
  * @author Arinto Murdopo
  * 

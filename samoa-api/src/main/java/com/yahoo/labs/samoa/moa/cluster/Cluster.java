@@ -47,8 +47,8 @@ public abstract class Cluster extends AbstractMOAObject {
   public abstract double[] getCenter();
 
   /**
-   * Returns the weight of this cluster, not neccessarily normalized. It could,
-   * for instance, simply return the number of points contined in this cluster.
+   * Returns the weight of this cluster, not neccessarily normalized. It could, for instance, simply return the number
+   * of points contined in this cluster.
    * 
    * @return the weight
    */

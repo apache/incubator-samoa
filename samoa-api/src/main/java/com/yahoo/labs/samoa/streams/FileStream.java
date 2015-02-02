@@ -37,8 +37,7 @@ import com.yahoo.labs.samoa.moa.tasks.TaskMonitor;
 import com.yahoo.labs.samoa.streams.fs.FileStreamSource;
 
 /**
- * InstanceStream for files (Abstract class: subclass this class for different
- * file formats)
+ * InstanceStream for files (Abstract class: subclass this class for different file formats)
  * 
  * @author Casey
  */
@@ -160,8 +159,7 @@ public abstract class FileStream extends AbstractOptionHandler implements Instan
   /**
    * Read next instance from the current file and assign it to lastInstanceRead.
    * 
-   * @return true if it was able to read next instance and false if it was at
-   *         the end of the file
+   * @return true if it was able to read next instance and false if it was at the end of the file
    */
   protected abstract boolean readNextInstanceFromFile();
 

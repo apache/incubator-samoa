@@ -23,9 +23,8 @@ package com.yahoo.labs.samoa.moa.classifiers.core.splitcriteria;
 import com.yahoo.labs.samoa.moa.core.Utils;
 
 /**
- * Class for computing splitting criteria using information gain with respect to
- * distributions of class values for Multilabel data. The split criterion is
- * used as a parameter on decision trees and decision stumps.
+ * Class for computing splitting criteria using information gain with respect to distributions of class values for
+ * Multilabel data. The split criterion is used as a parameter on decision trees and decision stumps.
  * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @author Jesse Read (jesse@tsc.uc3m.es)

@@ -33,8 +33,8 @@ import com.yahoo.labs.samoa.moa.core.Example;
 public interface ExampleStream<E extends Example> extends MOAObject {
 
   /**
-   * Gets the header of this stream. This is useful to know attributes and
-   * classes. InstancesHeader is an extension of weka.Instances.
+   * Gets the header of this stream. This is useful to know attributes and classes. InstancesHeader is an extension of
+   * weka.Instances.
    * 
    * @return the header of this stream
    */
@@ -48,8 +48,7 @@ public interface ExampleStream<E extends Example> extends MOAObject {
   public long estimatedRemainingInstances();
 
   /**
-   * Gets whether this stream has more instances to output. This is useful when
-   * reading streams from files.
+   * Gets whether this stream has more instances to output. This is useful when reading streams from files.
    * 
    * @return true if this stream has more instances to output
    */
@@ -70,8 +69,7 @@ public interface ExampleStream<E extends Example> extends MOAObject {
   public boolean isRestartable();
 
   /**
-   * Restarts this stream. It must be similar to starting a new stream from
-   * scratch.
+   * Restarts this stream. It must be similar to starting a new stream from scratch.
    * 
    */
   public void restart();

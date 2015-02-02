@@ -41,9 +41,8 @@ import backtype.storm.utils.NimbusClient;
 import backtype.storm.utils.Utils;
 
 /**
- * Helper class to submit SAMOA task into Storm without the need of submitting
- * the jar file. The jar file must be submitted first using StormJarSubmitter
- * class.
+ * Helper class to submit SAMOA task into Storm without the need of submitting the jar file. The jar file must be
+ * submitted first using StormJarSubmitter class.
  * 
  * @author Arinto Murdopo
  * 

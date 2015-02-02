@@ -23,10 +23,8 @@ package com.yahoo.labs.samoa.moa.core;
 import com.yahoo.labs.samoa.moa.AbstractMOAObject;
 
 /**
- * Gaussian incremental estimator that uses incremental method that is more
- * resistant to floating point imprecision. for more info see Donald Knuth's
- * "The Art of Computer Programming, Volume 2: Seminumerical Algorithms",
- * section 4.2.2.
+ * Gaussian incremental estimator that uses incremental method that is more resistant to floating point imprecision. for
+ * more info see Donald Knuth's "The Art of Computer Programming, Volume 2: Seminumerical Algorithms", section 4.2.2.
  * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $

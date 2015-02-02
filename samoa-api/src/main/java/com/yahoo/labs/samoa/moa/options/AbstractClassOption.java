@@ -56,9 +56,8 @@ public abstract class AbstractClassOption extends AbstractOption {
   protected String nullString;
 
   /**
-   * Creates a new instance of an abstract option given its class name, command
-   * line interface text, its purpose, its class type and its default command
-   * line interface text.
+   * Creates a new instance of an abstract option given its class name, command line interface text, its purpose, its
+   * class type and its default command line interface text.
    * 
    * @param name
    *          the name of this option
@@ -77,9 +76,8 @@ public abstract class AbstractClassOption extends AbstractOption {
   }
 
   /**
-   * Creates a new instance of an abstract option given its class name, command
-   * line interface text, its purpose, its class type, default command line
-   * interface text, and its null text.
+   * Creates a new instance of an abstract option given its class name, command line interface text, its purpose, its
+   * class type, default command line interface text, and its null text.
    * 
    * @param name
    *          the name of this option

@@ -26,8 +26,7 @@ import java.util.Set;
 /**
  * Topology abstract class.
  * 
- * It manages basic information of a topology: name, sets of Streams and
- * ProcessingItems
+ * It manages basic information of a topology: name, sets of Streams and ProcessingItems
  * 
  */
 public abstract class AbstractTopology implements Topology {

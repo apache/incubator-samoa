@@ -21,8 +21,8 @@ package com.yahoo.labs.samoa.learners.classifiers.trees;
  */
 
 /**
- * Class that represents the necessary data structure of the node where an
- * instance is routed/filtered through the decision tree model.
+ * Class that represents the necessary data structure of the node where an instance is routed/filtered through the
+ * decision tree model.
  * 
  * @author Arinto Murdopo
  * 
@@ -45,8 +45,8 @@ final class FoundNode implements java.io.Serializable {
   }
 
   /**
-   * Method to get the node where an instance is routed/filtered through the
-   * decision tree model for testing and training.
+   * Method to get the node where an instance is routed/filtered through the decision tree model for testing and
+   * training.
    * 
    * @return The node where the instance is routed/filtered
    */
@@ -55,8 +55,8 @@ final class FoundNode implements java.io.Serializable {
   }
 
   /**
-   * Method to get the parent of the node where an instance is routed/filtered
-   * through the decision tree model for testing and training
+   * Method to get the parent of the node where an instance is routed/filtered through the decision tree model for
+   * testing and training
    * 
    * @return The parent of the node
    */
@@ -65,8 +65,8 @@ final class FoundNode implements java.io.Serializable {
   }
 
   /**
-   * Method to get the index of the node (where an instance is routed/filtered
-   * through the decision tree model for testing and training) in its parent.
+   * Method to get the index of the node (where an instance is routed/filtered through the decision tree model for
+   * testing and training) in its parent.
    * 
    * @return The index of the node in its parent node.
    */

@@ -21,8 +21,7 @@ package com.yahoo.labs.samoa.instances;
  */
 
 /**
- * Class for storing the header or context of a data stream. It allows to know
- * the number of attributes and classes.
+ * Class for storing the header or context of a data stream. It allows to know the number of attributes and classes.
  * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $

@@ -24,8 +24,8 @@ import com.yahoo.labs.samoa.moa.classifiers.core.AttributeSplitSuggestion;
 import com.yahoo.labs.samoa.core.ContentEvent;
 
 /**
- * Local Result Content Event is the content event that represents local
- * calculation of statistic in Local Statistic Processor.
+ * Local Result Content Event is the content event that represents local calculation of statistic in Local Statistic
+ * Processor.
  * 
  * @author Arinto Murdopo
  * 
@@ -56,8 +56,7 @@ final class LocalResultContentEvent implements ContentEvent {
   }
 
   /**
-   * Method to return the best attribute split suggestion from this local
-   * statistic calculation.
+   * Method to return the best attribute split suggestion from this local statistic calculation.
    * 
    * @return The best attribute split suggestion.
    */
@@ -66,8 +65,7 @@ final class LocalResultContentEvent implements ContentEvent {
   }
 
   /**
-   * Method to return the second best attribute split suggestion from this local
-   * statistic calculation.
+   * Method to return the second best attribute split suggestion from this local statistic calculation.
    * 
    * @return The second best attribute split suggestion.
    */

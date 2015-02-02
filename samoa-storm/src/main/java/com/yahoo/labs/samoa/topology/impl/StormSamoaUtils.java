@@ -34,8 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.yahoo.labs.samoa.tasks.Task;
 
 /**
- * Utility class for samoa-storm project. It is used by StormDoTask to process
- * its arguments.
+ * Utility class for samoa-storm project. It is used by StormDoTask to process its arguments.
  * 
  * @author Arinto Murdopo
  * 

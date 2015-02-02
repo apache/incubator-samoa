@@ -26,8 +26,7 @@ import java.util.List;
 import com.yahoo.labs.samoa.moa.AbstractMOAObject;
 
 /**
- * AbstractErrorWeightedVote class for weighted votes based on estimates of
- * errors.
+ * AbstractErrorWeightedVote class for weighted votes based on estimates of errors.
  * 
  * @author Joao Duarte (jmduarte@inescporto.pt)
  * @version $Revision: 1 $

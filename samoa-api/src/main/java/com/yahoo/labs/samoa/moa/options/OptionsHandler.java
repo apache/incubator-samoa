@@ -83,9 +83,8 @@ public class OptionsHandler extends JavaCLIParser {
   }
 
   /**
-   * This method describes the implementation of how to prepare this object for
-   * use. All classes that extends this class have to implement
-   * <code>prepareForUseImpl</code> and not <code>prepareForUse</code> since
+   * This method describes the implementation of how to prepare this object for use. All classes that extends this class
+   * have to implement <code>prepareForUseImpl</code> and not <code>prepareForUse</code> since
    * <code>prepareForUse</code> calls <code>prepareForUseImpl</code>.
    * 
    * @param monitor

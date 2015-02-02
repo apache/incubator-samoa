@@ -26,8 +26,7 @@ import com.yahoo.labs.samoa.moa.core.ObjectRepository;
 import com.yahoo.labs.samoa.moa.tasks.TaskMonitor;
 
 /**
- * Drift detection method based in EWMA Charts of Ross, Adams, Tasoulis and Hand
- * 2012
+ * Drift detection method based in EWMA Charts of Ross, Adams, Tasoulis and Hand 2012
  * 
  * 
  * @author Manuel Baena (mbaena@lcc.uma.es)

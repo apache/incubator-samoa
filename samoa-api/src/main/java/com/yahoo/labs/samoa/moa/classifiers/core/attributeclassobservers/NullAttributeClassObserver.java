@@ -27,9 +27,8 @@ import com.yahoo.labs.samoa.moa.options.AbstractOptionHandler;
 import com.yahoo.labs.samoa.moa.tasks.TaskMonitor;
 
 /**
- * Class for observing the class data distribution for a null attribute. This
- * method is used to disable the observation for an attribute. Used in decision
- * trees to monitor data statistics on leaves.
+ * Class for observing the class data distribution for a null attribute. This method is used to disable the observation
+ * for an attribute. Used in decision trees to monitor data statistics on leaves.
  * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $

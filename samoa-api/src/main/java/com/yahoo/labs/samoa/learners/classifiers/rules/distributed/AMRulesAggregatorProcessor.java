@@ -214,15 +214,13 @@ public class AMRulesAggregatorProcessor implements Processor {
   }
 
   /**
-   * Helper method to generate new ResultContentEvent based on an instance and
-   * its prediction result.
+   * Helper method to generate new ResultContentEvent based on an instance and its prediction result.
    * 
    * @param prediction
    *          The predicted class label from the decision tree model.
    * @param inEvent
    *          The associated instance content event
-   * @return ResultContentEvent to be sent into Evaluator PI or other
-   *         destination PI.
+   * @return ResultContentEvent to be sent into Evaluator PI or other destination PI.
    */
   private ResultContentEvent newResultContentEvent(double[] prediction, InstanceContentEvent inEvent) {
     ResultContentEvent rce = new ResultContentEvent(inEvent.getInstanceIndex(), inEvent.getInstance(),

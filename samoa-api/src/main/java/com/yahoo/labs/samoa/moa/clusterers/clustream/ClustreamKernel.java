@@ -194,16 +194,14 @@ public class ClustreamKernel extends CFCluster {
   /**
    * Check if this cluster is empty or not.
    * 
-   * @return <code>true</code> if the cluster has no data points,
-   *         <code>false</code> otherwise.
+   * @return <code>true</code> if the cluster has no data points, <code>false</code> otherwise.
    */
   public boolean isEmpty() {
     return this.N == 0;
   }
 
   /**
-   * Calculate the normalized euclidean distance (Mahalanobis distance for
-   * distribution w/o covariances) to a point.
+   * Calculate the normalized euclidean distance (Mahalanobis distance for distribution w/o covariances) to a point.
    * 
    * @param point
    *          The point to which the distance is calculated.

@@ -33,8 +33,7 @@ import com.yahoo.labs.samoa.moa.core.DoubleVector;
 import com.yahoo.labs.samoa.moa.core.Measurement;
 
 /**
- * Prediction scheme using Perceptron: Predictions are computed according to a
- * linear function of the attributes.
+ * Prediction scheme using Perceptron: Predictions are computed according to a linear function of the attributes.
  * 
  * @author Anh Thu Vu
  * 

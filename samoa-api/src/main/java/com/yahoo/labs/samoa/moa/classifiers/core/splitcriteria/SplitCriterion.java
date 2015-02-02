@@ -23,10 +23,9 @@ package com.yahoo.labs.samoa.moa.classifiers.core.splitcriteria;
 import com.yahoo.labs.samoa.moa.options.OptionHandler;
 
 /**
- * Interface for computing splitting criteria. with respect to distributions of
- * class values. The split criterion is used as a parameter on decision trees
- * and decision stumps. The two split criteria most used are Information Gain
- * and Gini.
+ * Interface for computing splitting criteria. with respect to distributions of class values. The split criterion is
+ * used as a parameter on decision trees and decision stumps. The two split criteria most used are Information Gain and
+ * Gini.
  * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $
@@ -34,8 +33,7 @@ import com.yahoo.labs.samoa.moa.options.OptionHandler;
 public interface SplitCriterion extends OptionHandler {
 
   /**
-   * Computes the merit of splitting for a given ditribution before the split
-   * and after it.
+   * Computes the merit of splitting for a given ditribution before the split and after it.
    * 
    * @param preSplitDist
    *          the class distribution before the split

@@ -91,9 +91,8 @@ public abstract class AbstractEntranceProcessingItem implements EntranceProcessi
    * Output Stream
    */
   /**
-   * Set the output stream of this EntranceProcessingItem. An
-   * EntranceProcessingItem should have only 1 single output stream and should
-   * not be re-assigned.
+   * Set the output stream of this EntranceProcessingItem. An EntranceProcessingItem should have only 1 single output
+   * stream and should not be re-assigned.
    * 
    * @return this EntranceProcessingItem
    */

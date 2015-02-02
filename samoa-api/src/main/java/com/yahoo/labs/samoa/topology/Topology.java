@@ -54,8 +54,7 @@ public interface Topology {
    * Processing Items
    */
   /**
-   * Add a ProcessingItem to this topology with default parallelism level (i.e.
-   * 1)
+   * Add a ProcessingItem to this topology with default parallelism level (i.e. 1)
    * 
    * @param procItem
    *          the ProcessingItem to be added

@@ -23,11 +23,9 @@ package com.yahoo.labs.samoa.utils;
 import com.yahoo.labs.samoa.topology.IProcessingItem;
 
 /**
- * Represents one destination for streams. It has the info of: the
- * ProcessingItem, parallelismHint, and partitioning scheme. Usage: - When
- * ProcessingItem connects to a stream, it will pass a StreamDestination to the
- * stream. - Stream manages a set of StreamDestination. - Used in
- * single-threaded and multi-threaded local mode.
+ * Represents one destination for streams. It has the info of: the ProcessingItem, parallelismHint, and partitioning
+ * scheme. Usage: - When ProcessingItem connects to a stream, it will pass a StreamDestination to the stream. - Stream
+ * manages a set of StreamDestination. - Used in single-threaded and multi-threaded local mode.
  * 
  * @author Anh Thu Vu
  * 

@@ -31,8 +31,7 @@ import com.yahoo.labs.samoa.instances.Instance;
 //import weka.core.Instance;
 
 /**
- * The Class SerializableInstance. This class is needed for serialization of
- * kryo
+ * The Class SerializableInstance. This class is needed for serialization of kryo
  */
 public class SerializableInstance extends DenseInstance {
 

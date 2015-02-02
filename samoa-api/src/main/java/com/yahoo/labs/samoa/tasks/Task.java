@@ -29,8 +29,7 @@ import com.yahoo.labs.samoa.topology.Topology;
 public interface Task {
 
   /**
-   * Initialize this SAMOA task, i.e. create and connect ProcessingItems and
-   * Streams and initialize the topology
+   * Initialize this SAMOA task, i.e. create and connect ProcessingItems and Streams and initialize the topology
    */
   public void init();
 
@@ -49,9 +48,8 @@ public interface Task {
   // public TopologyStarter getTopologyStarter();
 
   /**
-   * Sets the factory. TODO: propose to hide factory from task, i.e. Task will
-   * only see TopologyBuilder, and factory creation will be handled by
-   * TopologyBuilder
+   * Sets the factory. TODO: propose to hide factory from task, i.e. Task will only see TopologyBuilder, and factory
+   * creation will be handled by TopologyBuilder
    * 
    * @param factory
    *          the new factory

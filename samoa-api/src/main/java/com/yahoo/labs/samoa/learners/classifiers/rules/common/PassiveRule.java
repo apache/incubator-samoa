@@ -23,8 +23,7 @@ package com.yahoo.labs.samoa.learners.classifiers.rules.common;
 import java.util.LinkedList;
 
 /**
- * PassiveRule is a LearningRule that update its LearningNode with the received
- * new LearningNode.
+ * PassiveRule is a LearningRule that update its LearningNode with the received new LearningNode.
  * 
  * @author Anh Thu Vu
  * 

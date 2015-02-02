@@ -26,9 +26,8 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 /**
- * Compute content event is the message that is sent by Model Aggregator
- * Processor to request Local Statistic PI to start the local statistic
- * calculation for splitting
+ * Compute content event is the message that is sent by Model Aggregator Processor to request Local Statistic PI to
+ * start the local statistic calculation for splitting
  * 
  * @author Arinto Murdopo
  * 
@@ -67,8 +66,8 @@ public final class ComputeContentEvent extends ControlContentEvent {
   }
 
   /**
-   * The Kryo serializer class for ComputeContentEevent when executing on top of
-   * Storm. This class allow us to change the precision of the statistics.
+   * The Kryo serializer class for ComputeContentEevent when executing on top of Storm. This class allow us to change
+   * the precision of the statistics.
    * 
    * @author Arinto Murdopo
    * 
@@ -106,8 +105,8 @@ public final class ComputeContentEvent extends ControlContentEvent {
   }
 
   /**
-   * The Kryo serializer class for ComputeContentEevent when executing on top of
-   * Storm with full precision of the statistics.
+   * The Kryo serializer class for ComputeContentEevent when executing on top of Storm with full precision of the
+   * statistics.
    * 
    * @author Arinto Murdopo
    * 

@@ -34,8 +34,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 /**
- * Implementation of Samza's SerdeFactory that uses Kryo to
- * serialize/deserialize objects
+ * Implementation of Samza's SerdeFactory that uses Kryo to serialize/deserialize objects
  * 
  * @author Anh Thu Vu
  * @param <T>

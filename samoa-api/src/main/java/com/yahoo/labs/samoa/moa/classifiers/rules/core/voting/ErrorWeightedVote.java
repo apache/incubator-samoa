@@ -31,8 +31,7 @@ import com.yahoo.labs.samoa.moa.MOAObject;
 public interface ErrorWeightedVote {
 
   /**
-   * Adds a vote and the corresponding error for the computation of the weighted
-   * vote and respective weighted error.
+   * Adds a vote and the corresponding error for the computation of the weighted vote and respective weighted error.
    * 
    * @param vote
    *          a vote returned by a classifier

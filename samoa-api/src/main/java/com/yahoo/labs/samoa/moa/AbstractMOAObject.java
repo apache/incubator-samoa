@@ -25,8 +25,8 @@ import com.yahoo.labs.samoa.moa.core.SerializeUtils;
 //import moa.core.SizeOf;
 
 /**
- * Abstract MOA Object. All classes that are serializable, copiable, can measure
- * its size, and can give a description, extend this class.
+ * Abstract MOA Object. All classes that are serializable, copiable, can measure its size, and can give a description,
+ * extend this class.
  * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $

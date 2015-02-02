@@ -33,12 +33,9 @@ import java.util.ArrayList;
  * 
  * CMM: Main class
  * 
- * Reference: Kremer et al.,
- * "An Effective Evaluation Measure for Clustering on Evolving Data Streams",
- * KDD, 2011
+ * Reference: Kremer et al., "An Effective Evaluation Measure for Clustering on Evolving Data Streams", KDD, 2011
  * 
- * @author Timm jansen Data Management and Data Exploration Group, RWTH Aachen
- *         University
+ * @author Timm jansen Data Management and Data Exploration Group, RWTH Aachen University
  */
 
 public class CMM extends MeasureCollection {
@@ -66,8 +63,7 @@ public class CMM extends MeasureCollection {
   private int numFClusters;
 
   /**
-   * number of cluster in the adjusted groundtruth clustering that was
-   * calculated through the groundtruth analysis
+   * number of cluster in the adjusted groundtruth clustering that was calculated through the groundtruth analysis
    */
   private int numGT0Classes;
 
@@ -77,14 +73,12 @@ public class CMM extends MeasureCollection {
   private int matchMap[];
 
   /**
-   * pointInclusionProbFC[p][C] contains the probability of point p being
-   * included in cluster C
+   * pointInclusionProbFC[p][C] contains the probability of point p being included in cluster C
    */
   private double[][] pointInclusionProbFC;
 
   /**
-   * threshold that defines when a point is being considered belonging to a
-   * cluster
+   * threshold that defines when a point is being considered belonging to a cluster
    */
   private double pointInclusionProbThreshold = 0.5;
 
@@ -104,8 +98,7 @@ public class CMM extends MeasureCollection {
   public boolean enableClassMerge = true;
 
   /**
-   * enable/disable model error when enabled errors that are caused by the
-   * underling cluster model will not be counted
+   * enable/disable model error when enabled errors that are caused by the underling cluster model will not be counted
    */
   public boolean enableModelError = true;
 
@@ -146,8 +139,7 @@ public class CMM extends MeasureCollection {
   }
 
   /**
-   * calculates the CMM specific matching between found clusters and ground
-   * truth clusters
+   * calculates the CMM specific matching between found clusters and ground truth clusters
    */
   private void calculateMatching() {
 
@@ -303,9 +295,8 @@ public class CMM extends MeasureCollection {
     double totalErrorMax = 0.0;
 
     /**
-     * mainly iterate over all points and find the right error value for the
-     * point. within the same run calculate various other stuff like coverage
-     * etc...
+     * mainly iterate over all points and find the right error value for the point. within the same run calculate
+     * various other stuff like coverage etc...
      */
     for (int p = 0; p < numPoints; p++) {
       CMMPoint cmdp = gtAnalysis.getPoint(p);

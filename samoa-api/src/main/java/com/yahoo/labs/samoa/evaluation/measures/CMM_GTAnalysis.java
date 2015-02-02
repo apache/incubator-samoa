@@ -33,12 +33,9 @@ import java.util.Iterator;
  * 
  * CMM: Ground truth analysis
  * 
- * Reference: Kremer et al.,
- * "An Effective Evaluation Measure for Clustering on Evolving Data Streams",
- * KDD, 2011
+ * Reference: Kremer et al., "An Effective Evaluation Measure for Clustering on Evolving Data Streams", KDD, 2011
  * 
- * @author Timm jansen Data Management and Data Exploration Group, RWTH Aachen
- *         University
+ * @author Timm jansen Data Management and Data Exploration Group, RWTH Aachen University
  */
 
 /*
@@ -78,8 +75,8 @@ public class CMM_GTAnalysis {
   private int numGTClusters;
 
   /**
-   * number of classes of the original ground truth, in case of a micro
-   * clustering ground truth this differs from numGTClusters
+   * number of classes of the original ground truth, in case of a micro clustering ground truth this differs from
+   * numGTClusters
    */
   private int numGTClasses;
 
@@ -94,11 +91,10 @@ public class CMM_GTAnalysis {
   private int numDims;
 
   /**
-   * mapping between true cluster ID/class label of the original ground truth
-   * and the internal cluster ID/working class label.
+   * mapping between true cluster ID/class label of the original ground truth and the internal cluster ID/working class
+   * label.
    * 
-   * different original cluster IDs might map to the same new cluster ID due to
-   * merging of two clusters
+   * different original cluster IDs might map to the same new cluster ID due to merging of two clusters
    */
   private HashMap<Integer, Integer> mapTrueLabelToWorkLabel;
 
@@ -108,15 +104,14 @@ public class CMM_GTAnalysis {
   private int[] mergeMap;
 
   /**
-   * number of non-noise points that will create an error due to the underlying
-   * clustering model (e.g. point being covered by two clusters representing
-   * different classes)
+   * number of non-noise points that will create an error due to the underlying clustering model (e.g. point being
+   * covered by two clusters representing different classes)
    */
   private int noiseErrorByModel;
 
   /**
-   * number of noise points that will create an error due to the underlying
-   * clustering model (e.g. noise point being covered by a cluster)
+   * number of noise points that will create an error due to the underlying clustering model (e.g. noise point being
+   * covered by a cluster)
    */
   private int pointErrorByModel;
 
@@ -133,22 +128,19 @@ public class CMM_GTAnalysis {
   private int knnNeighbourhood = 2;
 
   /**
-   * the threshold which defines when ground truth clusters will be merged. set
-   * to 1 to disable merging
+   * the threshold which defines when ground truth clusters will be merged. set to 1 to disable merging
    */
   private double tauConnection = 0.5;
 
   /**
-   * experimental (default: disabled) separate k for points to cluster and
-   * cluster to cluster
+   * experimental (default: disabled) separate k for points to cluster and cluster to cluster
    */
   private double clusterConnectionMaxPoints = knnNeighbourhood;
 
   /**
-   * experimental (default: disabled) use exponential connectivity function to
-   * model different behavior: closer points will have a stronger connection
-   * compared to the linear function. Use ConnRefXValue and ConnX to better
-   * parameterize lambda, which controls the decay of the connectivity
+   * experimental (default: disabled) use exponential connectivity function to model different behavior: closer points
+   * will have a stronger connection compared to the linear function. Use ConnRefXValue and ConnX to better parameterize
+   * lambda, which controls the decay of the connectivity
    */
   private boolean useExpConnectivity = false;
   private double lambdaConnRefXValue = 0.01;
@@ -201,8 +193,8 @@ public class CMM_GTAnalysis {
     }
 
     /**
-     * Retruns the current working label of the cluster the point belongs to.
-     * The label can change due to merging of clusters.
+     * Retruns the current working label of the cluster the point belongs to. The label can change due to merging of
+     * clusters.
      * 
      * @return the current working class label
      */
@@ -215,8 +207,7 @@ public class CMM_GTAnalysis {
   }
 
   /**
-   * Main class to model the new clusters that will be the output of the cluster
-   * analysis
+   * Main class to model the new clusters that will be the output of the cluster analysis
    * 
    */
   protected class GTCluster {
@@ -224,12 +215,10 @@ public class CMM_GTAnalysis {
     private ArrayList<Integer> points = new ArrayList<Integer>();
 
     /**
-     * a new GT cluster consists of one or more "old" GT clusters.
-     * Connected/overlapping clusters cannot be merged directly because of the
-     * underlying cluster model. E.g. for merging two spherical clusters the new
-     * cluster sphere can cover a lot more space then two separate smaller
-     * spheres. To keep the original coverage we need to keep the orignal
-     * clusters and merge them on an abstract level.
+     * a new GT cluster consists of one or more "old" GT clusters. Connected/overlapping clusters cannot be merged
+     * directly because of the underlying cluster model. E.g. for merging two spherical clusters the new cluster sphere
+     * can cover a lot more space then two separate smaller spheres. To keep the original coverage we need to keep the
+     * orignal clusters and merge them on an abstract level.
      */
     private ArrayList<Integer> clusterRepresentations = new ArrayList<Integer>();
 
@@ -289,8 +278,8 @@ public class CMM_GTAnalysis {
     }
 
     /**
-     * calculate knn distances of points within own cluster + average knn
-     * distance and average knn distance deviation of all points
+     * calculate knn distances of points within own cluster + average knn distance and average knn distance deviation of
+     * all points
      */
     private void calculateKnn() {
       for (int p0 : points) {
@@ -601,8 +590,7 @@ public class CMM_GTAnalysis {
    * @param pointIDs
    *          list of point IDs to check
    * @param knnDist
-   *          sorted list of smallest knn distances (can already be filled to
-   *          make updates possible)
+   *          sorted list of smallest knn distances (can already be filled to make updates possible)
    * @param knnPointIndex
    *          list of corresponding knn indices
    */
@@ -647,8 +635,7 @@ public class CMM_GTAnalysis {
   }
 
   /**
-   * Calculate connections between clusters and merge clusters accordingly as
-   * long as connections exceed threshold
+   * Calculate connections between clusters and merge clusters accordingly as long as connections exceed threshold
    */
   private void calculateGTClusterConnections() {
     for (int c0 = 0; c0 < gt0Clusters.size(); c0++) {
@@ -700,8 +687,8 @@ public class CMM_GTAnalysis {
   }
 
   /**
-   * Calculates how well the original clusters are separable. Small values
-   * indicate bad separability, values close to 1 indicate good separability
+   * Calculates how well the original clusters are separable. Small values indicate bad separability, values close to 1
+   * indicate good separability
    * 
    * @return index of seperability
    */
@@ -722,8 +709,8 @@ public class CMM_GTAnalysis {
   }
 
   /**
-   * Calculates how well noise is separable from the given clusters Small values
-   * indicate bad separability, values close to 1 indicate good separability
+   * Calculates how well noise is separable from the given clusters Small values indicate bad separability, values close
+   * to 1 indicate good separability
    * 
    * @return index of noise separability
    */
@@ -750,8 +737,7 @@ public class CMM_GTAnalysis {
   }
 
   /**
-   * Calculates the relative number of errors being caused by the underlying
-   * cluster model
+   * Calculates the relative number of errors being caused by the underlying cluster model
    * 
    * @return quality of the model
    */

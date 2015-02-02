@@ -37,8 +37,7 @@ import com.yahoo.labs.samoa.moa.classifiers.rules.driftdetection.PageHinkleyFadi
 import com.yahoo.labs.samoa.moa.classifiers.rules.driftdetection.PageHinkleyTest;
 
 /**
- * LearningNode for regression rule that updates both statistics for expanding
- * rule and computing predictions.
+ * LearningNode for regression rule that updates both statistics for expanding rule and computing predictions.
  * 
  * @author Anh Thu Vu
  * 

@@ -28,8 +28,7 @@ import com.yahoo.labs.samoa.moa.tasks.TaskMonitor;
  * Drift detection method based in DDM method of Joao Gama SBIA 2004.
  * 
  * <p>
- * João Gama, Pedro Medas, Gladys Castillo, Pedro Pereira Rodrigues: Learning
- * with Drift Detection. SBIA 2004: 286-295
+ * João Gama, Pedro Medas, Gladys Castillo, Pedro Pereira Rodrigues: Learning with Drift Detection. SBIA 2004: 286-295
  * </p>
  * 
  * @author Manuel Baena (mbaena@lcc.uma.es)

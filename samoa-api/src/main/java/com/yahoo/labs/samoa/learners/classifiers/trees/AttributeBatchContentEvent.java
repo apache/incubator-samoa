@@ -25,8 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Attribute Content Event represents the instances that split vertically based
- * on their attribute
+ * Attribute Content Event represents the instances that split vertically based on their attribute
  * 
  * @author Arinto Murdopo
  * 

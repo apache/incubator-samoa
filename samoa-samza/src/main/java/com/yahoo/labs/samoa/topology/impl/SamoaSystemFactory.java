@@ -32,9 +32,8 @@ import org.apache.samza.util.SinglePartitionWithoutOffsetsSystemAdmin;
 import com.yahoo.labs.samoa.topology.impl.SamzaEntranceProcessingItem.SamoaSystemConsumer;
 
 /**
- * Implementation of Samza's SystemFactory Samza will use this factory to get
- * our custom consumer which gets the events from SAMOA EntranceProcessor and
- * feed them to EntranceProcessingItem task
+ * Implementation of Samza's SystemFactory Samza will use this factory to get our custom consumer which gets the events
+ * from SAMOA EntranceProcessor and feed them to EntranceProcessingItem task
  * 
  * @author Anh Thu Vu
  */

@@ -43,9 +43,8 @@ import com.yahoo.labs.samoa.topology.TopologyBuilder;
 /**
  * Vertical Hoeffding Tree.
  * <p/>
- * Vertical Hoeffding Tree (VHT) classifier is a distributed classifier that
- * utilizes vertical parallelism on top of Very Fast Decision Tree (VFDT)
- * classifier.
+ * Vertical Hoeffding Tree (VHT) classifier is a distributed classifier that utilizes vertical parallelism on top of
+ * Very Fast Decision Tree (VFDT) classifier.
  * 
  * @author Arinto Murdopo
  */

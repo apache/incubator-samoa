@@ -34,8 +34,8 @@ import com.yahoo.labs.samoa.instances.DenseInstance;
 import com.yahoo.labs.samoa.instances.Instance;
 
 /**
- * Citation: CluStream: Charu C. Aggarwal, Jiawei Han, Jianyong Wang, Philip S.
- * Yu: A Framework for Clustering Evolving Data Streams. VLDB 2003: 81-92
+ * Citation: CluStream: Charu C. Aggarwal, Jiawei Han, Jianyong Wang, Philip S. Yu: A Framework for Clustering Evolving
+ * Data Streams. VLDB 2003: 81-92
  */
 public class Clustream extends AbstractClusterer {
 

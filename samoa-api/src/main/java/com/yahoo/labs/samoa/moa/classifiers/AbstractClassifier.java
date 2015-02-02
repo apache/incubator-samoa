@@ -61,8 +61,7 @@ public abstract class AbstractClassifier extends AbstractOptionHandler implement
   public Random classifierRandom;
 
   /**
-   * Creates an classifier and setups the random seed option if the classifier
-   * is randomizable.
+   * Creates an classifier and setups the random seed option if the classifier is randomizable.
    */
   public AbstractClassifier() {
     if (isRandomizable()) {
@@ -273,12 +272,10 @@ public abstract class AbstractClassifier extends AbstractOptionHandler implement
    * Rule 1: num classes can increase but never decrease<br>
    * Rule 2: num attributes can increase but never decrease<br>
    * Rule 3: num nominal attribute values can increase but never decrease<br>
-   * Rule 4: attribute types must stay in the same order (although class can
-   * move; is always skipped over)<br>
+   * Rule 4: attribute types must stay in the same order (although class can move; is always skipped over)<br>
    * <br>
    * 
-   * Attribute names are free to change, but should always still represent the
-   * original attributes.
+   * Attribute names are free to change, but should always still represent the original attributes.
    * 
    * @param originalContext
    *          the first context to compare
@@ -327,13 +324,11 @@ public abstract class AbstractClassifier extends AbstractOptionHandler implement
   }
 
   /**
-   * Resets this classifier. It must be similar to starting a new classifier
-   * from scratch. <br>
+   * Resets this classifier. It must be similar to starting a new classifier from scratch. <br>
    * <br>
    * 
-   * The reason for ...Impl methods: ease programmer burden by not requiring
-   * them to remember calls to super in overridden methods. Note that this will
-   * produce compiler errors if not overridden.
+   * The reason for ...Impl methods: ease programmer burden by not requiring them to remember calls to super in
+   * overridden methods. Note that this will produce compiler errors if not overridden.
    */
   public abstract void resetLearningImpl();
 
@@ -341,9 +336,8 @@ public abstract class AbstractClassifier extends AbstractOptionHandler implement
    * Trains this classifier incrementally using the given instance.<br>
    * <br>
    * 
-   * The reason for ...Impl methods: ease programmer burden by not requiring
-   * them to remember calls to super in overridden methods. Note that this will
-   * produce compiler errors if not overridden.
+   * The reason for ...Impl methods: ease programmer burden by not requiring them to remember calls to super in
+   * overridden methods. Note that this will produce compiler errors if not overridden.
    * 
    * @param inst
    *          the instance to be used for training
@@ -354,9 +348,8 @@ public abstract class AbstractClassifier extends AbstractOptionHandler implement
    * Gets the current measurements of this classifier.<br>
    * <br>
    * 
-   * The reason for ...Impl methods: ease programmer burden by not requiring
-   * them to remember calls to super in overridden methods. Note that this will
-   * produce compiler errors if not overridden.
+   * The reason for ...Impl methods: ease programmer burden by not requiring them to remember calls to super in
+   * overridden methods. Note that this will produce compiler errors if not overridden.
    * 
    * @return an array of measurements to be used in evaluation tasks
    */
@@ -373,8 +366,7 @@ public abstract class AbstractClassifier extends AbstractOptionHandler implement
   public abstract void getModelDescription(StringBuilder out, int indent);
 
   /**
-   * Gets the index of the attribute in the instance, given the index of the
-   * attribute in the learner.
+   * Gets the index of the attribute in the instance, given the index of the attribute in the learner.
    * 
    * @param index
    *          the index of the attribute in the learner

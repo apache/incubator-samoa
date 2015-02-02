@@ -129,9 +129,8 @@ public class Statistics {
   }
 
   /**
-   * Returns chi-squared probability for given value and degrees of freedom.
-   * (The probability that the chi-squared variate will be greater than x for
-   * the given degrees of freedom.)
+   * Returns chi-squared probability for given value and degrees of freedom. (The probability that the chi-squared
+   * variate will be greater than x for the given degrees of freedom.)
    * 
    * @param x
    *          the value
@@ -163,9 +162,8 @@ public class Statistics {
   }
 
   /**
-   * Returns the area under the Normal (Gaussian) probability density function,
-   * integrated from minus infinity to <tt>x</tt> (assumes mean is zero,
-   * variance is one).
+   * Returns the area under the Normal (Gaussian) probability density function, integrated from minus infinity to
+   * <tt>x</tt> (assumes mean is zero, variance is one).
    * 
    * <pre>
    *                            x
@@ -180,8 +178,8 @@ public class Statistics {
    *             =  erfc(z) / 2
    * </pre>
    * 
-   * where <tt>z = x/sqrt(2)</tt>. Computation is via the functions
-   * <tt>errorFunction</tt> and <tt>errorFunctionComplement</tt>.
+   * where <tt>z = x/sqrt(2)</tt>. Computation is via the functions <tt>errorFunction</tt> and
+   * <tt>errorFunctionComplement</tt>.
    * 
    * @param a
    *          the z-value
@@ -205,16 +203,13 @@ public class Statistics {
   }
 
   /**
-   * Returns the value, <tt>x</tt>, for which the area under the Normal
-   * (Gaussian) probability density function (integrated from minus infinity to
-   * <tt>x</tt>) is equal to the argument <tt>y</tt> (assumes mean is zero,
-   * variance is one).
+   * Returns the value, <tt>x</tt>, for which the area under the Normal (Gaussian) probability density function
+   * (integrated from minus infinity to <tt>x</tt>) is equal to the argument <tt>y</tt> (assumes mean is zero, variance
+   * is one).
    * <p>
-   * For small arguments <tt>0 < y < exp(-2)</tt>, the program computes
-   * <tt>z = sqrt( -2.0 * log(y) )</tt>; then the approximation is
-   * <tt>x = z - log(z)/z  - (1/z) P(1/z) / Q(1/z)</tt>. There are two rational
-   * functions P/Q, one for <tt>0 < y < exp(-32)</tt> and the other for
-   * <tt>y</tt> up to <tt>exp(-2)</tt>. For larger arguments,
+   * For small arguments <tt>0 < y < exp(-2)</tt>, the program computes <tt>z = sqrt( -2.0 * log(y) )</tt>; then the
+   * approximation is <tt>x = z - log(z)/z  - (1/z) P(1/z) / Q(1/z)</tt>. There are two rational functions P/Q, one for
+   * <tt>0 < y < exp(-32)</tt> and the other for <tt>y</tt> up to <tt>exp(-2)</tt>. For larger arguments,
    * <tt>w = y - 0.5</tt>, and <tt>x/sqrt(2pi) = w + w**3 R(w**2)/S(w**2))</tt>.
    * 
    * @param y0
@@ -367,14 +362,11 @@ public class Statistics {
    *                           0
    * </pre>
    * 
-   * <b>Implementation:</b> For
-   * <tt>0 <= |x| < 1, erf(x) = x * P4(x**2)/Q5(x**2)</tt>; otherwise
+   * <b>Implementation:</b> For <tt>0 <= |x| < 1, erf(x) = x * P4(x**2)/Q5(x**2)</tt>; otherwise
    * <tt>erf(x) = 1 - erfc(x)</tt>.
    * <p>
-   * Code adapted from the <A
-   * HREF="http://www.sci.usq.edu.au/staff/leighb/graph/Top.html"> Java 2D Graph
-   * Package 2.4</A>, which in turn is a port from the <A
-   * HREF="http://people.ne.mediaone.net/moshier/index.html#Cephes">Cephes
+   * Code adapted from the <A HREF="http://www.sci.usq.edu.au/staff/leighb/graph/Top.html"> Java 2D Graph Package
+   * 2.4</A>, which in turn is a port from the <A HREF="http://people.ne.mediaone.net/moshier/index.html#Cephes">Cephes
    * 2.2</A> Math Library (C).
    * 
    * @param a
@@ -420,13 +412,10 @@ public class Statistics {
    *                            x
    * </pre>
    * 
-   * <b>Implementation:</b> For small x, <tt>erfc(x) = 1 - erf(x)</tt>;
-   * otherwise rational approximations are computed.
+   * <b>Implementation:</b> For small x, <tt>erfc(x) = 1 - erf(x)</tt>; otherwise rational approximations are computed.
    * <p>
-   * Code adapted from the <A
-   * HREF="http://www.sci.usq.edu.au/staff/leighb/graph/Top.html"> Java 2D Graph
-   * Package 2.4</A>, which in turn is a port from the <A
-   * HREF="http://people.ne.mediaone.net/moshier/index.html#Cephes">Cephes
+   * Code adapted from the <A HREF="http://www.sci.usq.edu.au/staff/leighb/graph/Top.html"> Java 2D Graph Package
+   * 2.4</A>, which in turn is a port from the <A HREF="http://people.ne.mediaone.net/moshier/index.html#Cephes">Cephes
    * 2.2</A> Math Library (C).
    * 
    * @param a
@@ -518,9 +507,8 @@ public class Statistics {
   }
 
   /**
-   * Evaluates the given polynomial of degree <tt>N</tt> at <tt>x</tt>.
-   * Evaluates polynomial when coefficient of N is 1.0. Otherwise same as
-   * <tt>polevl()</tt>.
+   * Evaluates the given polynomial of degree <tt>N</tt> at <tt>x</tt>. Evaluates polynomial when coefficient of N is
+   * 1.0. Otherwise same as <tt>polevl()</tt>.
    * 
    * <pre>
    *                     2          N
@@ -533,9 +521,8 @@ public class Statistics {
    *            N                   0
    * </pre>
    * 
-   * The function <tt>p1evl()</tt> assumes that <tt>coef[N] = 1.0</tt> and is
-   * omitted from the array. Its calling arguments are otherwise the same as
-   * <tt>polevl()</tt>.
+   * The function <tt>p1evl()</tt> assumes that <tt>coef[N] = 1.0</tt> and is omitted from the array. Its calling
+   * arguments are otherwise the same as <tt>polevl()</tt>.
    * <p>
    * In the interest of speed, there are no checks for out of bounds arithmetic.
    * 
@@ -784,8 +771,7 @@ public class Statistics {
   }
 
   /**
-   * Returns the Gamma function computed by Stirling's formula. The polynomial
-   * STIR is valid for 33 <= x <= 172.
+   * Returns the Gamma function computed by Stirling's formula. The polynomial STIR is valid for 33 <= x <= 172.
    */
   public static double stirlingFormula(double x) {
 
@@ -1080,8 +1066,7 @@ public class Statistics {
   }
 
   /**
-   * Power series for incomplete beta integral. Use when b*x is small and x not
-   * too close to 1.
+   * Power series for incomplete beta integral. Use when b*x is small and x not too close to 1.
    */
   public static double powerSeries(double a, double b, double x) {
 

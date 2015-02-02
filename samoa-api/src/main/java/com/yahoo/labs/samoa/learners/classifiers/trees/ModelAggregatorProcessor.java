@@ -53,14 +53,12 @@ import com.yahoo.labs.samoa.topology.Stream;
 import static com.yahoo.labs.samoa.moa.core.Utils.maxIndex;
 
 /**
- * Model Aggegator Processor consists of the decision tree model. It connects to
- * local-statistic PI via attribute stream and control stream. Model-aggregator
- * PI sends the split instances via attribute stream and it sends control
- * messages to ask local-statistic PI to perform computation via control stream.
+ * Model Aggegator Processor consists of the decision tree model. It connects to local-statistic PI via attribute stream
+ * and control stream. Model-aggregator PI sends the split instances via attribute stream and it sends control messages
+ * to ask local-statistic PI to perform computation via control stream.
  * 
- * Model-aggregator PI sends the classification result via result stream to an
- * evaluator PI for classifier or other destination PI. The calculation results
- * from local statistic arrive to the model-aggregator PI via computation-result
+ * Model-aggregator PI sends the classification result via result stream to an evaluator PI for classifier or other
+ * destination PI. The calculation results from local statistic arrive to the model-aggregator PI via computation-result
  * stream.
  * 
  * @author Arinto Murdopo
@@ -250,15 +248,13 @@ final class ModelAggregatorProcessor implements Processor {
   }
 
   /**
-   * Helper method to generate new ResultContentEvent based on an instance and
-   * its prediction result.
+   * Helper method to generate new ResultContentEvent based on an instance and its prediction result.
    * 
    * @param prediction
    *          The predicted class label from the decision tree model.
    * @param inEvent
    *          The associated instance content event
-   * @return ResultContentEvent to be sent into Evaluator PI or other
-   *         destination PI.
+   * @return ResultContentEvent to be sent into Evaluator PI or other destination PI.
    */
   private ResultContentEvent newResultContentEvent(double[] prediction, InstanceContentEvent inEvent) {
     ResultContentEvent rce = new ResultContentEvent(inEvent.getInstanceIndex(), inEvent.getInstance(),
@@ -383,8 +379,7 @@ final class ModelAggregatorProcessor implements Processor {
   }
 
   /**
-   * Helper method to get the prediction result. The actual prediction result is
-   * delegated to the leaf node.
+   * Helper method to get the prediction result. The actual prediction result is delegated to the leaf node.
    * 
    * @param inst
    * @return
@@ -423,9 +418,8 @@ final class ModelAggregatorProcessor implements Processor {
   }
 
   /**
-   * Helper method that represent training of an instance. Since it is decision
-   * tree, this method routes the incoming instance into the correct leaf and
-   * then update the statistic on the found leaf.
+   * Helper method that represent training of an instance. Since it is decision tree, this method routes the incoming
+   * instance into the correct leaf and then update the statistic on the found leaf.
    * 
    * @param inst
    */
@@ -465,8 +459,7 @@ final class ModelAggregatorProcessor implements Processor {
    * @param activeLearningNode
    *          The corresponding active learning node which will be split
    * @param foundNode
-   *          The data structure to represents the filtering of the instance
-   *          using the tree model.
+   *          The data structure to represents the filtering of the instance using the tree model.
    */
   private void attemptToSplit(ActiveLearningNode activeLearningNode, FoundNode foundNode) {
     // Increment the split ID
@@ -489,14 +482,12 @@ final class ModelAggregatorProcessor implements Processor {
   }
 
   /**
-   * Helper method to continue the attempt to split once all local calculation
-   * results are received.
+   * Helper method to continue the attempt to split once all local calculation results are received.
    * 
    * @param activeLearningNode
    *          The corresponding active learning node which will be split
    * @param foundNode
-   *          The data structure to represents the filtering of the instance
-   *          using the tree model.
+   *          The data structure to represents the filtering of the instance using the tree model.
    */
   private void continueAttemptToSplit(ActiveLearningNode activeLearningNode, FoundNode foundNode) {
     AttributeSplitSuggestion bestSuggestion = activeLearningNode.getDistributedBestSuggestion();
@@ -600,8 +591,7 @@ final class ModelAggregatorProcessor implements Processor {
   }
 
   /**
-   * Helper method to set the model context, i.e. how many attributes they are
-   * and what is the class index
+   * Helper method to set the model context, i.e. how many attributes they are and what is the class index
    * 
    * @param ih
    */
@@ -622,8 +612,8 @@ final class ModelAggregatorProcessor implements Processor {
   }
 
   /**
-   * AggregationTimeOutHandler is a class to support time-out feature while
-   * waiting for local computation results from the local statistic PIs.
+   * AggregationTimeOutHandler is a class to support time-out feature while waiting for local computation results from
+   * the local statistic PIs.
    * 
    * @author Arinto Murdopo
    * 
@@ -652,8 +642,7 @@ final class ModelAggregatorProcessor implements Processor {
   }
 
   /**
-   * SplittingNodeInfo is a class to represents the ActiveLearningNode that is
-   * splitting
+   * SplittingNodeInfo is a class to represents the ActiveLearningNode that is splitting
    * 
    * @author Arinto Murdopo
    * 

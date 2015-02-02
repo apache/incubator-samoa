@@ -37,8 +37,8 @@ public interface FileStreamSource extends Serializable {
    * @param path
    *          File or directory path
    * @param ext
-   *          File extension to be used to filter files in a directory. If null,
-   *          all files in the directory are accepted.
+   *          File extension to be used to filter files in a directory. If null, all files in the directory are
+   *          accepted.
    */
   public void init(String path, String ext);
 
@@ -48,17 +48,15 @@ public interface FileStreamSource extends Serializable {
   public void reset() throws IOException;
 
   /**
-   * Retrieve InputStream for next file. This method will return null if we are
-   * at the last file in the list.
+   * Retrieve InputStream for next file. This method will return null if we are at the last file in the list.
    * 
    * @return InputStream for next file in the list
    */
   public InputStream getNextInputStream();
 
   /**
-   * Retrieve InputStream for current file. The "current pointer" is moved
-   * forward with getNextInputStream method. So if there was no invocation of
-   * getNextInputStream, this method will return null.
+   * Retrieve InputStream for current file. The "current pointer" is moved forward with getNextInputStream method. So if
+   * there was no invocation of getNextInputStream, this method will return null.
    * 
    * @return InputStream for current file in the list
    */

@@ -34,8 +34,7 @@ import com.yahoo.labs.samoa.moa.core.GaussianEstimator;
 /**
  * Implementation of a non-distributed Naive Bayes classifier.
  * 
- * At the moment, the implementation models all attributes as numeric
- * attributes.
+ * At the moment, the implementation models all attributes as numeric attributes.
  * 
  * @author Olivier Van Laere (vanlaere yahoo-inc dot com)
  */
@@ -102,23 +101,21 @@ public class NaiveBayes implements LocalLearner {
   }
 
   /**
-   * Predicts the class memberships for a given instance. If an instance is
-   * unclassified, the returned array elements will be all zero.
+   * Predicts the class memberships for a given instance. If an instance is unclassified, the returned array elements
+   * will be all zero.
    * 
-   * Smoothing is being implemented by the AttributeClassObserver classes. At
-   * the moment, the GaussianNumericProbabilityAttributeClassObserver needs no
-   * smoothing as it processes continuous variables.
+   * Smoothing is being implemented by the AttributeClassObserver classes. At the moment, the
+   * GaussianNumericProbabilityAttributeClassObserver needs no smoothing as it processes continuous variables.
    * 
-   * Please note that we transform the scores to log space to avoid underflow,
-   * and we replace the multiplication with addition.
+   * Please note that we transform the scores to log space to avoid underflow, and we replace the multiplication with
+   * addition.
    * 
-   * The resulting scores are no longer probabilities, as a mixture of
-   * probability densities and probabilities can be used in the computation.
+   * The resulting scores are no longer probabilities, as a mixture of probability densities and probabilities can be
+   * used in the computation.
    * 
    * @param inst
    *          the instance to be classified
-   * @return an array containing the estimated membership scores of the test
-   *         instance in each class, in log space.
+   * @return an array containing the estimated membership scores of the test instance in each class, in log space.
    */
   @Override
   public double[] getVotesForInstance(Instance inst) {
@@ -184,8 +181,7 @@ public class NaiveBayes implements LocalLearner {
   }
 
   /**
-   * Resets this classifier. It must be similar to starting a new classifier
-   * from scratch.
+   * Resets this classifier. It must be similar to starting a new classifier from scratch.
    */
   @Override
   public void resetLearning() {

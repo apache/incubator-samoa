@@ -23,9 +23,8 @@ package com.yahoo.labs.samoa.learners.classifiers.trees;
 import com.yahoo.labs.samoa.instances.Instance;
 
 /**
- * Class that represents inactive learning node. Inactive learning node is a
- * node which only keeps track of the observed class distribution. It does not
- * store the statistic for splitting the node.
+ * Class that represents inactive learning node. Inactive learning node is a node which only keeps track of the observed
+ * class distribution. It does not store the statistic for splitting the node.
  * 
  * @author Arinto Murdopo
  * 

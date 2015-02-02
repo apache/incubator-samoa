@@ -23,9 +23,8 @@ package com.yahoo.labs.samoa.moa;
 import java.io.Serializable;
 
 /**
- * Interface implemented by classes in MOA, so that all are serializable, can
- * produce copies of their objects, and can measure its memory size. They also
- * give a string description.
+ * Interface implemented by classes in MOA, so that all are serializable, can produce copies of their objects, and can
+ * measure its memory size. They also give a string description.
  * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $
@@ -47,9 +46,8 @@ public interface MOAObject extends Serializable {
   public MOAObject copy();
 
   /**
-   * Returns a string representation of this object. Used in
-   * <code>AbstractMOAObject.toString</code> to give a string representation of
-   * the object.
+   * Returns a string representation of this object. Used in <code>AbstractMOAObject.toString</code> to give a string
+   * representation of the object.
    * 
    * @param sb
    *          the stringbuilder to add the description

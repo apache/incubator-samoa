@@ -28,13 +28,12 @@ import com.yahoo.labs.samoa.moa.options.AbstractOptionHandler;
 import com.yahoo.labs.samoa.moa.tasks.TaskMonitor;
 
 /**
- * Class for observing the class data distribution for a numeric attribute using
- * a binary tree. This observer monitors the class distribution of a given
- * attribute.
+ * Class for observing the class data distribution for a numeric attribute using a binary tree. This observer monitors
+ * the class distribution of a given attribute.
  * 
  * <p>
- * Learning Adaptive Model Rules from High-Speed Data Streams, ECML 2013, E.
- * Almeida, C. Ferreira, P. Kosina and J. Gama;
+ * Learning Adaptive Model Rules from High-Speed Data Streams, ECML 2013, E. Almeida, C. Ferreira, P. Kosina and J.
+ * Gama;
  * </p>
  * 
  * @author E. Almeida, J. Gama

@@ -36,8 +36,7 @@ abstract class Node implements java.io.Serializable {
   protected final DoubleVector observedClassDistribution;
 
   /**
-   * Method to route/filter an instance into its corresponding leaf. This method
-   * will be invoked recursively.
+   * Method to route/filter an instance into its corresponding leaf. This method will be invoked recursively.
    * 
    * @param inst
    *          Instance to be routed
@@ -45,14 +44,12 @@ abstract class Node implements java.io.Serializable {
    *          Parent of the current node
    * @param parentBranch
    *          The index of the current node in the parent
-   * @return FoundNode which is the data structure to represent the resulting
-   *         leaf.
+   * @return FoundNode which is the data structure to represent the resulting leaf.
    */
   abstract FoundNode filterInstanceToLeaf(Instance inst, SplitNode parent, int parentBranch);
 
   /**
-   * Method to return the predicted class of the instance based on the statistic
-   * inside the node.
+   * Method to return the predicted class of the instance based on the statistic inside the node.
    * 
    * @param inst
    *          To-be-predicted instance
@@ -89,8 +86,7 @@ abstract class Node implements java.io.Serializable {
   }
 
   /**
-   * A method to check whether the class distribution only consists of one class
-   * or not.
+   * A method to check whether the class distribution only consists of one class or not.
    * 
    * @return Flag whether class distribution is pure or not.
    */

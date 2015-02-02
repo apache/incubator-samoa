@@ -70,8 +70,7 @@ public class FIMTDDNumericAttributeClassLimitObserver extends FIMTDDNumericAttri
     protected Node root = null;
 
     /**
-     * Insert a new value into the tree, updating both the sum of values and sum
-     * of squared values arrays
+     * Insert a new value into the tree, updating both the sum of values and sum of squared values arrays
      */
     @Override
     public void insertValue(double val, double label, double weight) {

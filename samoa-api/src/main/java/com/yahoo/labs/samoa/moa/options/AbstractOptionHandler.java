@@ -27,8 +27,7 @@ import com.yahoo.labs.samoa.moa.tasks.NullMonitor;
 import com.yahoo.labs.samoa.moa.tasks.TaskMonitor;
 
 /**
- * Abstract Option Handler. All classes that have options in MOA extend this
- * class.
+ * Abstract Option Handler. All classes that have options in MOA extend this class.
  * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $
@@ -83,9 +82,8 @@ public abstract class AbstractOptionHandler extends AbstractMOAObject implements
   }
 
   /**
-   * This method describes the implementation of how to prepare this object for
-   * use. All classes that extends this class have to implement
-   * <code>prepareForUseImpl</code> and not <code>prepareForUse</code> since
+   * This method describes the implementation of how to prepare this object for use. All classes that extends this class
+   * have to implement <code>prepareForUseImpl</code> and not <code>prepareForUse</code> since
    * <code>prepareForUse</code> calls <code>prepareForUseImpl</code>.
    * 
    * @param monitor

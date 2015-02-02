@@ -70,9 +70,8 @@ public final class Utils {
   }
 
   /**
-   * Returns the value used to code a missing value. Note that equality tests on
-   * this value will always return false, so use isMissingValue(double val) for
-   * testing..
+   * Returns the value used to code a missing value. Note that equality tests on this value will always return false, so
+   * use isMissingValue(double val) for testing..
    * 
    * @return the value used as missing value.
    */
@@ -82,8 +81,8 @@ public final class Utils {
   }
 
   /**
-   * Casting an object without "unchecked" compile-time warnings. Use only when
-   * absolutely necessary (e.g. when using clone()).
+   * Casting an object without "unchecked" compile-time warnings. Use only when absolutely necessary (e.g. when using
+   * clone()).
    */
   @SuppressWarnings("unchecked")
   public static <T> T cast(Object x) {
@@ -151,8 +150,7 @@ public final class Utils {
   }
 
   /**
-   * Replaces with a new string, all occurrences of a string from another
-   * string.
+   * Replaces with a new string, all occurrences of a string from another string.
    * 
    * @param inString
    *          the string to replace substrings in.
@@ -177,9 +175,8 @@ public final class Utils {
   }
 
   /**
-   * Pads a string to a specified length, inserting spaces on the left as
-   * required. If the string is too long, characters are removed (from the
-   * right).
+   * Pads a string to a specified length, inserting spaces on the left as required. If the string is too long,
+   * characters are removed (from the right).
    * 
    * @param inString
    *          the input string
@@ -193,9 +190,8 @@ public final class Utils {
   }
 
   /**
-   * Pads a string to a specified length, inserting spaces on the right as
-   * required. If the string is too long, characters are removed (from the
-   * right).
+   * Pads a string to a specified length, inserting spaces on the right as required. If the string is too long,
+   * characters are removed (from the right).
    * 
    * @param inString
    *          the input string
@@ -209,8 +205,8 @@ public final class Utils {
   }
 
   /**
-   * Pads a string to a specified length, inserting spaces as required. If the
-   * string is too long, characters are removed (from the right).
+   * Pads a string to a specified length, inserting spaces as required. If the string is too long, characters are
+   * removed (from the right).
    * 
    * @param inString
    *          the input string
@@ -292,8 +288,7 @@ public final class Utils {
   }
 
   /**
-   * Rounds a double and converts it into a formatted decimal-justified String.
-   * Trailing 0's are replaced with spaces.
+   * Rounds a double and converts it into a formatted decimal-justified String. Trailing 0's are replaced with spaces.
    * 
    * @param value
    *          the double value
@@ -357,8 +352,7 @@ public final class Utils {
   }
 
   /**
-   * Returns the basic class of an array class (handles multi-dimensional
-   * arrays).
+   * Returns the basic class of an array class (handles multi-dimensional arrays).
    * 
    * @param c
    *          the array to inspect
@@ -372,9 +366,8 @@ public final class Utils {
   }
 
   /**
-   * Returns the dimensions of the given array. Even though the parameter is of
-   * type "Object" one can hand over primitve arrays, e.g. int[3] or
-   * double[2][4].
+   * Returns the dimensions of the given array. Even though the parameter is of type "Object" one can hand over primitve
+   * arrays, e.g. int[3] or double[2][4].
    * 
    * @param array
    *          the array to determine the dimensions for
@@ -388,9 +381,8 @@ public final class Utils {
   }
 
   /**
-   * Returns the dimensions of the given array. Even though the parameter is of
-   * type "Object" one can hand over primitve arrays, e.g. int[3] or
-   * double[2][4].
+   * Returns the dimensions of the given array. Even though the parameter is of type "Object" one can hand over primitve
+   * arrays, e.g. int[3] or double[2][4].
    * 
    * @param array
    *          the array to determine the dimensions for
@@ -401,9 +393,8 @@ public final class Utils {
   }
 
   /**
-   * Returns the given Array in a string representation. Even though the
-   * parameter is of type "Object" one can hand over primitve arrays, e.g.
-   * int[3] or double[2][4].
+   * Returns the given Array in a string representation. Even though the parameter is of type "Object" one can hand over
+   * primitve arrays, e.g. int[3] or double[2][4].
    * 
    * @param array
    *          the array to return in a string representation
@@ -483,9 +474,8 @@ public final class Utils {
   }
 
   /**
-   * Checks if the given array contains the flag "-Char". Stops searching at the
-   * first marker "--". If the flag is found, it is replaced with the empty
-   * string.
+   * Checks if the given array contains the flag "-Char". Stops searching at the first marker "--". If the flag is
+   * found, it is replaced with the empty string.
    * 
    * @param flag
    *          the character indicating the flag.
@@ -502,9 +492,8 @@ public final class Utils {
   }
 
   /**
-   * Checks if the given array contains the flag "-String". Stops searching at
-   * the first marker "--". If the flag is found, it is replaced with the empty
-   * string.
+   * Checks if the given array contains the flag "-String". Stops searching at the first marker "--". If the flag is
+   * found, it is replaced with the empty string.
    * 
    * @param flag
    *          the String indicating the flag.
@@ -526,9 +515,8 @@ public final class Utils {
   }
 
   /**
-   * Gets an option indicated by a flag "-Char" from the given array of strings.
-   * Stops searching at the first marker "--". Replaces flag and option with
-   * empty strings.
+   * Gets an option indicated by a flag "-Char" from the given array of strings. Stops searching at the first marker
+   * "--". Replaces flag and option with empty strings.
    * 
    * @param flag
    *          the character indicating the option.
@@ -545,9 +533,8 @@ public final class Utils {
   }
 
   /**
-   * Gets an option indicated by a flag "-String" from the given array of
-   * strings. Stops searching at the first marker "--". Replaces flag and option
-   * with empty strings.
+   * Gets an option indicated by a flag "-String" from the given array of strings. Stops searching at the first marker
+   * "--". Replaces flag and option with empty strings.
    * 
    * @param flag
    *          the String indicating the option.
@@ -582,8 +569,8 @@ public final class Utils {
   }
 
   /**
-   * Gets the index of an option or flag indicated by a flag "-Char" from the
-   * given array of strings. Stops searching at the first marker "--".
+   * Gets the index of an option or flag indicated by a flag "-Char" from the given array of strings. Stops searching at
+   * the first marker "--".
    * 
    * @param flag
    *          the character indicating the option.
@@ -596,8 +583,8 @@ public final class Utils {
   }
 
   /**
-   * Gets the index of an option or flag indicated by a flag "-String" from the
-   * given array of strings. Stops searching at the first marker "--".
+   * Gets the index of an option or flag indicated by a flag "-String" from the given array of strings. Stops searching
+   * at the first marker "--".
    * 
    * @param flag
    *          the String indicating the option.
@@ -633,15 +620,13 @@ public final class Utils {
    * 
    * The following rules are applied:
    * 
-   * A character is backquoted version of it is one of <tt>" ' % \ \n \r \t</tt>
-   * .
+   * A character is backquoted version of it is one of <tt>" ' % \ \n \r \t</tt> .
    * 
-   * A string is enclosed within single quotes if a character has been
-   * backquoted using the previous rule above or contains <tt>{ }</tt> or is
-   * exactly equal to the strings <tt>, ? space or ""</tt> (empty string).
+   * A string is enclosed within single quotes if a character has been backquoted using the previous rule above or
+   * contains <tt>{ }</tt> or is exactly equal to the strings <tt>, ? space or ""</tt> (empty string).
    * 
-   * A quoted question mark distinguishes it from the missing value which is
-   * represented as an unquoted question mark in arff files.
+   * A quoted question mark distinguishes it from the missing value which is represented as an unquoted question mark in
+   * arff files.
    * 
    * @param string
    *          the string to be quoted
@@ -674,8 +659,8 @@ public final class Utils {
   }
 
   /**
-   * unquotes are previously quoted string (but only if necessary), i.e., it
-   * removes the single quotes around it. Inverse to quote(String).
+   * unquotes are previously quoted string (but only if necessary), i.e., it removes the single quotes around it.
+   * Inverse to quote(String).
    * 
    * @param string
    *          the string to process
@@ -699,8 +684,8 @@ public final class Utils {
   }
 
   /**
-   * Converts carriage returns and new lines in a string into \r and \n.
-   * Backquotes the following characters: ` " \ \t and %
+   * Converts carriage returns and new lines in a string into \r and \n. Backquotes the following characters: ` " \ \t
+   * and %
    * 
    * @param string
    *          the string
@@ -829,9 +814,8 @@ public final class Utils {
   }
 
   /**
-   * Returns the secondary set of options (if any) contained in the supplied
-   * options array. The secondary set is defined to be any options after the
-   * first "--". These options are removed from the original options array.
+   * Returns the secondary set of options (if any) contained in the supplied options array. The secondary set is defined
+   * to be any options after the first "--". These options are removed from the original options array.
    * 
    * @param options
    *          the input array of options
@@ -854,9 +838,8 @@ public final class Utils {
   }
 
   /**
-   * The inverse operation of backQuoteChars(). Converts back-quoted carriage
-   * returns and new lines in a string to the corresponding character ('\r' and
-   * '\n'). Also "un"-back-quotes the following characters: ` " \ \t and %
+   * The inverse operation of backQuoteChars(). Converts back-quoted carriage returns and new lines in a string to the
+   * corresponding character ('\r' and '\n'). Also "un"-back-quotes the following characters: ` " \ \t and %
    * 
    * @param string
    *          the string
@@ -906,15 +889,13 @@ public final class Utils {
   }
 
   /**
-   * Split up a string containing options into an array of strings, one for each
-   * option.
+   * Split up a string containing options into an array of strings, one for each option.
    * 
    * @param quotedOptionString
    *          the string containing the options
    * @return the array of options
    * @throws Exception
-   *           in case of an unterminated string, unknown character or a parse
-   *           error
+   *           in case of an unterminated string, unknown character or a parse error
    */
   public static String[] splitOptions(String quotedOptionString) throws Exception {
 
@@ -979,8 +960,7 @@ public final class Utils {
   }
 
   /**
-   * Joins all the options in an option array into a single string, as might be
-   * used on the command line.
+   * Joins all the options in an option array into a single string, as might be used on the command line.
    * 
    * @param optionArray
    *          the array of options
@@ -1015,8 +995,7 @@ public final class Utils {
    * 
    * @param counts
    *          array of counts
-   * @return - a log2 a - b log2 b - c log2 c + (a+b+c) log2 (a+b+c) when given
-   *         array [a b c]
+   * @return - a log2 a - b log2 b - c log2 c + (a+b+c) log2 (a+b+c) when given array [a b c]
    */
   public static/* @pure@ */double info(int counts[]) {
 
@@ -1134,8 +1113,7 @@ public final class Utils {
   }
 
   /**
-   * Returns index of maximum element in a given array of doubles. First maximum
-   * is returned.
+   * Returns index of maximum element in a given array of doubles. First maximum is returned.
    * 
    * @param doubles
    *          the array of doubles
@@ -1157,8 +1135,7 @@ public final class Utils {
   }
 
   /**
-   * Returns index of maximum element in a given array of integers. First
-   * maximum is returned.
+   * Returns index of maximum element in a given array of integers. First maximum is returned.
    * 
    * @param ints
    *          the array of integers
@@ -1200,8 +1177,7 @@ public final class Utils {
   }
 
   /**
-   * Returns index of minimum element in a given array of integers. First
-   * minimum is returned.
+   * Returns index of minimum element in a given array of integers. First minimum is returned.
    * 
    * @param ints
    *          the array of integers
@@ -1223,8 +1199,7 @@ public final class Utils {
   }
 
   /**
-   * Returns index of minimum element in a given array of doubles. First minimum
-   * is returned.
+   * Returns index of minimum element in a given array of doubles. First minimum is returned.
    * 
    * @param doubles
    *          the array of doubles
@@ -1287,9 +1262,8 @@ public final class Utils {
   }
 
   /**
-   * Converts an array containing the natural logarithms of probabilities stored
-   * in a vector back into probabilities. The probabilities are assumed to sum
-   * to one.
+   * Converts an array containing the natural logarithms of probabilities stored in a vector back into probabilities.
+   * The probabilities are assumed to sum to one.
    * 
    * @param a
    *          an array holding the natural logarithms of the probabilities
@@ -1317,8 +1291,7 @@ public final class Utils {
    * @param prob
    *          the probabilitiy
    * 
-   * @return the log-odds after the probability has been mapped to [Utils.SMALL,
-   *         1-Utils.SMALL]
+   * @return the log-odds after the probability has been mapped to [Utils.SMALL, 1-Utils.SMALL]
    */
   public static/* @pure@ */double probToLogOdds(double prob) {
 
@@ -1331,8 +1304,7 @@ public final class Utils {
   }
 
   /**
-   * Rounds a double to the next nearest integer value. The JDK version of it
-   * doesn't work properly.
+   * Rounds a double to the next nearest integer value. The JDK version of it doesn't work properly.
    * 
    * @param value
    *          the double value
@@ -1348,10 +1320,9 @@ public final class Utils {
   }
 
   /**
-   * Rounds a double to the next nearest integer value in a probabilistic
-   * fashion (e.g. 0.8 has a 20% chance of being rounded down to 0 and a 80%
-   * chance of being rounded up to 1). In the limit, the average of the rounded
-   * numbers generated by this procedure should converge to the original double.
+   * Rounds a double to the next nearest integer value in a probabilistic fashion (e.g. 0.8 has a 20% chance of being
+   * rounded down to 0 and a 80% chance of being rounded up to 1). In the limit, the average of the rounded numbers
+   * generated by this procedure should converge to the original double.
    * 
    * @param value
    *          the double value
@@ -1397,9 +1368,8 @@ public final class Utils {
   }
 
   /**
-   * Sorts a given array of integers in ascending order and returns an array of
-   * integers with the positions of the elements of the original array in the
-   * sorted array. The sort is stable. (Equal elements remain in their original
+   * Sorts a given array of integers in ascending order and returns an array of integers with the positions of the
+   * elements of the original array in the sorted array. The sort is stable. (Equal elements remain in their original
    * order.)
    * 
    * @param array
@@ -1445,11 +1415,9 @@ public final class Utils {
   }
 
   /**
-   * Sorts a given array of doubles in ascending order and returns an array of
-   * integers with the positions of the elements of the original array in the
-   * sorted array. NOTE THESE CHANGES: the sort is no longer stable and it
-   * doesn't use safe floating-point comparisons anymore. Occurrences of
-   * Double.NaN are treated as Double.MAX_VALUE
+   * Sorts a given array of doubles in ascending order and returns an array of integers with the positions of the
+   * elements of the original array in the sorted array. NOTE THESE CHANGES: the sort is no longer stable and it doesn't
+   * use safe floating-point comparisons anymore. Occurrences of Double.NaN are treated as Double.MAX_VALUE
    * 
    * @param array
    *          this array is not changed by the method!
@@ -1470,9 +1438,8 @@ public final class Utils {
   }
 
   /**
-   * Sorts a given array of doubles in ascending order and returns an array of
-   * integers with the positions of the elements of the original array in the
-   * sorted array. The sort is stable (Equal elements remain in their original
+   * Sorts a given array of doubles in ascending order and returns an array of integers with the positions of the
+   * elements of the original array in the sorted array. The sort is stable (Equal elements remain in their original
    * order.) Occurrences of Double.NaN are treated as Double.MAX_VALUE
    * 
    * @param array
@@ -1599,8 +1566,7 @@ public final class Utils {
   }
 
   /**
-   * Partitions the instances around a pivot. Used by quicksort and
-   * kthSmallestValue.
+   * Partitions the instances around a pivot. Used by quicksort and kthSmallestValue.
    * 
    * @param array
    *          the array of doubles to be sorted
@@ -1641,8 +1607,7 @@ public final class Utils {
   }
 
   /**
-   * Partitions the instances around a pivot. Used by quicksort and
-   * kthSmallestValue.
+   * Partitions the instances around a pivot. Used by quicksort and kthSmallestValue.
    * 
    * @param array
    *          the array of integers to be sorted
@@ -1737,8 +1702,7 @@ public final class Utils {
   }
 
   /**
-   * Implements computation of the kth-smallest element according to Manber's
-   * "Introduction to Algorithms".
+   * Implements computation of the kth-smallest element according to Manber's "Introduction to Algorithms".
    * 
    * @param array
    *          the array of double
@@ -1770,9 +1734,8 @@ public final class Utils {
   }
 
   /**
-   * Converts a File's absolute path to a path relative to the user (ie start)
-   * directory. Includes an additional workaround for Cygwin, which doesn't like
-   * upper case drive letters.
+   * Converts a File's absolute path to a path relative to the user (ie start) directory. Includes an additional
+   * workaround for Cygwin, which doesn't like upper case drive letters.
    * 
    * @param absolute
    *          the File to convert to relative path
@@ -1807,8 +1770,7 @@ public final class Utils {
   }
 
   /**
-   * Converts a File's absolute path to a path relative to the user (ie start)
-   * directory.
+   * Converts a File's absolute path to a path relative to the user (ie start) directory.
    * 
    * @param absolute
    *          the File to convert to relative path
@@ -1882,8 +1844,7 @@ public final class Utils {
   }
 
   /**
-   * Implements computation of the kth-smallest element according to Manber's
-   * "Introduction to Algorithms".
+   * Implements computation of the kth-smallest element according to Manber's "Introduction to Algorithms".
    * 
    * @param array
    *          the array of integers
@@ -1969,10 +1930,9 @@ public final class Utils {
   }
 
   /**
-   * Creates a new instance of an object given it's class name and (optional)
-   * arguments to pass to it's setOptions method. If the object implements
-   * OptionHandler and the options parameter is non-null, the object will have
-   * it's options set. Example use:
+   * Creates a new instance of an object given it's class name and (optional) arguments to pass to it's setOptions
+   * method. If the object implements OptionHandler and the options parameter is non-null, the object will have it's
+   * options set. Example use:
    * <p>
    * 
    * <code> <pre>
@@ -1984,19 +1944,17 @@ public final class Utils {
    * </pre></code>
    * 
    * @param classType
-   *          the class that the instantiated object should be assignable to --
-   *          an exception is thrown if this is not the case
+   *          the class that the instantiated object should be assignable to -- an exception is thrown if this is not
+   *          the case
    * @param className
    *          the fully qualified class name of the object
    * @param options
-   *          an array of options suitable for passing to setOptions. May be
-   *          null. Any options accepted by the object will be removed from the
-   *          array.
+   *          an array of options suitable for passing to setOptions. May be null. Any options accepted by the object
+   *          will be removed from the array.
    * @return the newly created object, ready for use.
    * @exception Exception
-   *              if the class name is invalid, or if the class is not
-   *              assignable to the desired class type, or the options supplied
-   *              are not acceptable to the object
+   *              if the class name is invalid, or if the class is not assignable to the desired class type, or the
+   *              options supplied are not acceptable to the object
    */
   public static Object forName(Class<?> classType,
       String className,

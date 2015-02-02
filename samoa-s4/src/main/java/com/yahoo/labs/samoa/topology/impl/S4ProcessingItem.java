@@ -35,8 +35,7 @@ import com.yahoo.labs.samoa.topology.ProcessingItem;
 import com.yahoo.labs.samoa.topology.Stream;
 
 /**
- * S4 Platform platform specific processing item, inherits from S4
- * ProcessinElemnt.
+ * S4 Platform platform specific processing item, inherits from S4 ProcessinElemnt.
  * 
  * @author severien
  * 

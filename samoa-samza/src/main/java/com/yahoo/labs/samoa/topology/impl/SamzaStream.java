@@ -137,9 +137,8 @@ public class SamzaStream extends AbstractStream implements Serializable {
   }
 
   /**
-   * SamzaSystemStream wrap around a Samza's SystemStream It contains the info
-   * to create a Samza stream during the constructing process of the topology
-   * and will create the actual Samza stream when the topology is submitted
+   * SamzaSystemStream wrap around a Samza's SystemStream It contains the info to create a Samza stream during the
+   * constructing process of the topology and will create the actual Samza stream when the topology is submitted
    * (invoking initSystemStream())
    * 
    * @author Anh Thu Vu

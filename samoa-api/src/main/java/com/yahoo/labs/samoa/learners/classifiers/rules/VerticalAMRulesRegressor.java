@@ -38,8 +38,8 @@ import com.yahoo.labs.samoa.topology.Stream;
 import com.yahoo.labs.samoa.topology.TopologyBuilder;
 
 /**
- * Vertical AMRules Regressor is a distributed learner for regression rules
- * learner. It applies vertical parallelism on AMRules regressor.
+ * Vertical AMRules Regressor is a distributed learner for regression rules learner. It applies vertical parallelism on
+ * AMRules regressor.
  * 
  * @author Anh Thu Vu
  * 

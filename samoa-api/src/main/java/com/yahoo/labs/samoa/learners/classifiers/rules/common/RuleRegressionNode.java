@@ -281,8 +281,7 @@ public abstract class RuleRegressionNode implements Serializable {
   }
 
   /**
-   * Gets the index of the attribute in the instance, given the index of the
-   * attribute in the learner.
+   * Gets the index of the attribute in the instance, given the index of the attribute in the learner.
    * 
    * @param index
    *          the index of the attribute in the learner

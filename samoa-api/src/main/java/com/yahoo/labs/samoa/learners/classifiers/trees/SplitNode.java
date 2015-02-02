@@ -25,8 +25,8 @@ import com.yahoo.labs.samoa.moa.core.AutoExpandVector;
 import com.yahoo.labs.samoa.instances.Instance;
 
 /**
- * SplitNode represents the node that contains one or more questions in the
- * decision tree model, in order to route the instances into the correct leaf.
+ * SplitNode represents the node that contains one or more questions in the decision tree model, in order to route the
+ * instances into the correct leaf.
  * 
  * @author Arinto Murdopo
  * 
@@ -78,8 +78,7 @@ public class SplitNode extends Node {
   }
 
   /**
-   * Method to set the children in a specific index of the SplitNode with the
-   * appropriate child
+   * Method to set the children in a specific index of the SplitNode with the appropriate child
    * 
    * @param index
    *          Index of the child in the SplitNode

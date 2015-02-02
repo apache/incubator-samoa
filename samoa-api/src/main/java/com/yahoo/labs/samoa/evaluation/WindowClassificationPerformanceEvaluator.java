@@ -27,8 +27,7 @@ import com.yahoo.labs.samoa.instances.Instance;
 import com.yahoo.labs.samoa.instances.Utils;
 
 /**
- * Classification evaluator that updates evaluation results using a sliding
- * window.
+ * Classification evaluator that updates evaluation results using a sliding window.
  * 
  * @author Albert Bifet (abifet at cs dot waikato dot ac dot nz)
  * @version $Revision: 7 $

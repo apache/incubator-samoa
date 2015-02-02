@@ -26,9 +26,8 @@ import com.yahoo.labs.samoa.utils.PartitioningScheme;
 /**
  * Abstract ProcessingItem
  * 
- * Helper for implementation of ProcessingItem. It has basic information for a
- * ProcessingItem: name, parallelismLevel and a processor. Subclass of this
- * class needs to implement {@link #addInputStream(Stream, PartitioningScheme)}.
+ * Helper for implementation of ProcessingItem. It has basic information for a ProcessingItem: name, parallelismLevel
+ * and a processor. Subclass of this class needs to implement {@link #addInputStream(Stream, PartitioningScheme)}.
  * 
  * @author Anh Thu Vu
  * 
@@ -129,8 +128,7 @@ public abstract class AbstractProcessingItem implements ProcessingItem {
    * @param inputStream
    *          the input stream to add
    * @param scheme
-   *          partitioning scheme associated with this ProcessingItem and the
-   *          input stream
+   *          partitioning scheme associated with this ProcessingItem and the input stream
    * @return this ProcessingItem
    */
   protected abstract ProcessingItem addInputStream(Stream inputStream, PartitioningScheme scheme);

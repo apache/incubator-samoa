@@ -35,8 +35,8 @@ import com.yahoo.labs.samoa.moa.options.OptionHandler;
 public interface Learner<E extends Example> extends MOAObject, OptionHandler {
 
   /**
-   * Gets whether this learner needs a random seed. Examples of methods that
-   * needs a random seed are bagging and boosting.
+   * Gets whether this learner needs a random seed. Examples of methods that needs a random seed are bagging and
+   * boosting.
    * 
    * @return true if the learner needs a random seed.
    */
@@ -58,16 +58,15 @@ public interface Learner<E extends Example> extends MOAObject, OptionHandler {
   public boolean trainingHasStarted();
 
   /**
-   * Gets the sum of the weights of the instances that have been used by this
-   * learner during the training in <code>trainOnInstance</code>
+   * Gets the sum of the weights of the instances that have been used by this learner during the training in
+   * <code>trainOnInstance</code>
    * 
    * @return the weight of the instances that have been used training
    */
   public double trainingWeightSeenByModel();
 
   /**
-   * Resets this learner. It must be similar to starting a new learner from
-   * scratch.
+   * Resets this learner. It must be similar to starting a new learner from scratch.
    * 
    */
   public void resetLearning();
@@ -81,13 +80,12 @@ public interface Learner<E extends Example> extends MOAObject, OptionHandler {
   public void trainOnInstance(E example);
 
   /**
-   * Predicts the class memberships for a given instance. If an instance is
-   * unclassified, the returned array elements must be all zero.
+   * Predicts the class memberships for a given instance. If an instance is unclassified, the returned array elements
+   * must be all zero.
    * 
    * @param inst
    *          the instance to be classified
-   * @return an array containing the estimated membership probabilities of the
-   *         test instance in each class
+   * @return an array containing the estimated membership probabilities of the test instance in each class
    */
   public double[] getVotesForInstance(E example);
 
@@ -99,8 +97,7 @@ public interface Learner<E extends Example> extends MOAObject, OptionHandler {
   public Measurement[] getModelMeasurements();
 
   /**
-   * Gets the learners of this ensemble. Returns null if this learner is a
-   * single learner.
+   * Gets the learners of this ensemble. Returns null if this learner is a single learner.
    * 
    * @return an array of the learners of the ensemble
    */
@@ -114,9 +111,8 @@ public interface Learner<E extends Example> extends MOAObject, OptionHandler {
   public MOAObject getModel();
 
   /**
-   * Sets the reference to the header of the data stream. The header of the data
-   * stream is extended from WEKA <code>Instances</code>. This header is needed
-   * to know the number of classes and attributes
+   * Sets the reference to the header of the data stream. The header of the data stream is extended from WEKA
+   * <code>Instances</code>. This header is needed to know the number of classes and attributes
    * 
    * @param ih
    *          the reference to the data stream header
@@ -124,9 +120,8 @@ public interface Learner<E extends Example> extends MOAObject, OptionHandler {
   public void setModelContext(InstancesHeader ih);
 
   /**
-   * Gets the reference to the header of the data stream. The header of the data
-   * stream is extended from WEKA <code>Instances</code>. This header is needed
-   * to know the number of classes and attributes
+   * Gets the reference to the header of the data stream. The header of the data stream is extended from WEKA
+   * <code>Instances</code>. This header is needed to know the number of classes and attributes
    * 
    * @return the reference to the data stream header
    */

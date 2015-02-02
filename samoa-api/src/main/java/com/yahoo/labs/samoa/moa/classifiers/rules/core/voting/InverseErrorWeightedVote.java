@@ -21,8 +21,7 @@ package com.yahoo.labs.samoa.moa.classifiers.rules.core.voting;
  */
 
 /**
- * InverseErrorWeightedVote class for weighted votes based on estimates of
- * errors.
+ * InverseErrorWeightedVote class for weighted votes based on estimates of errors.
  * 
  * @author Joao Duarte (jmduarte@inescporto.pt)
  * @version $Revision: 1 $

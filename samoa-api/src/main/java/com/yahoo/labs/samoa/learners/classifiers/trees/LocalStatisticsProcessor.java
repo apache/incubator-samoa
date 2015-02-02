@@ -44,8 +44,7 @@ import com.yahoo.labs.samoa.core.Processor;
 import com.yahoo.labs.samoa.topology.Stream;
 
 /**
- * Local Statistic Processor contains the local statistic of a subset of the
- * attributes.
+ * Local Statistic Processor contains the local statistic of a subset of the attributes.
  * 
  * @author Arinto Murdopo
  * 
@@ -179,8 +178,7 @@ final class LocalStatisticsProcessor implements Processor {
   }
 
   /**
-   * Method to set the computation result when using this processor to build a
-   * topology.
+   * Method to set the computation result when using this processor to build a topology.
    * 
    * @param computeStream
    */

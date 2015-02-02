@@ -23,8 +23,7 @@ package com.yahoo.labs.samoa.topology;
 import com.yahoo.labs.samoa.tasks.Task;
 
 /**
- * Submitter interface for programatically deploying platform specific
- * topologies.
+ * Submitter interface for programatically deploying platform specific topologies.
  * 
  * @author severien
  * 

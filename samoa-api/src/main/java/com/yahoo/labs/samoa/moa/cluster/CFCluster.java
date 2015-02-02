@@ -156,8 +156,7 @@ public abstract class CFCluster extends SphereCluster {
   }
 
   /**
-   * Adds the second array to the first array element by element. The arrays
-   * must have the same length.
+   * Adds the second array to the first array element by element. The arrays must have the same length.
    * 
    * @param a1
    *          Vector to which the second vector is added.

@@ -23,8 +23,7 @@ package com.yahoo.labs.samoa.learners.classifiers.trees;
 import com.yahoo.labs.samoa.core.ContentEvent;
 
 /**
- * Abstract class to represent ContentEvent to control Local Statistic
- * Processor.
+ * Abstract class to represent ContentEvent to control Local Statistic Processor.
  * 
  * @author Arinto Murdopo
  * 

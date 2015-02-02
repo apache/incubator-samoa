@@ -37,10 +37,9 @@ import com.yahoo.labs.samoa.moa.options.AbstractOptionHandler;
 import com.github.javacliparser.IntOption;
 
 /**
- * Class for observing the class data distribution for a numeric attribute using
- * gaussian estimators. This observer monitors the class distribution of a given
- * attribute. Used in naive Bayes and decision trees to monitor data statistics
- * on leaves.
+ * Class for observing the class data distribution for a numeric attribute using gaussian estimators. This observer
+ * monitors the class distribution of a given attribute. Used in naive Bayes and decision trees to monitor data
+ * statistics on leaves.
  * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $

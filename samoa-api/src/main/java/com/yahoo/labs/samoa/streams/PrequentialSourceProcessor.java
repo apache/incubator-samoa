@@ -38,8 +38,7 @@ import com.yahoo.labs.samoa.moa.options.AbstractOptionHandler;
 import com.yahoo.labs.samoa.moa.streams.InstanceStream;
 
 /**
- * Prequential Source Processor is the processor for Prequential Evaluation
- * Task.
+ * Prequential Source Processor is the processor for Prequential Evaluation Task.
  * 
  * @author Arinto Murdopo
  * 

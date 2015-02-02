@@ -49,10 +49,8 @@ import com.yahoo.labs.samoa.topology.Topology;
 import com.yahoo.labs.samoa.topology.TopologyBuilder;
 
 /**
- * Prequential Evaluation task is a scheme in evaluating performance of online
- * classifiers which uses each instance for testing online classifiers model and
- * then it further uses the same instance for training the
- * model(Test-then-train)
+ * Prequential Evaluation task is a scheme in evaluating performance of online classifiers which uses each instance for
+ * testing online classifiers model and then it further uses the same instance for training the model(Test-then-train)
  * 
  * @author Arinto Murdopo
  * 

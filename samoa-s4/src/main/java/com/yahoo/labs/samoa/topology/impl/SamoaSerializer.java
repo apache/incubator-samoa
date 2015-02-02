@@ -47,9 +47,8 @@ public class SamoaSerializer implements SerializerDeserializer {
   /**
    * 
    * @param classLoader
-   *          classloader able to handle classes to serialize/deserialize. For
-   *          instance, application-level events can only be handled by the
-   *          application classloader.
+   *          classloader able to handle classes to serialize/deserialize. For instance, application-level events can
+   *          only be handled by the application classloader.
    */
   @Inject
   public SamoaSerializer(@Assisted final ClassLoader classLoader) {

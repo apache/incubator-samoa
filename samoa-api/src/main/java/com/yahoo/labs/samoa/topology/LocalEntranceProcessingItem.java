@@ -24,8 +24,7 @@ import com.yahoo.labs.samoa.core.ContentEvent;
 import com.yahoo.labs.samoa.core.EntranceProcessor;
 
 /**
- * Implementation of EntranceProcessingItem for local engines (Simple,
- * Multithreads)
+ * Implementation of EntranceProcessingItem for local engines (Simple, Multithreads)
  * 
  * @author Anh Thu Vu
  * 
@@ -36,11 +35,9 @@ public class LocalEntranceProcessingItem extends AbstractEntranceProcessingItem 
   }
 
   /**
-   * If there are available events, first event in the queue will be sent out on
-   * the output stream.
+   * If there are available events, first event in the queue will be sent out on the output stream.
    * 
-   * @return true if there is (at least) one available event and it was sent out
-   *         false otherwise
+   * @return true if there is (at least) one available event and it was sent out false otherwise
    */
   public boolean injectNextEvent() {
     if (this.getProcessor().hasNext()) {
@@ -52,11 +49,10 @@ public class LocalEntranceProcessingItem extends AbstractEntranceProcessingItem 
   }
 
   /**
-   * Start sending events by calling {@link #injectNextEvent()}. If there are no
-   * available events, and that the stream is not entirely consumed, it will
-   * wait by calling {@link #waitForNewEvents()} before attempting to send
-   * again. </p> When the stream is entirely consumed, the last event is tagged
-   * accordingly and the processor gets the finished status.
+   * Start sending events by calling {@link #injectNextEvent()}. If there are no available events, and that the stream
+   * is not entirely consumed, it will wait by calling {@link #waitForNewEvents()} before attempting to send again. </p>
+   * When the stream is entirely consumed, the last event is tagged accordingly and the processor gets the finished
+   * status.
    * 
    */
   public void startSendingEvents() {
@@ -76,9 +72,8 @@ public class LocalEntranceProcessingItem extends AbstractEntranceProcessingItem 
   }
 
   /**
-   * Method to wait for an amount of time when there are no available events.
-   * Implementation of EntranceProcessingItem should override this method to
-   * implement non-blocking wait or to adjust the amount of time.
+   * Method to wait for an amount of time when there are no available events. Implementation of EntranceProcessingItem
+   * should override this method to implement non-blocking wait or to adjust the amount of time.
    */
   protected void waitForNewEvents() throws Exception {
     Thread.sleep(100);

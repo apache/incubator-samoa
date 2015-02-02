@@ -25,8 +25,7 @@ import com.yahoo.labs.samoa.instances.InstancesHeader;
 import com.yahoo.labs.samoa.instances.Instance;
 
 /**
- * Abstract conditional test for instances to use to split nodes in Hoeffding
- * trees.
+ * Abstract conditional test for instances to use to split nodes in Hoeffding trees.
  * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $
@@ -60,8 +59,7 @@ public abstract class InstanceConditionalTest extends AbstractMOAObject {
   public abstract int maxBranches();
 
   /**
-   * Gets the text that describes the condition of a branch. It is used to
-   * describe the branch.
+   * Gets the text that describes the condition of a branch. It is used to describe the branch.
    * 
    * @param branch
    *          the number of the branch to describe

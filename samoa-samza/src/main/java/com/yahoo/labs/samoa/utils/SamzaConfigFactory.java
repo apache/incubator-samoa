@@ -51,8 +51,8 @@ import com.yahoo.labs.samoa.topology.impl.SamzaTopology;
 import com.yahoo.labs.samoa.topology.impl.SamzaStream.SamzaSystemStream;
 
 /**
- * Generate Configs that will be used to submit Samza jobs from the input
- * topology (one config per PI/EntrancePI in the topology)
+ * Generate Configs that will be used to submit Samza jobs from the input topology (one config per PI/EntrancePI in the
+ * topology)
  * 
  * @author Anh Thu Vu
  * 
@@ -370,8 +370,8 @@ public class SamzaConfigFactory {
   }
 
   /*
-	 *
-	 */
+   *
+   */
   public void setSystemNameForStreams(Set<Stream> streams) {
     Map<Integer, String> batchSizeMap = new HashMap<Integer, String>();
     batchSizeMap.put(1, "kafka0"); // default system with sync producer

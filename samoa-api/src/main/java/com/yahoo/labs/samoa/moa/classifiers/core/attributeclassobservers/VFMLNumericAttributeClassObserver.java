@@ -36,9 +36,8 @@ import com.github.javacliparser.IntOption;
 import com.yahoo.labs.samoa.moa.tasks.TaskMonitor;
 
 /**
- * Class for observing the class data distribution for a numeric attribute as in
- * VFML. Used in naive Bayes and decision trees to monitor data statistics on
- * leaves.
+ * Class for observing the class data distribution for a numeric attribute as in VFML. Used in naive Bayes and decision
+ * trees to monitor data statistics on leaves.
  * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $

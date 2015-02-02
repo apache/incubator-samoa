@@ -27,9 +27,8 @@ import com.yahoo.labs.samoa.moa.tasks.TaskMonitor;
  * Drift detection method based in EDDM method of Manuel Baena et al.
  * 
  * <p>
- * Early Drift Detection Method. Manuel Baena-Garcia, Jose Del Campo-Avila, Raúl
- * Fidalgo, Albert Bifet, Ricard Gavalda, Rafael Morales-Bueno. In Fourth
- * International Workshop on Knowledge Discovery from Data Streams, 2006.
+ * Early Drift Detection Method. Manuel Baena-Garcia, Jose Del Campo-Avila, Raúl Fidalgo, Albert Bifet, Ricard Gavalda,
+ * Rafael Morales-Bueno. In Fourth International Workshop on Knowledge Discovery from Data Streams, 2006.
  * </p>
  * 
  * @author Manuel Baena (mbaena@lcc.uma.es)
