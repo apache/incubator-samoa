@@ -22,12 +22,8 @@ package com.yahoo.labs.flink;
 
 
 import com.yahoo.labs.flink.topology.impl.SamoaType;
-import com.yahoo.labs.samoa.core.ContentEvent;
-import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.tuple.Tuple3;
-import org.apache.flink.api.java.typeutils.TupleTypeInfo;
-import org.apache.flink.api.java.typeutils.TypeExtractor;
+import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.streaming.api.datastream.DataStream;
 
 import java.util.List;
@@ -58,7 +54,12 @@ public class Utils {
 			case ALL:
 				return stream.broadcast();
 			case GROUP:
-				return stream.groupBy(0);
+				return stream.groupBy(new KeySelector<SamoaType, String>() {
+					@Override
+					public String getKey(SamoaType samoaType) throws Exception {
+						return samoaType.f0;
+					}
+				});
 			case SHUFFLE:
 			default:
 				return stream.shuffle();
