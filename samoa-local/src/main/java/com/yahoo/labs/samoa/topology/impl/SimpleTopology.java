@@ -40,8 +40,7 @@ public class SimpleTopology extends AbstractTopology {
 
     SimpleEntranceProcessingItem entrancePi = (SimpleEntranceProcessingItem) this.getEntranceProcessingItems()
         .toArray()[0];
-    entrancePi.getProcessor().onCreate(0); // id=0 as it is not used in simple
-                                           // mode
+    entrancePi.getProcessor().onCreate(0); // id=0 as it is not used in simple mode
     entrancePi.startSendingEvents();
   }
 }

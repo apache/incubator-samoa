@@ -71,29 +71,22 @@ public class DoubleVectorTest {
     // test automatic vector enlargement
     emptyVector.setValue(0, 1.0);
     assertEquals(1, emptyVector.getArrayRef().length);
-    assertEquals(1.0, emptyVector.getArrayRef()[0], 0.0); // should be exactly
-                                                          // the same, so
-                                                          // delta=0.0
+    assertEquals(1.0, emptyVector.getArrayRef()[0], 0.0); // should be exactly the same, so delta=0.0
 
     emptyVector.setValue(5, 5.5);
     assertEquals(6, emptyVector.getArrayRef().length);
     assertEquals(2, emptyVector.numNonZeroEntries());
-    assertEquals(5.5, emptyVector.getArrayRef()[5], 0.0); // should be exactly
-                                                          // the same, so
-                                                          // delta=0.0
+    assertEquals(5.5, emptyVector.getArrayRef()[5], 0.0); // should be exactly the same, so delta=0.0
   }
 
   @Test
   public void testAddToValue() {
     array5Vector.addToValue(2, 5.0);
-    assertEquals(5, array5Vector.getArrayRef()[2], 0.0); // should be exactly
-                                                         // the same, so
-                                                         // delta=0.0
+    assertEquals(5, array5Vector.getArrayRef()[2], 0.0); // should be exactly the same, so delta=0.0
 
     // test automatic vector enlargement
     emptyVector.addToValue(0, 1.0);
-    assertEquals(1, emptyVector.getArrayRef()[0], 0.0); // should be exactly the
-                                                        // same, so delta=0.0
+    assertEquals(1, emptyVector.getArrayRef()[0], 0.0); // should be exactly the same, so delta=0.0
   }
 
   @Test

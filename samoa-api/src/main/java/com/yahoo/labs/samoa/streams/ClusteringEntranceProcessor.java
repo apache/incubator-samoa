@@ -224,17 +224,7 @@ public final class ClusteringEntranceProcessor implements EntranceProcessor {
     // evaluationStream.put(evalEvent);
     // }
 
-    groundTruthSamplingFrequency = ((ClusteringStream) streamSource.getStream()).getDecayHorizon(); // FIXME
-                                                                                                    // should
-                                                                                                    // it
-                                                                                                    // be
-                                                                                                    // taken
-                                                                                                    // from
-                                                                                                    // the
-                                                                                                    // ClusteringEvaluation
-                                                                                                    // -f
-                                                                                                    // option
-                                                                                                    // instead?
+    groundTruthSamplingFrequency = ((ClusteringStream) streamSource.getStream()).getDecayHorizon(); // FIXME should it be takend from the ClusteringEvaluation -f option instead?
     if (isFinished()) {
       // send ending event
       ClusteringContentEvent contentEvent = new ClusteringContentEvent(-1, firstInstance);
@@ -245,10 +235,8 @@ public final class ClusteringEntranceProcessor implements EntranceProcessor {
       numInstanceSent++;
       if (numInstanceSent % groundTruthSamplingFrequency == 0) {
         // TODO implement an interface ClusteringGroundTruth with a
-        // getGeneratingClusters() method, check if the source implements the
-        // interface
-        // send a clustering evaluation event for external measures (distance
-        // from the gt clusters)
+        // getGeneratingClusters() method, check if the source implements the interface
+        // send a clustering evaluation event for external measures (distance from the gt clusters)
         Clustering gtClustering = ((RandomRBFGeneratorEvents) streamSource.getStream()).getGeneratingClusters();
         return new ClusteringEvaluationContentEvent(gtClustering, nextDataPoint, false);
       } else {

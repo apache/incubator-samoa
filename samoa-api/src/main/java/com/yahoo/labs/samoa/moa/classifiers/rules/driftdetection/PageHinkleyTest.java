@@ -70,12 +70,8 @@ public class PageHinkleyTest implements Serializable {
     this.sumAbsolutError = this.sumAbsolutError + absolutError;
     if (this.phinstancesSeen > 30) {
       double mT = absolutError - (this.sumAbsolutError / this.phinstancesSeen) - this.alpha;
-      this.cumulativeSum = this.cumulativeSum + mT; // Update the cumulative mT
-                                                    // sum
-      if (this.cumulativeSum < this.minimumValue) { // Update the minimum mT
-                                                    // value if the new mT is
-                                                    // smaller than the current
-                                                    // minimum
+      this.cumulativeSum = this.cumulativeSum + mT; // Update the cumulative mT sum
+      if (this.cumulativeSum < this.minimumValue) { // Update the minimum mT value if the new mT is smaller than the current minimum
         this.minimumValue = this.cumulativeSum;
       }
       return (((this.cumulativeSum - this.minimumValue) > this.threshold));

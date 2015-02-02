@@ -46,8 +46,7 @@ public class ThreadsTopology extends AbstractTopology {
         .toArray()[0];
     if (entrancePi == null)
       throw new IllegalStateException("You need to set entrance PI before running the topology.");
-    entrancePi.getProcessor().onCreate(0); // id=0 as it is not used in simple
-                                           // mode
+    entrancePi.getProcessor().onCreate(0); // id=0 as it is not used in simple mode
     entrancePi.startSendingEvents();
   }
 

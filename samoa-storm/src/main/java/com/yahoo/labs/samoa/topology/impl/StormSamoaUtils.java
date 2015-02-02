@@ -50,12 +50,7 @@ public class StormSamoaUtils {
     Properties props = new Properties();
     InputStream is;
 
-    File f = new File("src/main/resources/samoa-storm-cluster.properties"); // FIXME
-                                                                            // it
-                                                                            // does
-                                                                            // not
-                                                                            // exist
-                                                                            // anymore
+    File f = new File("src/main/resources/samoa-storm-cluster.properties"); // FIXME it does not exist anymore
     is = new FileInputStream(f);
 
     try {

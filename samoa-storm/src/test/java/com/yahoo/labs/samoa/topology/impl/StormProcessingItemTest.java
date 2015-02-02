@@ -68,8 +68,7 @@ public class StormProcessingItemTest {
       }
     };
 
-    pi.addToTopology(topology, PARRALLELISM_HINT_4); // this parallelism hint is
-                                                     // ignored
+    pi.addToTopology(topology, PARRALLELISM_HINT_4); // this parallelism hint is ignored
 
     new Verifications() {
       {

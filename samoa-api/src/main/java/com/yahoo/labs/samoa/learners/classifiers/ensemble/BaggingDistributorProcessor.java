@@ -59,8 +59,7 @@ public class BaggingDistributorProcessor implements Processor {
    * @return true, if successful
    */
   public boolean process(ContentEvent event) {
-    InstanceContentEvent inEvent = (InstanceContentEvent) event; // ((s4Event)
-                                                                 // event).getContentEvent();
+    InstanceContentEvent inEvent = (InstanceContentEvent) event; // ((s4Event)event).getContentEvent();
     // InstanceEvent inEvent = (InstanceEvent) event;
 
     if (inEvent.getInstanceIndex() < 0) {

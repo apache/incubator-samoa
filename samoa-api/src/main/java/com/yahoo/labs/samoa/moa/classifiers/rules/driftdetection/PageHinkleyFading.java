@@ -58,12 +58,8 @@ public class PageHinkleyFading extends PageHinkleyTest {
     this.sumAbsolutError = fadingFactor * this.sumAbsolutError + absolutError;
     if (this.instancesSeen > 30) {
       double mT = absolutError - (this.sumAbsolutError / this.instancesSeen) - this.alpha;
-      this.cumulativeSum = this.cumulativeSum + mT; // Update the cumulative mT
-                                                    // sum
-      if (this.cumulativeSum < this.minimumValue) { // Update the minimum mT
-                                                    // value if the new mT is
-                                                    // smaller than the current
-                                                    // minimum
+      this.cumulativeSum = this.cumulativeSum + mT; // Update the cumulative mT sum
+      if (this.cumulativeSum < this.minimumValue) { // Update the minimum mT value if the new mT is smaller than the current minimum
         this.minimumValue = this.cumulativeSum;
       }
       return (((this.cumulativeSum - this.minimumValue) > this.threshold));

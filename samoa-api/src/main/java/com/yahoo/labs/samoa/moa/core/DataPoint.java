@@ -44,8 +44,7 @@ public class DataPoint extends DenseInstance {
     measure_values = new HashMap<String, String>();
 
     Attribute classLabel = dataset().classAttribute();
-    noiseLabel = classLabel.indexOfValue("noise"); // -1 returned if there is no
-                                                   // noise
+    noiseLabel = classLabel.indexOfValue("noise"); // -1 returned if there is no noise
   }
 
   public void updateWeight(int cur_timestamp, double decay_rate) {

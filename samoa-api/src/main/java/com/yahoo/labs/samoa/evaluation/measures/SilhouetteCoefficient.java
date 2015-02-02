@@ -88,8 +88,7 @@ public class SilhouetteCoefficient extends MeasureCollection {
         int minOwnIndex = -1;
         for (int fc : ownClusters) {
           double normDist = distanceByClusters[fc] / (double) countsByClusters[fc];
-          if (normDist < minAvgDistanceOwn) {// && pointInclusionProbFC[p][fc] >
-                                             // pointInclusionProbThreshold){
+          if (normDist < minAvgDistanceOwn) {// && pointInclusionProbFC[p][fc] > pointInclusionProbThreshold){
             minAvgDistanceOwn = normDist;
             minOwnIndex = fc;
           }

@@ -503,9 +503,7 @@ public class ADWIN extends AbstractMOAObject {
               break;
             }
             double absvalue = (u0 / n0) - (u1 / n1); // n1<WIDTH-mintMinWinLength-1
-            if ((n1 > mintMinWinLength + 1 && n0 > mintMinWinLength + 1) && // Diference
-                                                                            // NEGATIVE
-                // if(
+            if ((n1 > mintMinWinLength + 1 && n0 > mintMinWinLength + 1) && // Diference NEGATIVE if(
                 blnCutexpression(n0, n1, u0, u1, v0, v1, absvalue, delta)) {
               blnBucketDeleted = true;
               Detect = mintTime;
@@ -544,8 +542,7 @@ public class ADWIN extends AbstractMOAObject {
   private boolean blnCutexpression(int n0, int n1, double u0, double u1, double v0, double v1, double absvalue,
       double delta) {
     int n = getWidth();
-    double dd = Math.log(2 * Math.log(n) / delta); // -- ull perque el ln n va
-                                                   // al numerador.
+    double dd = Math.log(2 * Math.log(n) / delta); // -- ull perque el ln n va al numerador.
     // Formula Gener 2008
     double v = getVariance();
     double m = ((double) 1 / ((n0 - mintMinWinLength + 1))) + ((double) 1 / ((n1 - mintMinWinLength + 1)));

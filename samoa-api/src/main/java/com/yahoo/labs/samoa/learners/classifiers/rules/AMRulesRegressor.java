@@ -102,8 +102,7 @@ public class AMRulesRegressor implements RegressionLearner, Configurable {
       "anomalyThreshold",
       'n',
       "The threshold value of anomalies to be used in the anomaly detection.",
-      30, 0, Integer.MAX_VALUE); // num minimum of instances to detect
-                                 // anomalies. 15.
+      30, 0, Integer.MAX_VALUE); // num minimum of instances to detect anomalies anomalies. 15.
 
   public FlagOption unorderedRulesOption = new FlagOption("setUnorderedRulesOn", 'U',
       "unorderedRules.");

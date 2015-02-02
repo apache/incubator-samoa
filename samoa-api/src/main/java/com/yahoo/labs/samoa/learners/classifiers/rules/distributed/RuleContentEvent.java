@@ -37,8 +37,7 @@ public class RuleContentEvent implements ContentEvent {
   private static final long serialVersionUID = -9046390274402894461L;
 
   private final int ruleNumberID;
-  private final ActiveRule addingRule; // for removing rule, we only need the
-                                       // rule's ID
+  private final ActiveRule addingRule; // for removing rule, we only need the rule's ID
   private final boolean isRemoving;
 
   public RuleContentEvent() {

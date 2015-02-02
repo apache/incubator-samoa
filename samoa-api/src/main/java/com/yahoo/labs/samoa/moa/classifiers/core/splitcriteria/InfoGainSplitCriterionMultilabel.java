@@ -44,9 +44,7 @@ public class InfoGainSplitCriterionMultilabel extends InfoGainSplitCriterion {
       for (double num : dist) {
         double d = num / sum;
         if (d > 0.0) { // TODO: how small can d be before log2 overflows?
-          entropy -= d * Utils.log2(d) + (1 - d) * Utils.log2(1 - d); // Extension
-                                                                      // to
-                                                                      // Multilabel
+          entropy -= d * Utils.log2(d) + (1 - d) * Utils.log2(1 - d); // Extension to Multilabel
         }
       }
     }

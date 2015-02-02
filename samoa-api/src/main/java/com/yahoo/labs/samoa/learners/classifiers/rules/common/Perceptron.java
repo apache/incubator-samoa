@@ -40,8 +40,7 @@ import com.yahoo.labs.samoa.moa.core.Measurement;
  */
 public class Perceptron extends AbstractClassifier implements Regressor {
 
-  private final double SD_THRESHOLD = 0.0000001; // THRESHOLD for normalizing
-                                                 // attribute and target values
+  private final double SD_THRESHOLD = 0.0000001; // THRESHOLD for normalizing attribute and target values
 
   private static final long serialVersionUID = 1L;
 
@@ -215,8 +214,7 @@ public class Perceptron extends AbstractClassifier implements Regressor {
       // this.fadingFactor=this.fadingFactorOption.getValue();
       // this.classifierRandom.setSeed(randomSeedOption.getValue());
       this.classifierRandom.setSeed(randomSeed);
-      this.initialisePerceptron = false; // not in resetLearningImpl() because
-                                         // it needs Instance!
+      this.initialisePerceptron = false; // not in resetLearningImpl() because it needs Instance!
       this.weightAttribute = new double[inst.numAttributes()];
       for (int j = 0; j < inst.numAttributes(); j++) {
         weightAttribute[j] = 2 * this.classifierRandom.nextDouble() - 1;
@@ -273,8 +271,7 @@ public class Perceptron extends AbstractClassifier implements Regressor {
         return normalizedPrediction + meanY;
     }
     else
-      return normalizedPrediction; // Perceptron may have been "reseted". Use
-                                   // old weights to predict
+      return normalizedPrediction; // Perceptron may have been "reseted". Use old weights to predict
 
   }
 

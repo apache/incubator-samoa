@@ -90,8 +90,7 @@ public class EWMAChartDM extends AbstractChangeDetector {
 
     z_t += lambda * (prediction - z_t);
 
-    double L_t = 3.97 - 6.56 * m_p + 48.73 * Math.pow(m_p, 3) - 330.13 * Math.pow(m_p, 5) + 848.18 * Math.pow(m_p, 7); // %1
-                                                                                                                       // FP
+    double L_t = 3.97 - 6.56 * m_p + 48.73 * Math.pow(m_p, 3) - 330.13 * Math.pow(m_p, 5) + 848.18 * Math.pow(m_p, 7); // %1 FP
     this.estimation = m_p;
     this.isChangeDetected = false;
     this.isWarningZone = false;

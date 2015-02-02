@@ -96,20 +96,10 @@ public abstract class Rule extends AbstractMOAObject {
           .getSplitTest();
       if (nodeTest.isUsingSameAttribute(ruleSplitNodeTest)) {
         isIncludedInNodeList = true;
-        if (nodeTest.isIncludedInRuleNode(ruleSplitNodeTest) == true) { // remove
-                                                                        // this
-                                                                        // line
-                                                                        // to
-                                                                        // keep
-                                                                        // the
-                                                                        // most
-                                                                        // recent
-                                                                        // attribute
-                                                                        // value
+        if (nodeTest.isIncludedInRuleNode(ruleSplitNodeTest) == true) { // remove this line to keep the most recent attribute value
           // replace the value
           nodeTest.setAttributeValue(ruleSplitNodeTest);
-          isUpdated = true; // if is updated (i.e. an expansion happened) a new
-                            // learning node should be created
+          isUpdated = true; // if is updated (i.e. an expansion happened) a new learning node should be created
         }
       }
     }

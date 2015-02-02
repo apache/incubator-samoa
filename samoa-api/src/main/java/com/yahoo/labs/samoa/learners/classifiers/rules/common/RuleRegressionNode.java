@@ -250,8 +250,7 @@ public abstract class RuleRegressionNode implements Serializable {
     double probability = 0.0;
 
     if (sd > 0.0) {
-      double k = (Math.abs(value - mean) / sd); // One tailed variant of
-                                                // Chebyshev's inequality
+      double k = (Math.abs(value - mean) / sd); // One tailed variant of Chebyshev's inequality
       probability = 1.0 / (1 + k * k);
     }
 

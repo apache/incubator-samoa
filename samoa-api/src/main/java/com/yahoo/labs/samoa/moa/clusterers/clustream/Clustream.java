@@ -145,8 +145,7 @@ public class Clustream extends AbstractClusterer {
 
     // 3. Date does not fit, we need to free
     // some space to insert a new kernel
-    long threshold = timestamp - timeWindow; // Kernels before this can be
-                                             // forgotten
+    long threshold = timestamp - timeWindow; // Kernels before this can be forgotten
 
     // 3.1 Try to forget old kernels
     for (int i = 0; i < kernels.length; i++) {

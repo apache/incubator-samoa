@@ -139,8 +139,7 @@ public class AMRDefaultRuleProcessor implements Processor {
       if (defaultRule.tryToExpand(this.splitConfidence, this.tieThreshold) == true) {
         ActiveRule newDefaultRule = newRule(defaultRule.getRuleNumberID(),
             (RuleActiveRegressionNode) defaultRule.getLearningNode(),
-            ((RuleActiveRegressionNode) defaultRule.getLearningNode()).getStatisticsOtherBranchSplit()); // other
-                                                                                                         // branch
+            ((RuleActiveRegressionNode) defaultRule.getLearningNode()).getStatisticsOtherBranchSplit()); // other branch
         defaultRule.split();
         defaultRule.setRuleNumberID(++ruleNumberID);
         // send out the new rule

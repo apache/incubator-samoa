@@ -31,8 +31,7 @@ public class InverseErrorWeightedVote extends AbstractErrorWeightedVote {
   /**
 	 * 
 	 */
-  private static final double EPS = 0.000000001; // just to prevent divide by 0
-                                                 // in 1/X -> 1/(x+EPS)
+  private static final double EPS = 0.000000001; // just to prevent divide by 0 in 1/X -> 1/(x+EPS)
   private static final long serialVersionUID = 6359349250620616482L;
 
   public InverseErrorWeightedVote() {

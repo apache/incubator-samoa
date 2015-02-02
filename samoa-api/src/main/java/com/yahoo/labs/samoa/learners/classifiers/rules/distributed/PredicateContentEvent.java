@@ -50,8 +50,7 @@ public class PredicateContentEvent implements ContentEvent {
 
   public PredicateContentEvent(int ruleID, RuleSplitNode ruleSplitNode, RulePassiveRegressionNode learningNode) {
     this.ruleNumberID = ruleID;
-    this.ruleSplitNode = ruleSplitNode; // is this is null: this is for updating
-                                        // learningNode only
+    this.ruleSplitNode = ruleSplitNode; // is this is null: this is for updating learningNode only
     this.learningNode = learningNode;
   }
 

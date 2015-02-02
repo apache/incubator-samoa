@@ -43,8 +43,7 @@ public class Utils {
 
   public static void buildSamoaPackage() {
     try {
-      String output = "/tmp/samoa/samoa.jar";// System.getProperty("user.home")
-                                             // + "/samoa.jar";
+      String output = "/tmp/samoa/samoa.jar";// System.getProperty("user.home") + "/samoa.jar";
       Manifest manifest = createManifest();
 
       BufferedOutputStream bo;

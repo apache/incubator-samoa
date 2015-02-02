@@ -50,13 +50,9 @@ public class BinaryTreeNumericAttributeClassObserverRegression extends AbstractO
 
     public double cut_point;
 
-    public double[] lessThan; // This array maintains statistics for the
-                              // instance reaching the node with attribute
-                              // values less than or iqual to the cutpoint.
+    public double[] lessThan; // This array maintains statistics for the instance reaching the node with attribute values less than or iqual to the cutpoint.
 
-    public double[] greaterThan; // This array maintains statistics for the
-                                 // instance reaching the node with attribute
-                                 // values greater than to the cutpoint.
+    public double[] greaterThan; // This array maintains statistics for the instance reaching the node with attribute values greater than to the cutpoint.
 
     public Node left;
 
@@ -67,10 +63,8 @@ public class BinaryTreeNumericAttributeClassObserverRegression extends AbstractO
       this.lessThan = new double[3];
       this.greaterThan = new double[3];
       this.lessThan[0] = target; // The sum of their target attribute values.
-      this.lessThan[1] = target * target; // The sum of the squared target
-                                          // attribute values.
-      this.lessThan[2] = 1.0; // A counter of the number of instances that have
-                              // reached the node.
+      this.lessThan[1] = target * target; // The sum of the squared target attribute values.
+      this.lessThan[2] = 1.0; // A counter of the number of instances that have reached the node.
       this.greaterThan[0] = 0.0;
       this.greaterThan[1] = 0.0;
       this.greaterThan[2] = 0.0;

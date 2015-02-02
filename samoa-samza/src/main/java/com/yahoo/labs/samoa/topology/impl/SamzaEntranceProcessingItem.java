@@ -107,11 +107,7 @@ public class SamzaEntranceProcessingItem extends AbstractEntranceProcessingItem
   @Override
   public void init(Config config, TaskContext context) throws Exception {
     String yarnConfHome = config.get(SamzaConfigFactory.YARN_CONF_HOME_KEY);
-    if (yarnConfHome != null && yarnConfHome.length() > 0) // if the property is
-                                                           // set , otherwise,
-                                                           // assume we are
-                                                           // running in
-      // local mode and ignore this
+    if (yarnConfHome != null && yarnConfHome.length() > 0) // if the property is set, otherwise, assume we are running in local mode and ignore this
       SystemsUtils.setHadoopConfigHome(yarnConfHome);
 
     String filename = config.get(SamzaConfigFactory.FILE_KEY);
@@ -161,12 +157,7 @@ public class SamzaEntranceProcessingItem extends AbstractEntranceProcessingItem
 
     public SamoaSystemConsumer(String systemName, Config config) {
       String yarnConfHome = config.get(SamzaConfigFactory.YARN_CONF_HOME_KEY);
-      if (yarnConfHome != null && yarnConfHome.length() > 0) // if the property
-                                                             // is set ,
-                                                             // otherwise,
-                                                             // assume we are
-                                                             // running in
-        // local mode and ignore this
+      if (yarnConfHome != null && yarnConfHome.length() > 0) // if the property is set, otherwise, assume we are running in local mode and ignore this
         SystemsUtils.setHadoopConfigHome(yarnConfHome);
 
       String filename = config.get(SamzaConfigFactory.FILE_KEY);

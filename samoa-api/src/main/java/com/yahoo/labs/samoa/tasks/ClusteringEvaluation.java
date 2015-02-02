@@ -144,8 +144,7 @@ public class ClusteringEvaluation implements Task, Configurable {
     distributorStream = builder.createStream(distributor);
     distributor.setOutputStream(distributorStream);
     evaluationStream = builder.createStream(distributor);
-    distributor.setEvaluationStream(evaluationStream); // passes evaluation
-                                                       // events along
+    distributor.setEvaluationStream(evaluationStream); // passes evaluation events along
     logger.debug("Successfully instantiated Distributor");
 
     // instantiate learner and connect it to distributorStream
