@@ -40,81 +40,85 @@ import com.yahoo.labs.samoa.utils.StreamDestination;
 
 /**
  * @author Anh Thu Vu
- *
+ * 
  */
 public class SimpleProcessingItemTest {
 
-	@Tested private SimpleProcessingItem pi;
-	
-	@Mocked private Processor processor;
-	@Mocked private SimpleStream stream;
-	@Mocked private StreamDestination destination;
-	@Mocked private ContentEvent event;
-	
-	private final int parallelism = 4;
-	private final int counter = 2;
-	
-	
-	@Before
-	public void setUp() throws Exception {
-		pi = new SimpleProcessingItem(processor, parallelism);
-	}
+  @Tested
+  private SimpleProcessingItem pi;
 
-	@Test
-	public void testConstructor() {
-		assertSame("Processor was not set correctly.",processor,pi.getProcessor());
-		assertEquals("Parallelism was not set correctly.",parallelism,pi.getParallelism(),0);
-	}
-	
-	@Test
-	public void testConnectInputShuffleStream() {
-		new Expectations() {
-			{
-				destination = new StreamDestination(pi, parallelism, PartitioningScheme.SHUFFLE);
-				stream.addDestination(destination);
-			}
-		};
-		pi.connectInputShuffleStream(stream);
-	}
-	
-	@Test
-	public void testConnectInputKeyStream() {
-		new Expectations() {
-			{
-				destination = new StreamDestination(pi, parallelism, PartitioningScheme.GROUP_BY_KEY);
-				stream.addDestination(destination);
-			}
-		};
-		pi.connectInputKeyStream(stream);
-	}
-	
-	@Test
-	public void testConnectInputAllStream() {
-		new Expectations() {
-			{
-				destination = new StreamDestination(pi, parallelism, PartitioningScheme.BROADCAST);
-				stream.addDestination(destination);
-			}
-		};
-		pi.connectInputAllStream(stream);
-	}
-	
-	@Test
-	public void testProcessEvent() {
-		new Expectations() {
-			{
-				for (int i=0; i<parallelism; i++) {
-					processor.newProcessor(processor);
-					result=processor;
-				
-					processor.onCreate(anyInt);
-				}
-				
-				processor.process(event);
-			}
-		};
-		pi.processEvent(event, counter);
-		
-	}
+  @Mocked
+  private Processor processor;
+  @Mocked
+  private SimpleStream stream;
+  @Mocked
+  private StreamDestination destination;
+  @Mocked
+  private ContentEvent event;
+
+  private final int parallelism = 4;
+  private final int counter = 2;
+
+  @Before
+  public void setUp() throws Exception {
+    pi = new SimpleProcessingItem(processor, parallelism);
+  }
+
+  @Test
+  public void testConstructor() {
+    assertSame("Processor was not set correctly.", processor, pi.getProcessor());
+    assertEquals("Parallelism was not set correctly.", parallelism, pi.getParallelism(), 0);
+  }
+
+  @Test
+  public void testConnectInputShuffleStream() {
+    new Expectations() {
+      {
+        destination = new StreamDestination(pi, parallelism, PartitioningScheme.SHUFFLE);
+        stream.addDestination(destination);
+      }
+    };
+    pi.connectInputShuffleStream(stream);
+  }
+
+  @Test
+  public void testConnectInputKeyStream() {
+    new Expectations() {
+      {
+        destination = new StreamDestination(pi, parallelism, PartitioningScheme.GROUP_BY_KEY);
+        stream.addDestination(destination);
+      }
+    };
+    pi.connectInputKeyStream(stream);
+  }
+
+  @Test
+  public void testConnectInputAllStream() {
+    new Expectations() {
+      {
+        destination = new StreamDestination(pi, parallelism, PartitioningScheme.BROADCAST);
+        stream.addDestination(destination);
+      }
+    };
+    pi.connectInputAllStream(stream);
+  }
+
+  @Test
+  public void testProcessEvent() {
+    new Expectations() {
+      {
+        for (int i = 0; i < parallelism; i++) {
+          processor.newProcessor(processor);
+          result = processor;
+
+          processor.onCreate(anyInt);
+        }
+
+        processor.process(event);
+      }
+    };
+    pi.processEvent(event, counter);
+
+  }
 
 }

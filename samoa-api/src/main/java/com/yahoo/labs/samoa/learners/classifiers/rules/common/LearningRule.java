@@ -28,95 +28,95 @@ import com.yahoo.labs.samoa.moa.core.StringUtils;
  * Rule with LearningNode (statistical data).
  * 
  * @author Anh Thu Vu
- *
+ * 
  */
 public abstract class LearningRule extends Rule {
 
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	
-	/*
-	 * Constructor
-	 */
-	public LearningRule() {
-		super();
-	}
-	
-	/*
-	 * LearningNode
-	 */
-	public abstract RuleRegressionNode getLearningNode();
+  private static final long serialVersionUID = 1L;
 
-	public abstract void setLearningNode(RuleRegressionNode learningNode);
-	
-	/*
-	 * No. of instances seen
-	 */
-	public long getInstancesSeen() {
-		return this.getLearningNode().getInstancesSeen();
-	}
+  /*
+   * Constructor
+   */
+  public LearningRule() {
+    super();
+  }
 
-	/*
-	 * Error and change detection
-	 */
-	public double computeError(Instance instance) {
-		return this.getLearningNode().computeError(instance);
-	}
+  /*
+   * LearningNode
+   */
+  public abstract RuleRegressionNode getLearningNode();
 
+  public abstract void setLearningNode(RuleRegressionNode learningNode);
 
-	/*
-	 * Prediction
-	 */
-	public double[] getPrediction(Instance instance, int mode) {
-		return this.getLearningNode().getPrediction(instance, mode);
-	}
+  /*
+   * No. of instances seen
+   */
+  public long getInstancesSeen() {
+    return this.getLearningNode().getInstancesSeen();
+  }
 
-	public double[] getPrediction(Instance instance) {
-		return this.getLearningNode().getPrediction(instance);
-	}
-	
-	public double getCurrentError() {
-		return this.getLearningNode().getCurrentError();
-	}
-	
-	/*
-	 * Anomaly detection
-	 */
-	public boolean isAnomaly(Instance instance,
-			double uniVariateAnomalyProbabilityThreshold,
-			double multiVariateAnomalyProbabilityThreshold,
-			int numberOfInstanceesForAnomaly) {
-		return this.getLearningNode().isAnomaly(instance, uniVariateAnomalyProbabilityThreshold,
-				multiVariateAnomalyProbabilityThreshold,
-				numberOfInstanceesForAnomaly);
-	}
-	
-	/*
-	 * Update
-	 */
-	public void updateStatistics(Instance instance) {
-		this.getLearningNode().updateStatistics(instance);
-	}
-	
-	public String printRule() {
-		StringBuilder out = new StringBuilder();
-		int indent = 1;
-		StringUtils.appendIndented(out, indent, "Rule Nr." + this.ruleNumberID + " Instances seen:" + this.getLearningNode().getInstancesSeen() + "\n"); // AC
-		for (RuleSplitNode node : nodeList) {
-			StringUtils.appendIndented(out, indent, node.getSplitTest().toString());
-			StringUtils.appendIndented(out, indent, " ");
-			StringUtils.appendIndented(out, indent, node.toString());
-		}
-		DoubleVector pred = new DoubleVector(this.getLearningNode().getSimplePrediction());
-		StringUtils.appendIndented(out, 0, " --> y: " + pred.toString());
-		StringUtils.appendNewline(out);
+  /*
+   * Error and change detection
+   */
+  public double computeError(Instance instance) {
+    return this.getLearningNode().computeError(instance);
+  }
 
-		if(getLearningNode().perceptron!=null){
-			((RuleActiveRegressionNode)this.getLearningNode()).perceptron.getModelDescription(out,0);
-			StringUtils.appendNewline(out);
-		}
-		return(out.toString());
-	}
+  /*
+   * Prediction
+   */
+  public double[] getPrediction(Instance instance, int mode) {
+    return this.getLearningNode().getPrediction(instance, mode);
+  }
+
+  public double[] getPrediction(Instance instance) {
+    return this.getLearningNode().getPrediction(instance);
+  }
+
+  public double getCurrentError() {
+    return this.getLearningNode().getCurrentError();
+  }
+
+  /*
+   * Anomaly detection
+   */
+  public boolean isAnomaly(Instance instance,
+      double uniVariateAnomalyProbabilityThreshold,
+      double multiVariateAnomalyProbabilityThreshold,
+      int numberOfInstanceesForAnomaly) {
+    return this.getLearningNode().isAnomaly(instance, uniVariateAnomalyProbabilityThreshold,
+        multiVariateAnomalyProbabilityThreshold,
+        numberOfInstanceesForAnomaly);
+  }
+
+  /*
+   * Update
+   */
+  public void updateStatistics(Instance instance) {
+    this.getLearningNode().updateStatistics(instance);
+  }
+
+  public String printRule() {
+    StringBuilder out = new StringBuilder();
+    int indent = 1;
+    StringUtils.appendIndented(out, indent, "Rule Nr." + this.ruleNumberID + " Instances seen:"
+        + this.getLearningNode().getInstancesSeen() + "\n"); // AC
+    for (RuleSplitNode node : nodeList) {
+      StringUtils.appendIndented(out, indent, node.getSplitTest().toString());
+      StringUtils.appendIndented(out, indent, " ");
+      StringUtils.appendIndented(out, indent, node.toString());
+    }
+    DoubleVector pred = new DoubleVector(this.getLearningNode().getSimplePrediction());
+    StringUtils.appendIndented(out, 0, " --> y: " + pred.toString());
+    StringUtils.appendNewline(out);
+
+    if (getLearningNode().perceptron != null) {
+      ((RuleActiveRegressionNode) this.getLearningNode()).perceptron.getModelDescription(out, 0);
+      StringUtils.appendNewline(out);
+    }
+    return (out.toString());
+  }
 }

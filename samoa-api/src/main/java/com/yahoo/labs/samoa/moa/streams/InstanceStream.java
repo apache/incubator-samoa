@@ -24,14 +24,11 @@ import com.yahoo.labs.samoa.moa.core.Example;
 import com.yahoo.labs.samoa.instances.Instance;
 
 /**
- * Interface representing a data stream of instances. 
- *
+ * Interface representing a data stream of instances.
+ * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
- * @version $Revision: 7 $ 
+ * @version $Revision: 7 $
  */
 public interface InstanceStream extends ExampleStream<Example<Instance>> {
-
-
-
 
 }

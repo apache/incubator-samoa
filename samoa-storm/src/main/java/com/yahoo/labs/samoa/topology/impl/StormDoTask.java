@@ -31,87 +31,88 @@ import backtype.storm.Config;
 import backtype.storm.utils.Utils;
 
 /**
- * The main class that used by samoa script to execute SAMOA task. 
+ * The main class that used by samoa script to execute SAMOA task.
  * 
  * @author Arinto Murdopo
- *
+ * 
  */
 public class StormDoTask {
-	private static final Logger logger = LoggerFactory.getLogger(StormDoTask.class);
-	private static String localFlag = "local";
-	private static String clusterFlag = "cluster";
-	
-	/**
-	 * The main method.
-	 * 
-	 * @param args the arguments
-	 */
-	public static void main(String[] args) {
+  private static final Logger logger = LoggerFactory.getLogger(StormDoTask.class);
+  private static String localFlag = "local";
+  private static String clusterFlag = "cluster";
 
-		 List<String> tmpArgs = new ArrayList<String>(Arrays.asList(args));
-		
-		boolean isLocal = isLocal(tmpArgs);
-		int numWorker = StormSamoaUtils.numWorkers(tmpArgs);
-		
-		args = tmpArgs.toArray(new String[0]);
-		
-		//convert the arguments into Storm topology
-		StormTopology stormTopo = StormSamoaUtils.argsToTopology(args);
-		String topologyName = stormTopo.getTopologyName();
-		
-    	Config conf = new Config();
-    	conf.putAll(Utils.readStormConfig());
-    	conf.setDebug(false);
-    			
-    	
-		if(isLocal){
-			//local mode
-			conf.setMaxTaskParallelism(numWorker);
-			
-			backtype.storm.LocalCluster cluster = new backtype.storm.LocalCluster();
-			cluster.submitTopology(topologyName , conf, stormTopo.getStormBuilder().createTopology());
-			
-			backtype.storm.utils.Utils.sleep(600*1000);
-			
-			cluster.killTopology(topologyName);
-			cluster.shutdown();
-			
-		}else{
-			//cluster mode
-			conf.setNumWorkers(numWorker);
-			try {
-				backtype.storm.StormSubmitter.submitTopology(topologyName, conf,
-						stormTopo.getStormBuilder().createTopology());
-			} catch (backtype.storm.generated.AlreadyAliveException ale) {
-				ale.printStackTrace();
-			} catch (backtype.storm.generated.InvalidTopologyException ite) {
-				ite.printStackTrace();
-			}
-		}
-	}
-	
-	private static boolean isLocal(List<String> tmpArgs){
-		ExecutionMode executionMode = ExecutionMode.UNDETERMINED;
-		
-		int position = tmpArgs.size() - 1;
-		String flag = tmpArgs.get(position);
-		boolean isLocal = true;
-		
-		if(flag.equals(clusterFlag)){
-			executionMode = ExecutionMode.CLUSTER;
-			isLocal = false;
-		}else if(flag.equals(localFlag)){
-			executionMode = ExecutionMode.LOCAL;
-			isLocal = true;
-		}
-		
-		if(executionMode != ExecutionMode.UNDETERMINED){
-			tmpArgs.remove(position);
-		}
-		
-		return isLocal;
-	}
-	
-	private enum ExecutionMode {LOCAL, CLUSTER, UNDETERMINED};
+  /**
+   * The main method.
+   * 
+   * @param args
+   *          the arguments
+   */
+  public static void main(String[] args) {
+
+    List<String> tmpArgs = new ArrayList<String>(Arrays.asList(args));
+
+    boolean isLocal = isLocal(tmpArgs);
+    int numWorker = StormSamoaUtils.numWorkers(tmpArgs);
+
+    args = tmpArgs.toArray(new String[0]);
+
+    // convert the arguments into Storm topology
+    StormTopology stormTopo = StormSamoaUtils.argsToTopology(args);
+    String topologyName = stormTopo.getTopologyName();
+
+    Config conf = new Config();
+    conf.putAll(Utils.readStormConfig());
+    conf.setDebug(false);
+
+    if (isLocal) {
+      // local mode
+      conf.setMaxTaskParallelism(numWorker);
+
+      backtype.storm.LocalCluster cluster = new backtype.storm.LocalCluster();
+      cluster.submitTopology(topologyName, conf, stormTopo.getStormBuilder().createTopology());
+
+      backtype.storm.utils.Utils.sleep(600 * 1000);
+
+      cluster.killTopology(topologyName);
+      cluster.shutdown();
+
+    } else {
+      // cluster mode
+      conf.setNumWorkers(numWorker);
+      try {
+        backtype.storm.StormSubmitter.submitTopology(topologyName, conf,
+            stormTopo.getStormBuilder().createTopology());
+      } catch (backtype.storm.generated.AlreadyAliveException ale) {
+        ale.printStackTrace();
+      } catch (backtype.storm.generated.InvalidTopologyException ite) {
+        ite.printStackTrace();
+      }
+    }
+  }
+
+  private static boolean isLocal(List<String> tmpArgs) {
+    ExecutionMode executionMode = ExecutionMode.UNDETERMINED;
+
+    int position = tmpArgs.size() - 1;
+    String flag = tmpArgs.get(position);
+    boolean isLocal = true;
+
+    if (flag.equals(clusterFlag)) {
+      executionMode = ExecutionMode.CLUSTER;
+      isLocal = false;
+    } else if (flag.equals(localFlag)) {
+      executionMode = ExecutionMode.LOCAL;
+      isLocal = true;
+    }
+
+    if (executionMode != ExecutionMode.UNDETERMINED) {
+      tmpArgs.remove(position);
+    }
+
+    return isLocal;
+  }
+
+  private enum ExecutionMode {
+    LOCAL, CLUSTER, UNDETERMINED
+  };
 }
-		

@@ -32,51 +32,54 @@ import com.yahoo.labs.samoa.moa.core.DataPoint;
  */
 final public class ClusteringEvaluationContentEvent implements ContentEvent {
 
-    private static final long serialVersionUID = -7746983521296618922L;
-    private Clustering gtClustering;
-    private DataPoint dataPoint;
-    private final boolean isLast;
-    private String key = "0";
+  private static final long serialVersionUID = -7746983521296618922L;
+  private Clustering gtClustering;
+  private DataPoint dataPoint;
+  private final boolean isLast;
+  private String key = "0";
 
-    public ClusteringEvaluationContentEvent() {
-        this.isLast = false;
-    }
+  public ClusteringEvaluationContentEvent() {
+    this.isLast = false;
+  }
 
-    public ClusteringEvaluationContentEvent(boolean isLast) {
-        this.isLast = isLast;
-    }
+  public ClusteringEvaluationContentEvent(boolean isLast) {
+    this.isLast = isLast;
+  }
 
-    /**
-     * Instantiates a new gtClustering result event.
-     *
-     * @param clustering the gtClustering result
-     * @param instance data point
-     * @param isLast is the last result
-     */
-    public ClusteringEvaluationContentEvent(Clustering clustering, DataPoint instance, boolean isLast) {
-        this.gtClustering = clustering;
-        this.isLast = isLast;
-        this.dataPoint = instance;
-    }
+  /**
+   * Instantiates a new gtClustering result event.
+   * 
+   * @param clustering
+   *          the gtClustering result
+   * @param instance
+   *          data point
+   * @param isLast
+   *          is the last result
+   */
+  public ClusteringEvaluationContentEvent(Clustering clustering, DataPoint instance, boolean isLast) {
+    this.gtClustering = clustering;
+    this.isLast = isLast;
+    this.dataPoint = instance;
+  }
 
-    public String getKey() {
-        return key;
-    }
+  public String getKey() {
+    return key;
+  }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
+  public void setKey(String key) {
+    this.key = key;
+  }
 
-    public boolean isLastEvent() {
-        return this.isLast;
-    }
+  public boolean isLastEvent() {
+    return this.isLast;
+  }
 
-    Clustering getGTClustering() {
-        return this.gtClustering;
-    }
-    
-    DataPoint getDataPoint() {
-        return this.dataPoint;
-    }
-    
+  Clustering getGTClustering() {
+    return this.gtClustering;
+  }
+
+  DataPoint getDataPoint() {
+    return this.dataPoint;
+  }
+
 }

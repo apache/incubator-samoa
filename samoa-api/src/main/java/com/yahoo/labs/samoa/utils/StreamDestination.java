@@ -23,43 +23,40 @@ package com.yahoo.labs.samoa.utils;
 import com.yahoo.labs.samoa.topology.IProcessingItem;
 
 /**
- * Represents one destination for streams. It has the info of:
- * the ProcessingItem, parallelismHint, and partitioning scheme.
- * Usage:
- * - When ProcessingItem connects to a stream, it will pass 
- * a StreamDestination to the stream.
- * - Stream manages a set of StreamDestination.
- * - Used in single-threaded and multi-threaded local mode.
+ * Represents one destination for streams. It has the info of: the ProcessingItem, parallelismHint, and partitioning
+ * scheme. Usage: - When ProcessingItem connects to a stream, it will pass a StreamDestination to the stream. - Stream
+ * manages a set of StreamDestination. - Used in single-threaded and multi-threaded local mode.
+ * 
  * @author Anh Thu Vu
- *
+ * 
  */
 public class StreamDestination {
-	private IProcessingItem pi;
-	private int parallelism;
-	private PartitioningScheme type;
-	
-	/*
-	 * Constructor
-	 */
-	public StreamDestination(IProcessingItem pi, int parallelismHint, PartitioningScheme type) {
-		this.pi = pi;
-		this.parallelism = parallelismHint;
-		this.type = type;
-	}
-	
-	/*
-	 * Getters
-	 */
-	public IProcessingItem getProcessingItem() {
-		return this.pi;
-	}
-	
-	public int getParallelism() {
-		return this.parallelism;
-	}
-	
-	public PartitioningScheme getPartitioningScheme() {
-		return this.type;
-	}
+  private IProcessingItem pi;
+  private int parallelism;
+  private PartitioningScheme type;
+
+  /*
+   * Constructor
+   */
+  public StreamDestination(IProcessingItem pi, int parallelismHint, PartitioningScheme type) {
+    this.pi = pi;
+    this.parallelism = parallelismHint;
+    this.type = type;
+  }
+
+  /*
+   * Getters
+   */
+  public IProcessingItem getProcessingItem() {
+    return this.pi;
+  }
+
+  public int getParallelism() {
+    return this.parallelism;
+  }
+
+  public PartitioningScheme getPartitioningScheme() {
+    return this.type;
+  }
 
 }

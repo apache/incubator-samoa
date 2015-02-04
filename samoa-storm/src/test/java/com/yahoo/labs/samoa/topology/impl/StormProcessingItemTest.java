@@ -38,41 +38,45 @@ import backtype.storm.topology.TopologyBuilder;
 import com.yahoo.labs.samoa.core.Processor;
 
 public class StormProcessingItemTest {
-    private static final int PARRALLELISM_HINT_2 = 2;
-    private static final int PARRALLELISM_HINT_4 = 4;
-    private static final String ID = "id";
-    @Tested private StormProcessingItem pi;
-    @Mocked private Processor processor;
-    @Mocked private StormTopology topology;
-    @Mocked private TopologyBuilder stormBuilder = new TopologyBuilder();
+  private static final int PARRALLELISM_HINT_2 = 2;
+  private static final int PARRALLELISM_HINT_4 = 4;
+  private static final String ID = "id";
+  @Tested
+  private StormProcessingItem pi;
+  @Mocked
+  private Processor processor;
+  @Mocked
+  private StormTopology topology;
+  @Mocked
+  private TopologyBuilder stormBuilder = new TopologyBuilder();
 
-    @Before
-    public void setUp() {
-        pi = new StormProcessingItem(processor, ID, PARRALLELISM_HINT_2);
-    }
+  @Before
+  public void setUp() {
+    pi = new StormProcessingItem(processor, ID, PARRALLELISM_HINT_2);
+  }
 
-    @Test
-    public void testAddToTopology() {
-        new Expectations() {
-            {
-                topology.getStormBuilder();
-                result = stormBuilder;
+  @Test
+  public void testAddToTopology() {
+    new Expectations() {
+      {
+        topology.getStormBuilder();
+        result = stormBuilder;
 
-                stormBuilder.setBolt(ID, (IRichBolt) any, anyInt);
-                result = new MockUp<BoltDeclarer>() {
-                }.getMockInstance();
-            }
-        };
+        stormBuilder.setBolt(ID, (IRichBolt) any, anyInt);
+        result = new MockUp<BoltDeclarer>() {
+        }.getMockInstance();
+      }
+    };
 
-        pi.addToTopology(topology, PARRALLELISM_HINT_4); // this parallelism hint is ignored
+    pi.addToTopology(topology, PARRALLELISM_HINT_4); // this parallelism hint is ignored
 
-        new Verifications() {
-            {
-                assertEquals(pi.getProcessor(), processor);
-                // TODO add methods to explore a topology and verify them
-                assertEquals(pi.getParallelism(), PARRALLELISM_HINT_2);
-                assertEquals(pi.getId(), ID);
-            }
-        };
-    }
+    new Verifications() {
+      {
+        assertEquals(pi.getProcessor(), processor);
+        // TODO add methods to explore a topology and verify them
+        assertEquals(pi.getParallelism(), PARRALLELISM_HINT_2);
+        assertEquals(pi.getId(), ID);
+      }
+    };
+  }
 }

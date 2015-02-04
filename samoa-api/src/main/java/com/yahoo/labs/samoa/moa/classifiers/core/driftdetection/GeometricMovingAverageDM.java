@@ -27,82 +27,82 @@ import com.yahoo.labs.samoa.moa.tasks.TaskMonitor;
 
 /**
  * Drift detection method based in Geometric Moving Average Test
- *
- *
+ * 
+ * 
  * @author Manuel Baena (mbaena@lcc.uma.es)
  * @version $Revision: 7 $
  */
 public class GeometricMovingAverageDM extends AbstractChangeDetector {
 
-    private static final long serialVersionUID = -3518369648142099719L;
+  private static final long serialVersionUID = -3518369648142099719L;
 
-    public IntOption minNumInstancesOption = new IntOption(
-            "minNumInstances",
-            'n',
-            "The minimum number of instances before permitting detecting change.",
-            30, 0, Integer.MAX_VALUE);
+  public IntOption minNumInstancesOption = new IntOption(
+      "minNumInstances",
+      'n',
+      "The minimum number of instances before permitting detecting change.",
+      30, 0, Integer.MAX_VALUE);
 
-    public FloatOption lambdaOption = new FloatOption("lambda", 'l',
-            "Threshold parameter of the Geometric Moving Average Test", 1, 0.0, Float.MAX_VALUE);
+  public FloatOption lambdaOption = new FloatOption("lambda", 'l',
+      "Threshold parameter of the Geometric Moving Average Test", 1, 0.0, Float.MAX_VALUE);
 
-    public FloatOption alphaOption = new FloatOption("alpha", 'a',
-            "Alpha parameter of the Geometric Moving Average Test", .99, 0.0, 1.0);
+  public FloatOption alphaOption = new FloatOption("alpha", 'a',
+      "Alpha parameter of the Geometric Moving Average Test", .99, 0.0, 1.0);
 
-    private double m_n;
+  private double m_n;
 
-    private double sum;
+  private double sum;
 
-    private double x_mean;
-                                                                                            
-    private double alpha;
+  private double x_mean;
 
-    private double lambda;
+  private double alpha;
 
-    public GeometricMovingAverageDM() {
-        resetLearning();
+  private double lambda;
+
+  public GeometricMovingAverageDM() {
+    resetLearning();
+  }
+
+  @Override
+  public void resetLearning() {
+    m_n = 1.0;
+    x_mean = 0.0;
+    sum = 0.0;
+    alpha = this.alphaOption.getValue();
+    lambda = this.lambdaOption.getValue();
+  }
+
+  @Override
+  public void input(double x) {
+    // It monitors the error rate
+    if (this.isChangeDetected) {
+      resetLearning();
     }
 
-    @Override
-    public void resetLearning() {
-        m_n = 1.0;
-        x_mean = 0.0;
-        sum = 0.0;
-        alpha = this.alphaOption.getValue();
-        lambda = this.lambdaOption.getValue();
+    x_mean = x_mean + (x - x_mean) / m_n;
+    sum = alpha * sum + (1.0 - alpha) * (x - x_mean);
+    m_n++;
+    this.estimation = x_mean;
+    this.isChangeDetected = false;
+    this.isWarningZone = false;
+    this.delay = 0;
+
+    if (m_n < this.minNumInstancesOption.getValue()) {
+      return;
     }
 
-    @Override
-    public void input(double x) {
-        // It monitors the error rate
-        if (this.isChangeDetected) {
-            resetLearning();
-        }
-
-        x_mean = x_mean + (x - x_mean) / m_n;
-        sum = alpha * sum + (1.0- alpha) * (x - x_mean);
-        m_n++;
-        this.estimation = x_mean;
-        this.isChangeDetected = false;
-        this.isWarningZone = false;
-        this.delay = 0;
-
-        if (m_n < this.minNumInstancesOption.getValue()) {
-            return;
-        }
-
-        if (sum > this.lambda) {
-            this.isChangeDetected = true;
-        } 
+    if (sum > this.lambda) {
+      this.isChangeDetected = true;
     }
+  }
 
-    @Override
-    public void getDescription(StringBuilder sb, int indent) {
-        // TODO Auto-generated method stub
-    }
+  @Override
+  public void getDescription(StringBuilder sb, int indent) {
+    // TODO Auto-generated method stub
+  }
 
-    @Override
-    protected void prepareForUseImpl(TaskMonitor monitor,
-            ObjectRepository repository) {
-        // TODO Auto-generated method stub
-    }
+  @Override
+  protected void prepareForUseImpl(TaskMonitor monitor,
+      ObjectRepository repository) {
+    // TODO Auto-generated method stub
+  }
 }

@@ -26,21 +26,21 @@ import com.yahoo.labs.samoa.tasks.Task;
  * Submitter interface for programatically deploying platform specific topologies.
  * 
  * @author severien
- *
+ * 
  */
 public interface ISubmitter {
 
-	/**
-	 * Deploy a specific task to a platform.
-	 * 
-	 * @param task
-	 */
-	public void deployTask(Task task);
-	
-	/**
-	 * Sets if the task should run locally or distributed.
-	 * 
-	 * @param bool
-	 */
-	public void setLocal(boolean bool);
+  /**
+   * Deploy a specific task to a platform.
+   * 
+   * @param task
+   */
+  public void deployTask(Task task);
+
+  /**
+   * Sets if the task should run locally or distributed.
+   * 
+   * @param bool
+   */
+  public void setLocal(boolean bool);
 }

@@ -34,100 +34,118 @@ import com.yahoo.labs.samoa.topology.Stream;
 
 /**
  * @author Anh Thu Vu
- *
+ * 
  */
 public class ThreadsEntranceProcessingItemTest {
 
-	@Tested private ThreadsEntranceProcessingItem entrancePi;
-	
-	@Mocked private EntranceProcessor entranceProcessor;
-	@Mocked private Stream outputStream, anotherStream;
-	@Mocked private ContentEvent event;
-	
-	@Mocked private Thread unused;
-	
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-		entrancePi = new ThreadsEntranceProcessingItem(entranceProcessor);
-	}
+  @Tested
+  private ThreadsEntranceProcessingItem entrancePi;
 
-	@Test
-	public void testContructor() {
-		assertSame("EntranceProcessor is not set correctly.",entranceProcessor,entrancePi.getProcessor());
-	}
-	
-	@Test
-	public void testSetOutputStream() {
-		entrancePi.setOutputStream(outputStream);
-		assertSame("OutoutStream is not set correctly.",outputStream,entrancePi.getOutputStream());
-	}
-	
-	@Test
-	public void testSetOutputStreamRepeate() {
-		entrancePi.setOutputStream(outputStream);
-		entrancePi.setOutputStream(outputStream);
-		assertSame("OutoutStream is not set correctly.",outputStream,entrancePi.getOutputStream());
-	}
-	
-	@Test(expected=IllegalStateException.class)
-	public void testSetOutputStreamError() {
-		entrancePi.setOutputStream(outputStream);
-		entrancePi.setOutputStream(anotherStream);
-	}
-	
-	@Test
-	public void testStartSendingEvents() {
-		entrancePi.setOutputStream(outputStream);
-		new StrictExpectations() {
-			{
-				for (int i=0; i<1; i++) {
-					entranceProcessor.isFinished(); result=false;
-					entranceProcessor.hasNext(); result=false;
-				}
-				
-				for (int i=0; i<5; i++) {
-					entranceProcessor.isFinished(); result=false;
-					entranceProcessor.hasNext(); result=true;
-					entranceProcessor.nextEvent(); result=event;
-					outputStream.put(event);
-				}
-				
-				for (int i=0; i<2; i++) {
-					entranceProcessor.isFinished(); result=false;
-					entranceProcessor.hasNext(); result=false;
-				}
-				
-				for (int i=0; i<5; i++) {
-					entranceProcessor.isFinished(); result=false;
-					entranceProcessor.hasNext(); result=true;
-					entranceProcessor.nextEvent(); result=event;
-					outputStream.put(event);
-				}
+  @Mocked
+  private EntranceProcessor entranceProcessor;
+  @Mocked
+  private Stream outputStream, anotherStream;
+  @Mocked
+  private ContentEvent event;
 
-				entranceProcessor.isFinished(); result=true; times=1;
-				entranceProcessor.hasNext(); times=0;
+  @Mocked
+  private Thread unused;
 
+  /**
+   * @throws java.lang.Exception
+   */
+  @Before
+  public void setUp() throws Exception {
+    entrancePi = new ThreadsEntranceProcessingItem(entranceProcessor);
+  }
 
-			}
-		};
-		entrancePi.startSendingEvents();
-		new Verifications() {
-			{
-				try {
-					Thread.sleep(anyInt); times=3;
-				} catch (InterruptedException e) {
-					
-				}
-			}
-		};
-	}
-	
-	@Test(expected=IllegalStateException.class)
-	public void testStartSendingEventsError() {
-		entrancePi.startSendingEvents();
-	}
+  @Test
+  public void testContructor() {
+    assertSame("EntranceProcessor is not set correctly.", entranceProcessor, entrancePi.getProcessor());
+  }
+
+  @Test
+  public void testSetOutputStream() {
+    entrancePi.setOutputStream(outputStream);
+    assertSame("OutoutStream is not set correctly.", outputStream, entrancePi.getOutputStream());
+  }
+
+  @Test
+  public void testSetOutputStreamRepeate() {
+    entrancePi.setOutputStream(outputStream);
+    entrancePi.setOutputStream(outputStream);
+    assertSame("OutoutStream is not set correctly.", outputStream, entrancePi.getOutputStream());
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testSetOutputStreamError() {
+    entrancePi.setOutputStream(outputStream);
+    entrancePi.setOutputStream(anotherStream);
+  }
+
+  @Test
+  public void testStartSendingEvents() {
+    entrancePi.setOutputStream(outputStream);
+    new StrictExpectations() {
+      {
+        for (int i = 0; i < 1; i++) {
+          entranceProcessor.isFinished();
+          result = false;
+          entranceProcessor.hasNext();
+          result = false;
+        }
+
+        for (int i = 0; i < 5; i++) {
+          entranceProcessor.isFinished();
+          result = false;
+          entranceProcessor.hasNext();
+          result = true;
+          entranceProcessor.nextEvent();
+          result = event;
+          outputStream.put(event);
+        }
+
+        for (int i = 0; i < 2; i++) {
+          entranceProcessor.isFinished();
+          result = false;
+          entranceProcessor.hasNext();
+          result = false;
+        }
+
+        for (int i = 0; i < 5; i++) {
+          entranceProcessor.isFinished();
+          result = false;
+          entranceProcessor.hasNext();
+          result = true;
+          entranceProcessor.nextEvent();
+          result = event;
+          outputStream.put(event);
+        }
+
+        entranceProcessor.isFinished();
+        result = true;
+        times = 1;
+        entranceProcessor.hasNext();
+        times = 0;
+
+      }
+    };
+    entrancePi.startSendingEvents();
+    new Verifications() {
+      {
+        try {
+          Thread.sleep(anyInt);
+          times = 3;
+        } catch (InterruptedException e) {
+
+        }
+      }
+    };
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testStartSendingEventsError() {
+    entrancePi.startSendingEvents();
+  }
 
 }

@@ -31,63 +31,64 @@ import org.junit.Test;
  * #L%
  */
 
-
-
 import com.yahoo.labs.samoa.core.EntranceProcessor;
 import com.yahoo.labs.samoa.topology.EntranceProcessingItem;
 
 /**
  * @author Anh Thu Vu
- *
+ * 
  */
 public class SimpleTopologyTest {
 
-	@Tested private SimpleTopology topology;
-	
-	@Mocked private SimpleEntranceProcessingItem entrancePi;
-	@Mocked private EntranceProcessor entranceProcessor;
-	
-	@Before
-	public void setUp() throws Exception {
-		topology = new SimpleTopology("TestTopology");
-	}
+  @Tested
+  private SimpleTopology topology;
 
-	@Test
-	public void testAddEntrancePi() {
-		topology.addEntranceProcessingItem(entrancePi);
-		
-		Set<EntranceProcessingItem> entrancePIs = topology.getEntranceProcessingItems();
-		assertNotNull("Set of entrance PIs is null.",entrancePIs);
-		assertEquals("Number of entrance PI in SimpleTopology must be 1",1,entrancePIs.size());
-		assertSame("Entrance PI was not set correctly.",entrancePi,entrancePIs.toArray()[0]);
-		// TODO: verify that entrance PI is in the set of ProcessingItems
-		// Need to access topology's set of PIs (getProcessingItems() method)
-	}
-	
-	@Test
-	public void testRun() {
-		topology.addEntranceProcessingItem(entrancePi);
-		
-		new NonStrictExpectations() {
-			{
-				entrancePi.getProcessor();
-				result=entranceProcessor;
-				
-			}
-		};
-		
-		new Expectations() {
-			{
-				entranceProcessor.onCreate(anyInt);	
-				entrancePi.startSendingEvents();
-			}
-		};
-		topology.run();
-	}
-	
-	@Test(expected=IllegalStateException.class)
-	public void testRunWithoutEntrancePI() {
-		topology.run();
-	}
+  @Mocked
+  private SimpleEntranceProcessingItem entrancePi;
+  @Mocked
+  private EntranceProcessor entranceProcessor;
+
+  @Before
+  public void setUp() throws Exception {
+    topology = new SimpleTopology("TestTopology");
+  }
+
+  @Test
+  public void testAddEntrancePi() {
+    topology.addEntranceProcessingItem(entrancePi);
+
+    Set<EntranceProcessingItem> entrancePIs = topology.getEntranceProcessingItems();
+    assertNotNull("Set of entrance PIs is null.", entrancePIs);
+    assertEquals("Number of entrance PI in SimpleTopology must be 1", 1, entrancePIs.size());
+    assertSame("Entrance PI was not set correctly.", entrancePi, entrancePIs.toArray()[0]);
+    // TODO: verify that entrance PI is in the set of ProcessingItems
+    // Need to access topology's set of PIs (getProcessingItems() method)
+  }
+
+  @Test
+  public void testRun() {
+    topology.addEntranceProcessingItem(entrancePi);
+
+    new NonStrictExpectations() {
+      {
+        entrancePi.getProcessor();
+        result = entranceProcessor;
+
+      }
+    };
+
+    new Expectations() {
+      {
+        entranceProcessor.onCreate(anyInt);
+        entrancePi.startSendingEvents();
+      }
+    };
+    topology.run();
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testRunWithoutEntrancePI() {
+    topology.run();
+  }
 
 }

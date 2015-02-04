@@ -23,59 +23,59 @@ package com.yahoo.labs.samoa.moa.classifiers.rules.core.voting;
 import com.yahoo.labs.samoa.moa.MOAObject;
 
 /**
- * ErrorWeightedVote interface for weighted votes based on estimates of errors. 
- *
+ * ErrorWeightedVote interface for weighted votes based on estimates of errors.
+ * 
  * @author Joao Duarte (jmduarte@inescporto.pt)
  * @version $Revision: 1 $
  */
 public interface ErrorWeightedVote {
-        
-        /**
-         * Adds a vote and the corresponding error for the computation of the weighted vote and respective weighted error.
-         * 
-         * @param  vote a vote returned by a classifier
-         * @param  error the error associated to the vote
-         */
-        public void addVote(double [] vote, double error);
-        
-        /**
-         * Computes the weighted vote.
-         * Also updates the weights of the votes.
-         * 
-         * @return      the weighted vote
-         */
-        public double [] computeWeightedVote();
-        
-        /**
-         * Returns the weighted error.
-         * 
-         * @pre computeWeightedVote()
-         * @return      the weighted error
-         */
-        public double getWeightedError();
-        
-        /**
-         * Return the weights error.
-         * 
-         * @pre computeWeightedVote()
-         * @return      the weights
-         */
-        public double []  getWeights();
-        
-        
-        /**
-         * The number of votes added so far.
-         * 
-         * @return      the number of votes
-         */
-        public int getNumberVotes();
-        
-        /**
-         * Creates a copy of the object
-         * 
-         * @return      copy of the object
-         */
-        public MOAObject copy();
-        
-        public ErrorWeightedVote getACopy();
+
+  /**
+   * Adds a vote and the corresponding error for the computation of the weighted vote and respective weighted error.
+   * 
+   * @param vote
+   *          a vote returned by a classifier
+   * @param error
+   *          the error associated to the vote
+   */
+  public void addVote(double[] vote, double error);
+
+  /**
+   * Computes the weighted vote. Also updates the weights of the votes.
+   * 
+   * @return the weighted vote
+   */
+  public double[] computeWeightedVote();
+
+  /**
+   * Returns the weighted error.
+   * 
+   * @pre computeWeightedVote()
+   * @return the weighted error
+   */
+  public double getWeightedError();
+
+  /**
+   * Return the weights error.
+   * 
+   * @pre computeWeightedVote()
+   * @return the weights
+   */
+  public double[] getWeights();
+
+  /**
+   * The number of votes added so far.
+   * 
+   * @return the number of votes
+   */
+  public int getNumberVotes();
+
+  /**
+   * Creates a copy of the object
+   * 
+   * @return copy of the object
+   */
+  public MOAObject copy();
+
+  public ErrorWeightedVote getACopy();
 }

@@ -34,54 +34,54 @@ import com.yahoo.labs.samoa.utils.PartitioningScheme;
 import com.yahoo.labs.samoa.utils.StreamDestination;
 
 /**
- *
+ * 
  * @author abifet
  */
 class SimpleProcessingItem extends AbstractProcessingItem {
-    private IProcessingItem[] arrayProcessingItem;
+  private IProcessingItem[] arrayProcessingItem;
 
-    SimpleProcessingItem(Processor processor) {
-        super(processor);
-    }
-    
-    SimpleProcessingItem(Processor processor, int parallelism) {
-    	super(processor);
-        this.setParallelism(parallelism);
-    }
-    
-    public IProcessingItem getProcessingItem(int i) {
-        return arrayProcessingItem[i];
-    }
-    
-    @Override
-    protected ProcessingItem addInputStream(Stream inputStream, PartitioningScheme scheme) {
-		StreamDestination destination = new StreamDestination(this, this.getParallelism(), scheme);
-		((SimpleStream)inputStream).addDestination(destination);
-		return this;
-	}
+  SimpleProcessingItem(Processor processor) {
+    super(processor);
+  }
 
-    public SimpleProcessingItem copy() {
-    	Processor processor = this.getProcessor();
-        return new SimpleProcessingItem(processor.newProcessor(processor));
-    }
+  SimpleProcessingItem(Processor processor, int parallelism) {
+    super(processor);
+    this.setParallelism(parallelism);
+  }
 
-    public void processEvent(ContentEvent event, int counter) {
-    	
-        int parallelism = this.getParallelism();
-        //System.out.println("Process event "+event+" (isLast="+event.isLastEvent()+") with counter="+counter+" while parallelism="+parallelism);
-        if (this.arrayProcessingItem == null && parallelism > 0) {
-            //Init processing elements, the first time they are needed
-            this.arrayProcessingItem = new IProcessingItem[parallelism];
-            for (int j = 0; j < parallelism; j++) {
-                arrayProcessingItem[j] = this.copy();
-                arrayProcessingItem[j].getProcessor().onCreate(j);
-            }
-        }
-        if (this.arrayProcessingItem != null) {
-        	IProcessingItem pi = this.getProcessingItem(counter);
-        	Processor p = pi.getProcessor();
-        	//System.out.println("PI="+pi+", p="+p);
-            this.getProcessingItem(counter).getProcessor().process(event);
-        }
+  public IProcessingItem getProcessingItem(int i) {
+    return arrayProcessingItem[i];
+  }
+
+  @Override
+  protected ProcessingItem addInputStream(Stream inputStream, PartitioningScheme scheme) {
+    StreamDestination destination = new StreamDestination(this, this.getParallelism(), scheme);
+    ((SimpleStream) inputStream).addDestination(destination);
+    return this;
+  }
+
+  public SimpleProcessingItem copy() {
+    Processor processor = this.getProcessor();
+    return new SimpleProcessingItem(processor.newProcessor(processor));
+  }
+
+  public void processEvent(ContentEvent event, int counter) {
+
+    int parallelism = this.getParallelism();
+    // System.out.println("Process event "+event+" (isLast="+event.isLastEvent()+") with counter="+counter+" while parallelism="+parallelism);
+    if (this.arrayProcessingItem == null && parallelism > 0) {
+      // Init processing elements, the first time they are needed
+      this.arrayProcessingItem = new IProcessingItem[parallelism];
+      for (int j = 0; j < parallelism; j++) {
+        arrayProcessingItem[j] = this.copy();
+        arrayProcessingItem[j].getProcessor().onCreate(j);
+      }
     }
+    if (this.arrayProcessingItem != null) {
+      IProcessingItem pi = this.getProcessingItem(counter);
+      Processor p = pi.getProcessor();
+      // System.out.println("PI="+pi+", p="+p);
+      this.getProcessingItem(counter).getProcessor().process(event);
+    }
+  }
 }

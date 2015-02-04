@@ -30,60 +30,61 @@ import com.yahoo.labs.samoa.instances.Instance;
 @Immutable
 final public class ClusteringContentEvent implements ContentEvent {
 
-    private static final long serialVersionUID = -7746983521296618922L;
-    private Instance instance;
-    private boolean isLast = false;
-    private String key;
-    private boolean isSample;
+  private static final long serialVersionUID = -7746983521296618922L;
+  private Instance instance;
+  private boolean isLast = false;
+  private String key;
+  private boolean isSample;
 
-    public ClusteringContentEvent() {
-        // Necessary for kryo serializer
-    }
+  public ClusteringContentEvent() {
+    // Necessary for kryo serializer
+  }
 
-    /**
-     * Instantiates a new clustering event.
-     * 
-     * @param index
-     *            the index
-     * @param instance
-     *            the instance
+  /**
+   * Instantiates a new clustering event.
+   * 
+   * @param index
+   *          the index
+   * @param instance
+   *          the instance
+   */
+  public ClusteringContentEvent(long index, Instance instance) {
+    /*
+     * if (instance != null) { this.instance = new
+     * SerializableInstance(instance); }
      */
-    public ClusteringContentEvent(long index, Instance instance) {
-        /*
-         * if (instance != null) { this.instance = new SerializableInstance(instance); }
-         */
-        this.instance = instance;
-        this.setKey(Long.toString(index));
-    }
+    this.instance = instance;
+    this.setKey(Long.toString(index));
+  }
 
-    @Override
-    public String getKey() {
-        return this.key;
-    }
+  @Override
+  public String getKey() {
+    return this.key;
+  }
 
-    @Override
-    public void setKey(String str) {
-        this.key = str;
-    }
+  @Override
+  public void setKey(String str) {
+    this.key = str;
+  }
 
-    @Override
-    public boolean isLastEvent() {
-        return this.isLast;
-    }
+  @Override
+  public boolean isLastEvent() {
+    return this.isLast;
+  }
 
-    public void setLast(boolean isLast) {
-        this.isLast = isLast;
-    }
+  public void setLast(boolean isLast) {
+    this.isLast = isLast;
+  }
 
-    public Instance getInstance() {
-        return this.instance;
-    }
+  public Instance getInstance() {
+    return this.instance;
+  }
 
-    public boolean isSample() {
-        return isSample;
-    }
+  public boolean isSample() {
+    return isSample;
+  }
 
-    public void setSample(boolean b) {
-        this.isSample = b;
-    }
+  public void setSample(boolean b) {
+    this.isSample = b;
+  }
 }

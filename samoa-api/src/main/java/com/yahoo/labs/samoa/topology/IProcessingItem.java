@@ -26,22 +26,22 @@ import com.yahoo.labs.samoa.core.Processor;
  * ProcessingItem interface specific for entrance processing items.
  * 
  * @author severien
- *
+ * 
  */
 public interface IProcessingItem {
-	
-	/**
-	 * Gets the processing item processor.
-	 * 
-	 * @return Processor
-	 */
-	public Processor getProcessor();
-	
-	/**
-	 * Sets processing item name.
-	 * 
-	 * @param name
-	 */
-	//public void setName(String name);
+
+  /**
+   * Gets the processing item processor.
+   * 
+   * @return Processor
+   */
+  public Processor getProcessor();
+
+  /**
+   * Sets processing item name.
+   * 
+   * @param name
+   */
+  // public void setName(String name);
 
 }

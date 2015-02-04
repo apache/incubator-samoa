@@ -40,72 +40,82 @@ import com.yahoo.labs.samoa.utils.StreamDestination;
 
 /**
  * @author Anh Thu Vu
- *
+ * 
  */
 @RunWith(Parameterized.class)
 public class SimpleStreamTest {
 
-	@Tested private SimpleStream stream;
-	
-	@Mocked private SimpleProcessingItem sourcePi, destPi;
-	@Mocked private ContentEvent event;
-	@Mocked private StreamDestination destination;
+  @Tested
+  private SimpleStream stream;
 
-	private final String eventKey = "eventkey";
-	private final int parallelism;
-	private final PartitioningScheme scheme;
-	
-	
-	@Parameters
-	public static Collection<Object[]> generateParameters() {
-		return Arrays.asList(new Object[][] {
-			 { 2, PartitioningScheme.SHUFFLE },
-			 { 3, PartitioningScheme.GROUP_BY_KEY },
-			 { 4, PartitioningScheme.BROADCAST }
-		});
-	}
-	
-	public SimpleStreamTest(int parallelism, PartitioningScheme scheme) {
-		this.parallelism = parallelism;
-		this.scheme = scheme;
-	}
-	
-	@Before
-	public void setUp() throws Exception {
-		stream = new SimpleStream(sourcePi);
-		stream.addDestination(destination);
-	}
+  @Mocked
+  private SimpleProcessingItem sourcePi, destPi;
+  @Mocked
+  private ContentEvent event;
+  @Mocked
+  private StreamDestination destination;
 
-	@Test
-	public void testPut() {
-		new NonStrictExpectations() {
-			{
-				event.getKey(); result=eventKey;
-				destination.getProcessingItem(); result=destPi;
-				destination.getPartitioningScheme(); result=scheme;
-				destination.getParallelism(); result=parallelism;
-				
-			}
-		};
-		switch(this.scheme) {
-		case SHUFFLE: case GROUP_BY_KEY:
-			new Expectations() {
-				{
-					// TODO: restrict the range of counter value
-					destPi.processEvent(event, anyInt); times=1;
-				}
-			};
-			break;
-		case BROADCAST:
-			new Expectations() {
-				{
-					// TODO: restrict the range of counter value
-					destPi.processEvent(event, anyInt); times=parallelism;
-				}
-			};
-			break;
-		}
-		stream.put(event);
-	}
+  private final String eventKey = "eventkey";
+  private final int parallelism;
+  private final PartitioningScheme scheme;
+
+  @Parameters
+  public static Collection<Object[]> generateParameters() {
+    return Arrays.asList(new Object[][] {
+        { 2, PartitioningScheme.SHUFFLE },
+        { 3, PartitioningScheme.GROUP_BY_KEY },
+        { 4, PartitioningScheme.BROADCAST }
+    });
+  }
+
+  public SimpleStreamTest(int parallelism, PartitioningScheme scheme) {
+    this.parallelism = parallelism;
+    this.scheme = scheme;
+  }
+
+  @Before
+  public void setUp() throws Exception {
+    stream = new SimpleStream(sourcePi);
+    stream.addDestination(destination);
+  }
+
+  @Test
+  public void testPut() {
+    new NonStrictExpectations() {
+      {
+        event.getKey();
+        result = eventKey;
+        destination.getProcessingItem();
+        result = destPi;
+        destination.getPartitioningScheme();
+        result = scheme;
+        destination.getParallelism();
+        result = parallelism;
+
+      }
+    };
+    switch (this.scheme) {
+    case SHUFFLE:
+    case GROUP_BY_KEY:
+      new Expectations() {
+        {
+          // TODO: restrict the range of counter value
+          destPi.processEvent(event, anyInt);
+          times = 1;
+        }
+      };
+      break;
+    case BROADCAST:
+      new Expectations() {
+        {
+          // TODO: restrict the range of counter value
+          destPi.processEvent(event, anyInt);
+          times = parallelism;
+        }
+      };
+      break;
+    }
+    stream.put(event);
+  }
 
 }

@@ -31,103 +31,103 @@ import java.util.Set;
  */
 public abstract class AbstractTopology implements Topology {
 
-	private String topoName;
-    private Set<Stream> streams;
-    private Set<IProcessingItem> processingItems;
-    private Set<EntranceProcessingItem> entranceProcessingItems;
+  private String topoName;
+  private Set<Stream> streams;
+  private Set<IProcessingItem> processingItems;
+  private Set<EntranceProcessingItem> entranceProcessingItems;
 
-    protected AbstractTopology(String name) {
-    	this.topoName = name;
-    	this.streams = new HashSet<>();
-        this.processingItems = new HashSet<>();
-        this.entranceProcessingItems = new HashSet<>();
-    }
-    
-    /**
-     * Gets the name of this topology
-     * 
-     * @return name of the topology
-     */
-    public String getTopologyName() {
-    	return this.topoName;
-    }
-    
-    /**
-     * Sets the name of this topology
-     * 
-     * @param topologyName
-     * 			name of the topology
-     */
-    public void setTopologyName(String topologyName) {
-    	this.topoName = topologyName;
-    }
-    
-    /**
-     * Adds an Entrance processing item to the topology.
-     * 
-     * @param epi
-     * 			Entrance processing item
-     */
-    public void addEntranceProcessingItem(EntranceProcessingItem epi) {
-    	this.entranceProcessingItems.add(epi);
-    	this.addProcessingItem(epi);
-    }
-    
-    /**
-     * Gets entrance processing items in the topology
-     * 
-     * @return the set of processing items
-     */
-    public Set<EntranceProcessingItem> getEntranceProcessingItems() {
-    	return this.entranceProcessingItems;
-    }
+  protected AbstractTopology(String name) {
+    this.topoName = name;
+    this.streams = new HashSet<>();
+    this.processingItems = new HashSet<>();
+    this.entranceProcessingItems = new HashSet<>();
+  }
 
-    /**
-     * Add processing item to topology.
-     * 
-     * @param procItem
-     *            Processing item.
-     */
-    public void addProcessingItem(IProcessingItem procItem) {
-        addProcessingItem(procItem, 1);
-    }
+  /**
+   * Gets the name of this topology
+   * 
+   * @return name of the topology
+   */
+  public String getTopologyName() {
+    return this.topoName;
+  }
 
-    /**
-     * Add processing item to topology.
-     * 
-     * @param procItem
-     *            Processing item.
-     * @param parallelismHint
-     *            Processing item parallelism level.
-     */
-    public void addProcessingItem(IProcessingItem procItem, int parallelismHint) {
-        this.processingItems.add(procItem);
-    }
-    
-    /**
-     * Gets processing items in the topology (including entrance processing items)
-     * 
-     * @return the set of processing items
-     */
-    public Set<IProcessingItem> getProcessingItems() {
-    	return this.processingItems;
-    }
+  /**
+   * Sets the name of this topology
+   * 
+   * @param topologyName
+   *          name of the topology
+   */
+  public void setTopologyName(String topologyName) {
+    this.topoName = topologyName;
+  }
 
-    /**
-     * Add stream to topology.
-     * 
-     * @param stream
-     */
-    public void addStream(Stream stream) {
-        this.streams.add(stream);
-    }
-    
-    /**
-     * Gets streams in the topology
-     * 
-     * @return the set of streams
-     */
-    public Set<Stream> getStreams() {
-    	return this.streams;
-    } 
+  /**
+   * Adds an Entrance processing item to the topology.
+   * 
+   * @param epi
+   *          Entrance processing item
+   */
+  public void addEntranceProcessingItem(EntranceProcessingItem epi) {
+    this.entranceProcessingItems.add(epi);
+    this.addProcessingItem(epi);
+  }
+
+  /**
+   * Gets entrance processing items in the topology
+   * 
+   * @return the set of processing items
+   */
+  public Set<EntranceProcessingItem> getEntranceProcessingItems() {
+    return this.entranceProcessingItems;
+  }
+
+  /**
+   * Add processing item to topology.
+   * 
+   * @param procItem
+   *          Processing item.
+   */
+  public void addProcessingItem(IProcessingItem procItem) {
+    addProcessingItem(procItem, 1);
+  }
+
+  /**
+   * Add processing item to topology.
+   * 
+   * @param procItem
+   *          Processing item.
+   * @param parallelismHint
+   *          Processing item parallelism level.
+   */
+  public void addProcessingItem(IProcessingItem procItem, int parallelismHint) {
+    this.processingItems.add(procItem);
+  }
+
+  /**
+   * Gets processing items in the topology (including entrance processing items)
+   * 
+   * @return the set of processing items
+   */
+  public Set<IProcessingItem> getProcessingItems() {
+    return this.processingItems;
+  }
+
+  /**
+   * Add stream to topology.
+   * 
+   * @param stream
+   */
+  public void addStream(Stream stream) {
+    this.streams.add(stream);
+  }
+
+  /**
+   * Gets streams in the topology
+   * 
+   * @return the set of streams
+   */
+  public Set<Stream> getStreams() {
+    return this.streams;
+  }
 }

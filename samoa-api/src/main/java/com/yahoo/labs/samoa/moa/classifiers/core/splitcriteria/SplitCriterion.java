@@ -23,34 +23,33 @@ package com.yahoo.labs.samoa.moa.classifiers.core.splitcriteria;
 import com.yahoo.labs.samoa.moa.options.OptionHandler;
 
 /**
- * Interface for computing splitting criteria.
- * with respect to distributions of class values.
- * The split criterion is used as a parameter on
- * decision trees and decision stumps.
- * The two split criteria most used are 
- * Information Gain and Gini. 
- *
+ * Interface for computing splitting criteria. with respect to distributions of class values. The split criterion is
+ * used as a parameter on decision trees and decision stumps. The two split criteria most used are Information Gain and
+ * Gini.
+ * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
- * @version $Revision: 7 $ 
+ * @version $Revision: 7 $
  */
 public interface SplitCriterion extends OptionHandler {
 
-    /**
-     * Computes the merit of splitting for a given
-     * ditribution before the split and after it.
-     *
-     * @param preSplitDist the class distribution before the split
-     * @param postSplitDists the class distribution after the split
-     * @return value of the merit of splitting
-     */
-    public double getMeritOfSplit(double[] preSplitDist,
-            double[][] postSplitDists);
+  /**
+   * Computes the merit of splitting for a given ditribution before the split and after it.
+   * 
+   * @param preSplitDist
+   *          the class distribution before the split
+   * @param postSplitDists
+   *          the class distribution after the split
+   * @return value of the merit of splitting
+   */
+  public double getMeritOfSplit(double[] preSplitDist,
+      double[][] postSplitDists);
 
-    /**
-     * Computes the range of splitting merit
-     *
-     * @param preSplitDist the class distribution before the split
-     * @return value of the range of splitting merit
-     */
-    public double getRangeOfMerit(double[] preSplitDist);
+  /**
+   * Computes the range of splitting merit
+   * 
+   * @param preSplitDist
+   *          the class distribution before the split
+   * @return value of the range of splitting merit
+   */
+  public double getRangeOfMerit(double[] preSplitDist);
 }

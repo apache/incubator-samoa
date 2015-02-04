@@ -34,45 +34,46 @@ import com.yahoo.labs.samoa.topology.impl.StormTopology;
 
 /**
  * The main class to execute a SAMOA task in LOCAL mode in Storm.
- *
+ * 
  * @author Arinto Murdopo
- *
+ * 
  */
 public class LocalStormDoTask {
 
-    private static final Logger logger = LoggerFactory.getLogger(LocalStormDoTask.class);
+  private static final Logger logger = LoggerFactory.getLogger(LocalStormDoTask.class);
 
-    /**
-     * The main method.
-     *
-     * @param args the arguments
-     */
-    public static void main(String[] args) {
+  /**
+   * The main method.
+   * 
+   * @param args
+   *          the arguments
+   */
+  public static void main(String[] args) {
 
-        List<String> tmpArgs = new ArrayList<String>(Arrays.asList(args));
+    List<String> tmpArgs = new ArrayList<String>(Arrays.asList(args));
 
-        int numWorker = StormSamoaUtils.numWorkers(tmpArgs);
+    int numWorker = StormSamoaUtils.numWorkers(tmpArgs);
 
-        args = tmpArgs.toArray(new String[0]);
+    args = tmpArgs.toArray(new String[0]);
 
-        //convert the arguments into Storm topology
-        StormTopology stormTopo = StormSamoaUtils.argsToTopology(args);
-        String topologyName = stormTopo.getTopologyName();
+    // convert the arguments into Storm topology
+    StormTopology stormTopo = StormSamoaUtils.argsToTopology(args);
+    String topologyName = stormTopo.getTopologyName();
 
-        Config conf = new Config();
-        //conf.putAll(Utils.readStormConfig());
-        conf.setDebug(false);
+    Config conf = new Config();
+    // conf.putAll(Utils.readStormConfig());
+    conf.setDebug(false);
 
-        //local mode
-        conf.setMaxTaskParallelism(numWorker);
+    // local mode
+    conf.setMaxTaskParallelism(numWorker);
 
-        backtype.storm.LocalCluster cluster = new backtype.storm.LocalCluster();
-        cluster.submitTopology(topologyName, conf, stormTopo.getStormBuilder().createTopology());
+    backtype.storm.LocalCluster cluster = new backtype.storm.LocalCluster();
+    cluster.submitTopology(topologyName, conf, stormTopo.getStormBuilder().createTopology());
 
-        backtype.storm.utils.Utils.sleep(600 * 1000);
+    backtype.storm.utils.Utils.sleep(600 * 1000);
 
-        cluster.killTopology(topologyName);
-        cluster.shutdown();
+    cluster.killTopology(topologyName);
+    cluster.shutdown();
 
-    }
+  }
 }

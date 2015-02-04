@@ -59,162 +59,164 @@ import com.yahoo.labs.samoa.moa.core.StringUtils;
 
 public class TargetMean extends AbstractClassifier implements Regressor {
 
-	/**
+  /**
 	 * 
 	 */
-	protected long n;
-	protected double sum;
-	protected double errorSum;
-	protected double nError;
-	private double fadingErrorFactor;
+  protected long n;
+  protected double sum;
+  protected double errorSum;
+  protected double nError;
+  private double fadingErrorFactor;
 
-	private static final long serialVersionUID = 7152547322803559115L;
+  private static final long serialVersionUID = 7152547322803559115L;
 
-	public FloatOption fadingErrorFactorOption = new FloatOption(
-			"fadingErrorFactor", 'e', 
-			"Fading error factor for the TargetMean accumulated error", 0.99, 0, 1);
+  public FloatOption fadingErrorFactorOption = new FloatOption(
+      "fadingErrorFactor", 'e',
+      "Fading error factor for the TargetMean accumulated error", 0.99, 0, 1);
 
-	@Override
-	public boolean isRandomizable() {
-		return false;
-	}
+  @Override
+  public boolean isRandomizable() {
+    return false;
+  }
 
-	@Override
-	public double[] getVotesForInstance(Instance inst) {
-		return getVotesForInstance();
-	}
-	
-	public double[] getVotesForInstance() {
-		double[] currentMean=new double[1];
-		if (n>0)
-			currentMean[0]=sum/n;
-		else
-			currentMean[0]=0;
-		return currentMean;
-	}
+  @Override
+  public double[] getVotesForInstance(Instance inst) {
+    return getVotesForInstance();
+  }
 
-	@Override
-	public void resetLearningImpl() {
-		sum=0;
-		n=0;
-		errorSum=Double.MAX_VALUE;
-		nError=0;
-	}
+  public double[] getVotesForInstance() {
+    double[] currentMean = new double[1];
+    if (n > 0)
+      currentMean[0] = sum / n;
+    else
+      currentMean[0] = 0;
+    return currentMean;
+  }
 
-	@Override
-	public void trainOnInstanceImpl(Instance inst) {
-		updateAccumulatedError(inst);
-		++this.n;
-		this.sum+=inst.classValue();
-	}
-	protected void updateAccumulatedError(Instance inst){
-		double mean=0;
-		nError=1+fadingErrorFactor*nError;
-		if(n>0)
-			mean=sum/n;
-		errorSum=Math.abs(inst.classValue()-mean)+fadingErrorFactor*errorSum;
-	}
+  @Override
+  public void resetLearningImpl() {
+    sum = 0;
+    n = 0;
+    errorSum = Double.MAX_VALUE;
+    nError = 0;
+  }
 
-	@Override
-	protected Measurement[] getModelMeasurementsImpl() {
-		return null;
-	}
+  @Override
+  public void trainOnInstanceImpl(Instance inst) {
+    updateAccumulatedError(inst);
+    ++this.n;
+    this.sum += inst.classValue();
+  }
 
-	@Override
-	public void getModelDescription(StringBuilder out, int indent) {
-		StringUtils.appendIndented(out, indent, "Current Mean: " + this.sum/this.n);
-		StringUtils.appendNewline(out); 
+  protected void updateAccumulatedError(Instance inst) {
+    double mean = 0;
+    nError = 1 + fadingErrorFactor * nError;
+    if (n > 0)
+      mean = sum / n;
+    errorSum = Math.abs(inst.classValue() - mean) + fadingErrorFactor * errorSum;
+  }
 
-	}
-	/* JD
-	 * Resets the learner but initializes with a starting point 
-	 * */
-	 public void reset(double currentMean, long numberOfInstances) {
-		this.sum=currentMean*numberOfInstances;
-		this.n=numberOfInstances;
-		this.resetError();
-	}
+  @Override
+  protected Measurement[] getModelMeasurementsImpl() {
+    return null;
+  }
 
-	/* JD
-	 * Resets the learner but initializes with a starting point 
-	 * */
-	 public double getCurrentError(){
-		if(this.nError>0)
-			return this.errorSum/this.nError;
-		else
-			return Double.MAX_VALUE;
-	 }
+  @Override
+  public void getModelDescription(StringBuilder out, int indent) {
+    StringUtils.appendIndented(out, indent, "Current Mean: " + this.sum / this.n);
+    StringUtils.appendNewline(out);
 
-	 public TargetMean(TargetMean t) {
-		 super();
-		 this.n = t.n;
-		 this.sum = t.sum;
-		 this.errorSum = t.errorSum;
-		 this.nError = t.nError;
-		 this.fadingErrorFactor = t.fadingErrorFactor;
-		 this.fadingErrorFactorOption = t.fadingErrorFactorOption;
-	 }
-	 
-	 public TargetMean(TargetMeanData td) {
-		 this();
-		 this.n = td.n;
-		 this.sum = td.sum;
-		 this.errorSum = td.errorSum;
-		 this.nError = td.nError;
-		 this.fadingErrorFactor = td.fadingErrorFactor;
-		 this.fadingErrorFactorOption.setValue(td.fadingErrorFactorOptionValue);
-	 }
+  }
 
-	 public TargetMean() {
-		 super();
-		 fadingErrorFactor=fadingErrorFactorOption.getValue();
-	 }
+  /*
+   * JD Resets the learner but initializes with a starting point
+   */
+  public void reset(double currentMean, long numberOfInstances) {
+    this.sum = currentMean * numberOfInstances;
+    this.n = numberOfInstances;
+    this.resetError();
+  }
 
-	 public void resetError() {
-		 this.errorSum=0;
-		 this.nError=0;
-	 }
-	 
-	 public static class TargetMeanData {
-		 private long n;
-		 private double sum;
-		 private double errorSum;
-		 private double nError;
-		 private double fadingErrorFactor;
-		 private double fadingErrorFactorOptionValue;
-		 
-		 public TargetMeanData() {
-			 
-		 }
-		 
-		 public TargetMeanData(TargetMean tm) {
-			 this.n = tm.n;
-			 this.sum = tm.sum;
-			 this.errorSum = tm.errorSum;
-			 this.nError = tm.nError;
-			 this.fadingErrorFactor = tm.fadingErrorFactor;
-			 if (tm.fadingErrorFactorOption != null)
-				 this.fadingErrorFactorOptionValue = tm.fadingErrorFactorOption.getValue();
-			 else
-				 this.fadingErrorFactorOptionValue = 0.99;
-		 }
-		 
-		 public TargetMean build() {
-			 return new TargetMean(this);
-		 }
-	 }
-	 
-	 public static final class TargetMeanSerializer extends Serializer<TargetMean>{
+  /*
+   * JD Resets the learner but initializes with a starting point
+   */
+  public double getCurrentError() {
+    if (this.nError > 0)
+      return this.errorSum / this.nError;
+    else
+      return Double.MAX_VALUE;
+  }
 
-			@Override
-			public void write(Kryo kryo, Output output, TargetMean t) {
-				kryo.writeObjectOrNull(output, new TargetMeanData(t), TargetMeanData.class);
-			}
+  public TargetMean(TargetMean t) {
+    super();
+    this.n = t.n;
+    this.sum = t.sum;
+    this.errorSum = t.errorSum;
+    this.nError = t.nError;
+    this.fadingErrorFactor = t.fadingErrorFactor;
+    this.fadingErrorFactorOption = t.fadingErrorFactorOption;
+  }
 
-			@Override
-			public TargetMean read(Kryo kryo, Input input, Class<TargetMean> type) {
-				TargetMeanData data = kryo.readObjectOrNull(input, TargetMeanData.class);
-				return data.build();
-			}
-		}
+  public TargetMean(TargetMeanData td) {
+    this();
+    this.n = td.n;
+    this.sum = td.sum;
+    this.errorSum = td.errorSum;
+    this.nError = td.nError;
+    this.fadingErrorFactor = td.fadingErrorFactor;
+    this.fadingErrorFactorOption.setValue(td.fadingErrorFactorOptionValue);
+  }
+
+  public TargetMean() {
+    super();
+    fadingErrorFactor = fadingErrorFactorOption.getValue();
+  }
+
+  public void resetError() {
+    this.errorSum = 0;
+    this.nError = 0;
+  }
+
+  public static class TargetMeanData {
+    private long n;
+    private double sum;
+    private double errorSum;
+    private double nError;
+    private double fadingErrorFactor;
+    private double fadingErrorFactorOptionValue;
+
+    public TargetMeanData() {
+
+    }
+
+    public TargetMeanData(TargetMean tm) {
+      this.n = tm.n;
+      this.sum = tm.sum;
+      this.errorSum = tm.errorSum;
+      this.nError = tm.nError;
+      this.fadingErrorFactor = tm.fadingErrorFactor;
+      if (tm.fadingErrorFactorOption != null)
+        this.fadingErrorFactorOptionValue = tm.fadingErrorFactorOption.getValue();
+      else
+        this.fadingErrorFactorOptionValue = 0.99;
+    }
+
+    public TargetMean build() {
+      return new TargetMean(this);
+    }
+  }
+
+  public static final class TargetMeanSerializer extends Serializer<TargetMean> {
+
+    @Override
+    public void write(Kryo kryo, Output output, TargetMean t) {
+      kryo.writeObjectOrNull(output, new TargetMeanData(t), TargetMeanData.class);
+    }
+
+    @Override
+    public TargetMean read(Kryo kryo, Input input, Class<TargetMean> type) {
+      TargetMeanData data = kryo.readObjectOrNull(input, TargetMeanData.class);
+      return data.build();
+    }
+  }
 }

@@ -24,48 +24,49 @@ import com.yahoo.labs.samoa.core.ContentEvent;
 
 /**
  * Abstract class to represent ContentEvent to control Local Statistic Processor.
+ * 
  * @author Arinto Murdopo
- *
+ * 
  */
 abstract class ControlContentEvent implements ContentEvent {
 
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = 5837375639629708363L;
+  private static final long serialVersionUID = 5837375639629708363L;
 
-	protected final long learningNodeId;
-	
-	public ControlContentEvent(){
-		this.learningNodeId = -1;
-	}
-	
-	ControlContentEvent(long id){
-		this.learningNodeId = id;
-	}
-	
-	@Override
-	public final String getKey() {
-		return null;
-	}
-	
-	@Override
-	public void setKey(String str){
-		//Do nothing
-	}
-	
-	@Override
-	public boolean isLastEvent(){
-		return false;
-	}
-	
-	final long getLearningNodeId(){
-		return this.learningNodeId;
-	}
-	
-	abstract LocStatControl getType();
-	
-	static enum LocStatControl {
-		COMPUTE, DELETE
-	}
+  protected final long learningNodeId;
+
+  public ControlContentEvent() {
+    this.learningNodeId = -1;
+  }
+
+  ControlContentEvent(long id) {
+    this.learningNodeId = id;
+  }
+
+  @Override
+  public final String getKey() {
+    return null;
+  }
+
+  @Override
+  public void setKey(String str) {
+    // Do nothing
+  }
+
+  @Override
+  public boolean isLastEvent() {
+    return false;
+  }
+
+  final long getLearningNodeId() {
+    return this.learningNodeId;
+  }
+
+  abstract LocStatControl getType();
+
+  static enum LocStatControl {
+    COMPUTE, DELETE
+  }
 }

@@ -31,45 +31,45 @@ import com.yahoo.labs.samoa.core.Processor;
  */
 public class HelloWorldSourceProcessor implements EntranceProcessor {
 
-    private static final long serialVersionUID = 6212296305865604747L;
-    private Random rnd;
-    private final long maxInst;
-    private long count;
+  private static final long serialVersionUID = 6212296305865604747L;
+  private Random rnd;
+  private final long maxInst;
+  private long count;
 
-    public HelloWorldSourceProcessor(long maxInst) {
-        this.maxInst = maxInst;
-    }
+  public HelloWorldSourceProcessor(long maxInst) {
+    this.maxInst = maxInst;
+  }
 
-    @Override
-    public boolean process(ContentEvent event) {
-        // do nothing, API will be refined further
-        return false;
-    }
+  @Override
+  public boolean process(ContentEvent event) {
+    // do nothing, API will be refined further
+    return false;
+  }
 
-    @Override
-    public void onCreate(int id) {
-        rnd = new Random(id);
-    }
+  @Override
+  public void onCreate(int id) {
+    rnd = new Random(id);
+  }
 
-    @Override
-    public Processor newProcessor(Processor p) {
-        HelloWorldSourceProcessor hwsp = (HelloWorldSourceProcessor) p;
-        return new HelloWorldSourceProcessor(hwsp.maxInst);
-    }
+  @Override
+  public Processor newProcessor(Processor p) {
+    HelloWorldSourceProcessor hwsp = (HelloWorldSourceProcessor) p;
+    return new HelloWorldSourceProcessor(hwsp.maxInst);
+  }
 
-    @Override
-    public boolean isFinished() {
-    	return count >= maxInst;
-    }
-    
-    @Override
-    public boolean hasNext() {
-        return count < maxInst;
-    }
+  @Override
+  public boolean isFinished() {
+    return count >= maxInst;
+  }
 
-    @Override
-    public ContentEvent nextEvent() {
-        count++;
-        return new HelloWorldContentEvent(rnd.nextInt(), false);
-    }
+  @Override
+  public boolean hasNext() {
+    return count < maxInst;
+  }
+
+  @Override
+  public ContentEvent nextEvent() {
+    count++;
+    return new HelloWorldContentEvent(rnd.nextInt(), false);
+  }
 }

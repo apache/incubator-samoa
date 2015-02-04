@@ -32,26 +32,24 @@ import org.apache.samza.util.SinglePartitionWithoutOffsetsSystemAdmin;
 import com.yahoo.labs.samoa.topology.impl.SamzaEntranceProcessingItem.SamoaSystemConsumer;
 
 /**
- * Implementation of Samza's SystemFactory
- * Samza will use this factory to get our custom consumer
- * which gets the events from SAMOA EntranceProcessor
- * and feed them to EntranceProcessingItem task
+ * Implementation of Samza's SystemFactory Samza will use this factory to get our custom consumer which gets the events
+ * from SAMOA EntranceProcessor and feed them to EntranceProcessingItem task
  * 
  * @author Anh Thu Vu
  */
 public class SamoaSystemFactory implements SystemFactory {
-	@Override
-	public SystemAdmin getAdmin(String systemName, Config config) {
-		return new SinglePartitionWithoutOffsetsSystemAdmin();
-	}
+  @Override
+  public SystemAdmin getAdmin(String systemName, Config config) {
+    return new SinglePartitionWithoutOffsetsSystemAdmin();
+  }
 
-	@Override
-	public SystemConsumer getConsumer(String systemName, Config config, MetricsRegistry registry) {
-		return new SamoaSystemConsumer(systemName, config);
-	}
+  @Override
+  public SystemConsumer getConsumer(String systemName, Config config, MetricsRegistry registry) {
+    return new SamoaSystemConsumer(systemName, config);
+  }
 
-	@Override
-	public SystemProducer getProducer(String systemName, Config config, MetricsRegistry registry) {
-		throw new SamzaException("This implementation is not supposed to produce anything.");
-	}
+  @Override
+  public SystemProducer getProducer(String systemName, Config config, MetricsRegistry registry) {
+    throw new SamzaException("This implementation is not supposed to produce anything.");
+  }
 }

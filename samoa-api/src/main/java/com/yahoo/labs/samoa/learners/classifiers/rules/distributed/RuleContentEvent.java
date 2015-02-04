@@ -24,59 +24,57 @@ import com.yahoo.labs.samoa.core.ContentEvent;
 import com.yahoo.labs.samoa.learners.classifiers.rules.common.ActiveRule;
 
 /**
- * New rule from Model Aggregator/Default Rule Learner to Learners
- * or removed rule from Learner to Model Aggregators.
+ * New rule from Model Aggregator/Default Rule Learner to Learners or removed rule from Learner to Model Aggregators.
  * 
  * @author Anh Thu Vu
- *
+ * 
  */
 public class RuleContentEvent implements ContentEvent {
 
-	
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = -9046390274402894461L;
-	
-	private final int ruleNumberID;
-	private final ActiveRule addingRule; // for removing rule, we only need the rule's ID
-	private final boolean isRemoving;
-	
-	public RuleContentEvent() {
-		this(0, null, false);
-	}
-	
-	public RuleContentEvent(int ruleID, ActiveRule rule, boolean isRemoving) {
-		this.ruleNumberID = ruleID;
-		this.isRemoving = isRemoving;
-		this.addingRule = rule;
-	}
+  private static final long serialVersionUID = -9046390274402894461L;
 
-	@Override
-	public String getKey() {
-		return Integer.toString(this.ruleNumberID);
-	}
+  private final int ruleNumberID;
+  private final ActiveRule addingRule; // for removing rule, we only need the rule's ID
+  private final boolean isRemoving;
 
-	@Override
-	public void setKey(String key) {
-		// do nothing
-	}
+  public RuleContentEvent() {
+    this(0, null, false);
+  }
 
-	@Override
-	public boolean isLastEvent() {
-		return false;
-	}
-	
-	public int getRuleNumberID() {
-		return this.ruleNumberID;
-	}
-	
-	public ActiveRule getRule() {
-		return this.addingRule;
-	}
-	
-	public boolean isRemoving() {
-		return this.isRemoving;
-	}
+  public RuleContentEvent(int ruleID, ActiveRule rule, boolean isRemoving) {
+    this.ruleNumberID = ruleID;
+    this.isRemoving = isRemoving;
+    this.addingRule = rule;
+  }
+
+  @Override
+  public String getKey() {
+    return Integer.toString(this.ruleNumberID);
+  }
+
+  @Override
+  public void setKey(String key) {
+    // do nothing
+  }
+
+  @Override
+  public boolean isLastEvent() {
+    return false;
+  }
+
+  public int getRuleNumberID() {
+    return this.ruleNumberID;
+  }
+
+  public ActiveRule getRule() {
+    return this.addingRule;
+  }
+
+  public boolean isRemoving() {
+    return this.isRemoving;
+  }
 
 }

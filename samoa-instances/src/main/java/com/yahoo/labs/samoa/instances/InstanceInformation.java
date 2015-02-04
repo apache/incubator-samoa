@@ -28,85 +28,81 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- *
+ * 
  * @author abifet
  */
-public class InstanceInformation implements Serializable{
-    
-    //Should we split Instances as a List of Instances, and InformationInstances
-    
+public class InstanceInformation implements Serializable {
+
+  // Should we split Instances as a List of Instances, and InformationInstances
+
   /** The dataset's name. */
-  protected String relationName;         
+  protected String relationName;
 
   /** The attribute information. */
   protected List<Attribute> attributes;
-  
+
   protected int classIndex;
-  
 
- 
-    public InstanceInformation(InstanceInformation chunk) {
-        this.relationName = chunk.relationName;
-        this.attributes = chunk.attributes;
-        this.classIndex = chunk.classIndex;
-    }
-    
-    public InstanceInformation(String st, List<Attribute> v) {
-        this.relationName = st;
-        this.attributes = v;
-    }
-    
-    public InstanceInformation() {
-        this.relationName = null;
-        this.attributes = null;
-    }
-    
-    
-    //Information Instances
-    
-    public void setRelationName(String string) {
-        this.relationName = string;
-    }
+  public InstanceInformation(InstanceInformation chunk) {
+    this.relationName = chunk.relationName;
+    this.attributes = chunk.attributes;
+    this.classIndex = chunk.classIndex;
+  }
 
-    public String getRelationName() {
-        return this.relationName;
-    }
-    
-    public int classIndex() {
-        return classIndex; 
-    }
+  public InstanceInformation(String st, List<Attribute> v) {
+    this.relationName = st;
+    this.attributes = v;
+  }
 
-    public void setClassIndex(int classIndex) {
-        this.classIndex = classIndex;
-    }
-  
-    public Attribute classAttribute() {
-        return this.attribute(this.classIndex());
-    }
+  public InstanceInformation() {
+    this.relationName = null;
+    this.attributes = null;
+  }
 
-    public int numAttributes() {
-        return this.attributes.size();
-    }
+  // Information Instances
 
-    public Attribute attribute(int w) {
-        return this.attributes.get(w);
-    }
-    
-    public int numClasses() {
-        return this.attributes.get(this.classIndex()).numValues();
-    }
-    
-    public void deleteAttributeAt(Integer integer) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
+  public void setRelationName(String string) {
+    this.relationName = string;
+  }
 
-    public void insertAttributeAt(Attribute attribute, int i) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
+  public String getRelationName() {
+    return this.relationName;
+  }
 
-    public void setAttributes(List<Attribute> v) {
-        this.attributes = v;
-    }
-    
-    
+  public int classIndex() {
+    return classIndex;
+  }
+
+  public void setClassIndex(int classIndex) {
+    this.classIndex = classIndex;
+  }
+
+  public Attribute classAttribute() {
+    return this.attribute(this.classIndex());
+  }
+
+  public int numAttributes() {
+    return this.attributes.size();
+  }
+
+  public Attribute attribute(int w) {
+    return this.attributes.get(w);
+  }
+
+  public int numClasses() {
+    return this.attributes.get(this.classIndex()).numValues();
+  }
+
+  public void deleteAttributeAt(Integer integer) {
+    throw new UnsupportedOperationException("Not yet implemented");
+  }
+
+  public void insertAttributeAt(Attribute attribute, int i) {
+    throw new UnsupportedOperationException("Not yet implemented");
+  }
+
+  public void setAttributes(List<Attribute> v) {
+    this.attributes = v;
+  }
+
 }

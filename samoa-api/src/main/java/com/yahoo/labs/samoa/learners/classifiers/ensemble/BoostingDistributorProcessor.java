@@ -22,15 +22,14 @@ import com.yahoo.labs.samoa.learners.InstanceContentEvent;
  * #L%
  */
 
-
 /**
  * The Class BoostingDistributorProcessor.
  */
-public class BoostingDistributorProcessor extends BaggingDistributorProcessor{
-    
-        @Override
-    	protected void train(InstanceContentEvent inEvent) {
-            // Boosting is trained from the prediction combiner, not from the input
-        }
-    
+public class BoostingDistributorProcessor extends BaggingDistributorProcessor {
+
+  @Override
+  protected void train(InstanceContentEvent inEvent) {
+    // Boosting is trained from the prediction combiner, not from the input
+  }
+
 }

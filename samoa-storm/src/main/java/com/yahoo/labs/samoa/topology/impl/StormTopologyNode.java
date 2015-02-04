@@ -22,13 +22,16 @@ package com.yahoo.labs.samoa.topology.impl;
 
 /**
  * Interface to represent a node in samoa-storm topology.
+ * 
  * @author Arinto Murdopo
- *
+ * 
  */
 interface StormTopologyNode {
 
-	void addToTopology(StormTopology topology, int parallelismHint);
-	StormStream createStream();
-	String getId();
-	
+  void addToTopology(StormTopology topology, int parallelismHint);
+
+  StormStream createStream();
+
+  String getId();
+
 }

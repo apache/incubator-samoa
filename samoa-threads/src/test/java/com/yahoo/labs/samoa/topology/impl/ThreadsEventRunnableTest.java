@@ -31,37 +31,41 @@ import com.yahoo.labs.samoa.core.ContentEvent;
 
 /**
  * @author Anh Thu Vu
- *
+ * 
  */
 public class ThreadsEventRunnableTest {
 
-	@Tested private ThreadsEventRunnable task;
-	
-	@Mocked private ThreadsProcessingItemInstance piInstance;
-	@Mocked private ContentEvent event;
-	
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-		task = new ThreadsEventRunnable(piInstance, event);
-	}
+  @Tested
+  private ThreadsEventRunnable task;
 
-	@Test
-	public void testConstructor() {
-		assertSame("WorkerProcessingItem is not set correctly.",piInstance,task.getWorkerProcessingItem());
-		assertSame("ContentEvent is not set correctly.",event,task.getContentEvent());
-	}
-	
-	@Test
-	public void testRun() {
-		task.run();
-		new Verifications () {
-			{
-				piInstance.processEvent(event); times=1;
-			}
-		};
-	}
+  @Mocked
+  private ThreadsProcessingItemInstance piInstance;
+  @Mocked
+  private ContentEvent event;
+
+  /**
+   * @throws java.lang.Exception
+   */
+  @Before
+  public void setUp() throws Exception {
+    task = new ThreadsEventRunnable(piInstance, event);
+  }
+
+  @Test
+  public void testConstructor() {
+    assertSame("WorkerProcessingItem is not set correctly.", piInstance, task.getWorkerProcessingItem());
+    assertSame("ContentEvent is not set correctly.", event, task.getContentEvent());
+  }
+
+  @Test
+  public void testRun() {
+    task.run();
+    new Verifications() {
+      {
+        piInstance.processEvent(event);
+        times = 1;
+      }
+    };
+  }
 
 }

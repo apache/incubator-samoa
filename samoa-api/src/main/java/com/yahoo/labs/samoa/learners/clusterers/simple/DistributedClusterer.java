@@ -45,74 +45,75 @@ import com.yahoo.labs.samoa.topology.TopologyBuilder;
  */
 public final class DistributedClusterer implements Learner, Configurable {
 
-    private static final long serialVersionUID = 684111382631697031L;
+  private static final long serialVersionUID = 684111382631697031L;
 
-    private Stream resultStream;
+  private Stream resultStream;
 
-    private Instances dataset;
+  private Instances dataset;
 
-    public ClassOption learnerOption = new ClassOption("learner", 'l', "Clusterer to use.", LocalClustererAdapter.class,
-            ClustreamClustererAdapter.class.getName());
+  public ClassOption learnerOption = new ClassOption("learner", 'l', "Clusterer to use.", LocalClustererAdapter.class,
+      ClustreamClustererAdapter.class.getName());
 
-    public IntOption paralellismOption = new IntOption("paralellismOption", 'P', "The paralellism level for concurrent processes", 2, 1, Integer.MAX_VALUE);
+  public IntOption paralellismOption = new IntOption("paralellismOption", 'P',
+      "The paralellism level for concurrent processes", 2, 1, Integer.MAX_VALUE);
 
-    private TopologyBuilder builder;
+  private TopologyBuilder builder;
 
-//    private ClusteringDistributorProcessor distributorP;
-    private LocalClustererProcessor learnerP;
+  // private ClusteringDistributorProcessor distributorP;
+  private LocalClustererProcessor learnerP;
 
-//    private Stream distributorToLocalStream;
-    private Stream localToGlobalStream;
+  // private Stream distributorToLocalStream;
+  private Stream localToGlobalStream;
 
-//    private int parallelism;
+  // private int parallelism;
 
-    @Override
-    public void init(TopologyBuilder builder, Instances dataset, int parallelism) {
-        this.builder = builder;
-        this.dataset = dataset;
-//        this.parallelism = parallelism;
-        this.setLayout();
-    }
+  @Override
+  public void init(TopologyBuilder builder, Instances dataset, int parallelism) {
+    this.builder = builder;
+    this.dataset = dataset;
+    // this.parallelism = parallelism;
+    this.setLayout();
+  }
 
-    protected void setLayout() {
-        // Distributor
-//        distributorP = new ClusteringDistributorProcessor();
-//        this.builder.addProcessor(distributorP, parallelism);
-//        distributorToLocalStream = this.builder.createStream(distributorP);
-//        distributorP.setOutputStream(distributorToLocalStream);
-//        distributorToGlobalStream = this.builder.createStream(distributorP);
+  protected void setLayout() {
+    // Distributor
+    // distributorP = new ClusteringDistributorProcessor();
+    // this.builder.addProcessor(distributorP, parallelism);
+    // distributorToLocalStream = this.builder.createStream(distributorP);
+    // distributorP.setOutputStream(distributorToLocalStream);
+    // distributorToGlobalStream = this.builder.createStream(distributorP);
 
-        // Local Clustering
-        learnerP = new LocalClustererProcessor();
-        LocalClustererAdapter learner = (LocalClustererAdapter) this.learnerOption.getValue();
-        learner.setDataset(this.dataset);
-        learnerP.setLearner(learner);
-        builder.addProcessor(learnerP, this.paralellismOption.getValue());
-        localToGlobalStream = this.builder.createStream(learnerP);
-        learnerP.setOutputStream(localToGlobalStream);
+    // Local Clustering
+    learnerP = new LocalClustererProcessor();
+    LocalClustererAdapter learner = (LocalClustererAdapter) this.learnerOption.getValue();
+    learner.setDataset(this.dataset);
+    learnerP.setLearner(learner);
+    builder.addProcessor(learnerP, this.paralellismOption.getValue());
+    localToGlobalStream = this.builder.createStream(learnerP);
+    learnerP.setOutputStream(localToGlobalStream);
 
-        // Global Clustering
-        LocalClustererProcessor globalClusteringCombinerP = new LocalClustererProcessor();
-        LocalClustererAdapter globalLearner = (LocalClustererAdapter) this.learnerOption.getValue();
-        globalLearner.setDataset(this.dataset);
-        globalClusteringCombinerP.setLearner(learner);
-        builder.addProcessor(globalClusteringCombinerP, 1);
-        builder.connectInputAllStream(localToGlobalStream, globalClusteringCombinerP);
+    // Global Clustering
+    LocalClustererProcessor globalClusteringCombinerP = new LocalClustererProcessor();
+    LocalClustererAdapter globalLearner = (LocalClustererAdapter) this.learnerOption.getValue();
+    globalLearner.setDataset(this.dataset);
+    globalClusteringCombinerP.setLearner(learner);
+    builder.addProcessor(globalClusteringCombinerP, 1);
+    builder.connectInputAllStream(localToGlobalStream, globalClusteringCombinerP);
 
-        // Output Stream
-        resultStream = this.builder.createStream(globalClusteringCombinerP);
-        globalClusteringCombinerP.setOutputStream(resultStream);
-    }
+    // Output Stream
+    resultStream = this.builder.createStream(globalClusteringCombinerP);
+    globalClusteringCombinerP.setOutputStream(resultStream);
+  }
 
-    @Override
-    public Processor getInputProcessor() {
-//        return distributorP;
-        return learnerP;
-    }
+  @Override
+  public Processor getInputProcessor() {
+    // return distributorP;
+    return learnerP;
+  }
 
-    @Override
-    public Set<Stream> getResultStreams() {
-    	Set<Stream> streams = ImmutableSet.of(this.resultStream);
-		return streams;
-    }
+  @Override
+  public Set<Stream> getResultStreams() {
+    Set<Stream> streams = ImmutableSet.of(this.resultStream);
+    return streams;
+  }
 }

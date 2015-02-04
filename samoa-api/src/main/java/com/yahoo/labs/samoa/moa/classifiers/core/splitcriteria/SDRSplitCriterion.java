@@ -21,13 +21,13 @@ package com.yahoo.labs.samoa.moa.classifiers.core.splitcriteria;
  */
 
 public class SDRSplitCriterion extends VarianceReductionSplitCriterion {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public static double computeSD(double[] dist) {
-    	int N = (int)dist[0];
-        double sum = dist[1];
-        double sumSq = dist[2];
-        return Math.sqrt((sumSq - ((sum * sum)/N))/N);
-    }
+  public static double computeSD(double[] dist) {
+    int N = (int) dist[0];
+    double sum = dist[1];
+    double sumSq = dist[2];
+    return Math.sqrt((sumSq - ((sum * sum) / N)) / N);
+  }
 
 }

@@ -26,10 +26,10 @@ import com.google.inject.AbstractModule;
 
 public class SamoaSerializerModule extends AbstractModule {
 
-	@Override
-	protected void configure() {
-		bind(SerializerDeserializer.class).to(SamoaSerializer.class);
-		
-	}
+  @Override
+  protected void configure() {
+    bind(SerializerDeserializer.class).to(SamoaSerializer.class);
+
+  }
 
 }

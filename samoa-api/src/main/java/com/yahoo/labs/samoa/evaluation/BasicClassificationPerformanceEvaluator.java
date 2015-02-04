@@ -33,125 +33,125 @@ import com.yahoo.labs.samoa.instances.Utils;
  * @version $Revision: 7 $
  */
 public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject implements
-        ClassificationPerformanceEvaluator {
+    ClassificationPerformanceEvaluator {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    protected double weightObserved;
+  protected double weightObserved;
 
-    protected double weightCorrect;
+  protected double weightCorrect;
 
-    protected double[] columnKappa;
+  protected double[] columnKappa;
 
-    protected double[] rowKappa;
+  protected double[] rowKappa;
 
-    protected int numClasses;
+  protected int numClasses;
 
-    private double weightCorrectNoChangeClassifier;
+  private double weightCorrectNoChangeClassifier;
 
-    private int lastSeenClass;
+  private int lastSeenClass;
 
-    @Override
-    public void reset() {
-        reset(this.numClasses);
+  @Override
+  public void reset() {
+    reset(this.numClasses);
+  }
+
+  public void reset(int numClasses) {
+    this.numClasses = numClasses;
+    this.rowKappa = new double[numClasses];
+    this.columnKappa = new double[numClasses];
+    for (int i = 0; i < this.numClasses; i++) {
+      this.rowKappa[i] = 0.0;
+      this.columnKappa[i] = 0.0;
     }
+    this.weightObserved = 0.0;
+    this.weightCorrect = 0.0;
+    this.weightCorrectNoChangeClassifier = 0.0;
+    this.lastSeenClass = 0;
+  }
 
-    public void reset(int numClasses) {
-        this.numClasses = numClasses;
-        this.rowKappa = new double[numClasses];
-        this.columnKappa = new double[numClasses];
-        for (int i = 0; i < this.numClasses; i++) {
-            this.rowKappa[i] = 0.0;
-            this.columnKappa[i] = 0.0;
-        }
-        this.weightObserved = 0.0;
-        this.weightCorrect = 0.0;
-        this.weightCorrectNoChangeClassifier = 0.0;
-        this.lastSeenClass = 0;
+  @Override
+  public void addResult(Instance inst, double[] classVotes) {
+    double weight = inst.weight();
+    int trueClass = (int) inst.classValue();
+    if (weight > 0.0) {
+      if (this.weightObserved == 0) {
+        reset(inst.numClasses());
+      }
+      this.weightObserved += weight;
+      int predictedClass = Utils.maxIndex(classVotes);
+      if (predictedClass == trueClass) {
+        this.weightCorrect += weight;
+      }
+      if (rowKappa.length > 0) {
+        this.rowKappa[predictedClass] += weight;
+      }
+      if (columnKappa.length > 0) {
+        this.columnKappa[trueClass] += weight;
+      }
     }
-
-    @Override
-    public void addResult(Instance inst, double[] classVotes) {
-        double weight = inst.weight();
-        int trueClass = (int) inst.classValue();
-        if (weight > 0.0) {
-            if (this.weightObserved == 0) {
-                reset(inst.numClasses()); 
-            }
-            this.weightObserved += weight;
-            int predictedClass = Utils.maxIndex(classVotes);
-            if (predictedClass == trueClass) {
-                this.weightCorrect += weight;
-            }
-            if(rowKappa.length > 0){
-            	this.rowKappa[predictedClass] += weight;
-            }       
-            if (columnKappa.length > 0) {
-                this.columnKappa[trueClass] += weight;
-            }
-        }
-        if (this.lastSeenClass == trueClass) {
-            this.weightCorrectNoChangeClassifier += weight;
-        }
-        this.lastSeenClass = trueClass;
+    if (this.lastSeenClass == trueClass) {
+      this.weightCorrectNoChangeClassifier += weight;
     }
+    this.lastSeenClass = trueClass;
+  }
 
-    @Override
-    public Measurement[] getPerformanceMeasurements() {
-        return new Measurement[]{
-            new Measurement("classified instances",
+  @Override
+  public Measurement[] getPerformanceMeasurements() {
+    return new Measurement[] {
+        new Measurement("classified instances",
             getTotalWeightObserved()),
-            new Measurement("classifications correct (percent)",
+        new Measurement("classifications correct (percent)",
             getFractionCorrectlyClassified() * 100.0),
-            new Measurement("Kappa Statistic (percent)",
+        new Measurement("Kappa Statistic (percent)",
             getKappaStatistic() * 100.0),
-            new Measurement("Kappa Temporal Statistic (percent)",
+        new Measurement("Kappa Temporal Statistic (percent)",
             getKappaTemporalStatistic() * 100.0)
-        };
+    };
 
+  }
+
+  public double getTotalWeightObserved() {
+    return this.weightObserved;
+  }
+
+  public double getFractionCorrectlyClassified() {
+    return this.weightObserved > 0.0 ? this.weightCorrect
+        / this.weightObserved : 0.0;
+  }
+
+  public double getFractionIncorrectlyClassified() {
+    return 1.0 - getFractionCorrectlyClassified();
+  }
+
+  public double getKappaStatistic() {
+    if (this.weightObserved > 0.0) {
+      double p0 = getFractionCorrectlyClassified();
+      double pc = 0.0;
+      for (int i = 0; i < this.numClasses; i++) {
+        pc += (this.rowKappa[i] / this.weightObserved)
+            * (this.columnKappa[i] / this.weightObserved);
+      }
+      return (p0 - pc) / (1.0 - pc);
+    } else {
+      return 0;
     }
+  }
 
-    public double getTotalWeightObserved() {
-        return this.weightObserved;
+  public double getKappaTemporalStatistic() {
+    if (this.weightObserved > 0.0) {
+      double p0 = this.weightCorrect / this.weightObserved;
+      double pc = this.weightCorrectNoChangeClassifier / this.weightObserved;
+
+      return (p0 - pc) / (1.0 - pc);
+    } else {
+      return 0;
     }
+  }
 
-    public double getFractionCorrectlyClassified() {
-        return this.weightObserved > 0.0 ? this.weightCorrect
-                / this.weightObserved : 0.0;
-    }
-
-    public double getFractionIncorrectlyClassified() {
-        return 1.0 - getFractionCorrectlyClassified();
-    }
-
-    public double getKappaStatistic() {
-        if (this.weightObserved > 0.0) {
-            double p0 = getFractionCorrectlyClassified();
-            double pc = 0.0;
-            for (int i = 0; i < this.numClasses; i++) {
-                pc += (this.rowKappa[i] / this.weightObserved)
-                        * (this.columnKappa[i] / this.weightObserved);
-            }
-            return (p0 - pc) / (1.0 - pc);
-        } else {
-            return 0;
-        }
-    }
-
-    public double getKappaTemporalStatistic() {
-        if (this.weightObserved > 0.0) {
-            double p0 = this.weightCorrect / this.weightObserved;
-            double pc = this.weightCorrectNoChangeClassifier / this.weightObserved;
-
-            return (p0 - pc) / (1.0 - pc);
-        } else {
-            return 0;
-        }
-    }
-
-    @Override
-    public void getDescription(StringBuilder sb, int indent) {
-        Measurement.getMeasurementsDescription(getPerformanceMeasurements(),
-                sb, indent);
-    }
+  @Override
+  public void getDescription(StringBuilder sb, int indent) {
+    Measurement.getMeasurementsDescription(getPerformanceMeasurements(),
+        sb, indent);
+  }
 }

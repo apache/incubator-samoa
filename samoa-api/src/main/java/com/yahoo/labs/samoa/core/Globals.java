@@ -34,26 +34,26 @@ import com.github.javacliparser.StringUtils;
  */
 public class Globals {
 
-	public static final String workbenchTitle = "SAMOA: Scalable Advanced Massive Online Analysis Platform ";
+  public static final String workbenchTitle = "SAMOA: Scalable Advanced Massive Online Analysis Platform ";
 
-	public static final String versionString = "0.0.1";
+  public static final String versionString = "0.0.1";
 
-	public static final String copyrightNotice = "Copyright Yahoo! Inc 2013";
+  public static final String copyrightNotice = "Copyright Yahoo! Inc 2013";
 
-	public static final String webAddress = "http://github.com/yahoo/samoa";
+  public static final String webAddress = "http://github.com/yahoo/samoa";
 
-	public static String getWorkbenchInfoString() {
-		StringBuilder result = new StringBuilder();
-		result.append(workbenchTitle);
-		StringUtils.appendNewline(result);
-		result.append("Version: ");
-		result.append(versionString);
-		StringUtils.appendNewline(result);
-		result.append("Copyright: ");
-		result.append(copyrightNotice);
-		StringUtils.appendNewline(result);
-		result.append("Web: ");
-		result.append(webAddress);
-		return result.toString();
-	}
+  public static String getWorkbenchInfoString() {
+    StringBuilder result = new StringBuilder();
+    result.append(workbenchTitle);
+    StringUtils.appendNewline(result);
+    result.append("Version: ");
+    result.append(versionString);
+    StringUtils.appendNewline(result);
+    result.append("Copyright: ");
+    result.append(copyrightNotice);
+    StringUtils.appendNewline(result);
+    result.append("Web: ");
+    result.append(webAddress);
+    return result.toString();
+  }
 }

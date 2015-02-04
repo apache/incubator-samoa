@@ -32,33 +32,33 @@ import com.yahoo.labs.samoa.topology.AbstractTopology;
  * @author Anh Thu Vu
  */
 public class SamzaTopology extends AbstractTopology {
-	private int procItemCounter;
-	
-	public SamzaTopology(String topoName) {
-		super(topoName);
-		procItemCounter = 0;
-	}
-	
-	@Override
-	public void addProcessingItem(IProcessingItem procItem, int parallelism) {
-		super.addProcessingItem(procItem, parallelism);
-		SamzaProcessingNode samzaPi = (SamzaProcessingNode) procItem;
-		samzaPi.setName(this.getTopologyName()+"-"+Integer.toString(procItemCounter));
-		procItemCounter++;
-	}
-	
-	/*
-	 * Gets the set of ProcessingItems, excluding EntrancePIs
-	 * Used by SamzaConfigFactory as the config for EntrancePIs and
-	 * normal PIs are different
-	 */
-	public Set<IProcessingItem> getNonEntranceProcessingItems() throws Exception {
-		Set<IProcessingItem> copiedSet = new HashSet<IProcessingItem>();
-		copiedSet.addAll(this.getProcessingItems());
-		boolean result = copiedSet.removeAll(this.getEntranceProcessingItems());
-		if (!result) {
-			throw new Exception("Failed extracting the set of non-entrance processing items");
-		}
-		return copiedSet;
-	}
+  private int procItemCounter;
+
+  public SamzaTopology(String topoName) {
+    super(topoName);
+    procItemCounter = 0;
+  }
+
+  @Override
+  public void addProcessingItem(IProcessingItem procItem, int parallelism) {
+    super.addProcessingItem(procItem, parallelism);
+    SamzaProcessingNode samzaPi = (SamzaProcessingNode) procItem;
+    samzaPi.setName(this.getTopologyName() + "-" + Integer.toString(procItemCounter));
+    procItemCounter++;
+  }
+
+  /*
+   * Gets the set of ProcessingItems, excluding EntrancePIs Used by
+   * SamzaConfigFactory as the config for EntrancePIs and normal PIs are
+   * different
+   */
+  public Set<IProcessingItem> getNonEntranceProcessingItems() throws Exception {
+    Set<IProcessingItem> copiedSet = new HashSet<IProcessingItem>();
+    copiedSet.addAll(this.getProcessingItems());
+    boolean result = copiedSet.removeAll(this.getEntranceProcessingItems());
+    if (!result) {
+      throw new Exception("Failed extracting the set of non-entrance processing items");
+    }
+    return copiedSet;
+  }
 }

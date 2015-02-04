@@ -21,25 +21,27 @@ package com.yahoo.labs.samoa.learners.classifiers.trees;
  */
 
 /**
- * Delete Content Event is the content event that is sent by Model Aggregator Processor 
- * to delete unnecessary statistic in Local Statistic Processor.
+ * Delete Content Event is the content event that is sent by Model Aggregator Processor to delete unnecessary statistic
+ * in Local Statistic Processor.
+ * 
  * @author Arinto Murdopo
- *
+ * 
  */
 final class DeleteContentEvent extends ControlContentEvent {
 
-	private static final long serialVersionUID = -2105250722560863633L;
+  private static final long serialVersionUID = -2105250722560863633L;
 
-	public DeleteContentEvent(){
-		super(-1);
-	}
-	
-	DeleteContentEvent(long id) {
-		super(id);	}
+  public DeleteContentEvent() {
+    super(-1);
+  }
 
-	@Override
-	LocStatControl getType() {
-		return LocStatControl.DELETE;
-	}
+  DeleteContentEvent(long id) {
+    super(id);
+  }
+
+  @Override
+  LocStatControl getType() {
+    return LocStatControl.DELETE;
+  }
 
 }

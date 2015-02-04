@@ -24,10 +24,10 @@ import com.yahoo.labs.samoa.instances.Instance;
 
 /**
  * Interface for a predicate (a feature) in rules.
- *
+ * 
  */
 public interface Predicate {
-        
-         public boolean evaluate(Instance instance);
-         
+
+  public boolean evaluate(Instance instance);
+
 }

@@ -28,199 +28,201 @@ import com.yahoo.labs.samoa.moa.classifiers.rules.core.attributeclassobservers.F
 import com.yahoo.labs.samoa.moa.classifiers.rules.core.conditionaltests.NumericAttributeBinaryRulePredicate;
 
 /**
- * ActiveRule is a LearningRule that actively update its LearningNode
- * with incoming instances.
+ * ActiveRule is a LearningRule that actively update its LearningNode with incoming instances.
  * 
  * @author Anh Thu Vu
- *
+ * 
  */
 
 public class ActiveRule extends LearningRule {
-	
-	private static final long serialVersionUID = 1L;
 
-	private double[] statisticsOtherBranchSplit;
+  private static final long serialVersionUID = 1L;
 
-	private Builder builder;
-	
-	private RuleActiveRegressionNode learningNode;
-	
-	private RuleSplitNode lastUpdatedRuleSplitNode;
-	
-	/*
-	 * Constructor with Builder
-	 */
-	public ActiveRule() {
-		super();
-		this.builder = null;
-		this.learningNode = null;
-		this.ruleNumberID = 0;
-	}
-	public ActiveRule(Builder builder) {
-		super();
-		this.setBuilder(builder);
-		this.learningNode = newRuleActiveLearningNode(builder);
-		//JD - use builder ID to set ruleNumberID
-		this.ruleNumberID=builder.id;        
-	}
+  private double[] statisticsOtherBranchSplit;
 
-	private RuleActiveRegressionNode newRuleActiveLearningNode(Builder builder) {
-		return new RuleActiveRegressionNode(builder);
-	}
+  private Builder builder;
 
-	/*
-	 * Setters & getters
-	 */
-	public Builder getBuilder() {
-		return builder;
-	}
+  private RuleActiveRegressionNode learningNode;
 
-	public void setBuilder(Builder builder) {
-		this.builder = builder;
-	}
-	
-	@Override
-	public RuleRegressionNode getLearningNode() {
-		return this.learningNode;
-	}
+  private RuleSplitNode lastUpdatedRuleSplitNode;
 
-	@Override
-	public void setLearningNode(RuleRegressionNode learningNode) {
-		this.learningNode = (RuleActiveRegressionNode) learningNode;
-	}
-	
-	public double[] statisticsOtherBranchSplit() {
-		return this.statisticsOtherBranchSplit;
-	}
-	
-	public RuleSplitNode getLastUpdatedRuleSplitNode() {
-		return this.lastUpdatedRuleSplitNode;
-	}
+  /*
+   * Constructor with Builder
+   */
+  public ActiveRule() {
+    super();
+    this.builder = null;
+    this.learningNode = null;
+    this.ruleNumberID = 0;
+  }
 
-	/*
-	 * Builder
-	 */
-	public static class Builder implements Serializable {
+  public ActiveRule(Builder builder) {
+    super();
+    this.setBuilder(builder);
+    this.learningNode = newRuleActiveLearningNode(builder);
+    // JD - use builder ID to set ruleNumberID
+    this.ruleNumberID = builder.id;
+  }
 
-		private static final long serialVersionUID = 1712887264918475622L;
-		protected boolean changeDetection;
-		protected boolean usePerceptron;
-		protected double threshold;
-		protected double alpha;
-		protected int predictionFunction;
-		protected boolean constantLearningRatioDecay;
-		protected double learningRatio;
+  private RuleActiveRegressionNode newRuleActiveLearningNode(Builder builder) {
+    return new RuleActiveRegressionNode(builder);
+  }
 
-		protected double[] statistics;
+  /*
+   * Setters & getters
+   */
+  public Builder getBuilder() {
+    return builder;
+  }
 
-		protected FIMTDDNumericAttributeClassLimitObserver numericObserver;
-		
-		protected double lastTargetMean;
+  public void setBuilder(Builder builder) {
+    this.builder = builder;
+  }
 
-		public int id;
+  @Override
+  public RuleRegressionNode getLearningNode() {
+    return this.learningNode;
+  }
 
-		public Builder() {
-		}
+  @Override
+  public void setLearningNode(RuleRegressionNode learningNode) {
+    this.learningNode = (RuleActiveRegressionNode) learningNode;
+  }
 
-		public Builder changeDetection(boolean changeDetection) {
-			this.changeDetection = changeDetection;
-			return this;
-		}
+  public double[] statisticsOtherBranchSplit() {
+    return this.statisticsOtherBranchSplit;
+  }
 
-		public Builder threshold(double threshold) {
-			this.threshold = threshold;
-			return this;
-		}
+  public RuleSplitNode getLastUpdatedRuleSplitNode() {
+    return this.lastUpdatedRuleSplitNode;
+  }
 
-		public Builder alpha(double alpha) {
-			this.alpha = alpha;
-			return this;
-		}
+  /*
+   * Builder
+   */
+  public static class Builder implements Serializable {
 
-		public Builder predictionFunction(int predictionFunction) {
-			this.predictionFunction = predictionFunction;
-			return this;
-		}
+    private static final long serialVersionUID = 1712887264918475622L;
+    protected boolean changeDetection;
+    protected boolean usePerceptron;
+    protected double threshold;
+    protected double alpha;
+    protected int predictionFunction;
+    protected boolean constantLearningRatioDecay;
+    protected double learningRatio;
 
-		public Builder statistics(double[] statistics) {
-			this.statistics = statistics;
-			return this;
-		}
-		
-		public Builder constantLearningRatioDecay(boolean constantLearningRatioDecay) {
-			this.constantLearningRatioDecay = constantLearningRatioDecay;
-			return this;
-		}
-		
-		public Builder learningRatio(double learningRatio) {
-			this.learningRatio = learningRatio;
-			return this;
-		}
-		
-		public Builder numericObserver(FIMTDDNumericAttributeClassLimitObserver numericObserver) {
-			this.numericObserver = numericObserver;
-			return this;
-		}
+    protected double[] statistics;
 
-		public Builder id(int id) {
-			this.id = id;
-			return this;
-		}
-		public ActiveRule build() {
-			return new ActiveRule(this);
-		}
+    protected FIMTDDNumericAttributeClassLimitObserver numericObserver;
 
-	}
+    protected double lastTargetMean;
 
-	/**
-	 *  Try to Expand method.
-	 * @param splitConfidence
-	 * @param tieThreshold
-	 * @return
-	 */
-	public boolean tryToExpand(double splitConfidence, double tieThreshold) {
+    public int id;
 
-		boolean shouldSplit= this.learningNode.tryToExpand(splitConfidence, tieThreshold);
-		return shouldSplit;
+    public Builder() {
+    }
 
-	}
-	
-	//JD: Only call after tryToExpand returning true
-	public void split()
-	{
-		//this.statisticsOtherBranchSplit  = this.learningNode.getStatisticsOtherBranchSplit(); 
-		//create a split node,
-		int splitIndex = this.learningNode.getSplitIndex();
-		InstanceConditionalTest st=this.learningNode.getBestSuggestion().splitTest;
-		if(st instanceof NumericAttributeBinaryTest) {
-			NumericAttributeBinaryTest splitTest = (NumericAttributeBinaryTest) st;
-			NumericAttributeBinaryRulePredicate predicate = new NumericAttributeBinaryRulePredicate(
-					splitTest.getAttsTestDependsOn()[0], splitTest.getSplitValue(),
-					splitIndex + 1);
-			lastUpdatedRuleSplitNode = new RuleSplitNode(predicate, this.learningNode.getStatisticsBranchSplit() );
-			if (this.nodeListAdd(lastUpdatedRuleSplitNode)) {
-				// create a new learning node
-				RuleActiveRegressionNode newLearningNode = newRuleActiveLearningNode(this.getBuilder().statistics(this.learningNode.getStatisticsNewRuleActiveLearningNode())); 
-				newLearningNode.initialize(this.learningNode);
-				this.learningNode = newLearningNode;
-			}
-		}
-		else
-			throw new UnsupportedOperationException("AMRules (currently) only supports numerical attributes.");
-	}
+    public Builder changeDetection(boolean changeDetection) {
+      this.changeDetection = changeDetection;
+      return this;
+    }
 
-	
-	
-//	protected void debug(String string, int level) {
-//	if (this.amRules.VerbosityOption.getValue()>=level) {
-//		System.out.println(string);
-//	}
-//}
-	
-	/**
-	 * MOA GUI output
-	 */
-	@Override
-	public void getDescription(StringBuilder sb, int indent) {
-	}
+    public Builder threshold(double threshold) {
+      this.threshold = threshold;
+      return this;
+    }
+
+    public Builder alpha(double alpha) {
+      this.alpha = alpha;
+      return this;
+    }
+
+    public Builder predictionFunction(int predictionFunction) {
+      this.predictionFunction = predictionFunction;
+      return this;
+    }
+
+    public Builder statistics(double[] statistics) {
+      this.statistics = statistics;
+      return this;
+    }
+
+    public Builder constantLearningRatioDecay(boolean constantLearningRatioDecay) {
+      this.constantLearningRatioDecay = constantLearningRatioDecay;
+      return this;
+    }
+
+    public Builder learningRatio(double learningRatio) {
+      this.learningRatio = learningRatio;
+      return this;
+    }
+
+    public Builder numericObserver(FIMTDDNumericAttributeClassLimitObserver numericObserver) {
+      this.numericObserver = numericObserver;
+      return this;
+    }
+
+    public Builder id(int id) {
+      this.id = id;
+      return this;
+    }
+
+    public ActiveRule build() {
+      return new ActiveRule(this);
+    }
+
+  }
+
+  /**
+   * Try to Expand method.
+   * 
+   * @param splitConfidence
+   * @param tieThreshold
+   * @return
+   */
+  public boolean tryToExpand(double splitConfidence, double tieThreshold) {
+
+    boolean shouldSplit = this.learningNode.tryToExpand(splitConfidence, tieThreshold);
+    return shouldSplit;
+
+  }
+
+  // JD: Only call after tryToExpand returning true
+  public void split()
+  {
+    // this.statisticsOtherBranchSplit =
+    // this.learningNode.getStatisticsOtherBranchSplit();
+    // create a split node,
+    int splitIndex = this.learningNode.getSplitIndex();
+    InstanceConditionalTest st = this.learningNode.getBestSuggestion().splitTest;
+    if (st instanceof NumericAttributeBinaryTest) {
+      NumericAttributeBinaryTest splitTest = (NumericAttributeBinaryTest) st;
+      NumericAttributeBinaryRulePredicate predicate = new NumericAttributeBinaryRulePredicate(
+          splitTest.getAttsTestDependsOn()[0], splitTest.getSplitValue(),
+          splitIndex + 1);
+      lastUpdatedRuleSplitNode = new RuleSplitNode(predicate, this.learningNode.getStatisticsBranchSplit());
+      if (this.nodeListAdd(lastUpdatedRuleSplitNode)) {
+        // create a new learning node
+        RuleActiveRegressionNode newLearningNode = newRuleActiveLearningNode(this.getBuilder().statistics(
+            this.learningNode.getStatisticsNewRuleActiveLearningNode()));
+        newLearningNode.initialize(this.learningNode);
+        this.learningNode = newLearningNode;
+      }
+    }
+    else
+      throw new UnsupportedOperationException("AMRules (currently) only supports numerical attributes.");
+  }
+
+  // protected void debug(String string, int level) {
+  // if (this.amRules.VerbosityOption.getValue()>=level) {
+  // System.out.println(string);
+  // }
+  // }
+
+  /**
+   * MOA GUI output
+   */
+  @Override
+  public void getDescription(StringBuilder sb, int indent) {
+  }
 }

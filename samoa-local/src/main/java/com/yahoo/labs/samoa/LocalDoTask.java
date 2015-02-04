@@ -36,54 +36,55 @@ import com.yahoo.labs.samoa.topology.impl.SimpleEngine;
  */
 public class LocalDoTask {
 
-    // TODO: clean up this class for helping ML Developer in SAMOA
-    // TODO: clean up code from storm-impl
-	
-	// It seems that the 3 extra options are not used.
-	// Probably should remove them
-    private static final String SUPPRESS_STATUS_OUT_MSG = "Suppress the task status output. Normally it is sent to stderr.";
-    private static final String SUPPRESS_RESULT_OUT_MSG = "Suppress the task result output. Normally it is sent to stdout.";
-    private static final String STATUS_UPDATE_FREQ_MSG = "Wait time in milliseconds between status updates.";
-    private static final Logger logger = LoggerFactory.getLogger(LocalDoTask.class);
+  // TODO: clean up this class for helping ML Developer in SAMOA
+  // TODO: clean up code from storm-impl
 
-    /**
-     * The main method.
-     * 
-     * @param args
-     *            the arguments
-     */
-    public static void main(String[] args) {
+  // It seems that the 3 extra options are not used.
+  // Probably should remove them
+  private static final String SUPPRESS_STATUS_OUT_MSG = "Suppress the task status output. Normally it is sent to stderr.";
+  private static final String SUPPRESS_RESULT_OUT_MSG = "Suppress the task result output. Normally it is sent to stdout.";
+  private static final String STATUS_UPDATE_FREQ_MSG = "Wait time in milliseconds between status updates.";
+  private static final Logger logger = LoggerFactory.getLogger(LocalDoTask.class);
 
-        // ArrayList<String> tmpArgs = new ArrayList<String>(Arrays.asList(args));
+  /**
+   * The main method.
+   * 
+   * @param args
+   *          the arguments
+   */
+  public static void main(String[] args) {
 
-        // args = tmpArgs.toArray(new String[0]);
+    // ArrayList<String> tmpArgs = new ArrayList<String>(Arrays.asList(args));
 
-        FlagOption suppressStatusOutOpt = new FlagOption("suppressStatusOut", 'S', SUPPRESS_STATUS_OUT_MSG);
+    // args = tmpArgs.toArray(new String[0]);
 
-        FlagOption suppressResultOutOpt = new FlagOption("suppressResultOut", 'R', SUPPRESS_RESULT_OUT_MSG);
+    FlagOption suppressStatusOutOpt = new FlagOption("suppressStatusOut", 'S', SUPPRESS_STATUS_OUT_MSG);
 
-        IntOption statusUpdateFreqOpt = new IntOption("statusUpdateFrequency", 'F', STATUS_UPDATE_FREQ_MSG, 1000, 0, Integer.MAX_VALUE);
+    FlagOption suppressResultOutOpt = new FlagOption("suppressResultOut", 'R', SUPPRESS_RESULT_OUT_MSG);
 
-        Option[] extraOptions = new Option[] { suppressStatusOutOpt, suppressResultOutOpt, statusUpdateFreqOpt };
+    IntOption statusUpdateFreqOpt = new IntOption("statusUpdateFrequency", 'F', STATUS_UPDATE_FREQ_MSG, 1000, 0,
+        Integer.MAX_VALUE);
 
-        StringBuilder cliString = new StringBuilder();
-        for (String arg : args) {
-            cliString.append(" ").append(arg);
-        }
-        logger.debug("Command line string = {}", cliString.toString());
-        System.out.println("Command line string = " + cliString.toString());
+    Option[] extraOptions = new Option[] { suppressStatusOutOpt, suppressResultOutOpt, statusUpdateFreqOpt };
 
-        Task task;
-        try {
-            task = ClassOption.cliStringToObject(cliString.toString(), Task.class, extraOptions);
-            logger.info("Successfully instantiating {}", task.getClass().getCanonicalName());
-        } catch (Exception e) {
-            logger.error("Fail to initialize the task", e);
-            System.out.println("Fail to initialize the task" + e);
-            return;
-        }
-        task.setFactory(new SimpleComponentFactory());
-        task.init();
-        SimpleEngine.submitTopology(task.getTopology());
+    StringBuilder cliString = new StringBuilder();
+    for (String arg : args) {
+      cliString.append(" ").append(arg);
     }
+    logger.debug("Command line string = {}", cliString.toString());
+    System.out.println("Command line string = " + cliString.toString());
+
+    Task task;
+    try {
+      task = ClassOption.cliStringToObject(cliString.toString(), Task.class, extraOptions);
+      logger.info("Successfully instantiating {}", task.getClass().getCanonicalName());
+    } catch (Exception e) {
+      logger.error("Fail to initialize the task", e);
+      System.out.println("Fail to initialize the task" + e);
+      return;
+    }
+    task.setFactory(new SimpleComponentFactory());
+    task.init();
+    SimpleEngine.submitTopology(task.getTopology());
+  }
 }

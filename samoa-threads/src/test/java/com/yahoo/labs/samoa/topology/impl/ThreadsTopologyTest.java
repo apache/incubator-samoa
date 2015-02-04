@@ -35,50 +35,53 @@ import com.yahoo.labs.samoa.topology.EntranceProcessingItem;
 
 /**
  * @author Anh Thu Vu
- *
+ * 
  */
 public class ThreadsTopologyTest {
 
-	@Tested private ThreadsTopology topology;
-	
-	@Mocked private ThreadsEntranceProcessingItem entrancePi;
-	@Mocked private EntranceProcessor entranceProcessor;
-	
-	@Before
-	public void setUp() throws Exception {
-		topology = new ThreadsTopology("TestTopology");
-	}
+  @Tested
+  private ThreadsTopology topology;
 
-	@Test
-	public void testAddEntrancePi() {
-		topology.addEntranceProcessingItem(entrancePi);
-		Set<EntranceProcessingItem> entrancePIs = topology.getEntranceProcessingItems();
-		assertNotNull("Set of entrance PIs is null.",entrancePIs);
-		assertEquals("Number of entrance PI in ThreadsTopology must be 1",1,entrancePIs.size());
-		assertSame("Entrance PI was not set correctly.",entrancePi,entrancePIs.toArray()[0]);
-		// TODO: verify that entrance PI is in the set of ProcessingItems
-		// Need to access topology's set of PIs (getProcessingItems() method)
-	}
-	
-	@Test
-	public void testRun() {
-		topology.addEntranceProcessingItem(entrancePi);
-		
-		new Expectations() {
-			{
-				entrancePi.getProcessor();
-				result=entranceProcessor;
-				entranceProcessor.onCreate(anyInt);
-				
-				entrancePi.startSendingEvents();
-			}
-		};
-		topology.run();
-	}
-	
-	@Test(expected=IllegalStateException.class)
-	public void testRunWithoutEntrancePI() {
-		topology.run();
-	}
+  @Mocked
+  private ThreadsEntranceProcessingItem entrancePi;
+  @Mocked
+  private EntranceProcessor entranceProcessor;
+
+  @Before
+  public void setUp() throws Exception {
+    topology = new ThreadsTopology("TestTopology");
+  }
+
+  @Test
+  public void testAddEntrancePi() {
+    topology.addEntranceProcessingItem(entrancePi);
+    Set<EntranceProcessingItem> entrancePIs = topology.getEntranceProcessingItems();
+    assertNotNull("Set of entrance PIs is null.", entrancePIs);
+    assertEquals("Number of entrance PI in ThreadsTopology must be 1", 1, entrancePIs.size());
+    assertSame("Entrance PI was not set correctly.", entrancePi, entrancePIs.toArray()[0]);
+    // TODO: verify that entrance PI is in the set of ProcessingItems
+    // Need to access topology's set of PIs (getProcessingItems() method)
+  }
+
+  @Test
+  public void testRun() {
+    topology.addEntranceProcessingItem(entrancePi);
+
+    new Expectations() {
+      {
+        entrancePi.getProcessor();
+        result = entranceProcessor;
+        entranceProcessor.onCreate(anyInt);
+
+        entrancePi.startSendingEvents();
+      }
+    };
+    topology.run();
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testRunWithoutEntrancePI() {
+    topology.run();
+  }
 
 }

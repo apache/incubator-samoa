@@ -29,36 +29,36 @@ import com.yahoo.labs.samoa.instances.Instance;
 
 public interface Clusterer extends MOAObject, OptionHandler {
 
-	public void setModelContext(InstancesHeader ih);
+  public void setModelContext(InstancesHeader ih);
 
-	public InstancesHeader getModelContext();
+  public InstancesHeader getModelContext();
 
-	public boolean isRandomizable();
+  public boolean isRandomizable();
 
-	public void setRandomSeed(int s);
+  public void setRandomSeed(int s);
 
-	public boolean trainingHasStarted();
+  public boolean trainingHasStarted();
 
-	public double trainingWeightSeenByModel();
+  public double trainingWeightSeenByModel();
 
-	public void resetLearning();
+  public void resetLearning();
 
-	public void trainOnInstance(Instance inst);
+  public void trainOnInstance(Instance inst);
 
-	public double[] getVotesForInstance(Instance inst);
+  public double[] getVotesForInstance(Instance inst);
 
-	public Measurement[] getModelMeasurements();
+  public Measurement[] getModelMeasurements();
 
-	public Clusterer[] getSubClusterers();
+  public Clusterer[] getSubClusterers();
 
-	public Clusterer copy();
+  public Clusterer copy();
 
-    public Clustering getClusteringResult();
+  public Clustering getClusteringResult();
 
-    public boolean implementsMicroClusterer();
+  public boolean implementsMicroClusterer();
 
-    public Clustering getMicroClusteringResult();
-    
-    public boolean keepClassLabel();
+  public Clustering getMicroClusteringResult();
+
+  public boolean keepClassLabel();
 
 }

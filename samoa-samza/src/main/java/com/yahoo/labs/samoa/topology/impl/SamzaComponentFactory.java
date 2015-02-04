@@ -35,28 +35,28 @@ import com.yahoo.labs.samoa.topology.Topology;
  * @author Anh Thu Vu
  */
 public class SamzaComponentFactory implements ComponentFactory {
-	@Override
-	public ProcessingItem createPi(Processor processor) {
-		return this.createPi(processor, 1);
-	}
+  @Override
+  public ProcessingItem createPi(Processor processor) {
+    return this.createPi(processor, 1);
+  }
 
-	@Override
-	public ProcessingItem createPi(Processor processor, int parallelism) {
-		return new SamzaProcessingItem(processor, parallelism);
-	}
+  @Override
+  public ProcessingItem createPi(Processor processor, int parallelism) {
+    return new SamzaProcessingItem(processor, parallelism);
+  }
 
-	@Override
-	public EntranceProcessingItem createEntrancePi(EntranceProcessor entranceProcessor) {
-		return new SamzaEntranceProcessingItem(entranceProcessor);
-	}
-	
-	@Override
-	public Stream createStream(IProcessingItem sourcePi) {
-		return new SamzaStream(sourcePi);
-	}
-	
-	@Override
-	public Topology createTopology(String topoName) {
-		return new SamzaTopology(topoName);
-	}
+  @Override
+  public EntranceProcessingItem createEntrancePi(EntranceProcessor entranceProcessor) {
+    return new SamzaEntranceProcessingItem(entranceProcessor);
+  }
+
+  @Override
+  public Stream createStream(IProcessingItem sourcePi) {
+    return new SamzaStream(sourcePi);
+  }
+
+  @Override
+  public Topology createTopology(String topoName) {
+    return new SamzaTopology(topoName);
+  }
 }

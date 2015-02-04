@@ -31,60 +31,62 @@ import com.yahoo.labs.samoa.instances.Instance;
 /**
  * The Class StreamSource.
  */
-public class StreamSource implements java.io.Serializable{
+public class StreamSource implements java.io.Serializable {
 
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = 3974668694861231236L;
+  private static final long serialVersionUID = 3974668694861231236L;
 
-	/**
-	 * Instantiates a new stream source.
-	 *
-	 * @param stream the stream
-	 */
-	public StreamSource(InstanceStream stream) {
-		super();
-		this.stream = stream;
-	}
+  /**
+   * Instantiates a new stream source.
+   * 
+   * @param stream
+   *          the stream
+   */
+  public StreamSource(InstanceStream stream) {
+    super();
+    this.stream = stream;
+  }
 
-	/** The stream. */
-	protected InstanceStream stream;
+  /** The stream. */
+  protected InstanceStream stream;
 
-	/**
-	 * Gets the stream.
-	 *
-	 * @return the stream
-	 */
-	public InstanceStream getStream() {
-		return stream;
-	}
+  /**
+   * Gets the stream.
+   * 
+   * @return the stream
+   */
+  public InstanceStream getStream() {
+    return stream;
+  }
 
-	/**
-	 * Next instance.
-	 *
-	 * @return the instance
-	 */
-	public Example<Instance> nextInstance() {
-		return stream.nextInstance();
-	}
+  /**
+   * Next instance.
+   * 
+   * @return the instance
+   */
+  public Example<Instance> nextInstance() {
+    return stream.nextInstance();
+  }
 
-	/**
-	 * Sets the stream.
-	 *
-	 * @param stream the new stream
-	 */
-	public void setStream(InstanceStream stream) {
-		this.stream = stream;
-	}
+  /**
+   * Sets the stream.
+   * 
+   * @param stream
+   *          the new stream
+   */
+  public void setStream(InstanceStream stream) {
+    this.stream = stream;
+  }
 
-	/**
-	 * Checks for more instances.
-	 *
-	 * @return true, if successful
-	 */
-	public boolean hasMoreInstances() {
-		return this.stream.hasMoreInstances();
-	}
+  /**
+   * Checks for more instances.
+   * 
+   * @return true, if successful
+   */
+  public boolean hasMoreInstances() {
+    return this.stream.hasMoreInstances();
+  }
 
 }

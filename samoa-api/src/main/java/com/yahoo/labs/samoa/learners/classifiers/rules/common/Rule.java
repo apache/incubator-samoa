@@ -28,84 +28,84 @@ import com.yahoo.labs.samoa.moa.AbstractMOAObject;
 import com.yahoo.labs.samoa.moa.classifiers.rules.core.conditionaltests.NumericAttributeBinaryRulePredicate;
 
 /**
- * The base class for "rule".
- * Represents the most basic rule with and ID and a list of features (nodeList).
+ * The base class for "rule". Represents the most basic rule with and ID and a list of features (nodeList).
  * 
  * @author Anh Thu Vu
- *
+ * 
  */
 public abstract class Rule extends AbstractMOAObject {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	protected int ruleNumberID;
-	
-	protected List<RuleSplitNode> nodeList;
-	
-	/*
-	 * Constructor
-	 */
-	public Rule() {
-		this.nodeList = new LinkedList<RuleSplitNode>();
-	}
-	
-	/*
-	 * Rule ID
-	 */
-	public int getRuleNumberID() {
-		return ruleNumberID;
-	}
+  protected int ruleNumberID;
 
-	public void setRuleNumberID(int ruleNumberID) {
-		this.ruleNumberID = ruleNumberID;
-	}
-	
-	/*
-	 * RuleSplitNode list
-	 */
-	public List<RuleSplitNode> getNodeList() {
-		return nodeList;
-	}
+  protected List<RuleSplitNode> nodeList;
 
-	public void setNodeList(List<RuleSplitNode> nodeList) {
-		this.nodeList = nodeList;
-	}
-	
-	/*
-	 * Covering
-	 */
-	public boolean isCovering(Instance inst) {
-		boolean isCovering = true;
-		for (RuleSplitNode node : nodeList) {
-			if (node.evaluate(inst) == false) {
-				isCovering = false;
-				break;
-			}
-		}
-		return isCovering;
-	}
-	
-	/*
-	 * Add RuleSplitNode
-	 */
-	public boolean nodeListAdd(RuleSplitNode ruleSplitNode) {
-		//Check that the node is not already in the list
-		boolean isIncludedInNodeList = false;
-		boolean isUpdated=false;
-		for (RuleSplitNode node : nodeList) {
-			NumericAttributeBinaryRulePredicate nodeTest = (NumericAttributeBinaryRulePredicate) node.getSplitTest();
-			NumericAttributeBinaryRulePredicate ruleSplitNodeTest = (NumericAttributeBinaryRulePredicate) ruleSplitNode.getSplitTest();
-			if (nodeTest.isUsingSameAttribute(ruleSplitNodeTest)) {
-				isIncludedInNodeList = true;
-				if (nodeTest.isIncludedInRuleNode(ruleSplitNodeTest) == true) { //remove this line to keep the most recent attribute value
-					//replace the value
-					nodeTest.setAttributeValue(ruleSplitNodeTest);
-					isUpdated=true; //if is updated (i.e. an expansion happened) a new learning node should be created
-				}
-			}
-		}
-		if (isIncludedInNodeList == false) {
-			this.nodeList.add(ruleSplitNode);
-		}
-		return (!isIncludedInNodeList || isUpdated); 
-	}
+  /*
+   * Constructor
+   */
+  public Rule() {
+    this.nodeList = new LinkedList<RuleSplitNode>();
+  }
+
+  /*
+   * Rule ID
+   */
+  public int getRuleNumberID() {
+    return ruleNumberID;
+  }
+
+  public void setRuleNumberID(int ruleNumberID) {
+    this.ruleNumberID = ruleNumberID;
+  }
+
+  /*
+   * RuleSplitNode list
+   */
+  public List<RuleSplitNode> getNodeList() {
+    return nodeList;
+  }
+
+  public void setNodeList(List<RuleSplitNode> nodeList) {
+    this.nodeList = nodeList;
+  }
+
+  /*
+   * Covering
+   */
+  public boolean isCovering(Instance inst) {
+    boolean isCovering = true;
+    for (RuleSplitNode node : nodeList) {
+      if (node.evaluate(inst) == false) {
+        isCovering = false;
+        break;
+      }
+    }
+    return isCovering;
+  }
+
+  /*
+   * Add RuleSplitNode
+   */
+  public boolean nodeListAdd(RuleSplitNode ruleSplitNode) {
+    // Check that the node is not already in the list
+    boolean isIncludedInNodeList = false;
+    boolean isUpdated = false;
+    for (RuleSplitNode node : nodeList) {
+      NumericAttributeBinaryRulePredicate nodeTest = (NumericAttributeBinaryRulePredicate) node.getSplitTest();
+      NumericAttributeBinaryRulePredicate ruleSplitNodeTest = (NumericAttributeBinaryRulePredicate) ruleSplitNode
+          .getSplitTest();
+      if (nodeTest.isUsingSameAttribute(ruleSplitNodeTest)) {
+        isIncludedInNodeList = true;
+        if (nodeTest.isIncludedInRuleNode(ruleSplitNodeTest) == true) { // remove this line to keep the most recent attribute value
+          // replace the value
+          nodeTest.setAttributeValue(ruleSplitNodeTest);
+          isUpdated = true; // if is updated (i.e. an expansion happened) a new learning node should be created
+        }
+      }
+    }
+    if (isIncludedInNodeList == false) {
+      this.nodeList.add(ruleSplitNode);
+    }
+    return (!isIncludedInNodeList || isUpdated);
+  }
 }

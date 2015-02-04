@@ -25,44 +25,45 @@ import com.yahoo.labs.samoa.moa.classifiers.core.conditionaltests.InstanceCondit
 
 /**
  * Class for computing attribute split suggestions given a split test.
- *
+ * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $
  */
 public class AttributeSplitSuggestion extends AbstractMOAObject implements Comparable<AttributeSplitSuggestion> {
-    
-    private static final long serialVersionUID = 1L;
 
-    public InstanceConditionalTest splitTest;
+  private static final long serialVersionUID = 1L;
 
-    public double[][] resultingClassDistributions;
+  public InstanceConditionalTest splitTest;
 
-    public double merit;
-    
-    public AttributeSplitSuggestion() {}
+  public double[][] resultingClassDistributions;
 
-    public AttributeSplitSuggestion(InstanceConditionalTest splitTest,
-            double[][] resultingClassDistributions, double merit) {
-        this.splitTest = splitTest;
-        this.resultingClassDistributions = resultingClassDistributions.clone();
-        this.merit = merit;
-    }
+  public double merit;
 
-    public int numSplits() {
-        return this.resultingClassDistributions.length;
-    }
+  public AttributeSplitSuggestion() {
+  }
 
-    public double[] resultingClassDistributionFromSplit(int splitIndex) {
-        return this.resultingClassDistributions[splitIndex].clone();
-    }
+  public AttributeSplitSuggestion(InstanceConditionalTest splitTest,
+      double[][] resultingClassDistributions, double merit) {
+    this.splitTest = splitTest;
+    this.resultingClassDistributions = resultingClassDistributions.clone();
+    this.merit = merit;
+  }
 
-    @Override
-    public int compareTo(AttributeSplitSuggestion comp) {
-        return Double.compare(this.merit, comp.merit);
-    }
+  public int numSplits() {
+    return this.resultingClassDistributions.length;
+  }
 
-    @Override
-    public void getDescription(StringBuilder sb, int indent) {
-        // do nothing
-    }
+  public double[] resultingClassDistributionFromSplit(int splitIndex) {
+    return this.resultingClassDistributions[splitIndex].clone();
+  }
+
+  @Override
+  public int compareTo(AttributeSplitSuggestion comp) {
+    return Double.compare(this.merit, comp.merit);
+  }
+
+  @Override
+  public void getDescription(StringBuilder sb, int indent) {
+    // do nothing
+  }
 }

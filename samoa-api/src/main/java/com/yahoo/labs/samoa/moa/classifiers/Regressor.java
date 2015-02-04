@@ -21,11 +21,11 @@ package com.yahoo.labs.samoa.moa.classifiers;
  */
 
 /**
- * Regressor interface for incremental regression models. It is used only in the GUI Regression Tab. 
- *
+ * Regressor interface for incremental regression models. It is used only in the GUI Regression Tab.
+ * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $
  */
 public interface Regressor {
-    
+
 }

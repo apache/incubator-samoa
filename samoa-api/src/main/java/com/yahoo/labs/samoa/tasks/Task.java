@@ -28,34 +28,32 @@ import com.yahoo.labs.samoa.topology.Topology;
  */
 public interface Task {
 
-	/**
-	 * Initialize this SAMOA task, 
-	 * i.e. create and connect ProcessingItems and Streams
-	 * and initialize the topology
-	 */
-	public void init();	
-	
-	/**
-	 * Return the final topology object to be executed in the cluster
-	 * @return topology object to be submitted to be executed in the cluster
-	 */
-	public Topology getTopology();
-	
-    // /**
-    // * Return the entrance processor to start SAMOA topology
-    // * The logic to start the topology should be implemented here
-    // * @return entrance processor to start the topology
-    // */
-    // public TopologyStarter getTopologyStarter();
-	
-	/**
-	 * Sets the factory.
-	 * TODO: propose to hide factory from task, 
-	 * i.e. Task will only see TopologyBuilder, 
-	 * and factory creation will be handled by TopologyBuilder
-	 *
-	 * @param factory the new factory
-	 */
-	public void setFactory(ComponentFactory factory) ;
-	
+  /**
+   * Initialize this SAMOA task, i.e. create and connect ProcessingItems and Streams and initialize the topology
+   */
+  public void init();
+
+  /**
+   * Return the final topology object to be executed in the cluster
+   * 
+   * @return topology object to be submitted to be executed in the cluster
+   */
+  public Topology getTopology();
+
+  // /**
+  // * Return the entrance processor to start SAMOA topology
+  // * The logic to start the topology should be implemented here
+  // * @return entrance processor to start the topology
+  // */
+  // public TopologyStarter getTopologyStarter();
+
+  /**
+   * Sets the factory. TODO: propose to hide factory from task, i.e. Task will only see TopologyBuilder, and factory
+   * creation will be handled by TopologyBuilder
+   * 
+   * @param factory
+   *          the new factory
+   */
+  public void setFactory(ComponentFactory factory);
+
 }

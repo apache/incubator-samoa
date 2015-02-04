@@ -35,74 +35,75 @@ import com.yahoo.labs.samoa.tasks.Task;
 
 /**
  * Utility class for samoa-storm project. It is used by StormDoTask to process its arguments.
+ * 
  * @author Arinto Murdopo
- *
+ * 
  */
 public class StormSamoaUtils {
-	
-	private static final Logger logger = LoggerFactory.getLogger(StormSamoaUtils.class);
 
-	static final String KEY_FIELD = "key";
-	static final String CONTENT_EVENT_FIELD = "content_event";
-		
-	static Properties getProperties() throws IOException{
-		Properties props = new Properties();
-		InputStream is;
-		
-		File f = new File("src/main/resources/samoa-storm-cluster.properties"); // FIXME it does not exist anymore
-		is = new FileInputStream(f);
-		
-		try {
-			props.load(is);
-		} catch (IOException e1) {
-			System.out.println("Fail to load property file");
-			return null;
-		} finally{
-			is.close();
-		}
-		
-		return props;
-	}
-	
-	public static StormTopology argsToTopology(String[] args){
-		StringBuilder cliString = new StringBuilder();
-		for (String arg : args) {
-			cliString.append(" ").append(arg);
-		}
-		logger.debug("Command line string = {}", cliString.toString());
+  private static final Logger logger = LoggerFactory.getLogger(StormSamoaUtils.class);
 
-		Task task = getTask(cliString.toString());
-		
-		//TODO: remove setFactory method with DynamicBinding
-		task.setFactory(new StormComponentFactory());
-		task.init();
+  static final String KEY_FIELD = "key";
+  static final String CONTENT_EVENT_FIELD = "content_event";
 
-		return (StormTopology)task.getTopology();
-	}
-	
-	public static int numWorkers(List<String> tmpArgs){
-		int position = tmpArgs.size() - 1;
-		int numWorkers;
-		
-		try {
-			numWorkers = Integer.parseInt(tmpArgs.get(position));
-			tmpArgs.remove(position);
-		} catch (NumberFormatException e) {
-			numWorkers = 4;
-		}
-		
-		return numWorkers;
-	}
+  static Properties getProperties() throws IOException {
+    Properties props = new Properties();
+    InputStream is;
 
-    public static Task getTask(String cliString) {
-        Task task = null;
-        try {
-            logger.debug("Providing task [{}]", cliString);
-            task = ClassOption.cliStringToObject(cliString, Task.class, null);
-        } catch (Exception e) {
-            logger.warn("Fail in initializing the task!");
-            e.printStackTrace();
-        }
-        return task;
+    File f = new File("src/main/resources/samoa-storm-cluster.properties"); // FIXME it does not exist anymore
+    is = new FileInputStream(f);
+
+    try {
+      props.load(is);
+    } catch (IOException e1) {
+      System.out.println("Fail to load property file");
+      return null;
+    } finally {
+      is.close();
     }
+
+    return props;
+  }
+
+  public static StormTopology argsToTopology(String[] args) {
+    StringBuilder cliString = new StringBuilder();
+    for (String arg : args) {
+      cliString.append(" ").append(arg);
+    }
+    logger.debug("Command line string = {}", cliString.toString());
+
+    Task task = getTask(cliString.toString());
+
+    // TODO: remove setFactory method with DynamicBinding
+    task.setFactory(new StormComponentFactory());
+    task.init();
+
+    return (StormTopology) task.getTopology();
+  }
+
+  public static int numWorkers(List<String> tmpArgs) {
+    int position = tmpArgs.size() - 1;
+    int numWorkers;
+
+    try {
+      numWorkers = Integer.parseInt(tmpArgs.get(position));
+      tmpArgs.remove(position);
+    } catch (NumberFormatException e) {
+      numWorkers = 4;
+    }
+
+    return numWorkers;
+  }
+
+  public static Task getTask(String cliString) {
+    Task task = null;
+    try {
+      logger.debug("Providing task [{}]", cliString);
+      task = ClassOption.cliStringToObject(cliString, Task.class, null);
+    } catch (Exception e) {
+      logger.warn("Fail in initializing the task!");
+      e.printStackTrace();
+    }
+    return task;
+  }
 }

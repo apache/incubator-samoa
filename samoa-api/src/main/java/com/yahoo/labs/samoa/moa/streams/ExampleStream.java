@@ -25,55 +25,52 @@ import com.yahoo.labs.samoa.moa.MOAObject;
 import com.yahoo.labs.samoa.moa.core.Example;
 
 /**
- * Interface representing a data stream of examples. 
- *
+ * Interface representing a data stream of examples.
+ * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
- * @version $Revision: 7 $ 
+ * @version $Revision: 7 $
  */
 public interface ExampleStream<E extends Example> extends MOAObject {
 
-    /**
-     * Gets the header of this stream.
-     * This is useful to know attributes and classes.
-     * InstancesHeader is an extension of weka.Instances.
-     *
-     * @return the header of this stream
-     */
-    public InstancesHeader getHeader();
+  /**
+   * Gets the header of this stream. This is useful to know attributes and classes. InstancesHeader is an extension of
+   * weka.Instances.
+   * 
+   * @return the header of this stream
+   */
+  public InstancesHeader getHeader();
 
-    /**
-     * Gets the estimated number of remaining instances in this stream
-     *
-     * @return the estimated number of instances to get from this stream
-     */
-    public long estimatedRemainingInstances();
+  /**
+   * Gets the estimated number of remaining instances in this stream
+   * 
+   * @return the estimated number of instances to get from this stream
+   */
+  public long estimatedRemainingInstances();
 
-    /**
-     * Gets whether this stream has more instances to output.
-     * This is useful when reading streams from files.
-     *
-     * @return true if this stream has more instances to output
-     */
-    public boolean hasMoreInstances();
+  /**
+   * Gets whether this stream has more instances to output. This is useful when reading streams from files.
+   * 
+   * @return true if this stream has more instances to output
+   */
+  public boolean hasMoreInstances();
 
-    /**
-     * Gets the next example from this stream.
-     *
-     * @return the next example of this stream
-     */
-    public E nextInstance();
+  /**
+   * Gets the next example from this stream.
+   * 
+   * @return the next example of this stream
+   */
+  public E nextInstance();
 
-    /**
-     * Gets whether this stream can restart.
-     *
-     * @return true if this stream can restart
-     */
-    public boolean isRestartable();
+  /**
+   * Gets whether this stream can restart.
+   * 
+   * @return true if this stream can restart
+   */
+  public boolean isRestartable();
 
-    /**
-     * Restarts this stream. It must be similar to
-     * starting a new stream from scratch.
-     *
-     */
-    public void restart();
+  /**
+   * Restarts this stream. It must be similar to starting a new stream from scratch.
+   * 
+   */
+  public void restart();
 }

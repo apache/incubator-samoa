@@ -27,59 +27,60 @@ import com.yahoo.labs.samoa.topology.Stream;
 
 /**
  * Abstract class to implement Storm Stream
+ * 
  * @author Arinto Murdopo
- *
+ * 
  */
 abstract class StormStream implements Stream, java.io.Serializable {
-		
-	/**
+
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = 281835563756514852L;
-	protected final String outputStreamId;
-	protected final InputStreamId inputStreamId;
-	
-	public StormStream(String stormComponentId){
-		this.outputStreamId = UUID.randomUUID().toString();
-		this.inputStreamId = new InputStreamId(stormComponentId, this.outputStreamId);
-	}
-	
-	@Override
-	public abstract void put(ContentEvent contentEvent);
-	
-	String getOutputId(){
-		return this.outputStreamId;
-	}
-	
-	InputStreamId getInputId(){
-		return this.inputStreamId;
-	}
-	
-	final static class InputStreamId implements java.io.Serializable{
-		
-		/**
+  private static final long serialVersionUID = 281835563756514852L;
+  protected final String outputStreamId;
+  protected final InputStreamId inputStreamId;
+
+  public StormStream(String stormComponentId) {
+    this.outputStreamId = UUID.randomUUID().toString();
+    this.inputStreamId = new InputStreamId(stormComponentId, this.outputStreamId);
+  }
+
+  @Override
+  public abstract void put(ContentEvent contentEvent);
+
+  String getOutputId() {
+    return this.outputStreamId;
+  }
+
+  InputStreamId getInputId() {
+    return this.inputStreamId;
+  }
+
+  final static class InputStreamId implements java.io.Serializable {
+
+    /**
 		 * 
 		 */
-		private static final long serialVersionUID = -7457995634133691295L;
-		private final String componentId;
-		private final String streamId;
-		
-		InputStreamId(String componentId, String streamId){
-			this.componentId = componentId;
-			this.streamId = streamId;
-		}
-		
-		String getComponentId(){
-			return componentId;
-		}
-		
-		String getStreamId(){
-			return streamId;
-		}
-	}
-	
-	@Override
-	public void setBatchSize(int batchSize) {
-		// Ignore batch size
-	}
+    private static final long serialVersionUID = -7457995634133691295L;
+    private final String componentId;
+    private final String streamId;
+
+    InputStreamId(String componentId, String streamId) {
+      this.componentId = componentId;
+      this.streamId = streamId;
+    }
+
+    String getComponentId() {
+      return componentId;
+    }
+
+    String getStreamId() {
+      return streamId;
+    }
+  }
+
+  @Override
+  public void setBatchSize(int batchSize) {
+    // Ignore batch size
+  }
 }

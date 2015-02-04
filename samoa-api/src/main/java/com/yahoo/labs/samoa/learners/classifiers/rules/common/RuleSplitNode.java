@@ -30,37 +30,39 @@ import com.yahoo.labs.samoa.instances.Instance;
  * Represent a feature of rules (an element of ruleś nodeList).
  * 
  * @author Anh Thu Vu
- *
+ * 
  */
 public class RuleSplitNode extends SplitNode {
 
-    protected double lastTargetMean;
-    protected int operatorObserver;
+  protected double lastTargetMean;
+  protected int operatorObserver;
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public InstanceConditionalTest getSplitTest() {
-        return this.splitTest;
-    }
+  public InstanceConditionalTest getSplitTest() {
+    return this.splitTest;
+  }
 
-    /**
-     * Create a new RuleSplitNode
-     */
-    public RuleSplitNode() {
-    	this(null, new double[0]);
-    }
-    public RuleSplitNode(InstanceConditionalTest splitTest, double[] classObservations) {
-        super(splitTest, classObservations);
-    }
-    
-    public RuleSplitNode getACopy() {
-    	InstanceConditionalTest splitTest = new NumericAttributeBinaryRulePredicate((NumericAttributeBinaryRulePredicate) this.getSplitTest());
-		return new RuleSplitNode(splitTest, this.getObservedClassDistribution());
-    }
+  /**
+   * Create a new RuleSplitNode
+   */
+  public RuleSplitNode() {
+    this(null, new double[0]);
+  }
 
-    public boolean evaluate(Instance instance) {
-        Predicate predicate = (Predicate) this.splitTest;
-        return predicate.evaluate(instance);
-    }
+  public RuleSplitNode(InstanceConditionalTest splitTest, double[] classObservations) {
+    super(splitTest, classObservations);
+  }
+
+  public RuleSplitNode getACopy() {
+    InstanceConditionalTest splitTest = new NumericAttributeBinaryRulePredicate(
+        (NumericAttributeBinaryRulePredicate) this.getSplitTest());
+    return new RuleSplitNode(splitTest, this.getObservedClassDistribution());
+  }
+
+  public boolean evaluate(Instance instance) {
+    Predicate predicate = (Predicate) this.splitTest;
+    return predicate.evaluate(instance);
+  }
 
 }

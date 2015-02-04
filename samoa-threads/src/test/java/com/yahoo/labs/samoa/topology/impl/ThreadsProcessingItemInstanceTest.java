@@ -32,36 +32,40 @@ import com.yahoo.labs.samoa.core.Processor;
 
 /**
  * @author Anh Thu Vu
- *
+ * 
  */
 public class ThreadsProcessingItemInstanceTest {
 
-	@Tested private ThreadsProcessingItemInstance piInstance;
-	
-	@Mocked private Processor processor;
-	@Mocked private ContentEvent event;
-	
-	private final int threadIndex = 2;
-	
-	@Before
-	public void setUp() throws Exception {
-		piInstance = new ThreadsProcessingItemInstance(processor, threadIndex);
-	}
+  @Tested
+  private ThreadsProcessingItemInstance piInstance;
 
-	@Test
-	public void testConstructor() {
-		assertSame("Processor is not set correctly.", processor, piInstance.getProcessor());
-		assertEquals("Thread index is not set correctly.", threadIndex, piInstance.getThreadIndex(),0);
-	}
-	
-	@Test
-	public void testProcessEvent() {
-		piInstance.processEvent(event);
-		new Verifications() {
-			{
-				processor.process(event); times=1;
-			}
-		};
-	}
+  @Mocked
+  private Processor processor;
+  @Mocked
+  private ContentEvent event;
+
+  private final int threadIndex = 2;
+
+  @Before
+  public void setUp() throws Exception {
+    piInstance = new ThreadsProcessingItemInstance(processor, threadIndex);
+  }
+
+  @Test
+  public void testConstructor() {
+    assertSame("Processor is not set correctly.", processor, piInstance.getProcessor());
+    assertEquals("Thread index is not set correctly.", threadIndex, piInstance.getThreadIndex(), 0);
+  }
+
+  @Test
+  public void testProcessEvent() {
+    piInstance.processEvent(event);
+    new Verifications() {
+      {
+        processor.process(event);
+        times = 1;
+      }
+    };
+  }
 
 }

@@ -24,64 +24,63 @@ import org.junit.Test;
 
 public class AlgosTest {
 
+  @Test
+  public void testVHTLocal() throws Exception {
 
-    @Test
-    public void testVHTLocal() throws Exception {
+    TestParams vhtConfig = new TestParams.Builder()
+        .inputInstances(200_000)
+        .samplingSize(20_000)
+        .evaluationInstances(200_000)
+        .classifiedInstances(200_000)
+        .classificationsCorrect(75f)
+        .kappaStat(0f)
+        .kappaTempStat(0f)
+        .cliStringTemplate(TestParams.Templates.PREQEVAL_VHT_RANDOMTREE)
+        .resultFilePollTimeout(10)
+        .prePollWait(10)
+        .taskClassName(LocalDoTask.class.getName())
+        .build();
+    TestUtils.test(vhtConfig);
 
-        TestParams vhtConfig = new TestParams.Builder()
-                .inputInstances(200_000)
-                .samplingSize(20_000)
-                .evaluationInstances(200_000)
-                .classifiedInstances(200_000)
-                .classificationsCorrect(75f)
-                .kappaStat(0f)
-                .kappaTempStat(0f)
-                .cliStringTemplate(TestParams.Templates.PREQEVAL_VHT_RANDOMTREE)
-                .resultFilePollTimeout(10)
-                .prePollWait(10)
-                .taskClassName(LocalDoTask.class.getName())
-                .build();
-        TestUtils.test(vhtConfig);
+  }
 
-    }
+  @Test
+  public void testBaggingLocal() throws Exception {
+    TestParams baggingConfig = new TestParams.Builder()
+        .inputInstances(200_000)
+        .samplingSize(20_000)
+        .evaluationInstances(180_000)
+        .classifiedInstances(210_000)
+        .classificationsCorrect(60f)
+        .kappaStat(0f)
+        .kappaTempStat(0f)
+        .cliStringTemplate(TestParams.Templates.PREQEVAL_BAGGING_RANDOMTREE)
+        .prePollWait(10)
+        .resultFilePollTimeout(10)
+        .taskClassName(LocalDoTask.class.getName())
+        .build();
+    TestUtils.test(baggingConfig);
 
-    @Test
-    public void testBaggingLocal() throws Exception {
-        TestParams baggingConfig = new TestParams.Builder()
-                .inputInstances(200_000)
-                .samplingSize(20_000)
-                .evaluationInstances(180_000)
-                .classifiedInstances(210_000)
-                .classificationsCorrect(60f)
-                .kappaStat(0f)
-                .kappaTempStat(0f)
-                .cliStringTemplate(TestParams.Templates.PREQEVAL_BAGGING_RANDOMTREE)
-                .prePollWait(10)
-                .resultFilePollTimeout(10)
-                .taskClassName(LocalDoTask.class.getName())
-                .build();
-        TestUtils.test(baggingConfig);
+  }
 
-    }
+  @Test
+  public void testNaiveBayesLocal() throws Exception {
 
-    @Test
-    public void testNaiveBayesLocal() throws Exception {
+    TestParams vhtConfig = new TestParams.Builder()
+        .inputInstances(200_000)
+        .samplingSize(20_000)
+        .evaluationInstances(200_000)
+        .classifiedInstances(200_000)
+        .classificationsCorrect(65f)
+        .kappaStat(0f)
+        .kappaTempStat(0f)
+        .cliStringTemplate(TestParams.Templates.PREQEVAL_NAIVEBAYES_HYPERPLANE)
+        .resultFilePollTimeout(10)
+        .prePollWait(10)
+        .taskClassName(LocalDoTask.class.getName())
+        .build();
+    TestUtils.test(vhtConfig);
 
-        TestParams vhtConfig = new TestParams.Builder()
-                .inputInstances(200_000)
-                .samplingSize(20_000)
-                .evaluationInstances(200_000)
-                .classifiedInstances(200_000)
-                .classificationsCorrect(65f)
-                .kappaStat(0f)
-                .kappaTempStat(0f)
-                .cliStringTemplate(TestParams.Templates.PREQEVAL_NAIVEBAYES_HYPERPLANE)
-                .resultFilePollTimeout(10)
-                .prePollWait(10)
-                .taskClassName(LocalDoTask.class.getName())
-                .build();
-        TestUtils.test(vhtConfig);
-
-    }
+  }
 
 }

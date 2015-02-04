@@ -23,34 +23,36 @@ package com.yahoo.labs.samoa.topology.impl;
 import com.yahoo.labs.samoa.topology.IProcessingItem;
 
 /**
- * Common interface of SamzaEntranceProcessingItem and
- * SamzaProcessingItem
+ * Common interface of SamzaEntranceProcessingItem and SamzaProcessingItem
  * 
  * @author Anh Thu Vu
  */
 public interface SamzaProcessingNode extends IProcessingItem {
-	/**
-	 * Registers an output stream with this processing item
-	 * 
-	 * @param stream
-	 *               the output stream
-	 * @return the number of output streams of this processing item
-	 */
-	public int addOutputStream(SamzaStream stream);
-	
-	/**
-	 * Gets the name/id of this processing item
-	 * 
-	 * @return the name/id of this processing item
-	 */
-	// TODO: include getName() and setName() in IProcessingItem and/or AbstractEPI/PI
-	public String getName();
-	
-	/**
-	 * Sets the name/id for this processing item
-	 * @param name
-	 *            the name/id of this processing item
-	 */
-	// TODO: include getName() and setName() in IProcessingItem and/or AbstractEPI/PI
-	public void setName(String name);
+  /**
+   * Registers an output stream with this processing item
+   * 
+   * @param stream
+   *          the output stream
+   * @return the number of output streams of this processing item
+   */
+  public int addOutputStream(SamzaStream stream);
+
+  /**
+   * Gets the name/id of this processing item
+   * 
+   * @return the name/id of this processing item
+   */
+  // TODO: include getName() and setName() in IProcessingItem and/or
+  // AbstractEPI/PI
+  public String getName();
+
+  /**
+   * Sets the name/id for this processing item
+   * 
+   * @param name
+   *          the name/id of this processing item
+   */
+  // TODO: include getName() and setName() in IProcessingItem and/or
+  // AbstractEPI/PI
+  public void setName(String name);
 }

@@ -22,14 +22,14 @@ package com.yahoo.labs.samoa.moa.classifiers.core.conditionaltests;
 
 /**
  * Abstract binary conditional test for instances to use to split nodes in Hoeffding trees.
- *
+ * 
  * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
  * @version $Revision: 7 $
  */
 public abstract class InstanceConditionalBinaryTest extends InstanceConditionalTest {
 
-    @Override
-    public int maxBranches() {
-        return 2;
-    }
+  @Override
+  public int maxBranches() {
+    return 2;
+  }
 }

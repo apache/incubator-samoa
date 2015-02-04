@@ -24,45 +24,44 @@ import org.junit.Test;
 
 public class AlgosTest {
 
-    @Test(timeout = 60000)
-    public void testVHTWithThreads() throws Exception {
+  @Test(timeout = 60000)
+  public void testVHTWithThreads() throws Exception {
 
-        TestParams vhtConfig = new TestParams.Builder()
-                .inputInstances(200_000)
-                .samplingSize(20_000)
-                .evaluationInstances(200_000)
-                .classifiedInstances(200_000)
-                .classificationsCorrect(55f)
-                .kappaStat(-0.1f)
-                .kappaTempStat(-0.1f)
-                .cliStringTemplate(TestParams.Templates.PREQEVAL_VHT_RANDOMTREE + " -t 2")
-                .resultFilePollTimeout(10)
-                .prePollWait(10)
-                .taskClassName(LocalThreadsDoTask.class.getName())
-                .build();
-        TestUtils.test(vhtConfig);
+    TestParams vhtConfig = new TestParams.Builder()
+        .inputInstances(200_000)
+        .samplingSize(20_000)
+        .evaluationInstances(200_000)
+        .classifiedInstances(200_000)
+        .classificationsCorrect(55f)
+        .kappaStat(-0.1f)
+        .kappaTempStat(-0.1f)
+        .cliStringTemplate(TestParams.Templates.PREQEVAL_VHT_RANDOMTREE + " -t 2")
+        .resultFilePollTimeout(10)
+        .prePollWait(10)
+        .taskClassName(LocalThreadsDoTask.class.getName())
+        .build();
+    TestUtils.test(vhtConfig);
 
-    }
+  }
 
-    @Test(timeout = 180000)
-    public void testBaggingWithThreads() throws Exception {
-        TestParams baggingConfig = new TestParams.Builder()
-                .inputInstances(100_000)
-                .samplingSize(10_000)
-                .inputDelayMicroSec(100) // prevents saturating the system due to unbounded queues
-                .evaluationInstances(90_000)
-                .classifiedInstances(105_000)
-                .classificationsCorrect(55f)
-                .kappaStat(0f)
-                .kappaTempStat(0f)
-                .cliStringTemplate(TestParams.Templates.PREQEVAL_BAGGING_RANDOMTREE + " -t 2")
-                .prePollWait(10)
-                .resultFilePollTimeout(30)
-                .taskClassName(LocalThreadsDoTask.class.getName())
-                .build();
-        TestUtils.test(baggingConfig);
+  @Test(timeout = 180000)
+  public void testBaggingWithThreads() throws Exception {
+    TestParams baggingConfig = new TestParams.Builder()
+        .inputInstances(100_000)
+        .samplingSize(10_000)
+        .inputDelayMicroSec(100) // prevents saturating the system due to unbounded queues
+        .evaluationInstances(90_000)
+        .classifiedInstances(105_000)
+        .classificationsCorrect(55f)
+        .kappaStat(0f)
+        .kappaTempStat(0f)
+        .cliStringTemplate(TestParams.Templates.PREQEVAL_BAGGING_RANDOMTREE + " -t 2")
+        .prePollWait(10)
+        .resultFilePollTimeout(30)
+        .taskClassName(LocalThreadsDoTask.class.getName())
+        .build();
+    TestUtils.test(baggingConfig);
 
-    }
-
+  }
 
 }

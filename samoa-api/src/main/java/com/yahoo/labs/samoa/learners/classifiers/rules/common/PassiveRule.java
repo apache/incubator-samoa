@@ -23,49 +23,48 @@ package com.yahoo.labs.samoa.learners.classifiers.rules.common;
 import java.util.LinkedList;
 
 /**
- * PassiveRule is a LearningRule that update its LearningNode
- * with the received new LearningNode.
+ * PassiveRule is a LearningRule that update its LearningNode with the received new LearningNode.
  * 
  * @author Anh Thu Vu
- *
+ * 
  */
 public class PassiveRule extends LearningRule {
 
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = -5551571895910530275L;
-	
-	private RulePassiveRegressionNode learningNode;
+  private static final long serialVersionUID = -5551571895910530275L;
 
-	/*
-	 * Constructor to turn an ActiveRule into a PassiveRule
-	 */
-	public PassiveRule(ActiveRule rule) {
-		this.nodeList = new LinkedList<>();
-		for (RuleSplitNode node:rule.nodeList) {
-			this.nodeList.add(node.getACopy());
-		}
-		
-		this.learningNode = new RulePassiveRegressionNode(rule.getLearningNode());
-		this.ruleNumberID = rule.ruleNumberID;
-	}
-	
-	@Override
-	public RuleRegressionNode getLearningNode() {
-		return this.learningNode;
-	}
+  private RulePassiveRegressionNode learningNode;
 
-	@Override
-	public void setLearningNode(RuleRegressionNode learningNode) {
-		this.learningNode = (RulePassiveRegressionNode) learningNode;
-	}
-	
-	/*
-	 * MOA GUI
-	 */
-	@Override
-	public void getDescription(StringBuilder sb, int indent) {
-		// TODO Auto-generated method stub
-	}
+  /*
+   * Constructor to turn an ActiveRule into a PassiveRule
+   */
+  public PassiveRule(ActiveRule rule) {
+    this.nodeList = new LinkedList<>();
+    for (RuleSplitNode node : rule.nodeList) {
+      this.nodeList.add(node.getACopy());
+    }
+
+    this.learningNode = new RulePassiveRegressionNode(rule.getLearningNode());
+    this.ruleNumberID = rule.ruleNumberID;
+  }
+
+  @Override
+  public RuleRegressionNode getLearningNode() {
+    return this.learningNode;
+  }
+
+  @Override
+  public void setLearningNode(RuleRegressionNode learningNode) {
+    this.learningNode = (RulePassiveRegressionNode) learningNode;
+  }
+
+  /*
+   * MOA GUI
+   */
+  @Override
+  public void getDescription(StringBuilder sb, int indent) {
+    // TODO Auto-generated method stub
+  }
 }

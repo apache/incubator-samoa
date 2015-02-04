@@ -29,29 +29,32 @@ import org.junit.Test;
 
 /**
  * @author Anh Thu Vu
- *
+ * 
  */
 public class SimpleEngineTest {
 
-	@Tested private SimpleEngine unused;
-	@Mocked private SimpleTopology topology;
-	@Mocked private Runtime mockedRuntime;
-	
-	@Test
-	public void testSubmitTopology() {
-		new NonStrictExpectations() {
-			{
-				Runtime.getRuntime();
-				result=mockedRuntime;
-				mockedRuntime.exit(0);
-			}
-		};
-		SimpleEngine.submitTopology(topology);
-		new Verifications() {
-			{
-				topology.run();
-			}
-		};
-	}
+  @Tested
+  private SimpleEngine unused;
+  @Mocked
+  private SimpleTopology topology;
+  @Mocked
+  private Runtime mockedRuntime;
+
+  @Test
+  public void testSubmitTopology() {
+    new NonStrictExpectations() {
+      {
+        Runtime.getRuntime();
+        result = mockedRuntime;
+        mockedRuntime.exit(0);
+      }
+    };
+    SimpleEngine.submitTopology(topology);
+    new Verifications() {
+      {
+        topology.run();
+      }
+    };
+  }
 
 }

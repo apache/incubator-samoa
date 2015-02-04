@@ -24,45 +24,43 @@ import org.junit.Test;
 
 public class AlgosTest {
 
+  @Test(timeout = 60000)
+  public void testVHTWithStorm() throws Exception {
 
-    @Test(timeout = 60000)
-    public void testVHTWithStorm() throws Exception {
+    TestParams vhtConfig = new TestParams.Builder()
+        .inputInstances(200_000)
+        .samplingSize(20_000)
+        .evaluationInstances(200_000)
+        .classifiedInstances(200_000)
+        .classificationsCorrect(55f)
+        .kappaStat(0f)
+        .kappaTempStat(0f)
+        .cliStringTemplate(TestParams.Templates.PREQEVAL_VHT_RANDOMTREE)
+        .resultFilePollTimeout(30)
+        .prePollWait(15)
+        .taskClassName(LocalStormDoTask.class.getName())
+        .build();
+    TestUtils.test(vhtConfig);
 
-        TestParams vhtConfig = new TestParams.Builder()
-                .inputInstances(200_000)
-                .samplingSize(20_000)
-                .evaluationInstances(200_000)
-                .classifiedInstances(200_000)
-                .classificationsCorrect(55f)
-                .kappaStat(0f)
-                .kappaTempStat(0f)
-                .cliStringTemplate(TestParams.Templates.PREQEVAL_VHT_RANDOMTREE)
-                .resultFilePollTimeout(30)
-                .prePollWait(15)
-                .taskClassName(LocalStormDoTask.class.getName())
-                .build();
-        TestUtils.test(vhtConfig);
+  }
 
-    }
+  @Test(timeout = 120000)
+  public void testBaggingWithStorm() throws Exception {
+    TestParams baggingConfig = new TestParams.Builder()
+        .inputInstances(200_000)
+        .samplingSize(20_000)
+        .evaluationInstances(180_000)
+        .classifiedInstances(190_000)
+        .classificationsCorrect(60f)
+        .kappaStat(0f)
+        .kappaTempStat(0f)
+        .cliStringTemplate(TestParams.Templates.PREQEVAL_BAGGING_RANDOMTREE)
+        .resultFilePollTimeout(40)
+        .prePollWait(20)
+        .taskClassName(LocalStormDoTask.class.getName())
+        .build();
+    TestUtils.test(baggingConfig);
 
-    @Test(timeout = 120000)
-    public void testBaggingWithStorm() throws Exception {
-        TestParams baggingConfig = new TestParams.Builder()
-                .inputInstances(200_000)
-                .samplingSize(20_000)
-                .evaluationInstances(180_000)
-                .classifiedInstances(190_000)
-                .classificationsCorrect(60f)
-                .kappaStat(0f)
-                .kappaTempStat(0f)
-                .cliStringTemplate(TestParams.Templates.PREQEVAL_BAGGING_RANDOMTREE)
-                .resultFilePollTimeout(40)
-                .prePollWait(20)
-                .taskClassName(LocalStormDoTask.class.getName())
-                .build();
-        TestUtils.test(baggingConfig);
-
-    }
-
+  }
 
 }

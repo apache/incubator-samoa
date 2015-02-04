@@ -27,20 +27,20 @@ import com.yahoo.labs.samoa.core.EntranceProcessor;
  */
 public interface EntranceProcessingItem extends IProcessingItem {
 
-    @Override
-    /**
-     * Gets the processing item processor.
-     * 
-     * @return the embedded EntranceProcessor. 
-     */
-    public EntranceProcessor getProcessor();
+  @Override
+  /**
+   * Gets the processing item processor.
+   * 
+   * @return the embedded EntranceProcessor. 
+   */
+  public EntranceProcessor getProcessor();
 
-    /**
-     * Set the single output stream for this EntranceProcessingItem.
-     * 
-     * @param stream
-     *            the stream
-     * @return the current instance of the EntranceProcessingItem for fluent interface.
-     */
-    public EntranceProcessingItem setOutputStream(Stream stream);
+  /**
+   * Set the single output stream for this EntranceProcessingItem.
+   * 
+   * @param stream
+   *          the stream
+   * @return the current instance of the EntranceProcessingItem for fluent interface.
+   */
+  public EntranceProcessingItem setOutputStream(Stream stream);
 }

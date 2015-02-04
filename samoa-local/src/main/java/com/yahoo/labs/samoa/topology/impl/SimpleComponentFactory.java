@@ -31,23 +31,23 @@ import com.yahoo.labs.samoa.topology.Topology;
 
 public class SimpleComponentFactory implements ComponentFactory {
 
-    public ProcessingItem createPi(Processor processor, int paralellism) {
-        return new SimpleProcessingItem(processor, paralellism);
-    }
+  public ProcessingItem createPi(Processor processor, int paralellism) {
+    return new SimpleProcessingItem(processor, paralellism);
+  }
 
-    public ProcessingItem createPi(Processor processor) {
-        return this.createPi(processor, 1);
-    }
+  public ProcessingItem createPi(Processor processor) {
+    return this.createPi(processor, 1);
+  }
 
-    public EntranceProcessingItem createEntrancePi(EntranceProcessor processor) {
-        return new SimpleEntranceProcessingItem(processor);
-    }
+  public EntranceProcessingItem createEntrancePi(EntranceProcessor processor) {
+    return new SimpleEntranceProcessingItem(processor);
+  }
 
-    public Stream createStream(IProcessingItem sourcePi) {
-        return new SimpleStream(sourcePi);
-    }
+  public Stream createStream(IProcessingItem sourcePi) {
+    return new SimpleStream(sourcePi);
+  }
 
-    public Topology createTopology(String topoName) {
-        return new SimpleTopology(topoName);
-    }
+  public Topology createTopology(String topoName) {
+    return new SimpleTopology(topoName);
+  }
 }

@@ -25,62 +25,62 @@ package com.yahoo.labs.samoa.instances;
  */
 
 /**
- *
+ * 
  * @author abifet
  */
 public class SingleClassInstanceData implements InstanceData {
 
-    protected double classValue;
-    
-    @Override
-    public int numAttributes() {
-        return 1;
-    }
+  protected double classValue;
 
-    @Override
-    public double value(int instAttIndex) {
-        return classValue;
-    }
+  @Override
+  public int numAttributes() {
+    return 1;
+  }
 
-    @Override
-    public boolean isMissing(int indexAttribute) {
-        return Double.isNaN(this.value(indexAttribute));
-    }
+  @Override
+  public double value(int instAttIndex) {
+    return classValue;
+  }
 
-    @Override
-    public int numValues() {
-        return 1;
-    }
+  @Override
+  public boolean isMissing(int indexAttribute) {
+    return Double.isNaN(this.value(indexAttribute));
+  }
 
-    @Override
-    public int index(int i) {
-        return 0;
-    }
+  @Override
+  public int numValues() {
+    return 1;
+  }
 
-    @Override
-    public double valueSparse(int i) {
-        return value(i);
-    }
+  @Override
+  public int index(int i) {
+    return 0;
+  }
 
-    @Override
-    public boolean isMissingSparse(int indexAttribute) {
-        return Double.isNaN(this.value(indexAttribute));
-    }
+  @Override
+  public double valueSparse(int i) {
+    return value(i);
+  }
 
-    /*@Override
-    public double value(Attribute attribute) {
-        return this.classValue;
-    }*/
+  @Override
+  public boolean isMissingSparse(int indexAttribute) {
+    return Double.isNaN(this.value(indexAttribute));
+  }
 
-    @Override
-    public double[] toDoubleArray() {
-        double[] array = {this.classValue};
-        return array;
-    }
+  /*
+   * @Override public double value(Attribute attribute) { return
+   * this.classValue; }
+   */
 
-    @Override
-    public void setValue(int m_numAttributes, double d) {
-        this.classValue = d;
-    }
-    
+  @Override
+  public double[] toDoubleArray() {
+    double[] array = { this.classValue };
+    return array;
+  }
+
+  @Override
+  public void setValue(int m_numAttributes, double d) {
+    this.classValue = d;
+  }
+
 }
