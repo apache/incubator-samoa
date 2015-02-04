@@ -38,7 +38,7 @@ public interface FlinkComponent {
 
 	public boolean isInitialised();
 
-	public DataStream getOutStream();
+	public DataStream<SamoaType> getOutStream();
 
 	public int getId();
 

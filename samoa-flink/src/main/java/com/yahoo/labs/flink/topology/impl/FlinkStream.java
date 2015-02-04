@@ -20,10 +20,10 @@ package com.yahoo.labs.flink.topology.impl;
  * #L%
  */
 
+import com.yahoo.labs.flink.Utils;
 import com.yahoo.labs.samoa.core.ContentEvent;
 import com.yahoo.labs.samoa.topology.AbstractStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.SplitDataStream;
 
 import java.io.Serializable;
 
@@ -35,8 +35,8 @@ public class FlinkStream extends AbstractStream implements FlinkComponent, Seria
 
 	private static int outputCounter = 0;
 	private FlinkComponent procItem;
-	private transient DataStream dataStream;
-	private int sourcePiId ;
+	private transient DataStream<SamoaType> dataStream;
+	private int sourcePiId;
 
 	public FlinkStream(FlinkComponent sourcePi) {
 		this.procItem = sourcePi;
@@ -47,8 +47,7 @@ public class FlinkStream extends AbstractStream implements FlinkComponent, Seria
 	@Override
 	public void initialise() {
 		if (procItem instanceof FlinkProcessingItem) {
-			dataStream = ((SplitDataStream<SamoaType>) (((FlinkProcessingItem) procItem)
-					.getOutStream())).select(getStreamId());
+			dataStream = procItem.getOutStream().filter(Utils.getFilter(getStreamId()));
 		} else
 			dataStream = procItem.getOutStream();
 	}
@@ -74,7 +73,7 @@ public class FlinkStream extends AbstractStream implements FlinkComponent, Seria
 	}
 
 	@Override
-	public int getId(){
+	public int getId() {
 		return -1; //dummy number shows that it cones from a Stream
 	}
 

@@ -21,15 +21,11 @@ package com.yahoo.labs.flink.topology.impl;
  */
 
 
-import com.yahoo.labs.flink.SamoaTypeInfo;
 import com.yahoo.labs.flink.Utils;
 import com.yahoo.labs.samoa.core.ContentEvent;
 import com.yahoo.labs.samoa.core.EntranceProcessor;
 import com.yahoo.labs.samoa.topology.AbstractEntranceProcessingItem;
-import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.tuple.Tuple3;
-import org.apache.flink.api.java.typeutils.TupleTypeInfo;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -45,7 +41,7 @@ public class FlinkEntranceProcessingItem extends AbstractEntranceProcessingItem
 	private transient DataStream outStream;
 	private transient TypeInformation<? extends SamoaType> st;
 	private static int numberOfEntrancePIs = 0;
-	private int piID ;
+	private int piID;
 
 
 	private ContentEvent firstEvent;
@@ -81,7 +77,7 @@ public class FlinkEntranceProcessingItem extends AbstractEntranceProcessingItem
 					collector.collect(SamoaType.of(ce, id));
 				}
 			}
-		}, Utils.samoaTypeInfo);//st);
+		}, Utils.samoaTypeInfo);
 
 		((FlinkStream) getOutputStream()).initialise();
 	}

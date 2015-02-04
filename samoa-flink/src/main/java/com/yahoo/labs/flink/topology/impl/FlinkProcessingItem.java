@@ -30,10 +30,8 @@ import com.yahoo.labs.samoa.topology.Stream;
 import org.apache.flink.api.common.functions.Function;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.SplitDataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.invokable.StreamInvokable;
-import org.apache.flink.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -130,30 +128,9 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 
 	@Override
 	public void invoke() throws Exception {
-		System.err.println("piId: " + this.getId() + ", " + this.getProcessor().getClass().getCanonicalName());
 		while (readNext() != null) {
-			System.err.println(this.getId());
-			callUserFunctionAndLogException();
+			fun.processEvent(nextObject.f1);
 		}
-	}
-
-	protected void callUserFunctionAndLogException() {
-		try {
-			//System.err.println("callUserFunctionAndLogException");
-			callUserFunction();
-		} catch (Exception e) {
-			if (logger.isErrorEnabled()) {
-				logger.error("Calling user function failed due to: {}",
-						StringUtils.stringifyException(e));
-			}
-		}
-	}
-
-	@Override
-	protected void callUserFunction() throws Exception {
-		//System.err.println("CallUserFunction function was called");
-		System.out.println("Next :: " + nextObject.toString());
-		fun.processEvent(nextObject.f1);
 	}
 
 	@Override
@@ -191,7 +168,7 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 		return this.outStream;
 	}
 
-	public void setOutStream(SplitDataStream outStream) {
+	public void setOutStream(DataStream outStream) {
 		this.outStream = outStream;
 	}
 

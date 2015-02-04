@@ -24,19 +24,13 @@ package com.yahoo.labs.flink.topology.impl;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.yahoo.labs.flink.FlinkDoTask;
 import com.yahoo.labs.flink.Utils;
 import com.yahoo.labs.samoa.topology.AbstractTopology;
 import com.yahoo.labs.samoa.topology.EntranceProcessingItem;
-import org.apache.flink.api.java.operators.IterativeDataSet;
-import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
-import org.apache.flink.streaming.api.collector.OutputSelector;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.IterativeDataStream;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
-import org.apache.flink.streaming.api.datastream.SplitDataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 import java.util.ArrayList;
@@ -71,25 +65,15 @@ public class FlinkTopology extends AbstractTopology {
 		for (FlinkProcessingItem comp : flinkComponents) {
 			if (comp.canBeInitialised() && !comp.isInitialised()) {
 				comp.initialise();
-				SplitDataStream outStream = ((SingleOutputStreamOperator) comp.getOutStream())
-						.split(new OutputSelector<SamoaType>() {
-							@Override
-							public Iterable<String> select(SamoaType samoaType) {
-								return Lists.newArrayList(samoaType.f2);
-							}
-						});
-
-				comp.setOutStream(outStream);
 				comp.initialiseStreams();
 
 			}//if component is part of a circle
-			else if (comp.isPartOfCircle() && !comp.isInitialised()){
+			else if (comp.isPartOfCircle() && !comp.isInitialised()) {
 				//check if circle can be initialized
-				if (circleCanBeInitialised(comp.getCircleId())){
+				if (circleCanBeInitialised(comp.getCircleId())) {
 					System.out.println("Circle can be initialised");
 					initialiseCircle(comp.getCircleId());
-				}
-				else System.out.println("Circle cannot be initialised");
+				} else System.out.println("Circle cannot be initialised");
 			}
 
 		}
@@ -102,24 +86,25 @@ public class FlinkTopology extends AbstractTopology {
 	}
 
 
-	private static boolean circleCanBeInitialised(int circleId){
+	private static boolean circleCanBeInitialised(int circleId) {
 
 		List<Integer> circleIds = new ArrayList<>();
-		for (FlinkProcessingItem pi : FlinkDoTask.circles.get(circleId)){
+		for (FlinkProcessingItem pi : FlinkDoTask.circles.get(circleId)) {
 			circleIds.add(pi.getId());
 		}
 
 		//check that all incoming to the circle streams are initialised
-		for (FlinkProcessingItem procItem : FlinkDoTask.circles.get(circleId)){
-			for (Tuple3<FlinkStream, Utils.Partitioning,Integer> inputStream : procItem.getInputStreams()) {
+		for (FlinkProcessingItem procItem : FlinkDoTask.circles.get(circleId)) {
+			for (Tuple3<FlinkStream, Utils.Partitioning, Integer> inputStream : procItem.getInputStreams()) {
 				//if a inputStream is not initialized AND source of inputStream is not in the circle
-				if ((!inputStream.f0.isInitialised())&&(!circleIds.contains(inputStream.f2)))return false;
+				if ((!inputStream.f0.isInitialised()) && (!circleIds.contains(inputStream.f2)))
+					return false;
 			}
 		}
 		return true;
 	}
 
-	private static void initialiseCircle(int circleId){
+	private static void initialiseCircle(int circleId) {
 		//get the head and tail of circle
 		FlinkProcessingItem tail = FlinkDoTask.circles.get(circleId).get(0);
 		FlinkProcessingItem head = FlinkDoTask.circles.get(circleId).get(FlinkDoTask.circles.size());
@@ -127,10 +112,10 @@ public class FlinkTopology extends AbstractTopology {
 		//TODO:: refactor this part to apply in general cases also
 		//initialise source stream of the iteration, so as to use it for the iteration starting point
 		//head.initialiseCircleHead();
-		for (Tuple3<FlinkStream, Utils.Partitioning,Integer> inputStream : head.getInputStreams()) {
-			if (inputStream.f0.isInitialised()){ //if input stream is initialised
-				try{
-					if (head.getInStream()== null) {
+		for (Tuple3<FlinkStream, Utils.Partitioning, Integer> inputStream : head.getInputStreams()) {
+			if (inputStream.f0.isInitialised()) { //if input stream is initialised
+				try {
+					if (head.getInStream() == null) {
 						//initialise input stream of the head of the iteration
 						head.setInStream(Utils.subscribe(inputStream.f0.getOutStream(), inputStream.f1));
 					} else {
@@ -138,37 +123,23 @@ public class FlinkTopology extends AbstractTopology {
 						DataStream<SamoaType> in = head.getInStream().merge(Utils.subscribe(inputStream.f0.getOutStream(), inputStream.f1));
 						head.setInStream(in);
 					}
-				}catch (Exception e){
+				} catch (Exception e) {
 					System.out.println(e);
 				}
 			}
 		}
-		IterativeDataStream ids = head.getInStream().iterate(5000);
-		SplitDataStream temp = ids.transform("samoaProcessor",Utils.samoaTypeInfo, head).setParallelism(head.getParallelism())
-				.split(new OutputSelector<SamoaType>() {
-					@Override
-					public Iterable<String> select(SamoaType samoaType) {
-						return Lists.newArrayList(samoaType.f2);
-					}
-				});
+		IterativeDataStream ids = head.getInStream().iterate();
+		DataStream temp = ids.transform("samoaProcessor", Utils.samoaTypeInfo, head).setParallelism(head.getParallelism());
 		head.setOutStream(temp);
 		head.initialiseStreams();
 
 
 		//************tail*****************************************************************
 		tail.initialise();
-		SplitDataStream outStream = ((SingleOutputStreamOperator) tail.getOutStream()).split(new OutputSelector<SamoaType>() {
-			@Override
-			public Iterable<String> select(SamoaType samoaType) {
-				return Lists.newArrayList(samoaType.f2);
-			}
-		});
-
-		tail.setOutStream(outStream);
 		tail.initialiseStreams();
 
 		//refactor that:get(0) --> for the specific example
-		ids.closeWith(((SplitDataStream) tail.getOutStream()).select(tail.getOutputStreams().get(0).getStreamId()));
+		ids.closeWith(tail.getOutStream().filter(Utils.getFilter(tail.getOutputStreams().get(0).getStreamId())));
 	}
 
 

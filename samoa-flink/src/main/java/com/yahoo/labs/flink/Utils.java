@@ -22,6 +22,7 @@ package com.yahoo.labs.flink;
 
 
 import com.yahoo.labs.flink.topology.impl.SamoaType;
+import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -64,6 +65,15 @@ public class Utils {
 			default:
 				return stream.shuffle();
 		}
+	}
+
+	public static FilterFunction<SamoaType> getFilter(final String streamID) {
+		return new FilterFunction<SamoaType>() {
+			@Override
+			public boolean filter(SamoaType o) throws Exception {
+				return o.f2.equals(streamID);
+			}
+		};
 	}
 
 	public static void extractFlinkArguments(List<String> tmpargs) {
