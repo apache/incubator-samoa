@@ -21,6 +21,7 @@ package com.yahoo.labs.flink.topology.impl;
  */
 
 
+import com.yahoo.labs.flink.SamoaTypeInfo;
 import com.yahoo.labs.flink.Utils;
 import com.yahoo.labs.samoa.core.ContentEvent;
 import com.yahoo.labs.samoa.core.EntranceProcessor;
@@ -77,7 +78,7 @@ public class FlinkEntranceProcessingItem extends AbstractEntranceProcessingItem
 					collector.collect(SamoaType.of(ce, id));
 				}
 			}
-		}, Utils.samoaTypeInfo);
+		}, Utils.samoaTypeInformation);
 
 		((FlinkStream) getOutputStream()).initialise();
 	}

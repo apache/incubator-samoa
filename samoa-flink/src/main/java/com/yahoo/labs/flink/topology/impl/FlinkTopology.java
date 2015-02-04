@@ -129,7 +129,7 @@ public class FlinkTopology extends AbstractTopology {
 			}
 		}
 		IterativeDataStream ids = head.getInStream().iterate();
-		DataStream temp = ids.transform("samoaProcessor", Utils.samoaTypeInfo, head).setParallelism(head.getParallelism());
+		DataStream temp = ids.transform("samoaProcessor", Utils.samoaTypeInformation, head).setParallelism(head.getParallelism());
 		head.setOutStream(temp);
 		head.initialiseStreams();
 

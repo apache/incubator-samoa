@@ -21,6 +21,7 @@ package com.yahoo.labs.flink.topology.impl;
  */
 
 import com.google.common.collect.Lists;
+import com.yahoo.labs.flink.SamoaTypeInfo;
 import com.yahoo.labs.flink.Utils;
 import com.yahoo.labs.flink.Utils.Partitioning;
 import com.yahoo.labs.samoa.core.ContentEvent;
@@ -99,7 +100,7 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 				System.exit(1);
 			}
 		}
-		outStream = inStream.transform("samoaProcessor", Utils.samoaTypeInfo, this).setParallelism(parallelism);
+		outStream = inStream.transform("samoaProcessor", Utils.samoaTypeInformation, this).setParallelism(parallelism);
 	}
 
 	public void initialiseStreams() {
