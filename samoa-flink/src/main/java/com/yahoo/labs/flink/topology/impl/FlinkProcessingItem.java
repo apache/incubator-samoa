@@ -21,7 +21,6 @@ package com.yahoo.labs.flink.topology.impl;
  */
 
 import com.google.common.collect.Lists;
-import com.yahoo.labs.flink.SamoaTypeInfo;
 import com.yahoo.labs.flink.Utils;
 import com.yahoo.labs.flink.Utils.Partitioning;
 import com.yahoo.labs.samoa.core.ContentEvent;
@@ -82,6 +81,7 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 	}
 
 	public void putToStream(ContentEvent data, Stream targetStream) {
+		//System.out.println("----------------this: " + targetStream.getStreamId());
 		collector.collect(SamoaType.of(data, targetStream.getStreamId()));
 	}
 
@@ -129,8 +129,11 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 
 	@Override
 	public void invoke() throws Exception {
+		System.out.println("Processor: " + this.getComponentId());
 		while (readNext() != null) {
-			fun.processEvent(nextObject.f1);
+			SamoaType t = nextObject;
+			System.err.println(t.toString());
+			fun.processEvent(t.f1);
 		}
 	}
 
@@ -174,7 +177,7 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 	}
 
 	@Override
-	public int getId() {
+	public int getComponentId() {
 		return piID;
 	}
 

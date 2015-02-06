@@ -61,18 +61,18 @@ public class FlinkEntranceProcessingItem extends AbstractEntranceProcessingItem
 
 		//TypeInformation<Tuple3<String,ContentEvent,String>> ti = new TupleTypeInfo(Tuple3.class, BasicTypeInfo.STRING_TYPE_INFO,TypeExtractor.getForClass(ContentEvent.class),BasicTypeInfo.STRING_TYPE_INFO);
 
-		if (proc.hasNext()) {
-			firstEvent = proc.nextEvent();
-			SamoaType t = SamoaType.of(firstEvent, streamId);
-			st = TypeExtractor.getForObject(t); // consider the case that there is no event...how to create an object?
-		}
+//		if (proc.hasNext()) {
+//			firstEvent = proc.nextEvent();
+//			SamoaType t = SamoaType.of(firstEvent, streamId);
+//			st = TypeExtractor.getForObject(t); // consider the case that there is no event...how to create an object?
+//		}
 		outStream = env.addSource(new SourceFunction<SamoaType>() {
 			EntranceProcessor entrProc = proc;
 			String id = streamId;
 
 			@Override
 			public void invoke(Collector<SamoaType> collector) throws Exception {
-				collector.collect(SamoaType.of(firstEvent, id));
+				//collector.collect(SamoaType.of(firstEvent, id));
 				while (entrProc.hasNext()) {
 					ContentEvent ce = entrProc.nextEvent();
 					collector.collect(SamoaType.of(ce, id));
@@ -95,7 +95,7 @@ public class FlinkEntranceProcessingItem extends AbstractEntranceProcessingItem
 	}
 
 	@Override
-	public int getId() {
+	public int getComponentId() {
 		return -1; // dummy number shows that it cones from an Entrance PI
 	}
 

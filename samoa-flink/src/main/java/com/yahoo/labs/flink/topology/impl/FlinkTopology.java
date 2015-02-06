@@ -90,7 +90,7 @@ public class FlinkTopology extends AbstractTopology {
 
 		List<Integer> circleIds = new ArrayList<>();
 		for (FlinkProcessingItem pi : FlinkDoTask.circles.get(circleId)) {
-			circleIds.add(pi.getId());
+			circleIds.add(pi.getComponentId());
 		}
 
 		//check that all incoming to the circle streams are initialised

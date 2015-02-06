@@ -21,7 +21,6 @@ package com.yahoo.labs.flink;
  */
 
 import com.github.javacliparser.ClassOption;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.yahoo.labs.flink.topology.impl.FlinkComponentFactory;
@@ -29,9 +28,6 @@ import com.yahoo.labs.flink.topology.impl.FlinkProcessingItem;
 import com.yahoo.labs.flink.topology.impl.FlinkStream;
 import com.yahoo.labs.flink.topology.impl.FlinkTopology;
 import com.yahoo.labs.samoa.tasks.Task;
-import com.yahoo.labs.samoa.topology.EntranceProcessingItem;
-import com.yahoo.labs.samoa.topology.ProcessingItem;
-import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.slf4j.Logger;
@@ -104,9 +100,9 @@ public class FlinkDoTask {
 		}
 		//construct the graph of the topology for the Processing Items (No entrance pi is included)
 		for (FlinkProcessingItem pi: pis) {
-			processingItems[pi.getId()] = pi; //ordered processing items
+			processingItems[pi.getComponentId()] = pi; //ordered processing items
 			for (Tuple3<FlinkStream, Utils.Partitioning, Integer> is : pi.getInputStreams()) {
-				if (is.f2 != -1) graph[is.f2].add(pi.getId());
+				if (is.f2 != -1) graph[is.f2].add(pi.getComponentId());
 			}
 		}
 		for (int g=0;g<graph.length;g++)
@@ -122,7 +118,6 @@ public class FlinkDoTask {
 				circle.add(processingItems[it]); //add processing Item in the circle
 				processingItems[it].setPartOfCircle(true);
 				processingItems[it].setCircleId(piCircles.size()); //set the Id of the circle that this PI belongs to
-				//System.out.println("piId: "+processingItems[it].getPiID());
 			}
 			piCircles.add(circle);
 		}

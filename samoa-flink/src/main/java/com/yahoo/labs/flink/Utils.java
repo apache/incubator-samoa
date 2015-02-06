@@ -50,8 +50,6 @@ public class Utils {
 	public static int flinkPort;
 	public static String[] dependecyJars;
 	public static int parallelism = 2;
-//	public static TypeInformation[] ti= {BasicTypeInfo.STRING_TYPE_INFO, TypeExtractor.
-//			getForClass(ContentEvent.class), BasicTypeInfo.STRING_TYPE_INFO};
 
 	public enum Partitioning {SHUFFLE, ALL, GROUP}
 

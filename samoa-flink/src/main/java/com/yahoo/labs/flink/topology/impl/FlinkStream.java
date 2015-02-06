@@ -37,11 +37,14 @@ public class FlinkStream extends AbstractStream implements FlinkComponent, Seria
 	private FlinkComponent procItem;
 	private transient DataStream<SamoaType> dataStream;
 	private int sourcePiId;
+	private String flinkStreamId;
 
 	public FlinkStream(FlinkComponent sourcePi) {
 		this.procItem = sourcePi;
-		this.sourcePiId = sourcePi.getId();
-		setStreamId("stream-" + Integer.toString(outputCounter++));
+		this.sourcePiId = sourcePi.getComponentId();
+		setStreamId("stream-" + Integer.toString(outputCounter));
+		flinkStreamId = "stream-" + Integer.toString(outputCounter);
+		outputCounter++;
 	}
 
 	@Override
@@ -73,11 +76,16 @@ public class FlinkStream extends AbstractStream implements FlinkComponent, Seria
 	}
 
 	@Override
-	public int getId() {
-		return -1; //dummy number shows that it cones from a Stream
+	public int getComponentId() {
+		return -1; //dummy number shows that it comes from a Stream
 	}
 
 	public int getSourcePiId() {
 		return sourcePiId;
+	}
+
+	@Override
+	public String getStreamId() {
+		return flinkStreamId;
 	}
 }

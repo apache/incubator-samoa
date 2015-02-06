@@ -40,6 +40,6 @@ public interface FlinkComponent {
 
 	public DataStream<SamoaType> getOutStream();
 
-	public int getId();
+	public int getComponentId();
 
 }
