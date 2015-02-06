@@ -54,9 +54,9 @@ Decisions regarding the project are made by votes on the primary project develop
 
 | Vote | Meaning |
 |------|---------|
-| +1 | 'Yes', 'Agree', or 'the action should be performed'. |
-| +0 | Neutral about the proposed action (or mildly negative but not enough so to want to block it). |
-| -1 |This is a negative vote. On issues where consensus is required, this vote counts as a veto. All vetoes must contain an explanation of why the veto is appropriate. Vetoes with no explanation are void. It may also be appropriate for a -1 vote to include an alternative course of action. |
+| +1   | 'Yes', 'Agree', or 'the action should be performed'. |
+| +0   | Neutral about the proposed action (or mildly negative but not enough so to want to block it). |
+| -1   | This is a negative vote. On issues where consensus is required, this vote counts as a veto. All vetoes must contain an explanation of why the veto is appropriate. Vetoes with no explanation are void. It may also be appropriate for a -1 vote to include an alternative course of action. |
 
 All participants in the SAMOA project are encouraged to show their agreement with or against a particular action by voting. For technical decisions, only the votes of active Committers are binding. Non-binding votes are still useful for those with binding votes to understand the perception of an action in the wider SAMOA community. For PMC decisions, only the votes of active PMC members are binding.
 
@@ -68,12 +68,13 @@ Only active (i.e., non-emeritus) Committers and PMC members have binding votes.
 
 These are the types of approval that can be sought. Different actions require different types of approval.
 
-* Consensus - Consensus requires all binding-vote holders to cast +1 votes and no binding -1 vetoes (consensus votes are rarely required due to the impracticality of getting all eligible voters to cast a vote).
-* 2/3 Majority - 2/3 majority requires at least 2/3 of binding-vote holders to cast +1 votes. (2/3 majority is typically used for actions that affect the foundation of the project, e.g., adopting a new codebase to replace an existing product).
-* Lazy Approval - Lazy approval requires 1 binding +1 vote and no -1 veto.
-* Lazy Consensus - Lazy consensus requires 2 binding +1 votes and no -1 votes ('silence gives assent').
-* Lazy Majority - Lazy majority requires 3 binding +1 votes and more binding +1 votes than -1 vetoes.
-* Lazy 2/3 Majority - Lazy 2/3 majority requires at least 3 votes and twice as many +1 votes as -1 vetoes.
+| Approval          | Requirements |
+|-------------------|--------------|
+| Consensus         | requires all binding-vote holders to cast +1 votes and no binding -1 vetoes (consensus votes are rarely required due to the impracticality of getting all eligible voters to cast a vote). |
+| 2/3 Majority      | requires at least 2/3 of binding-vote holders to cast +1 votes. (2/3 majority is typically used for actions that affect the foundation of the project, e.g., adopting a new codebase to replace an existing product). |
+| Lazy Consensus    | requires 2 binding +1 votes and no -1 votes ('silence gives assent'). |
+| Lazy Majority     | requires 3 binding +1 votes and more binding +1 votes than -1 vetoes. |
+| Lazy 2/3 Majority | requires at least 3 votes and twice as many +1 votes as -1 vetoes. |
 
 ### Vetoes
 
@@ -87,14 +88,14 @@ This section describes the various actions which are undertaken within the proje
 
 | Action | Description | Approval | Binding Votes | Minimum Length | Mailing List |
 |--------|-------------|----------|---------------|----------------|--------------|
-| Code Change | A change made to a codebase of the project and committed by a committer. This includes source code, documentation, website content, etc. | Lazy Consensus (with at least one +1 vote from someone who has not authored the patch) | Active Committers | 2 days | JIRA or GitHub pull (with notification sent to dev@samoa.incubator.apache.org) |
-| Release Plan | Defines the timetable and actions for a release. The plan also nominates a Release Manager. | Lazy Majority | Active Committers | 3 days | dev@samoa.incubator.apache.org |
-| Product Release | Accepting the official release of a product of the project. | Lazy Majority | Active PMC members | 3 days | dev@samoa.incubator.apache.org |
-| Adoption of New Codebase | Replacing the codebase for an existing, released product with an alternative codebase. If such a vote fails to gain approval, the existing code base will continue. This action also covers the creation of new sub-projects and sub-modules within the project. | Lazy 2/3 Majority | Active PMC members | 7 days | dev@samoa.incubator.apache.org |
-| New Committer | Electing a new Committer for the project. | Lazy Consensus | Active PMC members | 7 days | private@samoa.incubator.apache.org |
-| New PMC Member | Promoting a Committer to the PMC of the project. | Consensus | Active PMC members | 7 days | private@samoa.incubator.apache.org |
-| Emeritus PMC Member re-instatement | When an emeritus PMC member requests to be re-instated as an active PMC member. | Consensus | Active PMC members | 7 days | private@samoa.incubator.apache.org |
-| Emeritus Committer re-instatement | When an emeritus Committer requests to be re-instated as an active committer. | Consensus | Active PMC members | 7 days | private@samoa.incubator.apache.org |
-| Committer Removal | When removal of commit privileges is sought. Note: Such actions will also be referred to the ASF board by the PMC chair. | Consensus | Active PMC members (excluding the committer in question if member of the PMC) | 7 Days | private@samoa.incubator.apache.org |
-| PMC Member Removal | When removal of a PMC member is sought. Note: Such actions will also be referred to the ASF board by the PMC chair. | Consensus | Active PMC members (excluding the member in question) | 7 Days | private@samoa.incubator.apache.org |
-| Modifying Bylaws | Modifying this document. | 2/3 Majority | Active PMC members | 7 Days | dev@samoa.incubator.apache.org |
+| Code Change | A change made to a codebase of the project and committed by a committer. This includes source code, documentation, and website content. | Lazy Consensus (with at least one +1 vote from someone who has not authored the patch). The code can be committed as soon as the required number of binding votes is reached. | Active Committers | 1 day | JIRA or GitHub pull request (with notification sent to dev@) |
+| Release Plan | Defines the timetable and actions for a release. The plan also nominates a Release Manager. | Lazy Majority | Active Committers | 3 days | dev@ |
+| Product Release | Accepting the official release of a product of the project. | Lazy Majority | Active PMC members | 3 days | dev@ |
+| Adoption of New Codebase | Replacing the codebase for an existing, released product with an alternative codebase. If such a vote fails to gain approval, the existing code base will continue. This action also covers the creation of new sub-projects and sub-modules within the project. | Lazy 2/3 Majority | Active PMC members | 7 days | dev@ |
+| New Committer | Electing a new Committer for the project. | Lazy Consensus | Active PMC members | 7 days | private@ |
+| New PMC Member | Promoting a Committer to the PMC of the project. | Consensus | Active PMC members | 7 days | private@ |
+| Emeritus PMC Member re-instatement | When an emeritus PMC member requests to be re-instated as an active PMC member. | Consensus | Active PMC members | 7 days | private@ |
+| Emeritus Committer re-instatement | When an emeritus Committer requests to be re-instated as an active committer. | Consensus | Active PMC members | 7 days | private@ |
+| Committer Removal | When removal of commit privileges is sought. Note: Such actions will also be referred to the ASF board by the PMC chair. | Consensus | Active PMC members (excluding the committer in question if member of the PMC) | 7 Days | private@ |
+| PMC Member Removal | When removal of a PMC member is sought. Note: Such actions will also be referred to the ASF board by the PMC chair. | Consensus | Active PMC members (excluding the member in question) | 7 Days | private@ |
+| Modifying Bylaws | Modifying this document. | 2/3 Majority | Active PMC members | 7 Days | dev@ |
