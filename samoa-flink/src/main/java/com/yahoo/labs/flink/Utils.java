@@ -77,12 +77,13 @@ public class Utils {
 
 		@Override
 		public SamoaType copy(SamoaType samoaType) {
-			return null;
+			return SamoaType.of(samoaType.f1, samoaType.f2);
 		}
 
 		@Override
 		public SamoaType copy(SamoaType samoaType, SamoaType t1) {
-			return null;
+			samoaType.setFields(t1.f0, t1.f1, t1.f2);
+			return samoaType;	
 		}
 
 		@Override

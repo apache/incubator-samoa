@@ -29,6 +29,7 @@ import com.yahoo.labs.samoa.topology.ProcessingItem;
 import com.yahoo.labs.samoa.topology.Stream;
 import org.apache.flink.api.common.functions.Function;
 import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.invokable.StreamInvokable;
@@ -83,6 +84,12 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 	public void putToStream(ContentEvent data, Stream targetStream) {
 		//System.out.println("----------------this: " + targetStream.getStreamId());
 		collector.collect(SamoaType.of(data, targetStream.getStreamId()));
+	}
+
+	@Override
+	public void open(Configuration parameters) throws Exception {
+		super.open(parameters);
+		this.processor.onCreate(getComponentId());
 	}
 
 	@Override
