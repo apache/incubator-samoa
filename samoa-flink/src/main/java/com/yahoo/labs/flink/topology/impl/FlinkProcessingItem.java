@@ -31,12 +31,14 @@ import org.apache.flink.api.common.functions.Function;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.IterativeDataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.invokable.StreamInvokable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -54,8 +56,9 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 	private int parallelism;
 	private static int numberOfPIs = 0;
 	private int piID;
-	private boolean isPartOfCircle;
-	private int circleId; //check if we can refactor this
+	private transient IterativeDataStream iterativeDataStream;
+	private List<Integer> circleId; //check if we can refactor this
+	//private int circleId; //check if we can refactor this
 
 	public FlinkProcessingItem(StreamExecutionEnvironment env, Processor proc) {
 		this(env, proc, 1);
@@ -72,7 +75,7 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 		this.processor = proc;
 		this.parallelism = parallelism;
 		this.piID = numberOfPIs++;
-		this.circleId = -1; // Is part of no circle
+		this.circleId = new ArrayList<Integer>() {}; // if size equals 0, then it is part of no circle
 	}
 
 	public Stream createStream() {
@@ -82,7 +85,6 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 	}
 
 	public void putToStream(ContentEvent data, Stream targetStream) {
-		//System.out.println("----------------this: " + targetStream.getStreamId());
 		collector.collect(SamoaType.of(data, targetStream.getStreamId()));
 	}
 
@@ -95,16 +97,18 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 	@Override
 	public void initialise() {
 		for (Tuple3<FlinkStream, Partitioning, Integer> inputStream : inputStreams) {
-			try {
-				DataStream toBeMerged = Utils.subscribe(inputStream.f0.getOutStream(), inputStream.f1);
-				if (inStream == null) {
-					inStream = toBeMerged;
-				} else {
-					inStream = inStream.merge(toBeMerged);
+			if (inputStream.f0.isInitialised()) { //if input stream is initialised
+				try {
+					DataStream toBeMerged = Utils.subscribe(inputStream.f0.getOutStream(), inputStream.f1);
+					if (inStream == null) {
+						inStream = toBeMerged;
+					} else {
+						inStream = inStream.merge(toBeMerged);
+					}
+				} catch (RuntimeException e) {
+					e.printStackTrace();
+					System.exit(1);
 				}
-			} catch (RuntimeException e) {
-				e.printStackTrace();
-				System.exit(1);
 			}
 		}
 		outStream = inStream.transform("samoaProcessor", Utils.samoaTypeInformation, this).setParallelism(parallelism);
@@ -136,10 +140,8 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 
 	@Override
 	public void invoke() throws Exception {
-		System.out.println("Processor: " + this.getComponentId());
 		while (readNext() != null) {
 			SamoaType t = nextObject;
-			System.err.println(t.toString());
 			fun.processEvent(t.f1);
 		}
 	}
@@ -189,19 +191,29 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 	}
 
 	public boolean isPartOfCircle() {
-		return isPartOfCircle;
+		return this.circleId.size()>0;
 	}
 
-	public void setPartOfCircle(boolean isPartOfCircle) {
-		this.isPartOfCircle = isPartOfCircle;
-	}
-
-	public int getCircleId() {
+	public List<Integer>  getCircleIds() {
 		return circleId;
 	}
 
-	public void setCircleId(int circleId) {
-		this.circleId = circleId;
+	public void setCircleIds(List<Integer> circlesIds) {
+		for (Integer i: circlesIds){
+			this.circleId.add(i);
+		}
+	}
+
+	public IterativeDataStream getIterativeDataStream() {
+		return iterativeDataStream;
+	}
+
+	public void setIterativeDataStream(IterativeDataStream iterativeDataStream) {
+		this.iterativeDataStream = iterativeDataStream;
+	}
+
+	public void addPItoCircle(int piId){
+		this.circleId.add(piId);
 	}
 
 	public DataStream<SamoaType> getInStream() {

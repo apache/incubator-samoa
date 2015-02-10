@@ -43,6 +43,7 @@ public class FlinkDoTask {
 
 	private static final Logger logger = LoggerFactory.getLogger(FlinkDoTask.class);
 	public static List<List<FlinkProcessingItem>> circles ;
+	public static List<Integer> circleTails = new ArrayList<Integer>();
 
 
 	public static void main(String[] args) throws Exception {
@@ -100,7 +101,7 @@ public class FlinkDoTask {
 		}
 		//construct the graph of the topology for the Processing Items (No entrance pi is included)
 		for (FlinkProcessingItem pi: pis) {
-			processingItems[pi.getComponentId()] = pi; //ordered processing items
+			processingItems[pi.getComponentId()] = pi;
 			for (Tuple3<FlinkStream, Utils.Partitioning, Integer> is : pi.getInputStreams()) {
 				if (is.f2 != -1) graph[is.f2].add(pi.getComponentId());
 			}
@@ -109,17 +110,17 @@ public class FlinkDoTask {
 			System.out.println(graph[g].toString());
 
 		CircleDetection detCircles = new CircleDetection();
-		List<List<Integer>> circles = detCircles.getCircles(graph); //detect circles in the topology
+		List<List<Integer>> circles = detCircles.getCircles(graph);
 
 		//update PIs, regarding being part fo a circle.
 		for (List<Integer> c : circles){
 			List<FlinkProcessingItem> circle = new ArrayList<>();
 			for (Integer it : c){
-				circle.add(processingItems[it]); //add processing Item in the circle
-				processingItems[it].setPartOfCircle(true);
-				processingItems[it].setCircleId(piCircles.size()); //set the Id of the circle that this PI belongs to
+				circle.add(processingItems[it]);
+				processingItems[it].addPItoCircle(piCircles.size());
 			}
 			piCircles.add(circle);
+			circleTails.add(circle.get(0).getComponentId());
 		}
 		System.out.println("Circles in the topology: " +circles);
 

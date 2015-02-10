@@ -63,17 +63,20 @@ public class FlinkTopology extends AbstractTopology {
 		if (flinkComponents.isEmpty()) return;
 
 		for (FlinkProcessingItem comp : flinkComponents) {
-			if (comp.canBeInitialised() && !comp.isInitialised()) {
+			if (comp.canBeInitialised() && !comp.isInitialised() && !comp.isPartOfCircle()) {
 				comp.initialise();
 				comp.initialiseStreams();
 
-			}//if component is part of a circle
+			}//if component is part of one or more circle
 			else if (comp.isPartOfCircle() && !comp.isInitialised()) {
-				//check if circle can be initialized
-				if (circleCanBeInitialised(comp.getCircleId())) {
-					System.out.println("Circle can be initialised");
-					initialiseCircle(comp.getCircleId());
-				} else System.out.println("Circle cannot be initialised");
+				for (Integer circle: comp.getCircleIds())
+				{
+					//check if circle can be initialized
+					if (circleCanBeInitialised(circle)){
+						System.out.println("Circle: " + circle +" can be initialised");
+						initialiseCircle(circle);
+					} else System.out.println("Circle cannot be initialised");
+				}
 			}
 
 		}
@@ -89,15 +92,15 @@ public class FlinkTopology extends AbstractTopology {
 	private static boolean circleCanBeInitialised(int circleId) {
 
 		List<Integer> circleIds = new ArrayList<>();
+
 		for (FlinkProcessingItem pi : FlinkDoTask.circles.get(circleId)) {
 			circleIds.add(pi.getComponentId());
 		}
-
 		//check that all incoming to the circle streams are initialised
 		for (FlinkProcessingItem procItem : FlinkDoTask.circles.get(circleId)) {
 			for (Tuple3<FlinkStream, Utils.Partitioning, Integer> inputStream : procItem.getInputStreams()) {
-				//if a inputStream is not initialized AND source of inputStream is not in the circle
-				if ((!inputStream.f0.isInitialised()) && (!circleIds.contains(inputStream.f2)))
+				//if a inputStream is not initialized AND source of inputStream is not in the circle or a tail of other circle
+				if ((!inputStream.f0.isInitialised()) && (!circleIds.contains(inputStream.f2))&&(!FlinkDoTask.circleTails.contains(inputStream.f2)))
 					return false;
 			}
 		}
@@ -107,40 +110,22 @@ public class FlinkTopology extends AbstractTopology {
 	private static void initialiseCircle(int circleId) {
 		//get the head and tail of circle
 		FlinkProcessingItem tail = FlinkDoTask.circles.get(circleId).get(0);
-		FlinkProcessingItem head = FlinkDoTask.circles.get(circleId).get(FlinkDoTask.circles.size());
+		FlinkProcessingItem head = FlinkDoTask.circles.get(circleId).get(FlinkDoTask.circles.get(circleId).size()-1);
 
-		//TODO:: refactor this part to apply in general cases also
 		//initialise source stream of the iteration, so as to use it for the iteration starting point
-		//head.initialiseCircleHead();
-		for (Tuple3<FlinkStream, Utils.Partitioning, Integer> inputStream : head.getInputStreams()) {
-			if (inputStream.f0.isInitialised()) { //if input stream is initialised
-				try {
-					if (head.getInStream() == null) {
-						//initialise input stream of the head of the iteration
-						head.setInStream(Utils.subscribe(inputStream.f0.getOutStream(), inputStream.f1));
-					} else {
-						//merge already initialized streams of head of the iteration
-						DataStream<SamoaType> in = head.getInStream().merge(Utils.subscribe(inputStream.f0.getOutStream(), inputStream.f1));
-						head.setInStream(in);
-					}
-				} catch (Exception e) {
-					System.out.println(e);
-				}
-			}
+		if (!head.isInitialised()) {
+			head.initialise();
+			head.setIterativeDataStream(head.getInStream().iterate(10000));
+			DataStream temp = head.getIterativeDataStream().transform("samoaProcessor", Utils.samoaTypeInformation, head).setParallelism(head.getParallelism());
+			head.setOutStream(temp);
+			head.initialiseStreams();
 		}
-		IterativeDataStream ids = head.getInStream().iterate();
-		DataStream temp = ids.transform("samoaProcessor", Utils.samoaTypeInformation, head).setParallelism(head.getParallelism());
-		head.setOutStream(temp);
-		head.initialiseStreams();
 
-
-		//************tail*****************************************************************
-		tail.initialise();
-		tail.initialiseStreams();
-
-		//refactor that:get(0) --> for the specific example
-		ids.closeWith(tail.getOutStream().filter(Utils.getFilter(tail.getOutputStreams().get(0).getStreamId())));
+		//initialise all nodes after head
+		for (int node = FlinkDoTask.circles.get(circleId).size()-2; node>=0;node--){
+			FlinkDoTask.circles.get(circleId).get(node).initialise();
+			FlinkDoTask.circles.get(circleId).get(node).initialiseStreams();
+		}
+		head.getIterativeDataStream().closeWith(tail.getOutStream().filter(Utils.getFilter(tail.getOutputStreams().get(0).getStreamId())));
 	}
-
-
 }
