@@ -41,15 +41,15 @@ public class Utils {
 	private static final String LOCAL_MODE = "local";
 
 	// FLAGS
-	private static final String MODE_FLAG = "-m";
-	private static final String PARALLELISM_FLAG = "-p";
+//	private static final String MODE_FLAG = "-m";
+//	private static final String PARALLELISM_FLAG = "-p";
 
 	//config values
-	public static boolean isLocal = true;
-	public static String flinkMaster;
-	public static int flinkPort;
-	public static String[] dependecyJars;
-	public static int parallelism = 2;
+	public static boolean isLocal;
+	public static String flinkMaster ;
+	public static int flinkPort ;
+	public static String[] dependecyJars ;
+	public static int parallelism ;
 
 	public enum Partitioning {SHUFFLE, ALL, GROUP}
 
@@ -161,19 +161,29 @@ public class Utils {
 
 
 	public static void extractFlinkArguments(List<String> tmpargs) {
-/*		for (int i = 1; i < tmpargs.size() - 1; i = i + 2) {
-			String choice = tmpargs.get(i).trim();
-			String value = tmpargs.get(i + 1).trim();
-			switch (choice) {
-				case PARALLELISM_FLAG:
-					parallelism = Integer.valueOf(value);
-					break;
-				case MODE_FLAG:
-					if (!(LOCAL_MODE.equals(value))) isLocal = false;
-					break;
-				case "-i":
-					//TODO::refactor to take into consideration all possible arguments.
-			}
-		}*/
+		int modePosition = tmpargs.size()-1;
+
+		//extract mode
+		String choice = tmpargs.get(modePosition).trim();
+		if (LOCAL_MODE.equals(choice)){
+			isLocal = true;
+		}
+		else {
+			isLocal = false;
+			//appropriate values for flinkMaster/port/jar dependencies etc
+		}
+		tmpargs.remove(modePosition);
+
+		//extract parallelism
+		int parallelismPosition = tmpargs.size()-1;
+		try {
+			choice = tmpargs.get(parallelismPosition).trim();
+			parallelism = Integer.parseInt(choice);
+			tmpargs.remove(parallelismPosition);
+		}
+		catch (NumberFormatException nfe){
+			parallelism = 2;
+		}
+
 	}
 }

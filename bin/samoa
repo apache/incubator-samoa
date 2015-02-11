@@ -282,6 +282,58 @@ elif [ $PLATFORM = 'SAMZA' ]; then
                --kryo_register=$BASE_DIR/$KRYO_REGISTER_FILE --pi_per_container=$PI_PER_CONTAINER \
 	       --samoa_hdfs_dir=$HDFS_SAMOA_HOME
 
+#----------------------Flink Platform---------------------------
+
+elif [ $PLATFORM = 'FLINK' ]; then
+
+        echo "Deploying to $PLATFORM"
+        if [ -z $FLINK_HOME ];then
+            echo "FLINK_HOME is not set!"
+            echo "Please set FLINK_HOME to point to your Flink installation"
+            exit -1
+        fi
+
+        if [ ! -f $2 ];then
+            echo "$2 does not exist!"
+            echo "Please use a valid jar file for Flink execution"
+            exit -1
+        fi
+
+        FLINK_EXEC="$FLINK_HOME/bin/flink"
+
+        SAMOA_FLINK_PROPERTIES="samoa-flink.properties"
+        MODE_OPTION="samoa.flink.mode"
+        NUM_WORKER_OPTION="samoa.flink.numworker"
+	
+        VALUE=""
+        getvalue()
+        {
+            VALUE=`sed '/^\#/d' $BASE_DIR/$SAMOA_FLINK_PROPERTIES | grep "$1" | tail -n 1 | cut -d "=" -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'`
+        }
+        
+        getvalue "$NUM_WORKER_OPTION"
+        NUM_WORKER="$VALUE"
+        
+        getvalue "$MODE_OPTION"
+        MODE_ARG="$VALUE"
+        COMPLETE_ARG=""
+        COUNTER=0
+        for var in "$@"
+        do
+            COUNTER=`expr $COUNTER + 1`
+            if [ $COUNTER -gt 2 ];then
+                COMPLETE_ARG="$COMPLETE_ARG $var"
+            fi
+        done
+
+        DEPLOYABLE=$JAR_PATH
+        if [ "$MODE_ARG" = "cluster" ]; then #refactor the cluster mode instructions
+                $FLINK_EXEC jar $DEPLOYABLE com.yahoo.labs.flink.FlinkDoTask $COMPLETE_ARG $NUM_WORKER $MODE_ARG
+        elif [ "$MODE_ARG" = "local" ]; then
+                EXEC_VAR="$FLINK_EXEC run $DEPLOYABLE -c com.yahoo.labs.flink.FlinkDoTask $COMPLETE_ARG $NUM_WORKER $MODE_ARG"
+                eval $EXEC_VAR
+        fi                                                    
+#--------------end of Flink Platform--------------	       
 elif [ $PLATFORM = 'THREADS' ]; then
 	
 	echo "Deploying to LOCAL with MULTITHREADING."
