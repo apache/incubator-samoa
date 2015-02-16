@@ -22,18 +22,11 @@ package com.yahoo.labs.flink;
 
 
 import com.yahoo.labs.flink.topology.impl.SamoaType;
-import org.apache.commons.lang.SerializationUtils;
 import org.apache.flink.api.common.functions.FilterFunction;
-import org.apache.flink.api.common.typeinfo.BasicArrayTypeInfo;
-import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.api.java.functions.KeySelector;
-import org.apache.flink.core.memory.DataInputView;
-import org.apache.flink.core.memory.DataOutputView;
 import org.apache.flink.streaming.api.datastream.DataStream;
 
-import java.io.IOException;
 import java.util.List;
 
 public class Utils {
@@ -46,76 +39,16 @@ public class Utils {
 
 	//config values
 	public static boolean isLocal;
-	public static String flinkMaster ;
-	public static int flinkPort ;
-	public static String[] dependecyJars ;
-	public static int parallelism ;
+	public static String flinkMaster;
+	public static int flinkPort;
+	public static String[] dependecyJars;
+	public static int parallelism;
 
 	public enum Partitioning {SHUFFLE, ALL, GROUP}
 
 	public static TypeInformation<SamoaType> samoaTypeInformation = new SamoaTypeInfo();
 
-	public static TypeSerializer<SamoaType> samoaTypeSerializer = new TypeSerializer<SamoaType>() {
-
-		private TypeSerializer<String> stringTypeSerializer = BasicTypeInfo.STRING_TYPE_INFO.createSerializer();
-		private TypeSerializer<Byte[]> byteTypeSerializer = BasicArrayTypeInfo.BYTE_ARRAY_TYPE_INFO.createSerializer();
-
-		@Override
-		public boolean isImmutableType() {
-			return false;
-		}
-
-		@Override
-		public boolean isStateful() {
-			return false;
-		}
-
-		@Override
-		public SamoaType createInstance() {
-			return new SamoaType();
-		}
-
-		@Override
-		public SamoaType copy(SamoaType samoaType) {
-			return SamoaType.of(samoaType.f1, samoaType.f2);
-		}
-
-		@Override
-		public SamoaType copy(SamoaType samoaType, SamoaType t1) {
-			samoaType.setFields(t1.f0, t1.f1, t1.f2);
-			return samoaType;	
-		}
-
-		@Override
-		public int getLength() {
-			return -1;
-		}
-
-		@Override
-		public void serialize(SamoaType record, DataOutputView target) throws IOException {
-			stringTypeSerializer.serialize(record.f0, target);
-			byteTypeSerializer.serialize(Utils.convert(SerializationUtils.serialize(record.f1)), target);
-			stringTypeSerializer.serialize(record.f2, target);
-		}
-
-		@Override
-		public SamoaType deserialize(DataInputView dataInputView) throws IOException {
-			return deserialize(new SamoaType(), dataInputView);
-		}
-
-		@Override
-		public SamoaType deserialize(SamoaType samoaType, DataInputView dataInputView) throws IOException {
-			samoaType.setField(stringTypeSerializer.deserialize(dataInputView), 0);
-			samoaType.setField(SerializationUtils.deserialize(convert(byteTypeSerializer.deserialize(dataInputView))), 1);
-			samoaType.setField(stringTypeSerializer.deserialize(dataInputView), 2);
-			return samoaType;
-		}
-
-		@Override
-		public void copy(DataInputView dataInputView, DataOutputView dataOutputView) throws IOException {
-			serialize(deserialize(dataInputView), dataOutputView);
-		}
-	};
+	public static SamoaTypeSerializer samoaTypeSerializer = new SamoaTypeSerializer();
 
 	public static DataStream subscribe(DataStream<SamoaType> stream, Partitioning partitioning) {
 		switch (partitioning) {
@@ -161,27 +94,25 @@ public class Utils {
 
 
 	public static void extractFlinkArguments(List<String> tmpargs) {
-		int modePosition = tmpargs.size()-1;
+		int modePosition = tmpargs.size() - 1;
 
 		//extract mode
 		String choice = tmpargs.get(modePosition).trim();
-		if (LOCAL_MODE.equals(choice)){
+		if (LOCAL_MODE.equals(choice)) {
 			isLocal = true;
-		}
-		else {
+		} else {
 			isLocal = false;
 			//appropriate values for flinkMaster/port/jar dependencies etc
 		}
 		tmpargs.remove(modePosition);
 
 		//extract parallelism
-		int parallelismPosition = tmpargs.size()-1;
+		int parallelismPosition = tmpargs.size() - 1;
 		try {
 			choice = tmpargs.get(parallelismPosition).trim();
 			parallelism = Integer.parseInt(choice);
 			tmpargs.remove(parallelismPosition);
-		}
-		catch (NumberFormatException nfe){
+		} catch (NumberFormatException nfe) {
 			parallelism = 2;
 		}
 

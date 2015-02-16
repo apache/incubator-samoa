@@ -331,6 +331,7 @@ elif [ $PLATFORM = 'FLINK' ]; then
                 $FLINK_EXEC jar $DEPLOYABLE com.yahoo.labs.flink.FlinkDoTask $COMPLETE_ARG $NUM_WORKER $MODE_ARG
         elif [ "$MODE_ARG" = "local" ]; then
                 EXEC_VAR="$FLINK_EXEC run $DEPLOYABLE -c com.yahoo.labs.flink.FlinkDoTask $COMPLETE_ARG $NUM_WORKER $MODE_ARG"
+                echo $EXEC_VAR
                 eval $EXEC_VAR
         fi                                                    
 #--------------end of Flink Platform--------------	       

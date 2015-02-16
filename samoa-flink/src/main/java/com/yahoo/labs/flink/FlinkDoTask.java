@@ -69,7 +69,6 @@ public class FlinkDoTask {
 			System.out.println("Fail to initialize the task: " + e);
 			return;
 		}
-
 		StreamExecutionEnvironment env = (Utils.isLocal) ? StreamExecutionEnvironment.createLocalEnvironment(Utils.parallelism) :
 				StreamExecutionEnvironment.createRemoteEnvironment(Utils.flinkMaster, Utils.flinkPort, Utils.parallelism, Utils.dependecyJars);
 
