@@ -69,9 +69,9 @@ public class FlinkDoTask {
 			System.out.println("Fail to initialize the task: " + e);
 			return;
 		}
-//		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-		StreamExecutionEnvironment env = (Utils.isLocal) ? StreamExecutionEnvironment.createLocalEnvironment(Utils.parallelism) :
-				StreamExecutionEnvironment.createRemoteEnvironment(Utils.flinkMaster, Utils.flinkPort, Utils.parallelism, Utils.dependencyJars);
+		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+//		StreamExecutionEnvironment env = (Utils.isLocal) ? StreamExecutionEnvironment.createLocalEnvironment(Utils.parallelism) :
+//				StreamExecutionEnvironment.createRemoteEnvironment(Utils.flinkMaster, Utils.flinkPort, Utils.parallelism, Utils.dependencyJars);
 
 		logger.info("Creating the factory\n");
 		task.setFactory(new FlinkComponentFactory(env));

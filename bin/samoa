@@ -338,10 +338,10 @@ elif [ $PLATFORM = 'FLINK' ]; then
 
 				getvalue "$PORT_OPTION"
 				PORT_OPTION="$VALUE"
-                $FLINK_EXEC run $DEPLOYABLE  $COMPLETE_ARG $NUM_WORKER $DEPLOYABLE $PORT_OPTION $FLINK_MASTER_OPTION $MODE_ARG
+                $FLINK_EXEC run -m $FLINK_MASTER_OPTION:$PORT_OPTION $DEPLOYABLE  $COMPLETE_ARG $NUM_WORKER
 
         elif [ "$MODE_ARG" = "local" ]; then
-                $FLINK_EXEC run $DEPLOYABLE $COMPLETE_ARG $NUM_WORKER $MODE_ARG
+                $FLINK_EXEC run $DEPLOYABLE $COMPLETE_ARG $NUM_WORKER
         fi                                                    
 #--------------end of Flink Platform--------------
 elif [ $PLATFORM = 'THREADS' ]; then

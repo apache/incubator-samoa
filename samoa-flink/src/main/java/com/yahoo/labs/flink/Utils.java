@@ -91,43 +91,43 @@ public class Utils {
 
 
 	public static void extractFlinkArguments(List<String> tmpargs) {
-		int argsPosition = tmpargs.size() - 1;
-
-		//extract mode
-		String choice = tmpargs.get(argsPosition).trim();
-		if (LOCAL_MODE.equals(choice)) {
-			isLocal = true;
-			tmpargs.remove(argsPosition);
-		} else {
-			isLocal = false;
-			tmpargs.remove(argsPosition);
-			System.out.println("-----------------------Cluster mode-----------------------");
-
-			argsPosition = tmpargs.size() - 1;
-			flinkMaster=tmpargs.get(argsPosition).trim();
-			tmpargs.remove(argsPosition);
-			System.out.println("-----------------------FlinkMaster-----------------------" + flinkMaster);
-
-			try{
-				argsPosition = tmpargs.size()-1;
-				flinkPort = Integer.parseInt(tmpargs.get(argsPosition).trim());
-				tmpargs.remove(argsPosition);
-				System.out.println("-----------------------flinkPort-----------------------" + flinkPort);
-			}catch (NumberFormatException nfe){
-				nfe.printStackTrace();
-				System.exit(1);
-			}
-
-			argsPosition = tmpargs.size() - 1;
-			dependencyJars = new String[]{tmpargs.get(argsPosition).trim()};
-			tmpargs.remove(argsPosition);
-			System.out.println("-----------------------dependencyJars-----------------------" + dependencyJars[0]);
-		}
+//		int argsPosition = tmpargs.size() - 1;
+//
+//		//extract mode
+//		String choice = tmpargs.get(argsPosition).trim();
+//		if (LOCAL_MODE.equals(choice)) {
+//			isLocal = true;
+//			tmpargs.remove(argsPosition);
+//		} else {
+//			isLocal = false;
+//			tmpargs.remove(argsPosition);
+//			System.out.println("-----------------------Cluster mode-----------------------");
+//
+//			argsPosition = tmpargs.size() - 1;
+//			flinkMaster=tmpargs.get(argsPosition).trim();
+//			tmpargs.remove(argsPosition);
+//			System.out.println("-----------------------FlinkMaster-----------------------" + flinkMaster);
+//
+//			try{
+//				argsPosition = tmpargs.size()-1;
+//				flinkPort = Integer.parseInt(tmpargs.get(argsPosition).trim());
+//				tmpargs.remove(argsPosition);
+//				System.out.println("-----------------------flinkPort-----------------------" + flinkPort);
+//			}catch (NumberFormatException nfe){
+//				nfe.printStackTrace();
+//				System.exit(1);
+//			}
+//
+//			argsPosition = tmpargs.size() - 1;
+//			dependencyJars = new String[]{tmpargs.get(argsPosition).trim()};
+//			tmpargs.remove(argsPosition);
+//			System.out.println("-----------------------dependencyJars-----------------------" + dependencyJars[0]);
+//		}
 
 		//extract parallelism
 		int parallelismPosition = tmpargs.size() - 1;
 		try {
-			choice = tmpargs.get(parallelismPosition).trim();
+			String choice = tmpargs.get(parallelismPosition).trim();
 			parallelism = Integer.parseInt(choice);
 			tmpargs.remove(parallelismPosition);
 		} catch (NumberFormatException nfe) {
