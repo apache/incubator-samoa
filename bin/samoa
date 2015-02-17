@@ -303,8 +303,8 @@ elif [ $PLATFORM = 'FLINK' ]; then
 
         SAMOA_FLINK_PROPERTIES="samoa-flink.properties"
         MODE_OPTION="samoa.flink.mode"
-        NUM_WORKER_OPTION="samoa.flink.numworker"
-	
+        NUM_WORKER_OPTION="samoa.flink.numWorker"
+
         VALUE=""
         getvalue()
         {
@@ -313,9 +313,10 @@ elif [ $PLATFORM = 'FLINK' ]; then
         
         getvalue "$NUM_WORKER_OPTION"
         NUM_WORKER="$VALUE"
-        
+
         getvalue "$MODE_OPTION"
         MODE_ARG="$VALUE"
+
         COMPLETE_ARG=""
         COUNTER=0
         for var in "$@"
@@ -327,14 +328,22 @@ elif [ $PLATFORM = 'FLINK' ]; then
         done
 
         DEPLOYABLE=$JAR_PATH
-        if [ "$MODE_ARG" = "cluster" ]; then #refactor the cluster mode instructions
-                $FLINK_EXEC jar $DEPLOYABLE com.yahoo.labs.flink.FlinkDoTask $COMPLETE_ARG $NUM_WORKER $MODE_ARG
+        echo "$DEPLOYABLE"
+        if [ "$MODE_ARG" = "cluster" ]; then
+				FLINK_MASTER_OPTION="samoa.flink.flinkMaster"
+				PORT_OPTION="samoa.flink.port"
+
+				getvalue "$FLINK_MASTER_OPTION"
+				FLINK_MASTER_OPTION="$VALUE"
+
+				getvalue "$PORT_OPTION"
+				PORT_OPTION="$VALUE"
+                $FLINK_EXEC run $DEPLOYABLE  $COMPLETE_ARG $NUM_WORKER $DEPLOYABLE $PORT_OPTION $FLINK_MASTER_OPTION $MODE_ARG
+
         elif [ "$MODE_ARG" = "local" ]; then
-                EXEC_VAR="$FLINK_EXEC run $DEPLOYABLE -c com.yahoo.labs.flink.FlinkDoTask $COMPLETE_ARG $NUM_WORKER $MODE_ARG"
-                echo $EXEC_VAR
-                eval $EXEC_VAR
+                $FLINK_EXEC run $DEPLOYABLE $COMPLETE_ARG $NUM_WORKER $MODE_ARG
         fi                                                    
-#--------------end of Flink Platform--------------	       
+#--------------end of Flink Platform--------------
 elif [ $PLATFORM = 'THREADS' ]; then
 	
 	echo "Deploying to LOCAL with MULTITHREADING."

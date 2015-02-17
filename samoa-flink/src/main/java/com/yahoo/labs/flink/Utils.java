@@ -27,21 +27,18 @@ import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.streaming.api.datastream.DataStream;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Utils {
 
 	private static final String LOCAL_MODE = "local";
 
-	// FLAGS
-//	private static final String MODE_FLAG = "-m";
-//	private static final String PARALLELISM_FLAG = "-p";
-
 	//config values
 	public static boolean isLocal;
 	public static String flinkMaster;
 	public static int flinkPort;
-	public static String[] dependecyJars;
+	public static String[] dependencyJars;
 	public static int parallelism;
 
 	public enum Partitioning {SHUFFLE, ALL, GROUP}
@@ -94,17 +91,38 @@ public class Utils {
 
 
 	public static void extractFlinkArguments(List<String> tmpargs) {
-		int modePosition = tmpargs.size() - 1;
+		int argsPosition = tmpargs.size() - 1;
 
 		//extract mode
-		String choice = tmpargs.get(modePosition).trim();
+		String choice = tmpargs.get(argsPosition).trim();
 		if (LOCAL_MODE.equals(choice)) {
 			isLocal = true;
+			tmpargs.remove(argsPosition);
 		} else {
 			isLocal = false;
-			//appropriate values for flinkMaster/port/jar dependencies etc
+			tmpargs.remove(argsPosition);
+			System.out.println("-----------------------Cluster mode-----------------------");
+
+			argsPosition = tmpargs.size() - 1;
+			flinkMaster=tmpargs.get(argsPosition).trim();
+			tmpargs.remove(argsPosition);
+			System.out.println("-----------------------FlinkMaster-----------------------" + flinkMaster);
+
+			try{
+				argsPosition = tmpargs.size()-1;
+				flinkPort = Integer.parseInt(tmpargs.get(argsPosition).trim());
+				tmpargs.remove(argsPosition);
+				System.out.println("-----------------------flinkPort-----------------------" + flinkPort);
+			}catch (NumberFormatException nfe){
+				nfe.printStackTrace();
+				System.exit(1);
+			}
+
+			argsPosition = tmpargs.size() - 1;
+			dependencyJars = new String[]{tmpargs.get(argsPosition).trim()};
+			tmpargs.remove(argsPosition);
+			System.out.println("-----------------------dependencyJars-----------------------" + dependencyJars[0]);
 		}
-		tmpargs.remove(modePosition);
 
 		//extract parallelism
 		int parallelismPosition = tmpargs.size() - 1;
@@ -113,7 +131,8 @@ public class Utils {
 			parallelism = Integer.parseInt(choice);
 			tmpargs.remove(parallelismPosition);
 		} catch (NumberFormatException nfe) {
-			parallelism = 2;
+			nfe.printStackTrace();
+			System.exit(1);
 		}
 
 	}
