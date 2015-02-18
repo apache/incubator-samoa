@@ -1,4 +1,4 @@
-# SAMOA Bylaws (Draft)
+# SAMOA Bylaws
 
 This document defines the bylaws under which the Apache SAMOA project operates.
 
@@ -27,22 +27,22 @@ The project's Committers are responsible for the project's technical management.
 
 Committer access is by invitation only and must be approved by lazy consensus of the active PMC members. A Committer is considered emeritus by their own declaration or by not contributing in any form to the project for over six months. An emeritus Committer may request reinstatement of commit access from the PMC. Such reinstatement is subject to lazy consensus approval of active PMC members.
 
-All Apache Committers are required to have a signed [Contributor License Agreement (CLA)](http://www.apache.org/licenses/icla.txt) on file with the Apache Software Foundation. There is a [Committer FAQ](http://www.apache.org/dev/committers.html) which provides more details on the requirements for Committers
+All Apache Committers are required to have a signed [Contributor License Agreement (CLA)](http://www.apache.org/licenses/icla.txt) on file with the Apache Software Foundation. There is a [Committer FAQ](http://www.apache.org/dev/committers.html) which provides more details on the requirements for Committers.
 
 A Committer who makes a sustained contribution to the project may be invited to become a member of the PMC. The form of contribution is not limited to code. It can also include other activities such as code review, helping out users on the mailing lists, documentation, and testing.
 
 ### Project Management Committee (PMC):
 
-The PMC is responsible to the board and the ASF for the management and oversight of the Apache SAMOA codebase. The responsibilities of the PMC include
+The PMC is responsible to the board and the ASF for the management and oversight of the Apache SAMOA codebase. The responsibilities of the PMC include:
 
- * Deciding what is distributed as products of the Apache SAMOA project. In particular all releases must be approved by the PMC.
- * Maintaining the project's shared resources, including the codebase repository, mailing lists, websites.
- * Speaking on behalf of the project.
- * Resolving license disputes regarding products of the project.
- * Nominating new PMC members and Committers.
- * Maintaining these bylaws and other guidelines of the project.
+ * Deciding what is distributed as products of the Apache SAMOA project, in particular all releases must be approved by the PMC
+ * Maintaining the project's shared resources, including the codebase repository, mailing lists, websites
+ * Speaking on behalf of the project
+ * Resolving license disputes regarding products of the project
+ * Nominating new PMC members and Committers
+ * Maintaining these bylaws and other guidelines of the project
 
-Membership of the PMC is by invitation only and must be approved by consensus approval of the active PMC members. A PMC member is considered "emeritus" by their own declaration or by not contributing in any form to the project for over six months. An emeritus member may request reinstatement to the PMC. Such reinstatement is subject to consensus approval of the active PMC members.
+Membership of the PMC is by invitation only and must be approved by consensus of the active PMC members. A PMC member is considered "emeritus" by their own declaration or by not contributing in any form to the project for over six months. An emeritus member may request reinstatement to the PMC. Such reinstatement is subject to consensus approval of the active PMC members.
 
 The chair of the PMC is appointed by the ASF board. The chair is an office holder of the Apache Software Foundation (Vice President, Apache SAMOA) and has primary responsibility to the board for the management of the projects within the scope of the SAMOA PMC. The chair reports to the board quarterly on developments within the SAMOA project.
 
