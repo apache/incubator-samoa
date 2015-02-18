@@ -27,6 +27,7 @@ import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.core.memory.DataInputView;
 import org.apache.flink.core.memory.DataOutputView;
+import org.apache.flink.util.InstantiationUtil;
 
 import java.io.IOException;
 
@@ -81,7 +82,14 @@ public final class SamoaTypeSerializer extends TypeSerializer<SamoaType> {
 	@Override
 	public SamoaType deserialize(SamoaType samoaType, DataInputView dataInputView) throws IOException {
 		samoaType.setField(stringTypeSerializer.deserialize(dataInputView), 0);
-		samoaType.setField(SerializationUtils.deserialize(Utils.convert(byteTypeSerializer.deserialize(dataInputView))), 1);
+		byte[] bytes = Utils.convert(byteTypeSerializer.deserialize(dataInputView));
+		final ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		try{
+			samoaType.setField(InstantiationUtil.deserializeObject(bytes,cl), 1);
+
+		}catch (ClassNotFoundException e){
+			throw new RuntimeException(e.getMessage());
+		}
 		samoaType.setField(stringTypeSerializer.deserialize(dataInputView), 2);
 		return samoaType;
 	}

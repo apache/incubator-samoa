@@ -198,12 +198,6 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 		return circleId;
 	}
 
-	public void setCircleIds(List<Integer> circlesIds) {
-		for (Integer i: circlesIds){
-			this.circleId.add(i);
-		}
-	}
-
 	public IterativeDataStream getIterativeDataStream() {
 		return iterativeDataStream;
 	}
@@ -218,10 +212,6 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 
 	public DataStream<SamoaType> getInStream() {
 		return inStream;
-	}
-
-	public void setInStream(DataStream<SamoaType> inStream) {
-		this.inStream = inStream;
 	}
 
 	public List<Tuple3<FlinkStream, Partitioning, Integer>> getInputStreams() {

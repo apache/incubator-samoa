@@ -32,13 +32,6 @@ import java.util.List;
 
 public class Utils {
 
-	private static final String LOCAL_MODE = "local";
-
-	//config values
-	public static boolean isLocal;
-	public static String flinkMaster;
-	public static int flinkPort;
-	public static String[] dependencyJars;
 	public static int parallelism;
 
 	public enum Partitioning {SHUFFLE, ALL, GROUP}
@@ -91,39 +84,6 @@ public class Utils {
 
 
 	public static void extractFlinkArguments(List<String> tmpargs) {
-//		int argsPosition = tmpargs.size() - 1;
-//
-//		//extract mode
-//		String choice = tmpargs.get(argsPosition).trim();
-//		if (LOCAL_MODE.equals(choice)) {
-//			isLocal = true;
-//			tmpargs.remove(argsPosition);
-//		} else {
-//			isLocal = false;
-//			tmpargs.remove(argsPosition);
-//			System.out.println("-----------------------Cluster mode-----------------------");
-//
-//			argsPosition = tmpargs.size() - 1;
-//			flinkMaster=tmpargs.get(argsPosition).trim();
-//			tmpargs.remove(argsPosition);
-//			System.out.println("-----------------------FlinkMaster-----------------------" + flinkMaster);
-//
-//			try{
-//				argsPosition = tmpargs.size()-1;
-//				flinkPort = Integer.parseInt(tmpargs.get(argsPosition).trim());
-//				tmpargs.remove(argsPosition);
-//				System.out.println("-----------------------flinkPort-----------------------" + flinkPort);
-//			}catch (NumberFormatException nfe){
-//				nfe.printStackTrace();
-//				System.exit(1);
-//			}
-//
-//			argsPosition = tmpargs.size() - 1;
-//			dependencyJars = new String[]{tmpargs.get(argsPosition).trim()};
-//			tmpargs.remove(argsPosition);
-//			System.out.println("-----------------------dependencyJars-----------------------" + dependencyJars[0]);
-//		}
-
 		//extract parallelism
 		int parallelismPosition = tmpargs.size() - 1;
 		try {
