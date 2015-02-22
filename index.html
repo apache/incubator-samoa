@@ -16,16 +16,18 @@
     <h2>Scalable Advanced Massive Online Analysis</h2>    
     
     <h3>Apache SAMOA is currently undergoing Incubation at the Apache Software Foundation.
-    </br>New <a href="https://github.com/yahoo/samoa/releases"> Release 0.2.0</a> !
-    </br>View on <a href="https://github.com/yahoo/samoa">GitHub <small>yahoo/samoa</small></a>
+    </br>Last release  before entering incubation/not at Apache: <a href="https://github.com/yahoo/samoa/releases"> Release 0.2.0</a> !
+    </br>View on <a href=" https://github.com/apache/incubator-samoa">GitHub <small> Apache SAMOA</small></a>
     </h3>
     <div id="slideshow">
-      <img src="images/slideshow/runtime.png" alt="SAMOA" class="slide active" height= "300" />
+      <img src="images/slideshow/runtime.png" alt="Apache SAMOA" class="slide active" height= "300" />
     </div>
 </section>
 
 <section id="tutorial" class="next-steps">
-  <h1>Apache SAMOA is distributed streaming machine learning (ML) framework that contains a 
+  <h1><a href="http://incubator.apache.org/"><img  style="max-width:55%;border:0px solid black;"src="http://incubator.apache.org/images/egg-logo.png" alt="Apache Incubator" > </a>
+
+Apache SAMOA is a distributed streaming machine learning (ML) framework that contains a 
 programing abstraction for distributed streaming ML algorithms.</h1>
 
 <h2>Apache SAMOA enables development of new ML algorithms without dealing with 
@@ -50,10 +52,10 @@ in multiple SPEs, i.e., code the algorithms once and execute them in multiple SP
 	<p>Hands-on with Apache SAMOA: Getting Started in 5 minutes!</p>
     </li>
     <li class="guides">
-      <a class="hero-octicon" href="https://github.com/yahoo/samoa/wiki/">
+      <a class="hero-octicon" href="documentation/Home.html">
         <span class="mega-octicon octicon-book"></span>
       </a>
-      <h4><a href="https://github.com/yahoo/samoa/wiki/">Documentation</a></h4>
+      <h4><a href="documentation/Home.html">Documentation</a></h4>
 	<p>Learn how to use Apache SAMOA in the various different ways possible. </p>
 
     </li>
@@ -62,7 +64,7 @@ in multiple SPEs, i.e., code the algorithms once and execute them in multiple SP
 
 <section class="tutorial">
 <h1>Slides</h1>
-<h2><a href="https://speakerdeck.com/gdfm/samoa-a-platform-for-mining-big-data-streams-2"><img src="samoa-slides.jpg" alt="SAMOA Slides" style="max-width:100%;"></a></h2>
+<h2><a href="https://speakerdeck.com/gdfm/samoa-a-platform-for-mining-big-data-streams-2"><img src="samoa-slides.jpg" alt="SAMOA Slides" data-canonical-src="samoa-slides.jpg" style="max-width:100%;"></a></h2>
 <h2>G. De Francisci Morales <a href="http://melmeric.files.wordpress.com/2013/04/samoa-a-platform-for-mining-big-data-streams.pdf">SAMOA: A Platform for Mining Big Data Streams</a>
 Keynote Talk at <a href="http://www.ramss.ws/2013/program/">RAMSS '13</a>: 2nd International Workshop on Real-Time Analysis and Mining of Social Streams WWW, Rio De Janeiro, 2013.</h2>
  </section>
@@ -73,7 +75,7 @@ Keynote Talk at <a href="http://www.ramss.ws/2013/program/">RAMSS '13</a>: 2nd I
 
 <h1>Apache SAMOA Developer's Guide</h1>
 
-<h2><a href="SAMOA-Developers-Guide-0-0-1.pdf"><img style="max-width:95%;border:3px solid black;" src="Manual.png" alt="SAMOA Developer's guide" height="250"> </a></h2>
+<h2><a href="SAMOA-Developers-Guide-0-3-0.pdf"><img style="max-width:95%;border:3px solid black;" src="Manual.png" alt="SAMOA Developer's guide" height="250"> </a></h2>
    </section><section class="tutorial">
    
 <h1>API Javadoc Reference</h1>
@@ -88,7 +90,7 @@ Keynote Talk at <a href="http://www.ramss.ws/2013/program/">RAMSS '13</a>: 2nd I
 <a href="mailto:commits@samoa.incubator.apache.org">commits@samoa.incubator.apache.org</a></h2>
 
 <h1>Contributors</h1>
-<h2><a href="contributors.html">List of contributors to the SAMOA project</a>.</h2>
+<h2><a href="documentation/Team.html">List of contributors to the SAMOA project</a>.</h2>
    </section><section class="next-steps">
 <h1>License</h1>
 
@@ -111,27 +113,27 @@ Apache License, Version 2.0 (<a href="http://www.apache.org/licenses/LICENSE-2.0
       <div class="terminal">
         <div class="header"></div>
         <div class="shell">
-          <p><span class="path">~</span><span class="prompt">$</span>git clone git@github.com:yahoo/samoa.git</p>
-<p><span class="path">~</span><span class="prompt">$</span>cd samoa</p>
+          <p><span class="path">~</span><span class="prompt">$</span>git clone http://git.apache.org/incubator-samoa.git</p>
+<p><span class="path">~</span><span class="prompt">$</span>cd incubator-samoa</p>
 <p><span class="path">~</span><span class="prompt">$</span>mvn -Pstorm package</p>
         </div>
       </div>
-<p>The deployable jar for Apache SAMOA will be in <code>target/SAMOA-Storm-0.0.1-SNAPSHOT.jar</code>.</p>
+<p>The deployable jar for Apache SAMOA will be in <code>target/SAMOA-Storm-0.3.0-SNAPSHOT.jar</code>.</p>
     </li>
 
   <li id="terminal-step-1" class="option-terminal">
       <h4>Apache S4</h4>
       <p>If you want to compile Apache SAMOA for S4, you will need to install the S4 dependencies
-manually as explained in <a href="https://github.com/yahoo/samoa/wiki/Executing-SAMOA-with-Apache-S4">Executing Apache SAMOA with Apache S4</a>.</p>
+manually as explained in <a href="documentation/Executing-SAMOA-with-Apache-S4.html">Executing Apache SAMOA with Apache S4</a>.</p>
 <div class="terminal">
         <div class="header"></div>
         <div class="shell">
-          <p><span class="path">~</span><span class="prompt">$</span>git clone git@github.com:yahoo/samoa.git</p>
-<p><span class="path">~</span><span class="prompt">$</span>cd samoa</p>
+          <p><span class="path">~</span><span class="prompt">$</span>git clone http://git.apache.org/incubator-samoa.git</p>
+<p><span class="path">~</span><span class="prompt">$</span>cd incubator-samoa</p>
 <p><span class="path">~</span><span class="prompt">$</span>mvn -Ps4 package</p>
         </div>
       </div>
-<p>The deployable jar for Apache SAMOA will be in <code>target/SAMOA-S4-0.0.1-SNAPSHOT.jar</code>.</p>
+<p>The deployable jar for Apache SAMOA will be in <code>target/SAMOA-S4-0.3.0-SNAPSHOT.jar</code>.</p>
     </li>
 
   <li id="terminal-step-1" class="option-terminal">
@@ -140,12 +142,12 @@ manually as explained in <a href="https://github.com/yahoo/samoa/wiki/Executing-
 <div class="terminal">
         <div class="header"></div>
         <div class="shell">
-          <p><span class="path">~</span><span class="prompt">$</span>git clone git@github.com:yahoo/samoa.git</p>
-<p><span class="path">~</span><span class="prompt">$</span>cd samoa</p>
+          <p><span class="path">~</span><span class="prompt">$</span>git clone http://git.apache.org/incubator-samoa.git</p>
+<p><span class="path">~</span><span class="prompt">$</span>cd incubator-samoa</p>
 <p><span class="path">~</span><span class="prompt">$</span>mvn package</p>
         </div>
       </div>
-<p>The deployable jar for Apache SAMOA will be in <code>target/SAMOA-Local-0.0.1-SNAPSHOT.jar</code>.</p>
+<p>The deployable jar for Apache SAMOA will be in <code>target/SAMOA-Local-0.3.0-SNAPSHOT.jar</code>.</p>
     </li>
 
   </ul>
@@ -164,8 +166,8 @@ manually as explained in <a href="https://github.com/yahoo/samoa/wiki/Executing-
       <div class="terminal">
         <div class="header"></div>
         <div class="shell">
-          <p><span class="path">~</span><span class="prompt">$</span>git clone git@github.com:yahoo/samoa.git</p>
-<p><span class="path">~</span><span class="prompt">$</span>cd samoa</p>
+          <p><span class="path">~</span><span class="prompt">$</span>git clone http://git.apache.org/incubator-samoa.git</p>
+<p><span class="path">~</span><span class="prompt">$</span>cd incubator-samoa</p>
 <p><span class="path">~</span><span class="prompt">$</span>mvn package</p>
         </div>
       </div>
@@ -174,7 +176,7 @@ manually as explained in <a href="https://github.com/yahoo/samoa/wiki/Executing-
 <li id="terminal-step-1" class="option-terminal">
       <h4>Download the Forest CoverType dataset </h4>
       <p>If you want to compile Apache SAMOA for S4, you will need to install the S4 dependencies
-manually as explained in <a href="https://github.com/yahoo/samoa/wiki/Executing-SAMOA-with-Apache-S4">Executing Apache SAMOA with Apache S4</a>.</p>
+manually as explained in <a href="documentation/Executing-SAMOA-with-Apache-S4">Executing Apache SAMOA with Apache S4</a>.</p>
 <div class="terminal">
         <div class="header"></div>
         <div class="shell">
@@ -191,7 +193,7 @@ manually as explained in <a href="https://github.com/yahoo/samoa/wiki/Executing-
 <div class="terminal">
         <div class="header"></div>
         <div class="shell">
-          <p><span class="path">~</span><span class="prompt">$</span>bin/samoa local target/SAMOA-Local-0.0.1-SNAPSHOT.jar "PrequentialEvaluation -l classifiers.ensemble.Bagging
+          <p><span class="path">~</span><span class="prompt">$</span>bin/samoa local target/SAMOA-Local-0.3.0-SNAPSHOT.jar "PrequentialEvaluation -l classifiers.ensemble.Bagging
     -s (ArffFileStream -f covtypeNorm.arff) -f 100000"</p>
         </div>
       </div>
@@ -203,7 +205,9 @@ manually as explained in <a href="https://github.com/yahoo/samoa/wiki/Executing-
 <section class="tutorial">
 <h2><a href="http://incubator.apache.org/"><img  style="max-width:95%;border:0px solid black;"src="http://incubator.apache.org/images/egg-logo.png" alt="Apache Incubator" > </a></h2>
 <h2>
-Apache SAMOA is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the name of Apache TLP sponsor. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.</h2>
+Apache SAMOA is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.</h2>
+
+<h2>Apache and the Apache feather logo are trademarks of The Apache Software Foundation.</h2>
 </section>
 
 <script src="js/jquery.js"></script>
@@ -217,9 +221,8 @@ Apache SAMOA is an effort undergoing incubation at The Apache Software Foundatio
 <footer class="page-footer">
 
    <ul class="site-footer-links right">
-          <li><a href="https://github.com/yahoo/samoa/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/yahoo/samoa/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/yahoo/samoa">View On <strong>GitHub</strong></a></li>
+
+          <li><a href="https://github.com/apache/incubator-samoa">View On <strong>GitHub</strong></a></li>
   </ul>
 
   <a href="/">
@@ -229,8 +232,8 @@ Apache SAMOA is an effort undergoing incubation at The Apache Software Foundatio
   <ul class="site-footer-links">
     <li>&copy; 2014 <span>Apache SAMOA</span></li>
      <li><a href="#build">Build Apache SAMOA</a></h4>
-     <li><a href="https://github.com/yahoo/samoa/wiki/Getting%20Started">Getting started!</a></li>
-     <li><a href="https://github.com/yahoo/samoa/wiki/">Documentation</a></li>
+     <li><a href="documentation/Getting-Started.html">Getting started!</a></li>
+     <li><a href="documentation/Home.html">Documentation</a></li>
   </ul>
 </footer>
 
