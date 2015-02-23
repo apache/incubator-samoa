@@ -29,9 +29,10 @@ import com.yahoo.labs.flink.Utils;
 import com.yahoo.labs.samoa.topology.AbstractTopology;
 import com.yahoo.labs.samoa.topology.EntranceProcessingItem;
 import org.apache.flink.api.java.tuple.Tuple3;
-import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.IterativeDataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ import java.util.List;
  */
 public class FlinkTopology extends AbstractTopology {
 
+	private static final Logger logger = LoggerFactory.getLogger(FlinkTopology.class);
 	public static StreamExecutionEnvironment env;
 
 	public FlinkTopology(String name, StreamExecutionEnvironment env) {
@@ -69,13 +71,14 @@ public class FlinkTopology extends AbstractTopology {
 
 			}//if component is part of one or more circle
 			else if (comp.isPartOfCircle() && !comp.isInitialised()) {
-				for (Integer circle: comp.getCircleIds())
-				{
+				for (Integer circle : comp.getCircleIds()) {
 					//check if circle can be initialized
-					if (circleCanBeInitialised(circle)){
-						System.out.println("Circle: " + circle +" can be initialised");
+					if (circleCanBeInitialised(circle)) {
+						logger.debug("Circle: " + circle + " can be initialised");
 						initialiseCircle(circle);
-					} else System.out.println("Circle cannot be initialised");
+					} else {
+						logger.debug("Circle cannot be initialised");
+					}
 				}
 			}
 
@@ -100,7 +103,7 @@ public class FlinkTopology extends AbstractTopology {
 		for (FlinkProcessingItem procItem : FlinkDoTask.circles.get(circleId)) {
 			for (Tuple3<FlinkStream, Utils.Partitioning, Integer> inputStream : procItem.getInputStreams()) {
 				//if a inputStream is not initialized AND source of inputStream is not in the circle or a tail of other circle
-				if ((!inputStream.f0.isInitialised()) && (!circleIds.contains(inputStream.f2))&&(!FlinkDoTask.circleTails.contains(inputStream.f2)))
+				if ((!inputStream.f0.isInitialised()) && (!circleIds.contains(inputStream.f2)) && (!FlinkDoTask.circleTails.contains(inputStream.f2)))
 					return false;
 			}
 		}
@@ -110,22 +113,23 @@ public class FlinkTopology extends AbstractTopology {
 	private static void initialiseCircle(int circleId) {
 		//get the head and tail of circle
 		FlinkProcessingItem tail = FlinkDoTask.circles.get(circleId).get(0);
-		FlinkProcessingItem head = FlinkDoTask.circles.get(circleId).get(FlinkDoTask.circles.get(circleId).size()-1);
+		FlinkProcessingItem head = FlinkDoTask.circles.get(circleId).get(FlinkDoTask.circles.get(circleId).size() - 1);
 
 		//initialise source stream of the iteration, so as to use it for the iteration starting point
 		if (!head.isInitialised()) {
+			head.setOnIteration(true);
 			head.initialise();
-			head.setIterativeDataStream(head.getInStream().iterate(10000));
-			DataStream temp = head.getIterativeDataStream().transform("samoaProcessor", Utils.samoaTypeInformation, head).setParallelism(head.getParallelism());
-			head.setOutStream(temp);
 			head.initialiseStreams();
 		}
 
 		//initialise all nodes after head
-		for (int node = FlinkDoTask.circles.get(circleId).size()-2; node>=0;node--){
+		for (int node = FlinkDoTask.circles.get(circleId).size() - 2; node >= 0; node--) {
 			FlinkDoTask.circles.get(circleId).get(node).initialise();
 			FlinkDoTask.circles.get(circleId).get(node).initialiseStreams();
 		}
-		head.getIterativeDataStream().closeWith(tail.getOutStream().filter(Utils.getFilter(tail.getOutputStreams().get(0).getStreamId())));
+
+		((IterativeDataStream) head.getInStream()).closeWith(head.getInputStreamBySourceID(tail.getComponentId()).getOutStream());
 	}
+
+
 }

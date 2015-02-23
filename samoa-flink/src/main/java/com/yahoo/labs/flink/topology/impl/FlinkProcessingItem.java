@@ -56,8 +56,8 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 	private int parallelism;
 	private static int numberOfPIs = 0;
 	private int piID;
-	private transient IterativeDataStream iterativeDataStream;
 	private List<Integer> circleId; //check if we can refactor this
+	private boolean onIteration;
 	//private int circleId; //check if we can refactor this
 
 	public FlinkProcessingItem(StreamExecutionEnvironment env, Processor proc) {
@@ -75,7 +75,8 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 		this.processor = proc;
 		this.parallelism = parallelism;
 		this.piID = numberOfPIs++;
-		this.circleId = new ArrayList<Integer>() {}; // if size equals 0, then it is part of no circle
+		this.circleId = new ArrayList<Integer>() {
+		}; // if size equals 0, then it is part of no circle
 	}
 
 	public Stream createStream() {
@@ -110,6 +111,10 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 					System.exit(1);
 				}
 			}
+		}
+
+		if (onIteration) {
+			inStream = inStream.iterate();
 		}
 		outStream = inStream.transform("samoaProcessor", Utils.samoaTypeInformation, this).setParallelism(parallelism);
 	}
@@ -191,22 +196,21 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 	}
 
 	public boolean isPartOfCircle() {
-		return this.circleId.size()>0;
+		return this.circleId.size() > 0;
 	}
 
-	public List<Integer>  getCircleIds() {
+	public List<Integer> getCircleIds() {
 		return circleId;
 	}
 
-	public IterativeDataStream getIterativeDataStream() {
-		return iterativeDataStream;
+
+	public void setCircleIds(List<Integer> circlesIds) {
+		for (Integer i : circlesIds) {
+			this.circleId.add(i);
+		}
 	}
 
-	public void setIterativeDataStream(IterativeDataStream iterativeDataStream) {
-		this.iterativeDataStream = iterativeDataStream;
-	}
-
-	public void addPItoCircle(int piId){
+	public void addPItoCircle(int piId) {
 		this.circleId.add(piId);
 	}
 
@@ -216,6 +220,14 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 
 	public List<Tuple3<FlinkStream, Partitioning, Integer>> getInputStreams() {
 		return inputStreams;
+	}
+
+	public void setOnIteration(boolean onIteration) {
+		this.onIteration = onIteration;
+	}
+
+	public boolean isOnIteration() {
+		return onIteration;
 	}
 
 	static class SamoaDelegateFunction implements Function, Serializable {
@@ -228,6 +240,15 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 		public void processEvent(ContentEvent event) {
 			proc.process(event);
 		}
+	}
+
+	public FlinkStream getInputStreamBySourceID(int sourceID) {
+		for (Tuple3<FlinkStream, Partitioning, Integer> fstreams : inputStreams) {
+			if (fstreams.f2 == sourceID) {
+				return fstreams.f0;
+			}
+		}
+		return null;
 	}
 
 }

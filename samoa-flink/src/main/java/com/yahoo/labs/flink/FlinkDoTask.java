@@ -65,8 +65,8 @@ public class FlinkDoTask {
 			task = ClassOption.cliStringToObject(cliString.toString(), Task.class, null);
 			logger.debug("Successfully instantiating {}", task.getClass().getCanonicalName());
 		} catch (Exception e) {
-			logger.error("Fail to initialize the task: ", e);
-			System.out.println("Fail to initialize the task: " + e);
+			logger.error("Failed to initialize the task: ", e);
+			System.out.println("Failed to initialize the task: " + e);
 			return;
 		}
 		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -105,7 +105,7 @@ public class FlinkDoTask {
 			}
 		}
 		for (int g=0;g<graph.length;g++)
-			System.out.println(graph[g].toString());
+			logger.debug(graph[g].toString());
 
 		CircleDetection detCircles = new CircleDetection();
 		List<List<Integer>> circles = detCircles.getCircles(graph);
@@ -120,7 +120,7 @@ public class FlinkDoTask {
 			piCircles.add(circle);
 			circleTails.add(circle.get(0).getComponentId());
 		}
-		System.out.println("Circles in the topology: " +circles);
+		logger.debug("Circles in the topology: " + circles);
 
 		return piCircles;
 	}
