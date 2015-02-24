@@ -4,7 +4,7 @@ package com.yahoo.labs.samoa.moa.classifiers.core.attributeclassobservers;
  * #%L
  * SAMOA
  * %%
- *    Copyright (C) 2007 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014 - 2015 Apache Software Foundation
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
