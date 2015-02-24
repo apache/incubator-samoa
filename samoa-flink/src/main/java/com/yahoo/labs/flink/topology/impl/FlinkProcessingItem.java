@@ -116,7 +116,7 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 		if (onIteration) {
 			inStream = inStream.iterate();
 		}
-		outStream = inStream.transform("samoaProcessor", Utils.samoaTypeInformation, this).setParallelism(parallelism);
+		outStream = inStream.transform("samoaProcessor", Utils.tempTypeInfo, this).setParallelism(parallelism);
 	}
 
 	public void initialiseStreams() {
@@ -201,13 +201,6 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 
 	public List<Integer> getCircleIds() {
 		return circleId;
-	}
-
-
-	public void setCircleIds(List<Integer> circlesIds) {
-		for (Integer i : circlesIds) {
-			this.circleId.add(i);
-		}
 	}
 
 	public void addPItoCircle(int piId) {

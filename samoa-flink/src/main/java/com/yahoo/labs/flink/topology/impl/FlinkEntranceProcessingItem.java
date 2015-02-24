@@ -22,16 +22,24 @@ package com.yahoo.labs.flink.topology.impl;
 
 
 import com.yahoo.labs.flink.Utils;
+import com.yahoo.labs.samoa.core.ContentEvent;
 import com.yahoo.labs.samoa.core.EntranceProcessor;
 import com.yahoo.labs.samoa.topology.AbstractEntranceProcessingItem;
+import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.typeutils.TupleTypeInfo;
+import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.function.source.RichSourceFunction;
 import org.apache.flink.streaming.api.function.source.SourceFunction;
 import org.apache.flink.util.Collector;
+import scala.Tuple3;
 
 import java.io.Serializable;
+
+import static org.apache.flink.api.common.typeinfo.BasicTypeInfo.*;
 
 public class FlinkEntranceProcessingItem extends AbstractEntranceProcessingItem
 		implements FlinkComponent, Serializable {
@@ -50,6 +58,7 @@ public class FlinkEntranceProcessingItem extends AbstractEntranceProcessingItem
 		final EntranceProcessor proc = getProcessor();
 		final String streamId = getOutputStream().getStreamId();
 		final int compID = getComponentId();
+
 		
 		outStream = env.addSource(new RichSourceFunction<SamoaType>() {
 			EntranceProcessor entrProc = proc;
@@ -67,7 +76,7 @@ public class FlinkEntranceProcessingItem extends AbstractEntranceProcessingItem
 					collector.collect(SamoaType.of(entrProc.nextEvent(), id));
 				}
 			}
-		}, Utils.samoaTypeInformation);
+		},Utils.tempTypeInfo);
 
 		((FlinkStream) getOutputStream()).initialise();
 	}

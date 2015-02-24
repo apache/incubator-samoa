@@ -22,13 +22,17 @@ package com.yahoo.labs.flink;
 
 
 import com.yahoo.labs.flink.topology.impl.SamoaType;
+import com.yahoo.labs.samoa.core.ContentEvent;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.functions.KeySelector;
+import org.apache.flink.api.java.typeutils.TupleTypeInfo;
+import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.streaming.api.datastream.DataStream;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static org.apache.flink.api.common.typeinfo.BasicTypeInfo.STRING_TYPE_INFO;
 
 public class Utils {
 
@@ -36,9 +40,7 @@ public class Utils {
 
 	public enum Partitioning {SHUFFLE, ALL, GROUP}
 
-	public static TypeInformation<SamoaType> samoaTypeInformation = new SamoaTypeInfo();
-
-	public static SamoaTypeSerializer samoaTypeSerializer = new SamoaTypeSerializer();
+	public static TypeInformation<SamoaType> tempTypeInfo = new TupleTypeInfo(SamoaType.class, STRING_TYPE_INFO, TypeExtractor.getForClass(ContentEvent.class), STRING_TYPE_INFO);
 
 	public static DataStream subscribe(DataStream<SamoaType> stream, Partitioning partitioning) {
 		switch (partitioning) {
@@ -64,22 +66,6 @@ public class Utils {
 				return o.f2.equals(streamID);
 			}
 		};
-	}
-
-	public static Byte[] convert(byte[] arr) {
-		Byte[] ret = new Byte[arr.length];
-		for (int i = 0; i < arr.length; i++) {
-			ret[i] = Byte.valueOf(arr[i]);
-		}
-		return ret;
-	}
-
-	public static byte[] convert(Byte[] arr) {
-		byte[] ret = new byte[arr.length];
-		for (int i = 0; i < arr.length; i++) {
-			ret[i] = arr[i];
-		}
-		return ret;
 	}
 
 
