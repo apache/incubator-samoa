@@ -1,4 +1,4 @@
-package com.yahoo.labs.flink;
+package com.yahoo.labs.flink.com.yahoo.labs.flink.helpers;
 
 /*
  * #%L

@@ -21,8 +21,8 @@ package com.yahoo.labs.flink.topology.impl;
  */
 
 import com.google.common.collect.Lists;
-import com.yahoo.labs.flink.Utils;
-import com.yahoo.labs.flink.Utils.Partitioning;
+import com.yahoo.labs.flink.com.yahoo.labs.flink.helpers.Utils;
+import com.yahoo.labs.flink.com.yahoo.labs.flink.helpers.Utils.Partitioning;
 import com.yahoo.labs.samoa.core.ContentEvent;
 import com.yahoo.labs.samoa.core.Processor;
 import com.yahoo.labs.samoa.topology.ProcessingItem;
@@ -31,7 +31,6 @@ import org.apache.flink.api.common.functions.Function;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.IterativeDataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.invokable.StreamInvokable;
 import org.slf4j.Logger;

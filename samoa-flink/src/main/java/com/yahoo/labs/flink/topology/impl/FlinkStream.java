@@ -20,7 +20,7 @@ package com.yahoo.labs.flink.topology.impl;
  * #L%
  */
 
-import com.yahoo.labs.flink.Utils;
+import com.yahoo.labs.flink.com.yahoo.labs.flink.helpers.Utils;
 import com.yahoo.labs.samoa.core.ContentEvent;
 import com.yahoo.labs.samoa.topology.AbstractStream;
 import org.apache.flink.streaming.api.datastream.DataStream;

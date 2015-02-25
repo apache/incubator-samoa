@@ -23,6 +23,8 @@ package com.yahoo.labs.flink;
 import com.github.javacliparser.ClassOption;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.yahoo.labs.flink.com.yahoo.labs.flink.helpers.CircleDetection;
+import com.yahoo.labs.flink.com.yahoo.labs.flink.helpers.Utils;
 import com.yahoo.labs.flink.topology.impl.FlinkComponentFactory;
 import com.yahoo.labs.flink.topology.impl.FlinkProcessingItem;
 import com.yahoo.labs.flink.topology.impl.FlinkStream;

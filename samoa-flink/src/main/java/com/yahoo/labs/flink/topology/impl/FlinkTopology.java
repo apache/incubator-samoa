@@ -25,7 +25,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.yahoo.labs.flink.FlinkDoTask;
-import com.yahoo.labs.flink.Utils;
+import com.yahoo.labs.flink.com.yahoo.labs.flink.helpers.Utils;
 import com.yahoo.labs.samoa.topology.AbstractTopology;
 import com.yahoo.labs.samoa.topology.EntranceProcessingItem;
 import org.apache.flink.api.java.tuple.Tuple3;
