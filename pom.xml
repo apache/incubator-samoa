@@ -135,7 +135,7 @@
         <jmockit.version>1.13</jmockit.version>
         <junit.version>4.10</junit.version>
         <kafka.version>0.8.1</kafka.version>
-        <kryo.version>2.24.0</kryo.version>
+        <kryo.version>2.17</kryo.version>
         <metrics-core.version>2.2.0</metrics-core.version>
         <miniball.version>1.0.3</miniball.version>
         <s4.version>0.6.0-incubating</s4.version>
