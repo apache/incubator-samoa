@@ -1,7 +1,7 @@
 //package com.yahoo.labs.samoa.topology.impl;
-//
-///*
-// * #%L
+
+/*
+ * #%L
  * SAMOA
  * %%
  * Copyright (C) 2014 - 2015 Apache Software Foundation
@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * #L%
-// */
+ */
 //
 //import com.yahoo.labs.samoa.core.ContentEvent;
 //import com.yahoo.labs.samoa.topology.impl.StormEntranceProcessingItem.StormEntranceSpout;
