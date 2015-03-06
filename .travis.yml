@@ -1,5 +1,9 @@
 language: java
 
+branches:
+  except:
+    - gh-pages
+
 jdk:
 - oraclejdk7
 
