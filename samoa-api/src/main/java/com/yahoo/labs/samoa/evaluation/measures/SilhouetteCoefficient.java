@@ -24,10 +24,11 @@ import com.yahoo.labs.samoa.moa.cluster.Cluster;
 import com.yahoo.labs.samoa.moa.cluster.Clustering;
 import com.yahoo.labs.samoa.moa.evaluation.MeasureCollection;
 import com.yahoo.labs.samoa.moa.core.DataPoint;
+
 import java.util.ArrayList;
 
 public class SilhouetteCoefficient extends MeasureCollection {
-  private double pointInclusionProbThreshold = 0.8;
+  private static final double pointInclusionProbThreshold = 0.8;
 
   public SilhouetteCoefficient() {
     super();
@@ -75,7 +76,7 @@ public class SilhouetteCoefficient extends MeasureCollection {
           if (p1 != p && point1.classValue() != -1) {
             for (int fc = 0; fc < numFCluster; fc++) {
               if (pointInclusionProbFC[p1][fc] > pointInclusionProbThreshold) {
-                double distance = distance(point, point1);
+                double distance = point.getDistance(point1);
                 distanceByClusters[fc] += distance;
                 countsByClusters[fc]++;
               }
@@ -122,13 +123,4 @@ public class SilhouetteCoefficient extends MeasureCollection {
     addValue(0, silhCoeff);
   }
 
-  private double distance(DataPoint inst1, DataPoint inst2) {
-    double distance = 0.0;
-    int numDims = inst1.numAttributes();
-    for (int i = 0; i < numDims; i++) {
-      double d = inst1.value(i) - inst2.value(i);
-      distance += d * d;
-    }
-    return Math.sqrt(distance);
-  }
 }
