@@ -36,8 +36,6 @@ import static org.apache.flink.api.common.typeinfo.BasicTypeInfo.STRING_TYPE_INF
 
 public class Utils {
 
-	public static int parallelism;
-
 	public enum Partitioning {SHUFFLE, ALL, GROUP}
 
 	public static TypeInformation<SamoaType> tempTypeInfo = new TupleTypeInfo(SamoaType.class, STRING_TYPE_INFO, TypeExtractor.getForClass(ContentEvent.class), STRING_TYPE_INFO);
@@ -68,18 +66,4 @@ public class Utils {
 		};
 	}
 
-
-	public static void extractFlinkArguments(List<String> tmpargs) {
-		//extract parallelism
-		int parallelismPosition = tmpargs.size() - 1;
-		try {
-			String choice = tmpargs.get(parallelismPosition).trim();
-			parallelism = Integer.parseInt(choice);
-			tmpargs.remove(parallelismPosition);
-		} catch (NumberFormatException nfe) {
-			nfe.printStackTrace();
-			System.exit(1);
-		}
-
-	}
 }

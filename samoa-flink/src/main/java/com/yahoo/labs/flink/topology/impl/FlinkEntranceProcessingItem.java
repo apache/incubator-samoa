@@ -62,10 +62,15 @@ public class FlinkEntranceProcessingItem extends AbstractEntranceProcessingItem
 			}
 
 			@Override
-			public void invoke(Collector<SamoaType> collector) throws Exception {
+			public void run(Collector<SamoaType> collector) throws Exception {
 				while (entrProc.hasNext()) {
 					collector.collect(SamoaType.of(entrProc.nextEvent(), id));
 				}
+			}
+
+			@Override
+			public void cancel() {
+
 			}
 		},Utils.tempTypeInfo);
 
@@ -85,7 +90,7 @@ public class FlinkEntranceProcessingItem extends AbstractEntranceProcessingItem
 
 	@Override
 	public int getComponentId() {
-		return -1; // dummy number shows that it cones from an Entrance PI
+		return -1; // dummy number shows that it comes from an Entrance PI
 	}
 
 	@Override

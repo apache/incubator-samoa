@@ -50,7 +50,6 @@ public class FlinkDoTask {
 
 	public static void main(String[] args) throws Exception {
 		List<String> tmpArgs = new ArrayList<String>(Arrays.asList(args));
-		Utils.extractFlinkArguments(tmpArgs);
 
 		args = tmpArgs.toArray(new String[0]);
 
