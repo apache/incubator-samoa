@@ -81,7 +81,7 @@ As a user you can use it to develop new algorithms and test different Distribute
 
 [![SAMOA Slides](http://samoa.incubator.apache.org/samoa-slides.jpg)](https://speakerdeck.com/gdfm/samoa-a-platform-for-mining-big-data-streams)
 
-G. De Francisci Morales, A. Bifet [SAMOA: A Platform for Mining Big Data Streams](http://jmlr.csail.mit.edu/papers/volume16/morales15a/morales15a.pdf)
+G. De Francisci Morales, A. Bifet [SAMOA: Scalable Advanced Massive Online Analysis](http://jmlr.csail.mit.edu/papers/volume16/morales15a/morales15a.pdf)
 Journal of Machine Learning Research, 16(Jan):149−153, 2015.
 
 ## Apache SAMOA Developer's Guide
