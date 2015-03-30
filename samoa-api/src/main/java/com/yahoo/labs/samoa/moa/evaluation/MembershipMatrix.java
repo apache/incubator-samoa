@@ -4,7 +4,7 @@ package com.yahoo.labs.samoa.moa.evaluation;
  * #%L
  * SAMOA
  * %%
- *    Copyright (C) 2010 RWTH Aachen University, Germany
+ * Copyright (C) 2014 - 2015 Apache Software Foundation
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
