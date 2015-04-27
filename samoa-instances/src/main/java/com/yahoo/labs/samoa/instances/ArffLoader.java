@@ -30,7 +30,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * 
+ *
  * @author abifet
  */
 public class ArffLoader implements Serializable {
@@ -92,7 +92,7 @@ public class ArffLoader implements Serializable {
           if (streamTokenizer.ttype == StreamTokenizer.TT_NUMBER) {
             // System.out.println(streamTokenizer.nval + "Num ");
             this.setValue(instance, numAttribute, streamTokenizer.nval, true);
-            numAttribute++;
+            //numAttribute++;
 
           } else if (streamTokenizer.sval != null && (streamTokenizer.ttype == StreamTokenizer.TT_WORD
               || streamTokenizer.ttype == 34)) {
@@ -104,12 +104,14 @@ public class ArffLoader implements Serializable {
             } else if (isNumeric == true) {
               value = Double.valueOf(streamTokenizer.sval).doubleValue();
             } else {
-              value = this.instanceInformation.attribute(numAttribute).indexOfValue(streamTokenizer.sval);
+              value = this.instanceInformation.attribute(numAttribute).indexOfValue(
+                  streamTokenizer.sval);
             }
 
             this.setValue(instance, numAttribute, value, isNumeric);
-            numAttribute++;
+            //numAttribute++;
           }
+          numAttribute++;
           streamTokenizer.nextToken();
         }
         streamTokenizer.nextToken();
