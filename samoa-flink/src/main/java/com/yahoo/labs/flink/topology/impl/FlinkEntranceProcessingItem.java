@@ -52,6 +52,7 @@ public class FlinkEntranceProcessingItem extends AbstractEntranceProcessingItem
 
 		
 		outStream = env.addSource(new RichSourceFunction<SamoaType>() {
+			volatile boolean canceled;
 			EntranceProcessor entrProc = proc;
 			String id = streamId;
 
@@ -63,14 +64,14 @@ public class FlinkEntranceProcessingItem extends AbstractEntranceProcessingItem
 
 			@Override
 			public void run(Collector<SamoaType> collector) throws Exception {
-				while (entrProc.hasNext()) {
+				while (!canceled && entrProc.hasNext()) {
 					collector.collect(SamoaType.of(entrProc.nextEvent(), id));
 				}
 			}
 
 			@Override
 			public void cancel() {
-
+				canceled = true;
 			}
 		},Utils.tempTypeInfo);
 

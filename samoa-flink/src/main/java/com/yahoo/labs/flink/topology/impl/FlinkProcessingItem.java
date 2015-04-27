@@ -113,7 +113,7 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 		}
 
 		if (onIteration) {
-			inStream = inStream.iterate();
+			inStream = inStream.iterate(10000);
 		}
 		outStream = inStream.transform("samoaProcessor", Utils.tempTypeInfo, this).setParallelism(parallelism);
 	}
