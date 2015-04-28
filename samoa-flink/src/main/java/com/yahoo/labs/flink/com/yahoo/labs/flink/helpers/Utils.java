@@ -4,7 +4,7 @@ package com.yahoo.labs.flink.com.yahoo.labs.flink.helpers;
  * #%L
  * SAMOA
  * %%
- * Copyright (C) 2013 - 2015 Yahoo! Inc.
+ * Copyright (C) 2014 - 2015 Apache Software Foundation
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,10 @@ package com.yahoo.labs.flink.com.yahoo.labs.flink.helpers;
  */
 
 
+
 import com.yahoo.labs.flink.topology.impl.SamoaType;
 import com.yahoo.labs.samoa.core.ContentEvent;
+import com.yahoo.labs.samoa.utils.PartitioningScheme;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.functions.KeySelector;
@@ -40,11 +42,11 @@ public class Utils {
 
 	public static TypeInformation<SamoaType> tempTypeInfo = new TupleTypeInfo(SamoaType.class, STRING_TYPE_INFO, TypeExtractor.getForClass(ContentEvent.class), STRING_TYPE_INFO);
 
-	public static DataStream subscribe(DataStream<SamoaType> stream, Partitioning partitioning) {
+	public static DataStream subscribe(DataStream<SamoaType> stream, PartitioningScheme partitioning) {
 		switch (partitioning) {
-			case ALL:
+			case BROADCAST:
 				return stream.broadcast();
-			case GROUP:
+			case GROUP_BY_KEY:
 				return stream.groupBy(new KeySelector<SamoaType, String>() {
 					@Override
 					public String getKey(SamoaType samoaType) throws Exception {

@@ -4,7 +4,7 @@ package com.yahoo.labs.flink.topology.impl;
  * #%L
  * SAMOA
  * %%
- * Copyright (C) 2013 - 2015 Yahoo! Inc.
+ * Copyright (C) 2014 - 2015 Apache Software Foundation
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ package com.yahoo.labs.flink.topology.impl;
  * #L%
  */
 
+
 import com.google.common.collect.Lists;
 import com.yahoo.labs.flink.com.yahoo.labs.flink.helpers.Utils;
 import com.yahoo.labs.flink.com.yahoo.labs.flink.helpers.Utils.Partitioning;
@@ -27,6 +28,7 @@ import com.yahoo.labs.samoa.core.ContentEvent;
 import com.yahoo.labs.samoa.core.Processor;
 import com.yahoo.labs.samoa.topology.ProcessingItem;
 import com.yahoo.labs.samoa.topology.Stream;
+import com.yahoo.labs.samoa.utils.PartitioningScheme;
 import org.apache.flink.api.common.functions.Function;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.configuration.Configuration;
@@ -44,6 +46,7 @@ import java.util.List;
 public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> implements ProcessingItem, FlinkComponent, Serializable {
 
 	private static final Logger logger = LoggerFactory.getLogger(FlinkProcessingItem.class);
+	public static final int MAX_WAIT_TIME_MILLIS = 10000;
 
 	private final Processor processor;
 	private final transient StreamExecutionEnvironment env;
@@ -51,7 +54,7 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 	private transient DataStream<SamoaType> inStream;
 	private transient DataStream<SamoaType> outStream;
 	private transient List<FlinkStream> outputStreams = Lists.newArrayList();
-	private transient List<Tuple3<FlinkStream, Partitioning, Integer>> inputStreams = Lists.newArrayList();
+	private transient List<Tuple3<FlinkStream, PartitioningScheme, Integer>> inputStreams = Lists.newArrayList();
 	private int parallelism;
 	private static int numberOfPIs = 0;
 	private int piID;
@@ -96,7 +99,7 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 
 	@Override
 	public void initialise() {
-		for (Tuple3<FlinkStream, Partitioning, Integer> inputStream : inputStreams) {
+		for (Tuple3<FlinkStream, PartitioningScheme, Integer> inputStream : inputStreams) {
 			if (inputStream.f0.isInitialised()) { //if input stream is initialised
 				try {
 					DataStream toBeMerged = Utils.subscribe(inputStream.f0.getOutStream(), inputStream.f1);
@@ -113,7 +116,7 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 		}
 
 		if (onIteration) {
-			inStream = inStream.iterate(10000);
+			inStream = inStream.iterate(MAX_WAIT_TIME_MILLIS);
 		}
 		outStream = inStream.transform("samoaProcessor", Utils.tempTypeInfo, this).setParallelism(parallelism);
 	}
@@ -126,7 +129,7 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 
 	@Override
 	public boolean canBeInitialised() {
-		for (Tuple3<FlinkStream, Partitioning, Integer> inputStream : inputStreams) {
+		for (Tuple3<FlinkStream, PartitioningScheme, Integer> inputStream : inputStreams) {
 			if (!inputStream.f0.isInitialised()) return false;
 		}
 		return true;
@@ -152,19 +155,19 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 
 	@Override
 	public ProcessingItem connectInputShuffleStream(Stream inputStream) {
-		inputStreams.add(new Tuple3<>((FlinkStream) inputStream, Partitioning.SHUFFLE, ((FlinkStream) inputStream).getSourcePiId()));
+		inputStreams.add(new Tuple3<>((FlinkStream) inputStream, PartitioningScheme.SHUFFLE, ((FlinkStream) inputStream).getSourcePiId()));
 		return this;
 	}
 
 	@Override
 	public ProcessingItem connectInputKeyStream(Stream inputStream) {
-		inputStreams.add(new Tuple3<>((FlinkStream) inputStream, Partitioning.GROUP, ((FlinkStream) inputStream).getSourcePiId()));
+		inputStreams.add(new Tuple3<>((FlinkStream) inputStream, PartitioningScheme.GROUP_BY_KEY, ((FlinkStream) inputStream).getSourcePiId()));
 		return this;
 	}
 
 	@Override
 	public ProcessingItem connectInputAllStream(Stream inputStream) {
-		inputStreams.add(new Tuple3<>((FlinkStream) inputStream, Partitioning.ALL, ((FlinkStream) inputStream).getSourcePiId()));
+		inputStreams.add(new Tuple3<>((FlinkStream) inputStream, PartitioningScheme.BROADCAST, ((FlinkStream) inputStream).getSourcePiId()));
 		return this;
 	}
 
@@ -202,7 +205,7 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 		return circleId;
 	}
 
-	public void addPItoCircle(int piId) {
+	public void addPItoLoop(int piId) {
 		this.circleId.add(piId);
 	}
 
@@ -210,7 +213,7 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 		return inStream;
 	}
 
-	public List<Tuple3<FlinkStream, Partitioning, Integer>> getInputStreams() {
+	public List<Tuple3<FlinkStream, PartitioningScheme, Integer>> getInputStreams() {
 		return inputStreams;
 	}
 
@@ -235,7 +238,7 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 	}
 
 	public FlinkStream getInputStreamBySourceID(int sourceID) {
-		for (Tuple3<FlinkStream, Partitioning, Integer> fstreams : inputStreams) {
+		for (Tuple3<FlinkStream, PartitioningScheme, Integer> fstreams : inputStreams) {
 			if (fstreams.f2 == sourceID) {
 				return fstreams.f0;
 			}

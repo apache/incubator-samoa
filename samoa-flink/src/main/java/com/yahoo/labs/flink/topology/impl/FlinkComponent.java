@@ -4,7 +4,7 @@ package com.yahoo.labs.flink.topology.impl;
  * #%L
  * SAMOA
  * %%
- * Copyright (C) 2013 - 2015 Yahoo! Inc.
+ * Copyright (C) 2014 - 2015 Apache Software Foundation
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package com.yahoo.labs.flink.topology.impl;
  * limitations under the License.
  * #L%
  */
+
 
 
 import org.apache.flink.streaming.api.datastream.DataStream;

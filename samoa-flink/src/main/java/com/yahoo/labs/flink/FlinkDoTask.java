@@ -4,7 +4,7 @@ package com.yahoo.labs.flink;
  * #%L
  * SAMOA
  * %%
- * Copyright (C) 2013 - 2015 Yahoo! Inc.
+ * Copyright (C) 2014 - 2015 Apache Software Foundation
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,8 +44,6 @@ import java.util.*;
 public class FlinkDoTask {
 
 	private static final Logger logger = LoggerFactory.getLogger(FlinkDoTask.class);
-	public static List<List<FlinkProcessingItem>> circles ;
-	public static List<Integer> circleTails = new ArrayList<Integer>();
 
 
 	public static void main(String[] args) throws Exception {
@@ -70,60 +68,20 @@ public class FlinkDoTask {
 			System.out.println("Failed to initialize the task: " + e);
 			return;
 		}
+		
 		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-
-		logger.debug("Creating the factory\n");
 		task.setFactory(new FlinkComponentFactory(env));
-
-		logger.debug("Going to initialize the task\n");
 		task.init();
-
-		circles = extractTopologyGraph((FlinkTopology) task.getTopology());
-
-		logger.debug("Going to build the topology\n");
+		
+		logger.debug("Building Flink topology...");
 		((FlinkTopology) task.getTopology()).build();
-
-		logger.debug("Execute environment\n");
+		
+		logger.debug("Submitting the job...");
 		env.execute();
 
 	}
 
-	private static List<List<FlinkProcessingItem>> extractTopologyGraph(FlinkTopology topology){
-		List<FlinkProcessingItem> pis = Lists.newArrayList(Iterables.filter(topology.getProcessingItems(), FlinkProcessingItem.class));
-		List<Integer>[] graph = new List[pis.size()];
-		FlinkProcessingItem[] processingItems = new FlinkProcessingItem[pis.size()];
-		List<List<FlinkProcessingItem>> piCircles = new ArrayList<>();
 
-
-		for (int i=0;i<pis.size();i++) {
-			graph[i] = new ArrayList<Integer>();
-		}
-		//construct the graph of the topology for the Processing Items (No entrance pi is included)
-		for (FlinkProcessingItem pi: pis) {
-			processingItems[pi.getComponentId()] = pi;
-			for (Tuple3<FlinkStream, Utils.Partitioning, Integer> is : pi.getInputStreams()) {
-				if (is.f2 != -1) graph[is.f2].add(pi.getComponentId());
-			}
-		}
-		for (int g=0;g<graph.length;g++)
-			logger.debug(graph[g].toString());
-
-		CircleDetection detCircles = new CircleDetection();
-		List<List<Integer>> circles = detCircles.getCircles(graph);
-
-		//update PIs, regarding being part fo a circle.
-		for (List<Integer> c : circles){
-			List<FlinkProcessingItem> circle = new ArrayList<>();
-			for (Integer it : c){
-				circle.add(processingItems[it]);
-				processingItems[it].addPItoCircle(piCircles.size());
-			}
-			piCircles.add(circle);
-			circleTails.add(circle.get(0).getComponentId());
-		}
-		logger.debug("Circles in the topology: " + circles);
-
-		return piCircles;
-	}
+	
 
 }

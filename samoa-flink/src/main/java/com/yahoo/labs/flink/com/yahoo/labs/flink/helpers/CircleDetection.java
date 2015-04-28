@@ -4,7 +4,7 @@ package com.yahoo.labs.flink.com.yahoo.labs.flink.helpers;
  * #%L
  * SAMOA
  * %%
- * Copyright (C) 2013 - 2015 Yahoo! Inc.
+ * Copyright (C) 2014 - 2015 Apache Software Foundation
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,17 @@ package com.yahoo.labs.flink.com.yahoo.labs.flink.helpers;
  * #L%
  */
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+/**
+ * This class contains all logic needed in order to mark circles in job graphs explicitly such as 
+ * in the case of Apache Flink. A circle is defined as a list of node ids ordered in topological 
+ * (DFS) order.
+ * 
+ */
 public class CircleDetection {
 	private int[] index;
 	private int[] lowLink;
@@ -75,7 +82,8 @@ public class CircleDetection {
 					w = stack.pop();
 					sccComponent.add(w);
 				} while (neighbor != w);
-				stack.add(neighbor); //add neighbor again, just in case it is in another circle also
+				//add neighbor again, just in case it is a member of another circle 
+				stack.add(neighbor); 
 				scc.add(sccComponent);
 			}
 
