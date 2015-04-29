@@ -677,14 +677,6 @@ h1 {
   transition-delay: 0.15s;
 }
 
-.custom-urls .mega-octicon {
-  -webkit-transform:rotate(-45deg);
-  -moz-transform:rotate(-45deg);
-  -o-transform:rotate(-45deg);
-  -ms-transform:rotate(-45deg);
-  transform:rotate(-45deg);
-}
-
 .next-steps .guides {
   -webkit-transition-delay: 0.3s;
   -moz-transition-delay: 0.3s;
@@ -756,10 +748,11 @@ footer .right {
 
 .octicon-book:before { content: '\f007'} /*  */
 .octicon-check:before { content: '\f03a'} /*  */
-
 .octicon-link:before { content: '\f05c'} /*  */
 .octicon-mark-github:before { content: '\f00a'} /*  */
 .octicon-pencil:before { content: '\f058'} /*  */
+.octicon-tools:before { content: '\f031'} /*  */
+.octicon-key:before { content: '\f049'} /*  */
 
 /* @end Octicons */
 
