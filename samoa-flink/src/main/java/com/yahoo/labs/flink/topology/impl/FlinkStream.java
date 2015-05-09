@@ -52,7 +52,8 @@ public class FlinkStream extends AbstractStream implements FlinkComponent, Seria
 	@Override
 	public void initialise() {
 		if (procItem instanceof FlinkProcessingItem) {
-			dataStream = procItem.getOutStream().filter(Utils.getFilter(getStreamId()));
+			dataStream = procItem.getOutStream().filter(Utils.getFilter(getStreamId()))
+			.setParallelism(((FlinkProcessingItem) procItem).getParallelism());
 		} else
 			dataStream = procItem.getOutStream();
 	}
