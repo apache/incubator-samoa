@@ -19,6 +19,7 @@ package com.yahoo.labs.samoa.instances;
  * limitations under the License.
  * #L%
  */
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -63,45 +64,45 @@ public class ArffLoaderTest {
     InstanceInformation header = loader.getStructure();
     assertEquals(10, header.numAttributes());
     assertEquals(9, header.classIndex());
-    assertEquals(true,header.attribute(0).isNumeric());
-    assertEquals(false,header.attribute(1).isNumeric());
-    assertEquals(false,header.attribute(2).isNumeric());
-    assertEquals(false,header.attribute(3).isNumeric());
-    assertEquals(true,header.attribute(4).isNumeric());
-    assertEquals(true,header.attribute(5).isNumeric());
-    assertEquals(true,header.attribute(6).isNumeric());
-    assertEquals(true,header.attribute(7).isNumeric());
-    assertEquals(true,header.attribute(8).isNumeric());
-    assertEquals(false,header.attribute(9).isNumeric());
+    assertEquals(true, header.attribute(0).isNumeric());
+    assertEquals(false, header.attribute(1).isNumeric());
+    assertEquals(false, header.attribute(2).isNumeric());
+    assertEquals(false, header.attribute(3).isNumeric());
+    assertEquals(true, header.attribute(4).isNumeric());
+    assertEquals(true, header.attribute(5).isNumeric());
+    assertEquals(true, header.attribute(6).isNumeric());
+    assertEquals(true, header.attribute(7).isNumeric());
+    assertEquals(true, header.attribute(8).isNumeric());
+    assertEquals(false, header.attribute(9).isNumeric());
 
-    assertEquals(7,header.attribute(2).numValues());
-    assertEquals(" <->",header.attribute(2).value(0));
-    assertEquals(" <?>",header.attribute(2).value(1));
-    assertEquals(" ->",header.attribute(2).value(2));
-    assertEquals(" ?>",header.attribute(2).value(3));
-    assertEquals(" who",header.attribute(2).value(4));
-    assertEquals(" <-",header.attribute(2).value(5));
-    assertEquals(" <?",header.attribute(2).value(6));
+    assertEquals(7, header.attribute(2).numValues());
+    assertEquals(" <->", header.attribute(2).value(0));
+    assertEquals(" <?>", header.attribute(2).value(1));
+    assertEquals(" ->", header.attribute(2).value(2));
+    assertEquals(" ?>", header.attribute(2).value(3));
+    assertEquals(" who", header.attribute(2).value(4));
+    assertEquals(" <-", header.attribute(2).value(5));
+    assertEquals(" <?", header.attribute(2).value(6));
 
-    assertEquals(3,header.attribute(9).numValues());
-    assertEquals("Background",header.attribute(9).value(0));
-    assertEquals("Normal",header.attribute(9).value(1));
-    assertEquals("Botnet",header.attribute(9).value(2));
+    assertEquals(3, header.attribute(9).numValues());
+    assertEquals("Background", header.attribute(9).value(0));
+    assertEquals("Normal", header.attribute(9).value(1));
+    assertEquals("Botnet", header.attribute(9).value(2));
 
   }
 
   @Test
   public void testReadInstance() {
     Instance instance = loader.readInstance(reader);
-    assertEquals(1065.731934,instance.value(0),0);
-    assertEquals(0,instance.value(1),0);
-    assertEquals(0,instance.value(2),0);
-    assertEquals(3,instance.value(3),0);
-    assertEquals(0,instance.value(4),0);
-    assertEquals(0,instance.value(5),0);
-    assertEquals(2,instance.value(6),0);
-    assertEquals(252,instance.value(7),0);
-    assertEquals(145,instance.value(8),0);
-    assertEquals(0,instance.value(9),0);
+    assertEquals(1065.731934, instance.value(0), 0);
+    assertEquals(0, instance.value(1), 0);
+    assertEquals(0, instance.value(2), 0);
+    assertEquals(3, instance.value(3), 0);
+    assertEquals(0, instance.value(4), 0);
+    assertEquals(0, instance.value(5), 0);
+    assertEquals(2, instance.value(6), 0);
+    assertEquals(252, instance.value(7), 0);
+    assertEquals(145, instance.value(8), 0);
+    assertEquals(0, instance.value(9), 0);
   }
 }
