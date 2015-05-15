@@ -19,6 +19,7 @@ package com.yahoo.labs.samoa.instances;
  * limitations under the License.
  * #L%
  */
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -30,7 +31,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * 
  * @author abifet
  */
 public class ArffLoader implements Serializable {
@@ -87,15 +87,16 @@ public class ArffLoader implements Serializable {
       while (numAttribute == 0 && streamTokenizer.ttype != StreamTokenizer.TT_EOF) {
         // For each line
         while (streamTokenizer.ttype != StreamTokenizer.TT_EOL
-            && streamTokenizer.ttype != StreamTokenizer.TT_EOF) {
+               && streamTokenizer.ttype != StreamTokenizer.TT_EOF) {
           // For each item
           if (streamTokenizer.ttype == StreamTokenizer.TT_NUMBER) {
             // System.out.println(streamTokenizer.nval + "Num ");
             this.setValue(instance, numAttribute, streamTokenizer.nval, true);
-            numAttribute++;
+            //numAttribute++;
 
-          } else if (streamTokenizer.sval != null && (streamTokenizer.ttype == StreamTokenizer.TT_WORD
-              || streamTokenizer.ttype == 34)) {
+          } else if (streamTokenizer.sval != null && (
+              streamTokenizer.ttype == StreamTokenizer.TT_WORD
+              || streamTokenizer.ttype == 34 || streamTokenizer.ttype == 39)) {
             // System.out.println(streamTokenizer.sval + "Str");
             boolean isNumeric = attributes.get(numAttribute).isNumeric();
             double value;
@@ -104,12 +105,14 @@ public class ArffLoader implements Serializable {
             } else if (isNumeric == true) {
               value = Double.valueOf(streamTokenizer.sval).doubleValue();
             } else {
-              value = this.instanceInformation.attribute(numAttribute).indexOfValue(streamTokenizer.sval);
+              value = this.instanceInformation.attribute(numAttribute).indexOfValue(
+                  streamTokenizer.sval);
             }
 
             this.setValue(instance, numAttribute, value, isNumeric);
-            numAttribute++;
+            //numAttribute++;
           }
+          numAttribute++;
           streamTokenizer.nextToken();
         }
         streamTokenizer.nextToken();
@@ -119,13 +122,15 @@ public class ArffLoader implements Serializable {
     } catch (IOException ex) {
       Logger.getLogger(ArffLoader.class.getName()).log(Level.SEVERE, null, ex);
     }
+    //System.out.println(instance);
     return (numAttribute > 0) ? instance : null;
   }
 
   private void setValue(Instance instance, int numAttribute, double value, boolean isNumber) {
     double valueAttribute;
-    if (isNumber && this.instanceInformation.attribute(numAttribute).isNominal) {
-      valueAttribute = this.instanceInformation.attribute(numAttribute).indexOfValue(Double.toString(value));
+    if (this.instanceInformation.attribute(numAttribute).isNominal) {
+      valueAttribute = value;
+      //this.instanceInformation.attribute(numAttribute).indexOfValue(Double.toString(value));
       // System.out.println(value +"/"+valueAttribute+" ");
 
     } else {
@@ -144,7 +149,7 @@ public class ArffLoader implements Serializable {
   private Instance readInstanceSparse() {
     // Return a Sparse Instance
     Instance instance = new SparseInstance(1.0, null); // (this.instanceInformation.numAttributes()
-                                                       // + 1);
+    // + 1);
     // System.out.println(this.instanceInformation.numAttributes());
     int numAttribute;
     ArrayList<Double> attributeValues = new ArrayList<Double>();
@@ -154,7 +159,7 @@ public class ArffLoader implements Serializable {
       streamTokenizer.nextToken(); // Remove the '{' char
       // For each line
       while (streamTokenizer.ttype != StreamTokenizer.TT_EOL
-          && streamTokenizer.ttype != StreamTokenizer.TT_EOF) {
+             && streamTokenizer.ttype != StreamTokenizer.TT_EOF) {
         while (streamTokenizer.ttype != '}') {
           // For each item
           // streamTokenizer.nextToken();
@@ -171,18 +176,22 @@ public class ArffLoader implements Serializable {
 
           if (streamTokenizer.ttype == StreamTokenizer.TT_NUMBER) {
             // System.out.print(streamTokenizer.nval + " ");
-            this.setSparseValue(instance, indexValues, attributeValues, numAttribute, streamTokenizer.nval, true);
+            this.setSparseValue(instance, indexValues, attributeValues, numAttribute,
+                                streamTokenizer.nval, true);
             // numAttribute++;
 
-          } else if (streamTokenizer.sval != null && (streamTokenizer.ttype == StreamTokenizer.TT_WORD
+          } else if (streamTokenizer.sval != null && (
+              streamTokenizer.ttype == StreamTokenizer.TT_WORD
               || streamTokenizer.ttype == 34)) {
             // System.out.print(streamTokenizer.sval + "-");
             if (attributes.get(numAttribute).isNumeric()) {
               this.setSparseValue(instance, indexValues, attributeValues, numAttribute,
-                  Double.valueOf(streamTokenizer.sval).doubleValue(), true);
+                                  Double.valueOf(streamTokenizer.sval).doubleValue(), true);
             } else {
-              this.setSparseValue(instance, indexValues, attributeValues, numAttribute, this.instanceInformation
-                  .attribute(numAttribute).indexOfValue(streamTokenizer.sval), false);
+              this.setSparseValue(instance, indexValues, attributeValues, numAttribute,
+                                  this.instanceInformation
+                                      .attribute(numAttribute).indexOfValue(streamTokenizer.sval),
+                                  false);
             }
           }
           streamTokenizer.nextToken();
@@ -202,16 +211,19 @@ public class ArffLoader implements Serializable {
       arrayIndexValues[i] = indexValues.get(i).intValue();
       arrayAttributeValues[i] = attributeValues.get(i).doubleValue();
     }
-    instance.addSparseValues(arrayIndexValues, arrayAttributeValues, this.instanceInformation.numAttributes());
+    instance.addSparseValues(arrayIndexValues, arrayAttributeValues,
+                             this.instanceInformation.numAttributes());
     return instance;
 
   }
 
-  private void setSparseValue(Instance instance, List<Integer> indexValues, List<Double> attributeValues,
-      int numAttribute, double value, boolean isNumber) {
+  private void setSparseValue(Instance instance, List<Integer> indexValues,
+                              List<Double> attributeValues,
+                              int numAttribute, double value, boolean isNumber) {
     double valueAttribute;
     if (isNumber && this.instanceInformation.attribute(numAttribute).isNominal) {
-      valueAttribute = this.instanceInformation.attribute(numAttribute).indexOfValue(Double.toString(value));
+      valueAttribute =
+          this.instanceInformation.attribute(numAttribute).indexOfValue(Double.toString(value));
     } else {
       valueAttribute = value;
     }
@@ -235,7 +247,7 @@ public class ArffLoader implements Serializable {
       streamTokenizer.nextToken(); // Remove the '{' char
       // For each line
       while (streamTokenizer.ttype != StreamTokenizer.TT_EOL
-          && streamTokenizer.ttype != StreamTokenizer.TT_EOF) {
+             && streamTokenizer.ttype != StreamTokenizer.TT_EOF) {
         while (streamTokenizer.ttype != '}') {
           // For each item
           // streamTokenizer.nextToken();
@@ -249,15 +261,18 @@ public class ArffLoader implements Serializable {
             this.setValue(instance, numAttribute, streamTokenizer.nval, true);
             // numAttribute++;
 
-          } else if (streamTokenizer.sval != null && (streamTokenizer.ttype == StreamTokenizer.TT_WORD
+          } else if (streamTokenizer.sval != null && (
+              streamTokenizer.ttype == StreamTokenizer.TT_WORD
               || streamTokenizer.ttype == 34)) {
             // System.out.print(streamTokenizer.sval +
             // "/"+this.instanceInformation.attribute(numAttribute).indexOfValue(streamTokenizer.sval)+" ");
             if (attributes.get(numAttribute).isNumeric()) {
-              this.setValue(instance, numAttribute, Double.valueOf(streamTokenizer.sval).doubleValue(), true);
+              this.setValue(instance, numAttribute,
+                            Double.valueOf(streamTokenizer.sval).doubleValue(), true);
             } else {
               this.setValue(instance, numAttribute,
-                  this.instanceInformation.attribute(numAttribute).indexOfValue(streamTokenizer.sval), false);
+                            this.instanceInformation.attribute(numAttribute)
+                                .indexOfValue(streamTokenizer.sval), false);
               // numAttribute++;
             }
           }
@@ -287,7 +302,8 @@ public class ArffLoader implements Serializable {
       while (streamTokenizer.ttype != StreamTokenizer.TT_EOF) {
         // For each line
         // if (streamTokenizer.ttype == '@') {
-        if (streamTokenizer.ttype == StreamTokenizer.TT_WORD && streamTokenizer.sval.startsWith("@") == true) {
+        if (streamTokenizer.ttype == StreamTokenizer.TT_WORD
+            && streamTokenizer.sval.startsWith("@") == true) {
           // streamTokenizer.nextToken();
           String token = streamTokenizer.sval.toUpperCase();
           if (token.startsWith("@RELATION")) {
@@ -305,22 +321,12 @@ public class ArffLoader implements Serializable {
             String type = streamTokenizer.sval;
             // System.out.println("* " + name + ":" + type + " ");
             if (streamTokenizer.ttype == '{') {
+              parseDoubleBrackests(name);
+            } else if (streamTokenizer.ttype == 10) {//for the buggy non-formal input arff file
               streamTokenizer.nextToken();
-              List<String> attributeLabels = new ArrayList<String>();
-              while (streamTokenizer.ttype != '}') {
-
-                if (streamTokenizer.sval != null) {
-                  attributeLabels.add(streamTokenizer.sval);
-                  // System.out.print(streamTokenizer.sval + ",");
-                } else {
-                  attributeLabels.add(Double.toString(streamTokenizer.nval));
-                  // System.out.print(streamTokenizer.nval + ",");
-                }
-
-                streamTokenizer.nextToken();
+              if (streamTokenizer.ttype == '{') {
+                parseDoubleBrackests(name);
               }
-              // System.out.println();
-              attributes.add(new Attribute(name, attributeLabels));
             } else {
               // Add attribute
               attributes.add(new Attribute(name));
@@ -339,6 +345,27 @@ public class ArffLoader implements Serializable {
       Logger.getLogger(ArffLoader.class.getName()).log(Level.SEVERE, null, ex);
     }
     return new InstanceInformation(relation, attributes);
+  }
+
+  private void parseDoubleBrackests(String name) throws IOException {
+
+    streamTokenizer.nextToken();
+    List<String> attributeLabels = new ArrayList<String>();
+    while (streamTokenizer.ttype != '}') {
+
+      if (streamTokenizer.sval != null) {
+        attributeLabels.add(streamTokenizer.sval);
+        // System.out.print(streamTokenizer.sval + ",");
+      } else {
+        attributeLabels.add(Double.toString(streamTokenizer.nval));
+        // System.out.print(streamTokenizer.nval + ",");
+      }
+
+      streamTokenizer.nextToken();
+    }
+    // System.out.println();
+    attributes.add(new Attribute(name, attributeLabels));
+
   }
 
   private void initStreamTokenizer(Reader reader) {

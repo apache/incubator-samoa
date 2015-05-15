@@ -25,7 +25,6 @@ package com.yahoo.labs.samoa.instances;
  */
 
 /**
- * 
  * @author abifet
  */
 public class DenseInstance extends SingleLabelInstance {
@@ -62,9 +61,10 @@ public class DenseInstance extends SingleLabelInstance {
   public String toString() {
     StringBuffer text = new StringBuffer();
 
-    for (int i = 0; i < this.instanceInformation.numAttributes(); i++) {
-      if (i > 0)
+    for (int i = 0; i < this.instanceData.numAttributes(); i++) {
+      if (i > 0) {
         text.append(",");
+      }
       text.append(this.value(i));
     }
     text.append(",").append(this.weight());
