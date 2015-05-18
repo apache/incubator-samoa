@@ -38,8 +38,6 @@ import static org.apache.flink.api.common.typeinfo.BasicTypeInfo.STRING_TYPE_INF
 
 public class Utils {
 
-	public enum Partitioning {SHUFFLE, ALL, GROUP}
-
 	public static TypeInformation<SamoaType> tempTypeInfo = new TupleTypeInfo(SamoaType.class, STRING_TYPE_INFO, TypeExtractor.getForClass(ContentEvent.class), STRING_TYPE_INFO);
 
 	public static DataStream subscribe(DataStream<SamoaType> stream, PartitioningScheme partitioning) {

@@ -23,7 +23,6 @@ package com.yahoo.labs.flink.topology.impl;
 
 import com.google.common.collect.Lists;
 import com.yahoo.labs.flink.com.yahoo.labs.flink.helpers.Utils;
-import com.yahoo.labs.flink.com.yahoo.labs.flink.helpers.Utils.Partitioning;
 import com.yahoo.labs.samoa.core.ContentEvent;
 import com.yahoo.labs.samoa.core.Processor;
 import com.yahoo.labs.samoa.topology.ProcessingItem;

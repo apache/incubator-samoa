@@ -257,28 +257,4 @@ public class SingleLabelInstance implements Instance {
     return text.toString();
   }
 
-	public InstanceData getInstanceData() {
-		return instanceData;
-	}
-
-	public void setInstanceData(InstanceData instanceData) {
-		this.instanceData = instanceData;
-	}
-
-	public InstanceData getClassData() {
-		return classData;
-	}
-
-	public void setClassData(InstanceData classData) {
-		this.classData = classData;
-	}
-
-	public InstancesHeader getInstanceInformation() {
-		return instanceInformation;
-	}
-
-	public void setInstanceInformation(InstancesHeader instanceInformation) {
-		this.instanceInformation = instanceInformation;
-	}
-
 }
