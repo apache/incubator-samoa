@@ -4,7 +4,7 @@
 # #%L
 # SAMOA
 # %%
-# Copyright (C) 2013 Yahoo! Inc.
+# Copyright (C) 2014 - 2015 Apache Software Foundation
 # %%
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -280,6 +280,66 @@ elif [ $PLATFORM = 'SAMZA' ]; then
                --kafka_replication_factor=$KAFKA_REPLICATION_FACTOR --checkpoint_frequency=$CHECKPOINT_FREQUENCY \
                --kryo_register=$BASE_DIR/$KRYO_REGISTER_FILE --pi_per_container=$PI_PER_CONTAINER \
 	       --samoa_hdfs_dir=$HDFS_SAMOA_HOME
+
+elif [ $PLATFORM = 'FLINK' ]; then
+
+        echo "Deploying to $PLATFORM"
+        if [ -z $FLINK_HOME ];then
+            echo "FLINK_HOME is not set!"
+            echo "Please set FLINK_HOME to point to your Flink installation"
+            exit -1
+        fi
+
+        if [ ! -f $2 ];then
+            echo "$2 does not exist!"
+            echo "Please use a valid jar file for Flink execution"
+            exit -1
+        fi
+
+        FLINK_EXEC="$FLINK_HOME/bin/flink"
+
+        SAMOA_FLINK_PROPERTIES="samoa-flink.properties"
+        MODE_OPTION="samoa.flink.mode"
+#        NUM_WORKER_OPTION="samoa.flink.numWorker"
+
+        VALUE=""
+        getvalue()
+        {
+            VALUE=`sed '/^\#/d' $BASE_DIR/$SAMOA_FLINK_PROPERTIES | grep "$1" | tail -n 1 | cut -d "=" -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'`
+        }
+        
+#        getvalue "$NUM_WORKER_OPTION"
+#        NUM_WORKER="$VALUE"
+
+        getvalue "$MODE_OPTION"
+        MODE_ARG="$VALUE"
+
+        COMPLETE_ARG=""
+        COUNTER=0
+        for var in "$@"
+        do
+            COUNTER=`expr $COUNTER + 1`
+            if [ $COUNTER -gt 2 ];then
+                COMPLETE_ARG="$COMPLETE_ARG $var"
+            fi
+        done
+
+        DEPLOYABLE=$JAR_PATH
+        echo "$DEPLOYABLE"
+        if [ "$MODE_ARG" = "cluster" ]; then
+				FLINK_MASTER_OPTION="samoa.flink.flinkMaster"
+				PORT_OPTION="samoa.flink.port"
+
+				getvalue "$FLINK_MASTER_OPTION"
+				FLINK_MASTER_OPTION="$VALUE"
+
+				getvalue "$PORT_OPTION"
+				PORT_OPTION="$VALUE"
+                $FLINK_EXEC run -m $FLINK_MASTER_OPTION:$PORT_OPTION $DEPLOYABLE  $COMPLETE_ARG
+
+        elif [ "$MODE_ARG" = "local" ]; then
+                $FLINK_EXEC run $DEPLOYABLE $COMPLETE_ARG
+        fi                                                    
 
 elif [ $PLATFORM = 'THREADS' ]; then
 	
