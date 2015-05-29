@@ -28,13 +28,14 @@ import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.invokable.StreamInvokable;
 import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.core.Processor;
 import org.apache.samoa.flink.helpers.Utils;
 import org.apache.samoa.topology.ProcessingItem;
 import org.apache.samoa.topology.Stream;
 import org.apache.samoa.utils.PartitioningScheme;
+import org.apache.flink.streaming.api.operators.AbstractUdfStreamOperator;
+import org.apache.flink.streaming.api.operators.OneInputStreamOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +44,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> implements ProcessingItem, FlinkComponent, Serializable {
+public class FlinkProcessingItem extends AbstractUdfStreamOperator<SamoaType, FlinkProcessingItem.SamoaDelegateFunction> 
+		implements OneInputStreamOperator<SamoaType, SamoaType>, ProcessingItem, FlinkComponent, Serializable {
 
 	private static final Logger logger = LoggerFactory.getLogger(FlinkProcessingItem.class);
 	public static final int MAX_WAIT_TIME_MILLIS = 10000;
@@ -88,7 +90,7 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 	}
 
 	public void putToStream(ContentEvent data, Stream targetStream) {
-		collector.collect(SamoaType.of(data, targetStream.getStreamId()));
+		output.collect(SamoaType.of(data, targetStream.getStreamId()));
 	}
 
 	@Override
@@ -106,7 +108,7 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 					if (inStream == null) {
 						inStream = toBeMerged;
 					} else {
-						inStream = inStream.merge(toBeMerged);
+						inStream = inStream.union(toBeMerged);
 					}
 				} catch (RuntimeException e) {
 					e.printStackTrace();
@@ -146,11 +148,8 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 	}
 
 	@Override
-	public void invoke() throws Exception {
-		while (readNext() != null) {
-			SamoaType t = nextObject;
-			fun.processEvent(t.f1);
-		}
+	public void processElement(SamoaType samoaType) throws Exception {
+		fun.processEvent(samoaType.f1);
 	}
 
 	@Override
@@ -219,10 +218,6 @@ public class FlinkProcessingItem extends StreamInvokable<SamoaType, SamoaType> i
 
 	public void setOnIteration(boolean onIteration) {
 		this.onIteration = onIteration;
-	}
-
-	public boolean isOnIteration() {
-		return onIteration;
 	}
 
 	static class SamoaDelegateFunction implements Function, Serializable {

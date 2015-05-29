@@ -24,11 +24,10 @@ package org.apache.samoa.flink.topology.impl;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.function.source.RichSourceFunction;
-import org.apache.flink.util.Collector;
 import org.apache.samoa.core.EntranceProcessor;
 import org.apache.samoa.flink.helpers.Utils;
 import org.apache.samoa.topology.AbstractEntranceProcessingItem;
+import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 
 import java.io.Serializable;
 
@@ -51,8 +50,23 @@ public class FlinkEntranceProcessingItem extends AbstractEntranceProcessingItem
 		final int compID = getComponentId();
 
 		
-		outStream = env.addSource(new RichSourceFunction<SamoaType>() {
-			volatile boolean canceled;
+		outStream = env.addSource(new RichSourceFunction() {
+
+			private volatile boolean isCancelled;
+			
+			@Override
+			public void run(SourceContext sourceContext) throws Exception {
+				while(!isCancelled && entrProc.hasNext())
+				{
+					sourceContext.collect(SamoaType.of(entrProc.nextEvent(), id));
+				}
+			}
+
+			@Override
+			public void cancel() {
+				isCancelled = true;
+			}
+
 			EntranceProcessor entrProc = proc;
 			String id = streamId;
 
@@ -61,19 +75,8 @@ public class FlinkEntranceProcessingItem extends AbstractEntranceProcessingItem
 				super.open(parameters);
 				entrProc.onCreate(compID);
 			}
-
-			@Override
-			public void run(Collector<SamoaType> collector) throws Exception {
-				while (!canceled && entrProc.hasNext()) {
-					collector.collect(SamoaType.of(entrProc.nextEvent(), id));
-				}
-			}
-
-			@Override
-			public void cancel() {
-				canceled = true;
-			}
-		},Utils.tempTypeInfo);
+			
+		}).returns(Utils.tempTypeInfo);
 
 		((FlinkStream) getOutputStream()).initialise();
 	}
