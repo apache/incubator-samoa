@@ -51,7 +51,7 @@
     </layout>
   </appender>
 
-  <category name="com.yahoo.labs" additivity="false">
+  <category name="org.apache.samoa" additivity="false">
     <priority value="info" />
     <appender-ref ref="CONSOLE" />
   </category>

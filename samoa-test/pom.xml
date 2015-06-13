@@ -23,7 +23,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <artifactId>samoa</artifactId>
-    <groupId>com.yahoo.labs.samoa</groupId>
+    <groupId>org.apache.samoa</groupId>
     <version>0.3.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -41,7 +41,7 @@
       <version>2.4</version>
     </dependency>
     <dependency>
-      <groupId>com.yahoo.labs.samoa</groupId>
+      <groupId>org.apache.samoa</groupId>
       <artifactId>samoa-api</artifactId>
       <version>${project.version}</version>
     </dependency>
