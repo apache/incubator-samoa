@@ -20,15 +20,10 @@ package org.apache.samoa.learners.classifiers.ensemble;
  * #L%
  */
 
-/**
- * License
- */
-
 import java.util.Set;
 
 import org.apache.samoa.core.Processor;
 import org.apache.samoa.instances.Instances;
-import org.apache.samoa.learners.ClassificationLearner;
 import org.apache.samoa.learners.Learner;
 import org.apache.samoa.learners.classifiers.trees.VerticalHoeffdingTree;
 import org.apache.samoa.topology.Stream;
@@ -42,15 +37,15 @@ import com.github.javacliparser.IntOption;
 import com.google.common.collect.ImmutableSet;
 
 /**
- * The Bagging Classifier by Oza and Russell.
+ * Simple sharding meta-classifier. It trains an ensemble of learners by shuffling the training stream among them, so
+ * that each learner is completely independent from each other.
  */
-public class Bagging implements ClassificationLearner, Configurable {
+public class Sharding implements Learner, Configurable {
 
-  /** The Constant serialVersionUID. */
   private static final long serialVersionUID = -2971850264864952099L;
-  private static final Logger logger = LoggerFactory.getLogger(Bagging.class);
+  private static final Logger logger = LoggerFactory.getLogger(Sharding.class);
 
-  /** The base learner option. */
+  /** The base learner class. */
   public ClassOption baseLearnerOption = new ClassOption("baseLearner", 'l',
       "Classifier to train.", Learner.class, VerticalHoeffdingTree.class.getName());
 
@@ -59,7 +54,7 @@ public class Bagging implements ClassificationLearner, Configurable {
       "The number of models in the bag.", 10, 1, Integer.MAX_VALUE);
 
   /** The distributor processor. */
-  private BaggingDistributorProcessor distributorP;
+  private ShardingDistributorProcessor distributor;
 
   /** The input streams for the ensemble, one per member. */
   private Stream[] ensembleStreams;
@@ -74,15 +69,14 @@ public class Bagging implements ClassificationLearner, Configurable {
 
   /**
    * Sets the layout.
-   * 
-   * @throws Exception
    */
   protected void setLayout() {
+
     int ensembleSize = this.ensembleSizeOption.getValue();
 
-    distributorP = new BaggingDistributorProcessor();
-    distributorP.setEnsembleSize(ensembleSize);
-    builder.addProcessor(distributorP, 1);
+    distributor = new ShardingDistributorProcessor();
+    distributor.setEnsembleSize(ensembleSize);
+    this.builder.addProcessor(distributor, 1);
 
     // instantiate classifier
     ensemble = new Learner[ensembleSize];
@@ -98,27 +92,27 @@ public class Bagging implements ClassificationLearner, Configurable {
       ensemble[i].init(builder, this.dataset, 1); // sequential
     }
 
-    PredictionCombinerProcessor predictionCombinerP = new PredictionCombinerProcessor();
-    predictionCombinerP.setEnsembleSize(ensembleSize);
-    this.builder.addProcessor(predictionCombinerP, 1);
+    PredictionCombinerProcessor predictionCombiner = new PredictionCombinerProcessor();
+    predictionCombiner.setEnsembleSize(ensembleSize);
+    this.builder.addProcessor(predictionCombiner, 1);
 
     // Streams
-    resultStream = builder.createStream(predictionCombinerP);
-    predictionCombinerP.setOutputStream(resultStream);
+    resultStream = this.builder.createStream(predictionCombiner);
+    predictionCombiner.setOutputStream(resultStream);
 
     for (Learner member : ensemble) {
       for (Stream subResultStream : member.getResultStreams()) { // a learner can have multiple output streams
-        this.builder.connectInputKeyStream(subResultStream, predictionCombinerP); // the key is the instance id to combine predictions
+        this.builder.connectInputKeyStream(subResultStream, predictionCombiner); // the key is the instance id to combine predictions
       }
     }
 
     ensembleStreams = new Stream[ensembleSize];
     for (int i = 0; i < ensembleSize; i++) {
-      ensembleStreams[i] = builder.createStream(distributorP);
+      ensembleStreams[i] = builder.createStream(distributor);
       builder.connectInputShuffleStream(ensembleStreams[i], ensemble[i].getInputProcessor()); // connect streams one-to-one with ensemble members (the type of connection does not matter)
     }
-
-    distributorP.setOutputStreams(ensembleStreams);
+    
+    distributor.setOutputStreams(ensembleStreams);
   }
 
   /** The builder. */
@@ -133,7 +127,7 @@ public class Bagging implements ClassificationLearner, Configurable {
 
   @Override
   public Processor getInputProcessor() {
-    return distributorP;
+    return distributor;
   }
 
   /*
