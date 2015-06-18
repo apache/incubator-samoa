@@ -37,22 +37,16 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <!-- PARENT MODULE SAMOA-S4 <parent> <groupId>com.yahoo.labs.bcn.samoa</groupId> <artifactId>samoa-s4</artifactId> <version>0.1</version> 
-    </parent> -->
-
-  <!-- SAMOA-S4-ADAPTER MODUEL -->
   <artifactId>samoa-s4-adapter</artifactId>
-  <groupId>com.yahoo.labs.bcn.samoa</groupId>
+  <groupId>org.apache.samoa</groupId>
   <version>0.1</version>
   <name>samoa-s4-adapter</name>
   <description>Adapter module to connect to external stream and also to provide entrance processing items for SAMOA</description>
 
   <dependencies>
-    <!-- dependency> <artifactId>samoa-api</artifactId> <groupId>com.yahoo.labs.bcn.samoa</groupId> <version>0.1</version> 
-      </dependency> -->
     <dependency>
       <artifactId>samoa-s4</artifactId>
-      <groupId>com.yahoo.labs.bcn.samoa</groupId>
+      <groupId>org.apache.samoa</groupId>
       <version>0.1</version>
     </dependency>
   </dependencies>

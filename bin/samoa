@@ -144,7 +144,7 @@ if [ $PLATFORM = 'S4' ]; then
 	# END Reading properties file
 
 	APP_NAME="SamoaS4App"
-	APP_CLASS="com.yahoo.labs.samoa.topology.impl.S4DoTask"
+	APP_CLASS="org.apache.samoa.topology.impl.S4DoTask"
 	NAMED_PARAMETERS=$(perl -MURI::Escape -e 'print uri_escape($ARGV[0]);' "$OPTIONS")
 
 	echo "Deploying SAMOA..."
@@ -199,10 +199,10 @@ elif [ $PLATFORM = 'STORM' ]; then
 	
 	DEPLOYABLE=$JAR_PATH
 	if [ "$MODE_ARG" = "cluster" ]; then
-		$STORM_EXEC jar $DEPLOYABLE com.yahoo.labs.samoa.topology.impl.StormDoTask $COMPLETE_ARG $NUM_WORKER $MODE_ARG
+		$STORM_EXEC jar $DEPLOYABLE org.apache.samoa.topology.impl.StormDoTask $COMPLETE_ARG $NUM_WORKER $MODE_ARG
 	elif [ "$MODE_ARG" = "local" ]; then
 		CLASSPATH="$CLASSPATH:$STORM_HOME/lib/*:$DEPLOYABLE"
-		java -cp $CLASSPATH com.yahoo.labs.samoa.LocalStormDoTask $COMPLETE_ARG $NUM_WORKER
+		java -cp $CLASSPATH org.apache.samoa.LocalStormDoTask $COMPLETE_ARG $NUM_WORKER
 	fi
 
 elif [ $PLATFORM = 'SAMZA' ]; then
@@ -274,7 +274,7 @@ elif [ $PLATFORM = 'SAMZA' ]; then
         done
 
         DEPLOYABLE=$JAR_PATH
-        java -Dsamza.log.dir=$BASE_DIR/logs -Dsamza.container.name=client -cp $DEPLOYABLE com.yahoo.labs.samoa.SamzaDoTask $COMPLETE_ARG --mode=$MODE_ARG \
+        java -Dsamza.log.dir=$BASE_DIR/logs -Dsamza.container.name=client -cp $DEPLOYABLE org.apache.samoa.SamzaDoTask $COMPLETE_ARG --mode=$MODE_ARG \
                --yarn_home=$YARN_HOME/conf --zookeeper=$ZOOKEEPER_HOST:$ZOOKEEPER_PORT --kafka=$KAFKA_BROKER_LIST \
                --jar_package=$JAR_PATH --yarn_am_mem=$YARN_AM_MEMORY --yarn_container_mem=$YARN_CONTAINER_MEMORY \
                --kafka_replication_factor=$KAFKA_REPLICATION_FACTOR --checkpoint_frequency=$CHECKPOINT_FREQUENCY \
@@ -354,7 +354,7 @@ elif [ $PLATFORM = 'THREADS' ]; then
             fi
         done
         
-	java $JAVA_OPTS -cp $JAR_PATH com.yahoo.labs.samoa.LocalThreadsDoTask $COMPLETE_ARG
+	java $JAVA_OPTS -cp $JAR_PATH org.apache.samoa.LocalThreadsDoTask $COMPLETE_ARG
 
 elif [ $PLATFORM = 'LOCAL' ]; then
 
@@ -369,7 +369,7 @@ elif [ $PLATFORM = 'LOCAL' ]; then
 	    fi
 	done
 
-	java $JAVA_OPTS -cp $JAR_PATH com.yahoo.labs.samoa.LocalDoTask $COMPLETE_ARG $NUM_WORKER $MODE_ARG
+	java $JAVA_OPTS -cp $JAR_PATH org.apache.samoa.LocalDoTask $COMPLETE_ARG $NUM_WORKER $MODE_ARG
 else
 	echo "Specify a valid platform."
 	echo "Usage: samoa <platform> <jar> <task & options>"
