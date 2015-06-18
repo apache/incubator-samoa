@@ -24,6 +24,7 @@ package org.apache.samoa.learners.classifiers.ensemble;
  * License
  */
 
+import java.util.Arrays;
 import java.util.Random;
 
 import org.apache.samoa.core.ContentEvent;
@@ -38,19 +39,16 @@ import org.apache.samoa.topology.Stream;
  */
 public class BaggingDistributorProcessor implements Processor {
 
-  /**
-	 * 
-	 */
   private static final long serialVersionUID = -1550901409625192730L;
 
-  /** The size ensemble. */
-  private int sizeEnsemble;
+  /** The ensemble size. */
+  private int ensembleSize;
 
-  /** The training stream. */
-  private Stream trainingStream;
+  /** The stream ensemble. */
+  private Stream[] ensembleStreams;
 
-  /** The prediction stream. */
-  private Stream predictionStream;
+  /** Ramdom number generator. */
+  protected Random random = new Random(); //TODO make random seed configurable
 
   /**
    * On event.
@@ -60,37 +58,33 @@ public class BaggingDistributorProcessor implements Processor {
    * @return true, if successful
    */
   public boolean process(ContentEvent event) {
-    InstanceContentEvent inEvent = (InstanceContentEvent) event; // ((s4Event)event).getContentEvent();
-    // InstanceEvent inEvent = (InstanceEvent) event;
+    InstanceContentEvent inEvent = (InstanceContentEvent) event;
 
     if (inEvent.getInstanceIndex() < 0) {
-      // End learning
-      predictionStream.put(event);
+      // end learning
+      for (Stream stream : ensembleStreams)
+        stream.put(event);
       return false;
     }
 
     if (inEvent.isTesting()) {
-      Instance trainInst = inEvent.getInstance();
-      for (int i = 0; i < sizeEnsemble; i++) {
-        Instance weightedInst = trainInst.copy();
-        // weightedInst.setWeight(trainInst.weight() * k);
-        InstanceContentEvent instanceContentEvent = new InstanceContentEvent(
-            inEvent.getInstanceIndex(), weightedInst, false, true);
-        instanceContentEvent.setClassifierIndex(i);
-        instanceContentEvent.setEvaluationIndex(inEvent.getEvaluationIndex());
-        predictionStream.put(instanceContentEvent);
+      Instance testInstance = inEvent.getInstance();
+      for (int i = 0; i < ensembleSize; i++) {
+        Instance instanceCopy = testInstance.copy();
+        InstanceContentEvent instanceContentEvent = new InstanceContentEvent(inEvent.getInstanceIndex(), instanceCopy,
+            false, true);
+        instanceContentEvent.setClassifierIndex(i); //TODO probably not needed anymore
+        instanceContentEvent.setEvaluationIndex(inEvent.getEvaluationIndex()); //TODO probably not needed anymore
+        ensembleStreams[i].put(instanceContentEvent);
       }
     }
 
-    /* Estimate model parameters using the training data. */
+    // estimate model parameters using the training data
     if (inEvent.isTraining()) {
       train(inEvent);
     }
-    return false;
+    return true;
   }
-
-  /** The random. */
-  protected Random random = new Random();
 
   /**
    * Train.
@@ -99,104 +93,51 @@ public class BaggingDistributorProcessor implements Processor {
    *          the in event
    */
   protected void train(InstanceContentEvent inEvent) {
-    Instance trainInst = inEvent.getInstance();
-    for (int i = 0; i < sizeEnsemble; i++) {
+    Instance trainInstance = inEvent.getInstance();
+    for (int i = 0; i < ensembleSize; i++) {
       int k = MiscUtils.poisson(1.0, this.random);
       if (k > 0) {
-        Instance weightedInst = trainInst.copy();
-        weightedInst.setWeight(trainInst.weight() * k);
-        InstanceContentEvent instanceContentEvent = new InstanceContentEvent(
-            inEvent.getInstanceIndex(), weightedInst, true, false);
+        Instance weightedInstance = trainInstance.copy();
+        weightedInstance.setWeight(trainInstance.weight() * k);
+        InstanceContentEvent instanceContentEvent = new InstanceContentEvent(inEvent.getInstanceIndex(),
+            weightedInstance, true, false);
         instanceContentEvent.setClassifierIndex(i);
         instanceContentEvent.setEvaluationIndex(inEvent.getEvaluationIndex());
-        trainingStream.put(instanceContentEvent);
+        ensembleStreams[i].put(instanceContentEvent);
       }
     }
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.apache.s4.core.ProcessingElement#onCreate()
-   */
   @Override
   public void onCreate(int id) {
     // do nothing
   }
 
-  /**
-   * Gets the training stream.
-   * 
-   * @return the training stream
-   */
-  public Stream getTrainingStream() {
-    return trainingStream;
+  public Stream[] getOutputStreams() {
+    return ensembleStreams;
   }
 
-  /**
-   * Sets the training stream.
-   * 
-   * @param trainingStream
-   *          the new training stream
-   */
-  public void setOutputStream(Stream trainingStream) {
-    this.trainingStream = trainingStream;
+  public void setOutputStreams(Stream[] ensembleStreams) {
+    this.ensembleStreams = ensembleStreams;
   }
 
-  /**
-   * Gets the prediction stream.
-   * 
-   * @return the prediction stream
-   */
-  public Stream getPredictionStream() {
-    return predictionStream;
+  public int getEnsembleSize() {
+    return ensembleSize;
   }
 
-  /**
-   * Sets the prediction stream.
-   * 
-   * @param predictionStream
-   *          the new prediction stream
-   */
-  public void setPredictionStream(Stream predictionStream) {
-    this.predictionStream = predictionStream;
+  public void setEnsembleSize(int ensembleSize) {
+    this.ensembleSize = ensembleSize;
   }
 
-  /**
-   * Gets the size ensemble.
-   * 
-   * @return the size ensemble
-   */
-  public int getSizeEnsemble() {
-    return sizeEnsemble;
-  }
-
-  /**
-   * Sets the size ensemble.
-   * 
-   * @param sizeEnsemble
-   *          the new size ensemble
-   */
-  public void setSizeEnsemble(int sizeEnsemble) {
-    this.sizeEnsemble = sizeEnsemble;
-  }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see samoa.core.Processor#newProcessor(samoa.core.Processor)
-   */
   @Override
   public Processor newProcessor(Processor sourceProcessor) {
     BaggingDistributorProcessor newProcessor = new BaggingDistributorProcessor();
     BaggingDistributorProcessor originProcessor = (BaggingDistributorProcessor) sourceProcessor;
-    if (originProcessor.getPredictionStream() != null) {
-      newProcessor.setPredictionStream(originProcessor.getPredictionStream());
+    if (originProcessor.getOutputStreams() != null) {
+      newProcessor.setOutputStreams(Arrays.copyOf(originProcessor.getOutputStreams(),
+          originProcessor.getOutputStreams().length));
     }
-    if (originProcessor.getTrainingStream() != null) {
-      newProcessor.setOutputStream(originProcessor.getTrainingStream());
-    }
-    newProcessor.setSizeEnsemble(originProcessor.getSizeEnsemble());
+    newProcessor.setEnsembleSize(originProcessor.getEnsembleSize());
     /*
      * if (originProcessor.getLearningCurve() != null){
      * newProcessor.setLearningCurve((LearningCurve)
@@ -204,5 +145,4 @@ public class BaggingDistributorProcessor implements Processor {
      */
     return newProcessor;
   }
-
 }

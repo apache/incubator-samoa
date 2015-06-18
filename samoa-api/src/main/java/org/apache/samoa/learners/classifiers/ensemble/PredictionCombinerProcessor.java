@@ -33,14 +33,14 @@ import org.apache.samoa.moa.core.DoubleVector;
 import org.apache.samoa.topology.Stream;
 
 /**
- * The Class PredictionCombinerProcessor.
+ * Combines predictions coming from an ensemble. Equivalent to a majority-vote classifier.
  */
 public class PredictionCombinerProcessor implements Processor {
 
   private static final long serialVersionUID = -1606045723451191132L;
 
   /**
-   * The size ensemble.
+   * The ensemble size.
    */
   protected int ensembleSize;
 
@@ -73,7 +73,7 @@ public class PredictionCombinerProcessor implements Processor {
    * 
    * @return the ensembleSize
    */
-  public int getSizeEnsemble() {
+  public int getEnsembleSize() {
     return ensembleSize;
   }
 
@@ -83,7 +83,7 @@ public class PredictionCombinerProcessor implements Processor {
    * @param ensembleSize
    *          the new size ensemble
    */
-  public void setSizeEnsemble(int ensembleSize) {
+  public void setEnsembleSize(int ensembleSize) {
     this.ensembleSize = ensembleSize;
   }
 
@@ -143,7 +143,7 @@ public class PredictionCombinerProcessor implements Processor {
     if (originProcessor.getOutputStream() != null) {
       newProcessor.setOutputStream(originProcessor.getOutputStream());
     }
-    newProcessor.setSizeEnsemble(originProcessor.getSizeEnsemble());
+    newProcessor.setEnsembleSize(originProcessor.getEnsembleSize());
     return newProcessor;
   }
 

@@ -20,8 +20,6 @@ package org.apache.samoa.learners.classifiers.trees;
  * #L%
  */
 
-import com.google.common.collect.ImmutableSet;
-
 import java.util.Set;
 
 import org.apache.samoa.core.Processor;
@@ -41,6 +39,7 @@ import com.github.javacliparser.Configurable;
 import com.github.javacliparser.FlagOption;
 import com.github.javacliparser.FloatOption;
 import com.github.javacliparser.IntOption;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Vertical Hoeffding Tree.
@@ -172,7 +171,7 @@ public final class VerticalHoeffdingTree implements ClassificationLearner, Adapt
   public void setChangeDetector(ChangeDetector cd) {
     this.changeDetector = cd;
   }
-
+  
   static class LearningNodeIdGenerator {
 
     // TODO: add code to warn user of when value reaches Long.MAX_VALUES

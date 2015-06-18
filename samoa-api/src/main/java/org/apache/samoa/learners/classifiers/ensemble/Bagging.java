@@ -24,8 +24,6 @@ package org.apache.samoa.learners.classifiers.ensemble;
  * License
  */
 
-import com.google.common.collect.ImmutableSet;
-
 import java.util.Set;
 
 import org.apache.samoa.core.Processor;
@@ -34,10 +32,13 @@ import org.apache.samoa.learners.Learner;
 import org.apache.samoa.learners.classifiers.trees.VerticalHoeffdingTree;
 import org.apache.samoa.topology.Stream;
 import org.apache.samoa.topology.TopologyBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.javacliparser.ClassOption;
 import com.github.javacliparser.Configurable;
 import com.github.javacliparser.IntOption;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * The Bagging Classifier by Oza and Russell.
@@ -46,6 +47,7 @@ public class Bagging implements Learner, Configurable {
 
   /** The Constant serialVersionUID. */
   private static final long serialVersionUID = -2971850264864952099L;
+  private static final Logger logger = LoggerFactory.getLogger(Bagging.class);
 
   /** The base learner option. */
   public ClassOption baseLearnerOption = new ClassOption("baseLearner", 'l',
@@ -58,11 +60,8 @@ public class Bagging implements Learner, Configurable {
   /** The distributor processor. */
   private BaggingDistributorProcessor distributorP;
 
-  /** The training stream. */
-  private Stream testingStream;
-
-  /** The prediction stream. */
-  private Stream predictionStream;
+  /** The input streams for the ensemble, one per member. */
+  private Stream[] ensembleStreams;
 
   /** The result stream. */
   protected Stream resultStream;
@@ -70,45 +69,57 @@ public class Bagging implements Learner, Configurable {
   /** The dataset. */
   private Instances dataset;
 
-  protected Learner classifier;
+  protected Learner[] ensemble;
 
   protected int parallelism;
 
   /**
    * Sets the layout.
+   * 
+   * @throws Exception
    */
   protected void setLayout() {
-
-    int sizeEnsemble = this.ensembleSizeOption.getValue();
+    int ensembleSize = this.ensembleSizeOption.getValue();
 
     distributorP = new BaggingDistributorProcessor();
-    distributorP.setSizeEnsemble(sizeEnsemble);
-    this.builder.addProcessor(distributorP, 1);
+    distributorP.setEnsembleSize(ensembleSize);
+    builder.addProcessor(distributorP, 1);
 
     // instantiate classifier
-    classifier = (Learner) this.baseLearnerOption.getValue();
-    classifier.init(builder, this.dataset, sizeEnsemble);
+    ensemble = new Learner[ensembleSize];
+    for (int i = 0; i < ensembleSize; i++) {
+      try {
+        ensemble[i] = (Learner) ClassOption.createObject(baseLearnerOption.getValueAsCLIString(),
+            baseLearnerOption.getRequiredType());
+      } catch (Exception e) {
+        logger.error("Unable to create members of the ensemble. Please check your CLI parameters");
+        e.printStackTrace();
+        throw new IllegalArgumentException(e);
+      }
+      ensemble[i].init(builder, this.dataset, 1); // sequential
+    }
 
     PredictionCombinerProcessor predictionCombinerP = new PredictionCombinerProcessor();
-    predictionCombinerP.setSizeEnsemble(sizeEnsemble);
+    predictionCombinerP.setEnsembleSize(ensembleSize);
     this.builder.addProcessor(predictionCombinerP, 1);
 
     // Streams
-    resultStream = this.builder.createStream(predictionCombinerP);
+    resultStream = builder.createStream(predictionCombinerP);
     predictionCombinerP.setOutputStream(resultStream);
 
-    for (Stream subResultStream : classifier.getResultStreams()) {
-      this.builder.connectInputKeyStream(subResultStream, predictionCombinerP);
+    for (Learner member : ensemble) {
+      for (Stream subResultStream : member.getResultStreams()) { // a learner can have multiple output streams
+        this.builder.connectInputKeyStream(subResultStream, predictionCombinerP); // the key is the instance id to combine predictions
+      }
     }
 
-    testingStream = this.builder.createStream(distributorP);
-    this.builder.connectInputKeyStream(testingStream, classifier.getInputProcessor());
+    ensembleStreams = new Stream[ensembleSize];
+    for (int i = 0; i < ensembleSize; i++) {
+      ensembleStreams[i] = builder.createStream(distributorP);
+      builder.connectInputShuffleStream(ensembleStreams[i], ensemble[i].getInputProcessor()); // connect streams one-to-one with ensemble members (the type of connection does not matter)
+    }
 
-    predictionStream = this.builder.createStream(distributorP);
-    this.builder.connectInputKeyStream(predictionStream, classifier.getInputProcessor());
-
-    distributorP.setOutputStream(testingStream);
-    distributorP.setPredictionStream(predictionStream);
+    distributorP.setOutputStreams(ensembleStreams);
   }
 
   /** The builder. */
