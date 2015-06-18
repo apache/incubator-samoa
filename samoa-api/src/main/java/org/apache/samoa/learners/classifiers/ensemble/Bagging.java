@@ -71,8 +71,6 @@ public class Bagging implements Learner, Configurable {
 
   protected Learner[] ensemble;
 
-  protected int parallelism;
-
   /**
    * Sets the layout.
    * 
@@ -129,7 +127,6 @@ public class Bagging implements Learner, Configurable {
   public void init(TopologyBuilder builder, Instances dataset, int parallelism) {
     this.builder = builder;
     this.dataset = dataset;
-    this.parallelism = parallelism;
     this.setLayout();
   }
 

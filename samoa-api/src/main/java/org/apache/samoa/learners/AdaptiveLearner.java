@@ -25,14 +25,13 @@ package org.apache.samoa.learners;
  */
 
 import org.apache.samoa.moa.classifiers.core.driftdetection.ChangeDetector;
-import org.apache.samoa.topology.Stream;
 
 /**
  * The Interface Adaptive Learner. Initializing Classifier should initalize PI to connect the Classifier with the input
  * stream and initialize result stream so that other PI can connect to the classification result of this classifier
  */
 
-public interface AdaptiveLearner {
+public interface AdaptiveLearner extends Learner{
 
   /**
    * Gets the change detector item.
