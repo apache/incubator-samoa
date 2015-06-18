@@ -76,7 +76,7 @@ public class Boosting implements Learner, Configurable {
     int sizeEnsemble = this.ensembleSizeOption.getValue();
 
     distributorP = new BoostingDistributorProcessor();
-    distributorP.setSizeEnsemble(sizeEnsemble);
+    distributorP.setEnsembleSize(sizeEnsemble);
     this.builder.addProcessor(distributorP, 1);
 
     // instantiate classifier
@@ -84,7 +84,7 @@ public class Boosting implements Learner, Configurable {
     classifier.init(builder, this.dataset, sizeEnsemble);
 
     BoostingPredictionCombinerProcessor predictionCombinerP = new BoostingPredictionCombinerProcessor();
-    predictionCombinerP.setSizeEnsemble(sizeEnsemble);
+    predictionCombinerP.setEnsembleSize(sizeEnsemble);
     this.builder.addProcessor(predictionCombinerP, 1);
 
     // Streams
@@ -103,8 +103,8 @@ public class Boosting implements Learner, Configurable {
     Stream predictionStream = this.builder.createStream(distributorP);
     this.builder.connectInputKeyStream(predictionStream, classifier.getInputProcessor());
 
-    distributorP.setOutputStream(testingStream);
-    distributorP.setPredictionStream(predictionStream);
+//    distributorP.setOutputStream(testingStream);
+//    distributorP.setPredictionStream(predictionStream);
 
     // Addition to Bagging: stream to train
     /* The training stream. */
