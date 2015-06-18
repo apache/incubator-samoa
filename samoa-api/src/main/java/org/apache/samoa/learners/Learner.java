@@ -29,8 +29,9 @@ import org.apache.samoa.topology.Stream;
 import org.apache.samoa.topology.TopologyBuilder;
 
 /**
- * The Interface Classifier. Initializing Classifier should initalize PI to connect the Classifier with the input stream
- * and initialize result stream so that other PI can connect to the classification result of this classifier
+ * A Learner instance learns a model, and it can be either a classifier or a regressor. Initializing a Learner should
+ * initialize a {@link Processor}, connect the Learner with the input stream, and initialize the result stream so that other processors
+ * can subscribe to the results of this learner.
  */
 
 public interface Learner extends Serializable {
