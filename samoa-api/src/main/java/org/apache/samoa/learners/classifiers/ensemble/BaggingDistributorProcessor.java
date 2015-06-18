@@ -34,6 +34,8 @@ import org.apache.samoa.learners.InstanceContentEvent;
 import org.apache.samoa.moa.core.MiscUtils;
 import org.apache.samoa.topology.Stream;
 
+import com.google.common.base.Preconditions;
+
 /**
  * The Class BaggingDistributorPE.
  */
@@ -58,6 +60,8 @@ public class BaggingDistributorProcessor implements Processor {
    * @return true, if successful
    */
   public boolean process(ContentEvent event) {
+    Preconditions.checkState(ensembleSize == ensembleStreams.length, String.format(
+        "Ensemble size ({}) and number of enseble streams ({}) do not match.", ensembleSize, ensembleStreams.length));
     InstanceContentEvent inEvent = (InstanceContentEvent) event;
 
     if (inEvent.getInstanceIndex() < 0) {
