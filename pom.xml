@@ -26,14 +26,11 @@
     <description>Apache SAMOA (incubating) is a platform for mining big data streams.</description>
     <url>http://samoa.incubator.apache.org</url>
     <inceptionYear>2013</inceptionYear>
-    <modules>
-        <module>samoa-test</module>
-    </modules>
     <packaging>pom</packaging>
 
     <groupId>org.apache.samoa</groupId>
     <artifactId>samoa</artifactId>
-    <version>0.3.0-incubating-SNAPSHOT</version>
+    <version>0.3.0-SNAPSHOT</version>
 
     <organization>
         <name>The Apache Software Foundation</name>
