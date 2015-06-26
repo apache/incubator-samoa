@@ -16,6 +16,11 @@
  * limitations under the License.
  */
 
+Release v0.3.0
+  First Apache release (incubating).
+  Flink execution engine.
+  Bagging with distributed learners.
+
 Release v0.2.0
   NaiveBayes classitication algorithm.
   AMRules regression algorithm.
