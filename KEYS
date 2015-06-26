@@ -1,0 +1,60 @@
+This file contains the PGP keys of various developers.
+
+Users: pgp < KEYS
+or
+       gpg --import KEYS
+Developers: 
+    pgp -kxa <your name> and append it to this file.
+or
+    (pgpk -ll <your name> && pgpk -xa <your name>) >> this file.
+or
+    (gpg --list-sigs <your name>
+    && gpg --armor --export <your name>) >> this file.
+
+
+pub   2048R/2A7AAA60 2013-04-26
+uid                  Gianmarco De Francisci Morales <gdfm@apache.org>
+sig 3        2A7AAA60 2015-06-26  Gianmarco De Francisci Morales <gdfm@apache.org>
+uid                  Gianmarco De Francisci Morales <gdfm@gdfm.me>
+sig 3        2A7AAA60 2013-04-26  Gianmarco De Francisci Morales <gdfm@apache.org>
+sub   2048R/74C744B1 2013-04-26
+sig          2A7AAA60 2013-04-26  Gianmarco De Francisci Morales <gdfm@apache.org>
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1
+
+mQENBFF6t8QBCADCksZ/faC6lSHWhUBRsKilzF5V/1cf6UnaKuA+aN8i9YHi4Bmc
+64n1GcbcTsDXNYyAp28DtXQyDaCmIAkIq+M4mrZrg5O866A8E4gv5V7Th4SZsnRy
+nBQreE6YqB6+dYEU0yrgz1tmoCeNCOgiYH3xk86lHFtPONNvLQXamKcNKlpSboE5
+NT8obQ7oz9p9vpB3OaZf/nDyiaa9V/sKrNYmTWB0LfPpoEh9W1Gp2mI3NM+TmwxS
+TI5ESxw8j6VHQBhdrKFfQYYSJbBQUioxh0OGFCtOpH4V1exwvHJ564jvbziuiZhd
+KP56CxS2faE07Cvt/RW7Pdc+il1uVWP8+WbtABEBAAG0LUdpYW5tYXJjbyBEZSBG
+cmFuY2lzY2kgTW9yYWxlcyA8Z2RmbUBnZGZtLm1lPokBOAQTAQIAIgUCUXq3xAIb
+AwYLCQgHAwIGFQgCCQoLBBYCAwECHgECF4AACgkQbSb4OSp6qmABCwf+LmY4k4hu
+tSTmXgjZ4Tulyfac1GXSc5CYYnIFvgGYG+vR66RC/puQchVkr+4fM6Y/G1V6sv1I
++6519Ft9GCeP5PAp3HBXR4OyW9+wKoz3kUT1K3OEOrXUg0qJzfwQ9onIHUJXohZN
+MQVNG1V2V41PlukCZSchh9tGxC9Y8k6KScfeXe14nNoUFitwgE2JHqkAYPW2CsIM
+fqEknP2BQv2bmDC4wxLEpNi1fccD4kQ8tsSmz7kKIlIvnO1AHPRRRdIVp9mH2SAo
+0zy+mh13eNxYsynqTpEJkYem+HjMu9pc64DE+4gIFCL0zGNyjAVfdLKZNTVpL+6v
+Vy/+sfCEWEcTzrQwR2lhbm1hcmNvIERlIEZyYW5jaXNjaSBNb3JhbGVzIDxnZGZt
+QGFwYWNoZS5vcmc+iQE4BBMBAgAiBQJVjQWPAhsDBgsJCAcDAgYVCAIJCgsEFgID
+AQIeAQIXgAAKCRBtJvg5KnqqYGYZCACVpS4ejQv4DsUo3dep2FLag/vHftcN95Sg
+W8k16OSEglp6S3SlULPCuB0t141L/h9FfnFqgysOxq9RX8Qs8sLq+rUmvTsIKQcF
+SISZDlZKKPt3pXAd5ppvRMa8S5bId4pFB/bKxtVHERLn7qc63hRXKLMhhsa3Kwqa
+r/edm58CaDUf4YKChWxNsq65h0ES71U4VimKrRnCS5H5GF5BxAWs83kB/fM6qcXR
+38jD2+lSt+iu45SimHIw+/ZNAkSvsx6X/wQGR2sa2MY/uxweaDaeYeGiItToKv1y
+KMRbm6xe9UsacyP9qzeRR4UNBQwjuqza3H4/nYYFmc8m8hR1MaYLuQENBFF6t8QB
+CADiV9ioxJ4uaj2EJxIWkn/Grv1XZNYXsewaB+UcLOuSNh2xgJw5ni0RCGqIr41x
+swvCJK4c1HcWgrmMNyCyokpEszQ3HVn+l/mSGJ7sXnLkU5AtbqXiJ3LRcr3rp8Rs
+QyAeJFbgGa3hWFst2r+Dkma7q3Bo9Fu7T2hNf3fseZxDaTk8szzgUEuoW780rhqI
+0AsBYdiCwD2XF1LH8VbpDt8HFbH7U1Q95YlMEO6nuLd6kjhw0LJ/mbSXL1yqyWqI
+Wb9l38oN1OEnty6jgAE//4x0TqUBmblDFoUsIjhU7G+Z5ThP9tQ9MOIYjwuyQXPy
+RS/u8XBv0wj9eCe3gtI1/YWRABEBAAGJAR8EGAECAAkFAlF6t8QCGwwACgkQbSb4
+OSp6qmBQ3gf+KleZD+Pwp9q9k81l5MNbI45Nnj7C23TfxxJ/wzYZLyADBM70BZhS
+TTGfRcX/tod5kJtLTOPhqK7gvrahVRztzd1MgfDoJVfA/lVlpLtJslbc6JUwSWSw
+adzUcr+rB3fEse49usSWnSIA++ew2w6ESEnJES0iaK7JhTIobd8tJ5t2M77U9kYk
+RYHokPrNG+HrRC7oLJd7iCHV+kgFHfW2mMn1h/J+xxv2JHuRO/oxnynyfHEcWR8k
+TBHGL8eJNfL7sp76Mc5f9YyOgwKNgE6/tWLWUc7mLFUJBIWC7b5LviV7fZY57RY3
+LJis+XqEYNAvzGoxcN0gcYIUC9x8sEddEA==
+=GwfA
+-----END PGP PUBLIC KEY BLOCK-----
