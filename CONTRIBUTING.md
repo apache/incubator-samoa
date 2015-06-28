@@ -59,6 +59,7 @@ The recommended way is to submit a pull request **through GitHub**.
 	1. If your contribution has no JIRA ticket, create a new JIRA ticket, describing the issue (see [^1] for how to do this).
 	2. Otherwise note the existing JIRA ticket ID ( e.g. `SAMOA-XX` )
 1. Create a pull request from your contribution, and submit it through the github interface to the github SAMOA mirror repo. Make sure to **include the JIRA ticket ID in the description of the pull request**, so that the JIRA ticket is automatically updated. e.g.: `SAMOA-XX: Fixes XYZ`
+2. Make sure not to include any `merge` commits in your PR and always `rebase` on the current master to make it easier for project committers to apply your changes.
 
 The patch will be reviewed and voted upon, according to the [project's bylaws](http://samoa.incubator.apache.org/documentation/Bylaws.html).
 
