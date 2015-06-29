@@ -21,14 +21,18 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <name>samoa-test</name>
+  <description>Test suite module for SAMOA</description>
+
+  <artifactId>samoa-test</artifactId>
   <parent>
     <artifactId>samoa</artifactId>
     <groupId>org.apache.samoa</groupId>
-    <version>0.3.0-SNAPSHOT</version>
+    <version>0.3.0-incubating-SNAPSHOT</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>samoa-test</artifactId>
   <dependencies>
     <dependency>
       <groupId>org.apache.commons</groupId>
