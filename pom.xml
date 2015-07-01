@@ -40,7 +40,7 @@
     <scm>
         <url>https://git-wip-us.apache.org/repos/asf/incubator-samoa.git</url>
         <connection>scm:git:https://git-wip-us.apache.org/repos/asf/incubator-samoa.git</connection>
-        <developerConnection>scm:git:git://git.apache.org/incubator-samoa.git</developerConnection>
+        <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/incubator-samoa.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
