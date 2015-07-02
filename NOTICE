@@ -1,12 +1,13 @@
-Apache SAMOA
-Copyright 2014-2015 The Apache Software Foundation
+Apache SAMOA (incubating)
+Copyright (C) 2014-2015 The Apache Software Foundation.
 
 This product includes software developed at
 The Apache Software Foundation (http://www.apache.org/).
 
-Except as specifically stated below, the 3rd party software packages are not distributed as part of
-this project, but instead are separately downloaded from the respective provider.
+This product includes software developed at Yahoo! Inc. (www.yahoo.com)
+Copyright (c) 2013-2014 Yahoo! Inc.
 
-* MOA version 13.08 (redistributed under the Apache License v2). Copyright (C) 2007 University of Waikato.
-  Library for data stream mining. Only a small subset of the original library is redistributed with Apache SAMOA.
-  http://moa.cms.waikato.ac.nz
+This product bundles MOA version 13.08 (redistributed under the Apache License v2 with consent of the copyright holders).
+Copyright (C) 2007 University of Waikato. Library for data stream mining.
+Only a small subset of the original library is bundled with Apache SAMOA.
+http://moa.cms.waikato.ac.nz
