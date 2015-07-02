@@ -221,6 +221,8 @@
                         <root>samoa-s4</root>
                         <root>samoa-flink</root>
                         <root>samoa-samza</root>
+                        <root>samoa-test</root>
+                        <root>samoa-threads</root>
                         <root>bin</root>
                     </roots>
                     <excludes>
