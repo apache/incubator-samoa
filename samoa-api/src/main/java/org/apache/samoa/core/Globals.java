@@ -34,13 +34,13 @@ import com.github.javacliparser.StringUtils;
  */
 public class Globals {
 
-  public static final String workbenchTitle = "SAMOA: Scalable Advanced Massive Online Analysis Platform ";
+  public static final String workbenchTitle = "SAMOA: Scalable Advanced Massive Online Analysis ";
 
-  public static final String versionString = "0.0.1";
+  public static final String versionString = "0.3.0-incubating";
 
-  public static final String copyrightNotice = "Copyright Yahoo! Inc 2013";
+  public static final String copyrightNotice = "Copyright 2014-2015 The Apache Software Foundation";
 
-  public static final String webAddress = "http://github.com/yahoo/samoa";
+  public static final String webAddress = "http://samoa.incubator.apache.org";
 
   public static String getWorkbenchInfoString() {
     StringBuilder result = new StringBuilder();
