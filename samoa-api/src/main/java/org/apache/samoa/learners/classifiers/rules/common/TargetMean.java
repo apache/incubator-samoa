@@ -1,6 +1,6 @@
 /*
  *    TargetMean.java
- *    Copyright (C) 2014 University of Porto, Portugal
+ *    Copyright (C) 2014 - 2015 Apache Software Foundation
  *    @author  J. Duarte, A. Bifet, J. Gama
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");

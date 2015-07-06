@@ -38,7 +38,7 @@ public class Globals {
 
   public static final String versionString = "0.3.0-incubating";
 
-  public static final String copyrightNotice = "Copyright 2014-2015 The Apache Software Foundation";
+  public static final String copyrightNotice = "Copyright 2014-2015 Apache Software Foundation";
 
   public static final String webAddress = "http://samoa.incubator.apache.org";
 

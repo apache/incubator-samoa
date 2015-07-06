@@ -211,7 +211,7 @@
                 <configuration>
                     <licenseName>apache_v2</licenseName>
                     <inceptionYear>2014</inceptionYear>
-                    <organizationName>The Apache Software Foundation</organizationName>
+                    <organizationName>Apache Software Foundation</organizationName>
                     <projectName>SAMOA</projectName>
                     <roots>
                         <root>samoa-api</root>

@@ -22,7 +22,7 @@ package org.apache.samoa.moa.classifiers.rules.core.splitcriteria;
 
 /*
  *    SDRSplitCriterionAMRules.java
- *    Copyright (C) 2014 University of Porto, Portugal
+ *    Copyright (C) 2014 - 2015 Apache Software Foundation
  *    @author A. Bifet, J. Duarte, J. Gama
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
