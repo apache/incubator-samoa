@@ -207,11 +207,11 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <version>1.5</version>
+                <version>1.8</version>
                 <configuration>
                     <licenseName>apache_v2</licenseName>
                     <inceptionYear>2014</inceptionYear>
-                    <organizationName>Apache Software Foundation</organizationName>
+                    <organizationName>The Apache Software Foundation</organizationName>
                     <projectName>SAMOA</projectName>
                     <roots>
                         <root>samoa-api</root>
