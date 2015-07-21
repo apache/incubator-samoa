@@ -3,17 +3,17 @@ title: Apache SAMOA Documentation
 layout: documentation
 documentation: true
 ---
-Apache SAMOA is a distributed realtime machine learning system, similar to Mahout, but specific designed for stream mining. Apache SAMOA is simple and fun to use!
+Apache SAMOA is a platform for mining big data streams.
 
-This documentation is intended to give an introduction on how to use Apache SAMOA in different ways. As a user you can run Apache SAMOA algorithms into several Stream Processing Engines: local mode, Apache Storm, S4 and Samza. As a developer you can create new algorithms only once and test them in all of these Stream Processing Engines.
+It provides a collection of distributed streaming algorithms for the most common data mining and machine learning tasks such as classification, clustering, and regression, as well as programming abstractions to develop new algorithms that run on top of distributed stream processing engines (DSPEs). It features a pluggable architecture that allows it to run on several DSPEs such as Apache Storm, Apache S4, Apache Samza, and Apache Flink.
+SAMOA is similar to Mahout in spirit, but specific designed for stream mining.
+
+Apache SAMOA is simple and fun to use! This documentation is intended to give an introduction on how to use SAMOA in different ways. As a user you can run SAMOA algorithms on several stream processing engines: local mode, Storm, S4, Samza, and Flink. As a developer you can create new algorithms only once and test them in all of these distributed stream processing engines.
 
 ## Getting Started
-
 * [0 Hands-on with SAMOA: Getting Started!](Getting-Started.html)
 
-
 ## Users
-
 * [1 Building and Executing SAMOA](Scalable-Advanced-Massive-Online-Analysis.html)
     * [1.0 Building SAMOA](Building-SAMOA.html)
     * [1.1 Executing SAMOA with Apache Storm](Executing-SAMOA-with-Apache-Storm.html)
@@ -29,7 +29,6 @@ This documentation is intended to give an introduction on how to use Apache SAMO
     * [2.7 SAMOA for MOA users](SAMOA-for-MOA-users.html)
 
 ## Developers
-
 * [3 Understanding SAMOA Topologies](SAMOA-Topology.html)
     * [3.1 Processor](Processor.html)
     * [3.2 Content Event](Content-Event.html)
@@ -41,17 +40,6 @@ This documentation is intended to give an introduction on how to use Apache SAMO
 * [4 Developing New Tasks in SAMOA](Developing-New-Tasks-in-SAMOA.html)
 
 ### Getting help
+Discussion about SAMOA happens on the Apache development mailing list [dev@samoa.incubator.org](mailto:dev@samoa.incubator.org)
 
-#### Apache SAMOA Users
-Samoa users should send messages and subscribe to [users@samoa.incubator.apache.org](mailto:users@samoa.incubator.apache.org).
-
-You can subscribe to this list by sending an email to [users-subscribe@samoa.incubator.apache.org](mailto:users-subscribe@samoa.incubator.org). Likewise, you can cancel a subscription by sending an email to [users-unsubscribe@samoa.incubator.org](mailto:users-unsubscribe@samoa.incubator.org).
-
-
-#### Apache SAMOA Developers
-Storm developers should send messages and subscribe to [dev@samoa.incubator.org](mailto:dev@samoa.incubator.org).
-
-You can subscribe to this list by sending an email to [dev-subscribe@samoa.incubator.org](mailto:dev-subscribe@samoa.incubator.org). Likewise, you can cancel a subscription by sending an email to [dev-unsubscribe@samoa.incubator.org](mailto:dev-unsubscribe@samoa.incubator.org).
-
-__NOTE:__ The google groups account samoa-user@googlegroups.com is now officially deprecated in favor of the Apache-hosted user/dev mailing lists.
-
+[ [subscribe](mailto:dev-subscribe@samoa.incubator.org) | [unsubscribe](mailto:dev-unsubscribe@samoa.incubator.org) | [archives](http://mail-archives.apache.org/mod_mbox/incubator-samoa-dev) ]
