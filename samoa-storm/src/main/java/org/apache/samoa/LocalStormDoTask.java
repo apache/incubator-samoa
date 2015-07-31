@@ -27,6 +27,7 @@ import org.apache.samoa.topology.impl.StormSamoaUtils;
 import org.apache.samoa.topology.impl.StormTopology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.configuration.Configuration;
 
 import backtype.storm.Config;
 import backtype.storm.utils.Utils;
@@ -40,6 +41,8 @@ import backtype.storm.utils.Utils;
 public class LocalStormDoTask {
 
   private static final Logger logger = LoggerFactory.getLogger(LocalStormDoTask.class);
+  private static final String EXECUTION_DURATION_KEY ="samoa.storm.local.mode.execution.duration";
+  private static final String SAMOA_STORM_PROPERTY_FILE_LOC ="samoa-storm.properties";
 
   /**
    * The main method.
@@ -69,7 +72,10 @@ public class LocalStormDoTask {
     backtype.storm.LocalCluster cluster = new backtype.storm.LocalCluster();
     cluster.submitTopology(topologyName, conf, stormTopo.getStormBuilder().createTopology());
 
-    backtype.storm.utils.Utils.sleep(600 * 1000);
+    // Read local mode execution duration from property file
+    Configuration stormConfig = StormSamoaUtils.getPropertyConfig(LocalStormDoTask.SAMOA_STORM_PROPERTY_FILE_LOC);
+    long executionDuration= stormConfig.getLong(LocalStormDoTask.EXECUTION_DURATION_KEY);
+    backtype.storm.utils.Utils.sleep(executionDuration * 1000);
 
     cluster.killTopology(topologyName);
     cluster.shutdown();

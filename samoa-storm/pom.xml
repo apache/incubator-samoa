@@ -121,5 +121,13 @@
         </configuration>
       </plugin>
     </plugins>
+    <resources>
+      <resource>
+	<directory>${project.basedir}/../bin</directory>
+	<includes>
+	<include>*storm.properties</include>
+	</includes>
+      </resource>
+   </resources>
   </build>
 </project>

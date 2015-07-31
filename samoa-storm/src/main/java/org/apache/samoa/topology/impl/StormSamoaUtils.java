@@ -33,6 +33,10 @@ import org.apache.samoa.tasks.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+
 /**
  * Utility class for samoa-storm project. It is used by StormDoTask to process its arguments.
  * 
@@ -106,4 +110,21 @@ public class StormSamoaUtils {
     }
     return task;
   }
+
+ public static Configuration getPropertyConfig(String configPropertyPath){
+     Configuration config = null;
+	try {
+	config = new PropertiesConfiguration(configPropertyPath);
+	  if (null == config || config.isEmpty()) {
+	     logger.error("Configuration is null or empty at file  = {}",configPropertyPath);
+	     throw new RuntimeException("Configuration is null or empty : " + configPropertyPath);       	    
+	     }
+	}
+	catch(ConfigurationException configurationException)
+	{
+	     logger.error("ConfigurationException while reading property file = {}",configurationException);
+	     throw new RuntimeException("ConfigurationException while reading property file : " + configPropertyPath);
+	}
+	return config;
+	}
 }
