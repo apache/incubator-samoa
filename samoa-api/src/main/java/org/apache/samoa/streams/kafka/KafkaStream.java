@@ -22,7 +22,10 @@ package org.apache.samoa.streams.kafka;
 
 import com.github.javacliparser.IntOption;
 import com.github.javacliparser.StringOption;
-import org.apache.samoa.instances.*;
+import org.apache.samoa.instances.Attribute;
+import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.InstancesHeader;
+import org.apache.samoa.instances.Instances;
 import org.apache.samoa.moa.core.Example;
 import org.apache.samoa.moa.core.FastVector;
 import org.apache.samoa.moa.core.InstanceExample;
@@ -30,8 +33,6 @@ import org.apache.samoa.moa.core.ObjectRepository;
 import org.apache.samoa.moa.options.AbstractOptionHandler;
 import org.apache.samoa.moa.streams.InstanceStream;
 import org.apache.samoa.moa.tasks.TaskMonitor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -49,16 +50,14 @@ public class KafkaStream extends AbstractOptionHandler implements
 
     private KafkaReader reader;
 
+    private KafkaToInstanceMapper mapper;
+
     protected InstanceExample lastInstanceRead;
 
+    List<String> seeds = new ArrayList<String>();
+
+    // This is used to buffer messages read from kafka. It helps reducing number of queries to kafka
     protected Queue<String> instanceQueue;
-
-    private static final Logger logger = LoggerFactory
-            .getLogger(KafkaStream.class);
-
-    public void KafkaReader() {
-        reader = new KafkaReader();
-    }
 
     public IntOption classIndexOption = new IntOption("classIndex", 'c',
             "Class index of data. 0 for none or -1 for last attribute in file.",
@@ -66,8 +65,7 @@ public class KafkaStream extends AbstractOptionHandler implements
 
     public IntOption numAttrOption = new IntOption("numNumerics", 'u',
             "The number of numeric attributes in" +
-                    " dataset", 300, 0,
-            Integer.MAX_VALUE);
+                    " dataset", 300, 0, Integer.MAX_VALUE);
 
     public StringOption topicOption = new StringOption("topic", 't',
             "Topic in the kafka to be used for reading data", "test");
@@ -91,14 +89,29 @@ public class KafkaStream extends AbstractOptionHandler implements
     public IntOption timeDelayOption = new IntOption("timeDelay", 'y',
             "Time delay in milliseconds between two read from kafka", 0, 0, Integer.MAX_VALUE);
 
+    public IntOption instanceType = new IntOption("instanceType", 'i',
+            "Type of instance to be used. DenseInstance(0)/SparaseInstance(1)", 0);
+
+    public StringOption keyValueSeparator = new StringOption("keyValueSeparator", 'a',
+            "Separator between key and value for string read from kafka", ":");
+
+    public StringOption valuesSeparator = new StringOption("valuesSeparator", 'b',
+            "Separator between values for string read from kafka", ",");
+
+    public void KafkaReader() {
+        reader = new KafkaReader();
+    }
+
     @Override
     protected void prepareForUseImpl(TaskMonitor monitor,
                                      ObjectRepository repository) {
         this.reader = new KafkaReader();
+        this.mapper = new KafkaToInstanceMapper();
         generateHeader();
         instanceQueue = new LinkedList<String>();
-        this.lastInstanceRead = null;
+        seeds.add(this.seedOption.getValue());
     }
+
 
     protected void generateHeader() {
         FastVector<Attribute> attributes = new FastVector<>();
@@ -120,7 +133,6 @@ public class KafkaStream extends AbstractOptionHandler implements
         } else if (this.classIndexOption.getValue() > 0) {
             this.streamHeader.setClassIndex(this.classIndexOption.getValue() - 1);
         }
-
     }
 
     @Override
@@ -138,14 +150,11 @@ public class KafkaStream extends AbstractOptionHandler implements
             return instanceQueue.remove();
         }
 
-        List<String> seeds = new ArrayList<String>();
-        seeds.add(this.seedOption.getValue());
         ArrayList<String> kafkaData;
-
         do {
             kafkaData = this.reader.run(this.numMaxreadOption.getValue(),
                     this.topicOption.getValue(), this.partitionOption.getValue(),
-                    seeds, this.portOption.getValue());
+                    this.seeds, this.portOption.getValue());
         } while (kafkaData == null);
 
         instanceQueue.addAll(kafkaData);
@@ -155,20 +164,10 @@ public class KafkaStream extends AbstractOptionHandler implements
     @Override
     public Example<Instance> nextInstance() {
         InstancesHeader header = getHeader();
-        Instance inst = new DenseInstance(header.numAttributes());
-
+        Instance inst;
         String kafkaString = getNextInstanceFromKafka();
-        String[] KeyValueString = kafkaString.split(":");
-        String[] attributes = KeyValueString[1].split(",");
-
-        for (int i = 0; i < attributes.length - 1; i++) {
-            if (i < numAttrOption.getValue()) {
-                inst.setValue(i, Double.parseDouble(attributes[i]));
-            }
-        }
-        inst.setDataset(header);
-        inst.setClassValue(Double
-                .parseDouble(attributes[attributes.length - 1]));
+        inst = mapper.getInstance(kafkaString, keyValueSeparator.getValue(), valuesSeparator.getValue(),
+                instanceType.getValue(), numAttrOption.getValue(), header);
 
         try {
             Thread.sleep(timeDelayOption.getValue());
