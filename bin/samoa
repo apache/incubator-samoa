@@ -201,7 +201,7 @@ elif [ $PLATFORM = 'STORM' ]; then
 	if [ "$MODE_ARG" = "cluster" ]; then
 		$STORM_EXEC jar $DEPLOYABLE org.apache.samoa.topology.impl.StormDoTask $COMPLETE_ARG $NUM_WORKER $MODE_ARG
 	elif [ "$MODE_ARG" = "local" ]; then
-		CLASSPATH="$CLASSPATH:$STORM_HOME/lib/*:$DEPLOYABLE"
+		CLASSPATH="$CLASSPATH:$STORM_HOME/lib/*:$BASE_DIR/:$DEPLOYABLE"
 		java -cp $CLASSPATH org.apache.samoa.LocalStormDoTask $COMPLETE_ARG $NUM_WORKER
 	fi
 

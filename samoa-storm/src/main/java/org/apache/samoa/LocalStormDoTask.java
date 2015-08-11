@@ -43,7 +43,6 @@ public class LocalStormDoTask {
   private static final Logger logger = LoggerFactory.getLogger(LocalStormDoTask.class);
   private static final String EXECUTION_DURATION_KEY ="samoa.storm.local.mode.execution.duration";
   private static final String SAMOA_STORM_PROPERTY_FILE_LOC ="samoa-storm.properties";
-
   /**
    * The main method.
    * 
