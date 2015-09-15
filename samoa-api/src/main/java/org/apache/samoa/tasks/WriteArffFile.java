@@ -26,6 +26,7 @@ import org.apache.samoa.moa.streams.InstanceStream;
 import org.apache.samoa.moa.streams.clustering.RandomRBFGeneratorEvents;
 import org.apache.samoa.streams.PrequentialSourceProcessor;
 import org.apache.samoa.topology.ComponentFactory;
+import org.apache.samoa.topology.Stream;
 import org.apache.samoa.topology.Topology;
 import org.apache.samoa.topology.TopologyBuilder;
 import org.slf4j.Logger;
@@ -84,6 +85,8 @@ public class WriteArffFile implements Task, Configurable {
         preqSource.setStreamSource(stream);
         preqSource.setMaxNumInstances(this.maxInstancesOption.getValue());
         builder.addEntranceProcessor(preqSource);
+
+        Stream sourcePiOutputStream = builder.createStream(preqSource);
 
         File destFile = this.arffFileOption.getFile();
         if (destFile != null) {
