@@ -46,7 +46,7 @@ public class ArffFileStream extends FileStream {
       -1, -1, Integer.MAX_VALUE);*/
 
   protected InstanceExample lastInstanceRead;
-  private BufferedReader fileReader;
+  private transient BufferedReader fileReader;
 
   @Override
   public void prepareForUseImpl(TaskMonitor monitor, ObjectRepository repository) {

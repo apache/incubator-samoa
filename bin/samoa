@@ -344,6 +344,84 @@ elif [ $PLATFORM = 'FLINK' ]; then
                 $FLINK_EXEC run $DEPLOYABLE $COMPLETE_ARG
         fi                                                    
 
+elif [ $PLATFORM = 'APEX' ]; then
+
+    if [ ! -f $2 ];then
+        echo "$2 does not exist!"
+        echo "Please use a valid jar file for Apex execution"
+        exit -1
+    fi
+
+    VALUE=""
+    getvalue()
+    {
+        VALUE=`sed '/^\#/d' $BASE_DIR/$SAMOA_APEX_PROPERTIES | grep "$1" | tail -n 1 | cut -d "=" -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'`
+    }
+
+    SAMOA_APEX_PROPERTIES="samoa-apex.properties"
+    MODE_OPTION="samoa.apex.mode"
+    DT_DFS_DIR_OPTION="dt.dfsRootDirectory"
+    DT_SITE_OPTION="dt.site.path"
+    DEFAULT_FS_OPTION="fs.defaultFS"
+    RM_OPTION="yarn.resourcemanager.address"
+    HADOOP_HDFS_HOME_OPTION="hadoop.hdfs.home"
+    HADOOP_YARN_HOME_OPTION="hadoop.yarn.home"
+    HADOOP_COMMON_HOME_OPTION="hadoop.common.home"
+    HADOOP_CONF_DIR_OPTION="hadoop.conf.dir"
+
+    getvalue "$MODE_OPTION"
+    MODE_ARG="$VALUE"
+
+    if [[ "$MODE_ARG" = "cluster" && -z $HADOOP_HOME ]];then
+        echo "HADOOP_HOME is not set!"
+        echo "Please set HADOOP_HOME to point to your Hadoop installation"
+        exit -1
+    fi
+
+    getvalue "$DT_DFS_DIR_OPTION"
+    DT_DFS_DIR="$VALUE"
+
+    getvalue "$DEFAULT_FS_OPTION"
+    DEFAULT_FS="$VALUE"
+
+    getvalue "$DT_SITE_OPTION"
+    DT_SITE=`echo $(eval echo "$VALUE")`
+
+    getvalue "$RM_OPTION"
+    RM="$VALUE"
+
+    getvalue "$HADOOP_HDFS_HOME_OPTION"
+    HADOOP_HDFS_HOME=`echo $(eval echo "$VALUE")`
+
+    getvalue "$HADOOP_YARN_HOME_OPTION"
+    HADOOP_YARN_HOME=`echo $(eval echo "$VALUE")`
+
+    getvalue "$HADOOP_COMMON_HOME_OPTION"
+    HADOOP_COMMON_HOME=`echo $(eval echo "$VALUE")`
+
+    getvalue "$HADOOP_CONF_DIR_OPTION"
+    HADOOP_CONF_DIR=`echo $(eval echo "$VALUE")`
+
+    DEPLOYABLE=$JAR_PATH
+    echo "Deployable: " $DEPLOYABLE
+
+    #LIB_PREFIX=/opt/cloudera/parcels/CDH/lib/
+    YARN_CLASSPATH=$HADOOP_HDFS_HOME/*:$HADOOP_YARN_HOME/*:$HADOOP_COMMON_HOME/*:$HADOOP_CONF_DIR
+    echo "YARN CLASSPATH: " $YARN_CLASSPATH
+
+    if [ "$MODE_ARG" = "cluster" ]; then
+        CMD="java -cp .:$YARN_CLASSPATH:$DEPLOYABLE -D$DT_DFS_DIR_OPTION=$DT_DFS_DIR -D$DEFAULT_FS_OPTION=$DEFAULT_FS -D$DT_SITE_OPTION=$DT_SITE -D$RM_OPTION=$RM org.apache.samoa.apex.ApexDoTask ${OPTIONS}"
+        echo Command: $CMD
+        ${CMD}
+    elif [ "$MODE_ARG" = "local" ]
+    then
+        CMD="java -cp .:$DEPLOYABLE -D$DT_SITE_OPTION=$DT_SITE org.apache.samoa.apex.LocalApexDoTask ${OPTIONS}"
+        echo Command: $CMD
+        ${CMD}
+    else
+        echo "Wrong mode argument. Check property samoa.apex.mode in samoa-apex.properties file"
+    fi
+
 elif [ $PLATFORM = 'THREADS' ]; then
 	
 	echo "Deploying to LOCAL with MULTITHREADING."

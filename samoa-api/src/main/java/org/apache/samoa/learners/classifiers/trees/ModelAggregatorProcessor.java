@@ -22,6 +22,7 @@ package org.apache.samoa.learners.classifiers.trees;
 
 import static org.apache.samoa.moa.core.Utils.maxIndex;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -620,11 +621,11 @@ final class ModelAggregatorProcessor implements Processor {
    * @author Arinto Murdopo
    * 
    */
-  static class SplittingNodeInfo {
+  static class SplittingNodeInfo implements Serializable {
 
     private final ActiveLearningNode activeLearningNode;
     private final FoundNode foundNode;
-    private final ScheduledFuture<?> scheduledFuture;
+    private final transient ScheduledFuture<?> scheduledFuture;
 
     SplittingNodeInfo(ActiveLearningNode activeLearningNode, FoundNode foundNode, ScheduledFuture<?> scheduledFuture) {
       this.activeLearningNode = activeLearningNode;

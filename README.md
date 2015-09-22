@@ -56,6 +56,15 @@ cd incubator-samoa
 mvn -Ps4 package
 ```
 
+###Apex mode
+
+Simply clone the repository and and create SAMOA with Apex package.
+```bash
+git clone http://git.apache.org/incubator-samoa.git
+cd incubator-samoa
+mvn -Papex package
+```
+
 ###Local mode
 
 If you want to test SAMOA in a local environment, simply clone the repository and install SAMOA.
