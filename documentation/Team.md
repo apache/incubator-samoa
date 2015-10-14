@@ -55,6 +55,8 @@ documentation: true
 ### Contributors
 <ul>
 <li><a href="http://www.lsi.upc.edu/~marias/">Marta Arias</a></li>
+<li>Foteini Beligianni</li>
+<li><a href="https://www.kth.se/profile/parisc/">Paris Carbone</a></li>
 <li><a href="http://www.cms.waikato.ac.nz/~eibe">Eibe Frank</a></li>
 <li><a href="http://www.lsi.upc.edu/~gavalda/">Ricard Gavaldà</a></li>
 <li><a href="http://dme.rwth-aachen.de/de/team/hassani">Marwan Hassani</a></li>
