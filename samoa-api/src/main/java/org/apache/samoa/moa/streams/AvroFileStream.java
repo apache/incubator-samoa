@@ -40,7 +40,6 @@ import com.github.javacliparser.StringOption;
  *  InstanceStream implementation to handle Apache Avro Files.
  *  Handles both JSON & Binary encoded streams
  *  
- *  @author jayadeepj
  *
  */
 public class AvroFileStream extends FileStream {

@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Load Data from Binary Avro Stream and parse to corresponding Dense & Parse Instances
  * 
- * @author jayadeepj
  *
  */
 public class AvroBinaryLoader extends AvroLoader {
@@ -94,7 +93,7 @@ public class AvroBinaryLoader extends AvroLoader {
 
 		if(record==null)
 		{
-			//closeReader();
+			closeReader();
 			return null;
 		}
 
