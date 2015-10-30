@@ -144,6 +144,7 @@
         <storm.version>0.9.4</storm.version>
         <!-- storm 0.8.2 loads zookeeper classes with hardcoded names from 3.3 version-->
         <zookeeper.storm.version>3.4.6</zookeeper.storm.version>
+        <avro.version>1.7.7</avro.version>
     </properties>
 
     <dependencies>

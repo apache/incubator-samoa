@@ -34,4 +34,11 @@
     <artifactId>samoa</artifactId>
     <version>0.4.0-incubating-SNAPSHOT</version>
   </parent>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.avro</groupId>
+			<artifactId>avro</artifactId>
+			<version>${avro.version}</version>
+		</dependency>
+	</dependencies>
 </project>

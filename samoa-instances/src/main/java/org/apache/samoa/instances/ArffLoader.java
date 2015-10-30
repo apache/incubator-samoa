@@ -23,7 +23,6 @@ package org.apache.samoa.instances;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.io.Serializable;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ import java.util.logging.Logger;
 /**
  * @author abifet
  */
-public class ArffLoader implements Serializable {
+public class ArffLoader implements Loader {
 
   protected InstanceInformation instanceInformation;
 
@@ -392,5 +391,10 @@ public class ArffLoader implements Serializable {
     } else if (classAttribute > 0) {
       this.instanceInformation.setClassIndex(classAttribute - 1);
     }
+  }
+
+  @Override
+  public Instance readInstance() {
+	  return readInstance(this.reader);
   }
 }
