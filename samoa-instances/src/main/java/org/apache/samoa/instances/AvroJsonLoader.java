@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Load Data from JSON Avro Stream and parse to corresponding Dense & Parse Instances
  * 
- * @author jayadeepj
  *
  */
 public class AvroJsonLoader extends AvroLoader {

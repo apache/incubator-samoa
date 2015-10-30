@@ -35,7 +35,6 @@ import org.apache.avro.io.DatumReader;
  * Load Data from Avro Stream and parse to corresponding Dense & Parse Instances
  * Abstract Class: Subclass this class for different types of Avro Encodings
  * 
- * @author jayadeepj
  *
  */
 public abstract class AvroLoader implements Loader {
