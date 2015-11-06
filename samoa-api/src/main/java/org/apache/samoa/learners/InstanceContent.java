@@ -24,31 +24,35 @@ package org.apache.samoa.learners;
  * License
  */
 
-import org.apache.samoa.core.ContentEvent;
+import net.jcip.annotations.Immutable;
 import org.apache.samoa.core.SerializableInstance;
 import org.apache.samoa.instances.Instance;
 
-import net.jcip.annotations.Immutable;
+import java.io.Serializable;
 
 /**
- * The Class InstanceContentEvent.
+ * The Class InstanceContent.
  */
 @Immutable
-final public class InstanceContentEvent implements ContentEvent {
+final public class InstanceContent implements Serializable {
 
-  /**
-	 * 
-	 */
-  private static final long serialVersionUID = -8620668863064613845L;
-  private InstanceContent instanceContent;
+  private static final long serialVersionUID = -8620668863064613841L;
 
-  public InstanceContentEvent() {
+  private long instanceIndex;
+  private int classifierIndex;
+  private int evaluationIndex;
+  private SerializableInstance instance;
+  private boolean isTraining;
+  private boolean isTesting;
+  private boolean isLast = false;
+
+  public InstanceContent() {
 
   }
 
   /**
    * Instantiates a new instance event.
-   * 
+   *
    * @param index
    *          the index
    * @param instance
@@ -56,9 +60,14 @@ final public class InstanceContentEvent implements ContentEvent {
    * @param isTraining
    *          the is training
    */
-  public InstanceContentEvent(long index, Instance instance,
-      boolean isTraining, boolean isTesting) {
-    this.instanceContent = new InstanceContent(index, instance, isTraining, isTesting);
+  public InstanceContent(long index, Instance instance,
+                         boolean isTraining, boolean isTesting) {
+    if (instance != null) {
+      this.instance = new SerializableInstance(instance);
+    }
+    this.instanceIndex = index;
+    this.isTraining = isTraining;
+    this.isTesting = isTesting;
   }
 
   /**
@@ -67,7 +76,7 @@ final public class InstanceContentEvent implements ContentEvent {
    * @return the instance.
    */
   public Instance getInstance() {
-    return this.instanceContent.getInstance();
+    return instance;
   }
 
   /**
@@ -76,7 +85,7 @@ final public class InstanceContentEvent implements ContentEvent {
    * @return the index of the data vector.
    */
   public long getInstanceIndex() {
-    return this.instanceContent.getInstanceIndex();
+    return instanceIndex;
   }
 
   /**
@@ -84,7 +93,9 @@ final public class InstanceContentEvent implements ContentEvent {
    * 
    * @return the true class of the vector.
    */
-  public int getClassId() {return this.instanceContent.getClassId();
+  public int getClassId() {
+    // return classId;
+    return (int) instance.classValue();
   }
 
   /**
@@ -93,7 +104,7 @@ final public class InstanceContentEvent implements ContentEvent {
    * @return true if this is training data.
    */
   public boolean isTraining() {
-    return this.instanceContent.isTraining();
+    return isTraining;
   }
 
   /**
@@ -102,8 +113,9 @@ final public class InstanceContentEvent implements ContentEvent {
    * @param training
    *          flag.
    */
-  public void setTraining(boolean training) {this.instanceContent.setTraining(training);}
-
+  public void setTraining(boolean training) {
+    this.isTraining = training;
+  }
 
   /**
    * Checks if is testing.
@@ -111,7 +123,7 @@ final public class InstanceContentEvent implements ContentEvent {
    * @return true if this is testing data.
    */
   public boolean isTesting() {
-    return this.instanceContent.isTesting();
+    return isTesting;
   }
 
   /**
@@ -121,7 +133,7 @@ final public class InstanceContentEvent implements ContentEvent {
    *          flag.
    */
   public void setTesting(boolean testing) {
-    this.instanceContent.setTesting(testing);
+    this.isTesting = testing;
   }
 
   /**
@@ -130,7 +142,7 @@ final public class InstanceContentEvent implements ContentEvent {
    * @return the classifier index
    */
   public int getClassifierIndex() {
-    return this.instanceContent.getClassifierIndex();
+    return classifierIndex;
   }
 
   /**
@@ -140,7 +152,7 @@ final public class InstanceContentEvent implements ContentEvent {
    *          the new classifier index
    */
   public void setClassifierIndex(int classifierIndex) {
-    this.instanceContent.setClassifierIndex(classifierIndex);
+    this.classifierIndex = classifierIndex;
   }
 
   /**
@@ -149,7 +161,7 @@ final public class InstanceContentEvent implements ContentEvent {
    * @return the evaluation index
    */
   public int getEvaluationIndex() {
-    return this.instanceContent.getEvaluationIndex();
+    return evaluationIndex;
   }
 
   /**
@@ -159,48 +171,27 @@ final public class InstanceContentEvent implements ContentEvent {
    *          the new evaluation index
    */
   public void setEvaluationIndex(int evaluationIndex) {
-    this.instanceContent.setEvaluationIndex(evaluationIndex);
+    this.evaluationIndex = evaluationIndex;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see samoa.core.ContentEvent#getKey(int)
+  /**
+   * Sets the instance index.
+   *
+   * @param instanceIndex
+   *          the new evaluation index
    */
-  public String getKey(int key) {
-    if (key == 0)
-      return Long.toString(this.getEvaluationIndex());
-    else
-      return Long.toString(10000
-          * this.getEvaluationIndex()
-          + this.getClassifierIndex());
+  public void setInstanceIndex(long instanceIndex) {
+    this.instanceIndex = instanceIndex;
   }
 
-  @Override
-  public String getKey() {
-    // System.out.println("InstanceContentEvent "+Long.toString(this.instanceIndex));
-    return Long.toString(this.getClassifierIndex());
-  }
-
-  @Override
-  public void setKey(String str) {
-    this.instanceContent.setInstanceIndex(Long.parseLong(str));
-  }
-
-  @Override
   public boolean isLastEvent() {
-    return this.instanceContent.isLastEvent();
+    return isLast;
   }
 
   public void setLast(boolean isLast) {
-    this.instanceContent.setLast(isLast);
+    this.isLast = isLast;
   }
-  /**
-   * Gets the Instance Content.
-   *
-   * @return the instance content
-   */
-  public InstanceContent getInstanceContent() {
-    return instanceContent;
-  }
+
+
+
 }
