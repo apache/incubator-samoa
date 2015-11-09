@@ -27,7 +27,6 @@ public class AlgosTest {
 
   @Test
   public void testVHTLocal() throws Exception {
-
     TestParams vhtConfig = new TestParams.Builder()
         .inputInstances(200_000)
         .samplingSize(20_000)
@@ -42,7 +41,6 @@ public class AlgosTest {
         .taskClassName(LocalDoTask.class.getName())
         .build();
     TestUtils.test(vhtConfig);
-
   }
 
   @Test
@@ -50,8 +48,8 @@ public class AlgosTest {
     TestParams baggingConfig = new TestParams.Builder()
         .inputInstances(200_000)
         .samplingSize(20_000)
-        .evaluationInstances(180_000)
-        .classifiedInstances(210_000)
+        .evaluationInstances(200_000)
+        .classifiedInstances(200_000)
         .classificationsCorrect(60f)
         .kappaStat(0f)
         .kappaTempStat(0f)
@@ -61,12 +59,10 @@ public class AlgosTest {
         .taskClassName(LocalDoTask.class.getName())
         .build();
     TestUtils.test(baggingConfig);
-
   }
 
   @Test
   public void testNaiveBayesLocal() throws Exception {
-
     TestParams vhtConfig = new TestParams.Builder()
         .inputInstances(200_000)
         .samplingSize(20_000)
@@ -81,7 +77,5 @@ public class AlgosTest {
         .taskClassName(LocalDoTask.class.getName())
         .build();
     TestUtils.test(vhtConfig);
-
   }
-
 }
