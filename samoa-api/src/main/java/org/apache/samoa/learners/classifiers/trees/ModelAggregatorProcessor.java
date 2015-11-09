@@ -20,6 +20,8 @@ package org.apache.samoa.learners.classifiers.trees;
  * #L%
  */
 
+import static org.apache.samoa.moa.core.Utils.maxIndex;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,7 +41,6 @@ import org.apache.samoa.instances.Instance;
 import org.apache.samoa.instances.Instances;
 import org.apache.samoa.instances.InstancesHeader;
 import org.apache.samoa.learners.InstanceContent;
-import org.apache.samoa.learners.InstanceContentEvent;
 import org.apache.samoa.learners.InstancesContentEvent;
 import org.apache.samoa.learners.ResultContentEvent;
 import org.apache.samoa.moa.classifiers.core.AttributeSplitSuggestion;
@@ -49,8 +50,6 @@ import org.apache.samoa.moa.classifiers.core.splitcriteria.SplitCriterion;
 import org.apache.samoa.topology.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static org.apache.samoa.moa.core.Utils.maxIndex;
 
 /**
  * Model Aggegator Processor consists of the decision tree model. It connects to local-statistic PI via attribute stream

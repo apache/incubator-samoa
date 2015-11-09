@@ -25,6 +25,7 @@ package org.apache.samoa.learners;
  */
 
 import net.jcip.annotations.Immutable;
+
 import org.apache.samoa.core.SerializableInstance;
 import org.apache.samoa.instances.Instance;
 
@@ -61,7 +62,7 @@ final public class InstanceContent implements Serializable {
    *          the is training
    */
   public InstanceContent(long index, Instance instance,
-                         boolean isTraining, boolean isTesting) {
+      boolean isTraining, boolean isTesting) {
     if (instance != null) {
       this.instance = new SerializableInstance(instance);
     }
@@ -192,6 +193,11 @@ final public class InstanceContent implements Serializable {
     this.isLast = isLast;
   }
 
-
-
+  @Override
+  public String toString() {
+    return String
+        .format(
+            "InstanceContent [instanceIndex=%s, classifierIndex=%s, evaluationIndex=%s, instance=%s, isTraining=%s, isTesting=%s, isLast=%s]",
+            instanceIndex, classifierIndex, evaluationIndex, instance, isTraining, isTesting, isLast);
+  }
 }

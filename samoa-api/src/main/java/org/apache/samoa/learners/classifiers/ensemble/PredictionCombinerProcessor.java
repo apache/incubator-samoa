@@ -105,7 +105,6 @@ public class PredictionCombinerProcessor implements Processor {
     int instanceIndex = (int) inEvent.getInstanceIndex();
 
     addStatisticsForInstanceReceived(instanceIndex, inEvent.getClassifierIndex(), prediction, 1);
-
     if (hasAllVotesArrivedInstance(instanceIndex)) {
       DoubleVector combinedVote = this.mapVotesforInstanceReceived.get(instanceIndex);
       if (combinedVote == null) {
