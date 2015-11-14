@@ -35,136 +35,133 @@ import com.github.javacliparser.FileOption;
 import com.github.javacliparser.IntOption;
 import com.github.javacliparser.StringOption;
 
-
 /**
- *  InstanceStream implementation to handle Apache Avro Files.
- *  Handles both JSON & Binary encoded streams
- *  
+ * InstanceStream implementation to handle Apache Avro Files. Handles both JSON & Binary encoded streams
+ * 
  *
  */
 public class AvroFileStream extends FileStream {
 
-	private static final long serialVersionUID = 1L;
-	private static final Logger logger = LoggerFactory.getLogger(AvroFileStream.class);
+  private static final long serialVersionUID = 1L;
+  private static final Logger logger = LoggerFactory.getLogger(AvroFileStream.class);
 
-	public FileOption avroFileOption = new FileOption("avroFile", 'f',"Avro File(s) to load.", null, null, false);
-	public IntOption classIndexOption = new IntOption("classIndex", 'c',"Class index of data. 0 for none or -1 for last attribute in file.",-1, -1, Integer.MAX_VALUE);
-	public StringOption encodingFormatOption = new StringOption("encodingFormatOption", 'e', "Encoding format for Avro Files. Can be JSON/AVRO", "BINARY");
+  public FileOption avroFileOption = new FileOption("avroFile", 'f', "Avro File(s) to load.", null, null, false);
+  public IntOption classIndexOption = new IntOption("classIndex", 'c',
+      "Class index of data. 0 for none or -1 for last attribute in file.", -1, -1, Integer.MAX_VALUE);
+  public StringOption encodingFormatOption = new StringOption("encodingFormatOption", 'e',
+      "Encoding format for Avro Files. Can be JSON/AVRO", "BINARY");
 
-	/** Represents the last read Instance **/
-	protected InstanceExample lastInstanceRead;
+  /** Represents the last read Instance **/
+  protected InstanceExample lastInstanceRead;
 
-	/** Represents the binary input stream of avro data **/
-	protected transient InputStream inputStream = null;
+  /** Represents the binary input stream of avro data **/
+  protected transient InputStream inputStream = null;
 
-	/** The extension to be considered for the files **/
-	private static final String AVRO_FILE_EXTENSION = "avro";
+  /** The extension to be considered for the files **/
+  private static final String AVRO_FILE_EXTENSION = "avro";
 
-	/* (non-Javadoc)
-	 * @see org.apache.samoa.streams.FileStream#reset()
-	 * Reset the BINARY encoded Avro Stream & Close the file source
-	 */
-	@Override
-	protected void reset() {
+  /* (non-Javadoc)
+   * @see org.apache.samoa.streams.FileStream#reset()
+   * Reset the BINARY encoded Avro Stream & Close the file source
+   */
+  @Override
+  protected void reset() {
 
-		try {
-			if (this.inputStream != null)
-				this.inputStream.close();
+    try {
+      if (this.inputStream != null)
+        this.inputStream.close();
 
-			fileSource.reset();
-		} catch (IOException ioException) {
-			logger.error(AVRO_STREAM_FAILED_RESTART_ERROR+" : {}",ioException);
-			throw new RuntimeException(AVRO_STREAM_FAILED_RESTART_ERROR, ioException);
-		}
+      fileSource.reset();
+    } catch (IOException ioException) {
+      logger.error(AVRO_STREAM_FAILED_RESTART_ERROR + " : {}", ioException);
+      throw new RuntimeException(AVRO_STREAM_FAILED_RESTART_ERROR, ioException);
+    }
 
-		if (!getNextFileStream()) {
-			hitEndOfStream = true;
-			throw new RuntimeException(AVRO_STREAM_EMPTY_STREAM_ERROR);
-		}
-	}
+    if (!getNextFileStream()) {
+      hitEndOfStream = true;
+      throw new RuntimeException(AVRO_STREAM_EMPTY_STREAM_ERROR);
+    }
+  }
 
+  /**
+   * Get next File Stream & set the class index read from the command line option
+   * 
+   * @return
+   */
+  protected boolean getNextFileStream() {
+    if (this.inputStream != null)
+      try {
+        this.inputStream.close();
+      } catch (IOException ioException) {
+        logger.error(AVRO_STREAM_FAILED_READ_ERROR + " : {}", ioException);
+        throw new RuntimeException(AVRO_STREAM_FAILED_READ_ERROR, ioException);
+      }
 
-	/**
-	 * Get next File Stream & set the class index read from the command line option
-	 * @return
-	 */
-	protected boolean getNextFileStream() {
-		if (this.inputStream != null)
-			try {
-				this.inputStream.close();
-			} catch (IOException ioException) {
-				logger.error(AVRO_STREAM_FAILED_READ_ERROR+" : {}",ioException);
-				throw new RuntimeException(AVRO_STREAM_FAILED_READ_ERROR, ioException);
-			}
+    this.inputStream = this.fileSource.getNextInputStream();
 
-		this.inputStream = this.fileSource.getNextInputStream();
+    if (this.inputStream == null)
+      return false;
 
-		if (this.inputStream == null)
-			return false;
+    this.instances = new Instances(this.inputStream, classIndexOption.getValue(), encodingFormatOption.getValue());
 
-		this.instances = new Instances(this.inputStream, classIndexOption.getValue(),encodingFormatOption.getValue());
+    if (this.classIndexOption.getValue() < 0) {
+      this.instances.setClassIndex(this.instances.numAttributes() - 1);
+    } else if (this.classIndexOption.getValue() > 0) {
+      this.instances.setClassIndex(this.classIndexOption.getValue() - 1);
+    }
+    return true;
+  }
 
-		if (this.classIndexOption.getValue() < 0) {
-			this.instances.setClassIndex(this.instances.numAttributes() - 1);
-		} else if (this.classIndexOption.getValue() > 0) {
-			this.instances.setClassIndex(this.classIndexOption.getValue() - 1);
-		}
-		return true;
-	}
+  /* (non-Javadoc)
+   * @see org.apache.samoa.streams.FileStream#readNextInstanceFromFile()
+   * Read next Instance from File. Return false if unable to read next Instance
+   */
+  @Override
+  protected boolean readNextInstanceFromFile() {
+    try {
+      if (this.instances.readInstance()) {
+        this.lastInstanceRead = new InstanceExample(this.instances.instance(0));
+        this.instances.delete();
+        return true;
+      }
+      if (this.inputStream != null) {
+        this.inputStream.close();
+        this.inputStream = null;
+      }
+      return false;
+    } catch (IOException ioException) {
+      logger.error(AVRO_STREAM_FAILED_READ_ERROR + " : {}", ioException);
+      throw new RuntimeException(AVRO_STREAM_FAILED_READ_ERROR, ioException);
+    }
 
+  }
 
-	/* (non-Javadoc)
-	 * @see org.apache.samoa.streams.FileStream#readNextInstanceFromFile()
-	 * Read next Instance from File. Return false if unable to read next Instance
-	 */
-	@Override
-	protected boolean readNextInstanceFromFile() {
-		try {
-			if (this.instances.readInstance()) {
-				this.lastInstanceRead = new InstanceExample(this.instances.instance(0));
-				this.instances.delete(); 
-				return true;
-			}
-			if (this.inputStream != null) {
-				this.inputStream.close();
-				this.inputStream = null;
-			}
-			return false;
-		} catch (IOException ioException) {
-			logger.error(AVRO_STREAM_FAILED_READ_ERROR+" : {}",ioException);
-			throw new RuntimeException(AVRO_STREAM_FAILED_READ_ERROR, ioException);
-		}
+  @Override
+  public void prepareForUseImpl(TaskMonitor monitor, ObjectRepository repository) {
+    super.prepareForUseImpl(monitor, repository);
+    String filePath = this.avroFileOption.getFile().getAbsolutePath();
+    this.fileSource.init(filePath, AvroFileStream.AVRO_FILE_EXTENSION);
+    this.lastInstanceRead = null;
+  }
 
-	}
+  /* (non-Javadoc)
+   * @see org.apache.samoa.streams.FileStream#getLastInstanceRead()
+   * Return the last read Instance
+   */
+  @Override
+  protected InstanceExample getLastInstanceRead() {
+    return this.lastInstanceRead;
+  }
 
-	@Override
-	public void prepareForUseImpl(TaskMonitor monitor, ObjectRepository repository) {
-		super.prepareForUseImpl(monitor, repository);
-		String filePath = this.avroFileOption.getFile().getAbsolutePath();
-		this.fileSource.init(filePath, AvroFileStream.AVRO_FILE_EXTENSION);
-		this.lastInstanceRead = null;
-	}
+  @Override
+  public void getDescription(StringBuilder sb, int indent) {
+    throw new UnsupportedOperationException(AVRO_STREAM_UNSUPPORTED_METHOD);
+  }
 
+  /** Error Messages to for all types of Avro File Streams */
+  protected static final String AVRO_STREAM_FAILED_RESTART_ERROR = "Avro FileStream restart failed.";
+  protected static final String AVRO_STREAM_EMPTY_STREAM_ERROR = "Avro FileStream is empty.";
+  protected static final String AVRO_STREAM_FAILED_READ_ERROR = "Failed to read next instance from Avro File Stream.";
+  protected static final String AVRO_STREAM_UNSUPPORTED_METHOD = "This method is not supported for AvroFileStream yet.";
 
-	/* (non-Javadoc)
-	 * @see org.apache.samoa.streams.FileStream#getLastInstanceRead()
-	 * Return the last read Instance
-	 */
-	@Override
-	protected InstanceExample getLastInstanceRead() {
-		return this.lastInstanceRead;
-	}
-
-
-	@Override
-	public void getDescription(StringBuilder sb, int indent) {
-		throw new UnsupportedOperationException(AVRO_STREAM_UNSUPPORTED_METHOD);
-	}
-
-	/** Error Messages to for all types of Avro File Streams */
-	protected static final String AVRO_STREAM_FAILED_RESTART_ERROR = "Avro FileStream restart failed."; 
-	protected static final String AVRO_STREAM_EMPTY_STREAM_ERROR = "Avro FileStream is empty."; 
-	protected static final String AVRO_STREAM_FAILED_READ_ERROR = "Failed to read next instance from Avro File Stream.";
-	protected static final String AVRO_STREAM_UNSUPPORTED_METHOD = "This method is not supported for AvroFileStream yet.";	
-	
 }

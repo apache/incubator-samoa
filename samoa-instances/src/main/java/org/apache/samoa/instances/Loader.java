@@ -20,26 +20,28 @@ package org.apache.samoa.instances;
  * #L%
  */
 
-
 import java.io.Serializable;
 
 /**
  * Loads Instances from streams of different types of Input Formats e.g ARFF & AVRO
+ * 
  * @author jayadeepj
  */
 
-public interface Loader extends Serializable{
+public interface Loader extends Serializable {
 
-	/**
-	 * Fetch the Meta-data from the data 
-	 * @return InstanceInformation
-	 */
-	public InstanceInformation getStructure();
+  /**
+   * Fetch the Meta-data from the data
+   * 
+   * @return InstanceInformation
+   */
+  public InstanceInformation getStructure();
 
-	/**
-	 * Read a single instance from the Stream
-	 * @return Instance
-	 */
-	public Instance readInstance(); 
+  /**
+   * Read a single instance from the Stream
+   * 
+   * @return Instance
+   */
+  public Instance readInstance();
 
 }

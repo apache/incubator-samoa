@@ -20,7 +20,6 @@ package org.apache.samoa.instances;
  * #L%
  */
 
-
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -32,88 +31,86 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Load Data from Binary Avro Stream and parse to corresponding Dense & Parse Instances
- * 
- *
  */
 public class AvroBinaryLoader extends AvroLoader {
 
-	private static final long serialVersionUID = 1L;
-	private static final Logger logger = LoggerFactory.getLogger(AvroBinaryLoader.class);
+  private static final long serialVersionUID = 1L;
+  private static final Logger logger = LoggerFactory.getLogger(AvroBinaryLoader.class);
 
-	/** Avro Binary reader for an input stream **/
-	protected DataFileStream<GenericRecord> dataFileStream   = null;
+  /** Avro Binary reader for an input stream **/
+  protected DataFileStream<GenericRecord> dataFileStream = null;
 
-	public AvroBinaryLoader(InputStream inputStream,int classAttribute) {
-		super(classAttribute);
-		initializeSchema(inputStream);
-	}
+  public AvroBinaryLoader(InputStream inputStream, int classAttribute) {
+    super(classAttribute);
+    initializeSchema(inputStream);
+  }
 
-	/* (non-Javadoc)
-	 * @see org.apache.samoa.instances.AvroLoader#initializeSchema(java.io.InputStream)
-	 */
-	@Override
-	public void initializeSchema(InputStream inputStream)
-	{
-		try {
-			this.datumReader = new GenericDatumReader<GenericRecord>();
-			this.dataFileStream =  new DataFileStream<GenericRecord>(inputStream, datumReader);
-			this.schema = dataFileStream.getSchema();
+  /* (non-Javadoc)
+   * @see org.apache.samoa.instances.AvroLoader#initializeSchema(java.io.InputStream)
+   */
+  @Override
+  public void initializeSchema(InputStream inputStream)
+  {
+    try {
+      this.datumReader = new GenericDatumReader<GenericRecord>();
+      this.dataFileStream = new DataFileStream<GenericRecord>(inputStream, datumReader);
+      this.schema = dataFileStream.getSchema();
 
-			this.instanceInformation = getHeader();
-			this.isSparseData = isSparseData();
+      this.instanceInformation = getHeader();
+      this.isSparseData = isSparseData();
 
-			if (classAttribute < 0) {
-				this.instanceInformation.setClassIndex(this.instanceInformation.numAttributes() - 1);
-			} else if (classAttribute > 0) {
-				this.instanceInformation.setClassIndex(classAttribute - 1);
-			}
+      if (classAttribute < 0) {
+        this.instanceInformation.setClassIndex(this.instanceInformation.numAttributes() - 1);
+      } else if (classAttribute > 0) {
+        this.instanceInformation.setClassIndex(classAttribute - 1);
+      }
 
-		} catch (IOException ioException) {
-			logger.error(AVRO_LOADER_SCHEMA_READ_ERROR+" : {}",ioException);
-			throw new RuntimeException(AVRO_LOADER_SCHEMA_READ_ERROR+" : " + ioException);
-		}
-	}
+    } catch (IOException ioException) {
+      logger.error(AVRO_LOADER_SCHEMA_READ_ERROR + " : {}", ioException);
+      throw new RuntimeException(AVRO_LOADER_SCHEMA_READ_ERROR + " : " + ioException);
+    }
+  }
 
-	/* (non-Javadoc)
-	 * @see org.apache.samoa.instances.AvroLoader#readInstance()
-	 */
-	@Override
-	public Instance readInstance() {
+  /* (non-Javadoc)
+   * @see org.apache.samoa.instances.AvroLoader#readInstance()
+   */
+  @Override
+  public Instance readInstance() {
 
-		GenericRecord record = null;
+    GenericRecord record = null;
 
-		try{
-			if (dataFileStream.hasNext()) {
-				record =(GenericRecord) dataFileStream.next();
-			}
-		} catch (Exception ioException) {
-			logger.error(AVRO_LOADER_INSTANCE_READ_ERROR+" : {}",ioException);
-			throw new RuntimeException(AVRO_LOADER_INSTANCE_READ_ERROR+" : " + ioException);
-		}
+    try {
+      if (dataFileStream.hasNext()) {
+        record = (GenericRecord) dataFileStream.next();
+      }
+    } catch (Exception ioException) {
+      logger.error(AVRO_LOADER_INSTANCE_READ_ERROR + " : {}", ioException);
+      throw new RuntimeException(AVRO_LOADER_INSTANCE_READ_ERROR + " : " + ioException);
+    }
 
-		if(record==null)
-		{
-			closeReader();
-			return null;
-		}
+    if (record == null)
+    {
+      closeReader();
+      return null;
+    }
 
-		if(isSparseData)
-			return readInstanceSparse(record);
+    if (isSparseData)
+      return readInstanceSparse(record);
 
-		return readInstanceDense(record);
-	}
+    return readInstanceDense(record);
+  }
 
-	/**
-	 * Close the Avro Data Stream
-	 */
-	private void closeReader()
-	{
-		if(dataFileStream !=null)
-			try {
-				dataFileStream.close();
-			} catch (IOException ioException) {
-				logger.error(AVRO_LOADER_INSTANCE_READ_ERROR+" : {}",ioException);
-				throw new RuntimeException(AVRO_LOADER_INSTANCE_READ_ERROR+" : " + ioException);
-			}
-	}
+  /**
+   * Close the Avro Data Stream
+   */
+  private void closeReader()
+  {
+    if (dataFileStream != null)
+      try {
+        dataFileStream.close();
+      } catch (IOException ioException) {
+        logger.error(AVRO_LOADER_INSTANCE_READ_ERROR + " : {}", ioException);
+        throw new RuntimeException(AVRO_LOADER_INSTANCE_READ_ERROR + " : " + ioException);
+      }
+  }
 }

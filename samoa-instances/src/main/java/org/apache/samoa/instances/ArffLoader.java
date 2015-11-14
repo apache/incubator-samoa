@@ -86,7 +86,7 @@ public class ArffLoader implements Loader {
       while (numAttribute == 0 && streamTokenizer.ttype != StreamTokenizer.TT_EOF) {
         // For each line
         while (streamTokenizer.ttype != StreamTokenizer.TT_EOL
-               && streamTokenizer.ttype != StreamTokenizer.TT_EOF) {
+            && streamTokenizer.ttype != StreamTokenizer.TT_EOF) {
           // For each item
           if (streamTokenizer.ttype == StreamTokenizer.TT_NUMBER) {
             // System.out.println(streamTokenizer.nval + "Num ");
@@ -95,7 +95,7 @@ public class ArffLoader implements Loader {
 
           } else if (streamTokenizer.sval != null && (
               streamTokenizer.ttype == StreamTokenizer.TT_WORD
-              || streamTokenizer.ttype == 34 || streamTokenizer.ttype == 39)) {
+                  || streamTokenizer.ttype == 34 || streamTokenizer.ttype == 39)) {
             // System.out.println(streamTokenizer.sval + "Str");
             boolean isNumeric = attributes.get(numAttribute).isNumeric();
             double value;
@@ -158,7 +158,7 @@ public class ArffLoader implements Loader {
       streamTokenizer.nextToken(); // Remove the '{' char
       // For each line
       while (streamTokenizer.ttype != StreamTokenizer.TT_EOL
-             && streamTokenizer.ttype != StreamTokenizer.TT_EOF) {
+          && streamTokenizer.ttype != StreamTokenizer.TT_EOF) {
         while (streamTokenizer.ttype != '}') {
           // For each item
           // streamTokenizer.nextToken();
@@ -176,7 +176,7 @@ public class ArffLoader implements Loader {
           if (streamTokenizer.ttype == StreamTokenizer.TT_NUMBER) {
             // System.out.print(streamTokenizer.nval + " ");
             this.setSparseValue(instance, indexValues, attributeValues, numAttribute,
-                                streamTokenizer.nval, true);
+                streamTokenizer.nval, true);
             // numAttribute++;
 
           } else if (streamTokenizer.sval != null && (
@@ -185,12 +185,12 @@ public class ArffLoader implements Loader {
             // System.out.print(streamTokenizer.sval + "-");
             if (attributes.get(numAttribute).isNumeric()) {
               this.setSparseValue(instance, indexValues, attributeValues, numAttribute,
-                                  Double.valueOf(streamTokenizer.sval).doubleValue(), true);
+                  Double.valueOf(streamTokenizer.sval).doubleValue(), true);
             } else {
               this.setSparseValue(instance, indexValues, attributeValues, numAttribute,
-                                  this.instanceInformation
-                                      .attribute(numAttribute).indexOfValue(streamTokenizer.sval),
-                                  false);
+                  this.instanceInformation
+                      .attribute(numAttribute).indexOfValue(streamTokenizer.sval),
+                  false);
             }
           }
           streamTokenizer.nextToken();
@@ -211,14 +211,14 @@ public class ArffLoader implements Loader {
       arrayAttributeValues[i] = attributeValues.get(i).doubleValue();
     }
     instance.addSparseValues(arrayIndexValues, arrayAttributeValues,
-                             this.instanceInformation.numAttributes());
+        this.instanceInformation.numAttributes());
     return instance;
 
   }
 
   private void setSparseValue(Instance instance, List<Integer> indexValues,
-                              List<Double> attributeValues,
-                              int numAttribute, double value, boolean isNumber) {
+      List<Double> attributeValues,
+      int numAttribute, double value, boolean isNumber) {
     double valueAttribute;
     if (isNumber && this.instanceInformation.attribute(numAttribute).isNominal) {
       valueAttribute =
@@ -246,7 +246,7 @@ public class ArffLoader implements Loader {
       streamTokenizer.nextToken(); // Remove the '{' char
       // For each line
       while (streamTokenizer.ttype != StreamTokenizer.TT_EOL
-             && streamTokenizer.ttype != StreamTokenizer.TT_EOF) {
+          && streamTokenizer.ttype != StreamTokenizer.TT_EOF) {
         while (streamTokenizer.ttype != '}') {
           // For each item
           // streamTokenizer.nextToken();
@@ -267,11 +267,11 @@ public class ArffLoader implements Loader {
             // "/"+this.instanceInformation.attribute(numAttribute).indexOfValue(streamTokenizer.sval)+" ");
             if (attributes.get(numAttribute).isNumeric()) {
               this.setValue(instance, numAttribute,
-                            Double.valueOf(streamTokenizer.sval).doubleValue(), true);
+                  Double.valueOf(streamTokenizer.sval).doubleValue(), true);
             } else {
               this.setValue(instance, numAttribute,
-                            this.instanceInformation.attribute(numAttribute)
-                                .indexOfValue(streamTokenizer.sval), false);
+                  this.instanceInformation.attribute(numAttribute)
+                      .indexOfValue(streamTokenizer.sval), false);
               // numAttribute++;
             }
           }
@@ -395,6 +395,6 @@ public class ArffLoader implements Loader {
 
   @Override
   public Instance readInstance() {
-	  return readInstance(this.reader);
+    return readInstance(this.reader);
   }
 }
