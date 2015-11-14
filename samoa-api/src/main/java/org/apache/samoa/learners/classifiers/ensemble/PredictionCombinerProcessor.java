@@ -105,15 +105,13 @@ public class PredictionCombinerProcessor implements Processor {
     int instanceIndex = (int) inEvent.getInstanceIndex();
 
     addStatisticsForInstanceReceived(instanceIndex, inEvent.getClassifierIndex(), prediction, 1);
-
-    if (inEvent.isLastEvent() || hasAllVotesArrivedInstance(instanceIndex)) {
+    if (hasAllVotesArrivedInstance(instanceIndex)) {
       DoubleVector combinedVote = this.mapVotesforInstanceReceived.get(instanceIndex);
       if (combinedVote == null) {
         combinedVote = new DoubleVector(new double[inEvent.getInstance().numClasses()]);
       }
-      ResultContentEvent outContentEvent = new ResultContentEvent(inEvent.getInstanceIndex(),
-          inEvent.getInstance(), inEvent.getClassId(),
-          combinedVote.getArrayCopy(), inEvent.isLastEvent());
+      ResultContentEvent outContentEvent = new ResultContentEvent(inEvent.getInstanceIndex(), inEvent.getInstance(),
+          inEvent.getClassId(), combinedVote.getArrayCopy(), inEvent.isLastEvent());
       outContentEvent.setEvaluationIndex(inEvent.getEvaluationIndex());
       outputStream.put(outContentEvent);
       clearStatisticsInstance(instanceIndex);
@@ -133,7 +131,6 @@ public class PredictionCombinerProcessor implements Processor {
 
   /*
    * (non-Javadoc)
-   * 
    * @see samoa.core.Processor#newProcessor(samoa.core.Processor)
    */
   @Override

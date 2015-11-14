@@ -78,17 +78,11 @@ final class FilterProcessor implements Processor {
       this.waitingInstances++;
       if (this.waitingInstances == this.batchSize || instanceContentEvent.isLastEvent()) {
         // Send Instances
-        InstancesContentEvent outputEvent = new InstancesContentEvent(instanceContentEvent);
-        boolean isLastEvent = false;
+        InstancesContentEvent outputEvent = new InstancesContentEvent();
         while (!this.contentEventList.isEmpty()) {
           InstanceContentEvent ice = this.contentEventList.remove(0);
-          Instance inst = ice.getInstance();
-          outputEvent.add(inst);
-          if (!isLastEvent) {
-            isLastEvent = ice.isLastEvent();
-          }
+          outputEvent.add(ice.getInstanceContent());
         }
-        outputEvent.setLast(isLastEvent);
         this.waitingInstances = 0;
         this.outputStream.put(outputEvent);
         if (this.delay > 0) {
