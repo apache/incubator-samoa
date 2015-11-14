@@ -46,11 +46,12 @@ public class Instances implements Serializable {
    * The instances.
    */
   protected List<Instance> instances;
-  
-  transient protected Loader loader;
-  
 
-  protected static enum AVRO_ENCODING_FORMAT{JSON,BINARY}
+  transient protected Loader loader;
+
+  protected static enum AVRO_ENCODING_FORMAT {
+    JSON, BINARY
+  }
 
   protected int classAttribute;
 
@@ -73,24 +74,24 @@ public class Instances implements Serializable {
   }
 
   public Instances(Reader reader, int size, int classAttribute) {
-	  this.classAttribute = classAttribute;
-	  loader = new ArffLoader(reader, 0, classAttribute);
-	  this.instanceInformation = loader.getStructure();
-	  this.instances = new ArrayList<>();
+    this.classAttribute = classAttribute;
+    loader = new ArffLoader(reader, 0, classAttribute);
+    this.instanceInformation = loader.getStructure();
+    this.instances = new ArrayList<>();
   }
 
   public Instances(InputStream inputStream, int classAttribute, String encodingFormat) {
-	  this.classAttribute = classAttribute;
+    this.classAttribute = classAttribute;
 
-	  if(encodingFormat.equalsIgnoreCase(AVRO_ENCODING_FORMAT.BINARY.toString()))
-		  loader = new AvroBinaryLoader(inputStream, classAttribute);
-	  else
-		  loader = new AvroJsonLoader(inputStream, classAttribute);
+    if (encodingFormat.equalsIgnoreCase(AVRO_ENCODING_FORMAT.BINARY.toString()))
+      loader = new AvroBinaryLoader(inputStream, classAttribute);
+    else
+      loader = new AvroJsonLoader(inputStream, classAttribute);
 
-	  this.instanceInformation = loader.getStructure();
-	  this.instances = new ArrayList<>();
+    this.instanceInformation = loader.getStructure();
+    this.instances = new ArrayList<>();
   }
-	
+
   public Instances(Instances chunk, int capacity) {
     this(chunk);
   }
@@ -191,22 +192,22 @@ public class Instances implements Serializable {
 
   public boolean readInstance(Reader fileReader) {
 
-	  if (loader == null) {
-		  loader = new ArffLoader(fileReader, 0, this.classAttribute);
-	  }
-	  return readInstance() ;
+    if (loader == null) {
+      loader = new ArffLoader(fileReader, 0, this.classAttribute);
+    }
+    return readInstance();
   }
 
   public boolean readInstance() {
 
-	  Instance inst = loader.readInstance();
-	  if (inst != null) {
-		  inst.setDataset(this);
-		  add(inst);
-		  return true;
-	  } else {
-		  return false;
-	  }
+    Instance inst = loader.readInstance();
+    if (inst != null) {
+      inst.setDataset(this);
+      add(inst);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public void delete() {
