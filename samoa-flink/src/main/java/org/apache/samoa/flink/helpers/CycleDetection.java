@@ -26,12 +26,12 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * This class contains all logic needed in order to mark circles in job graphs explicitly such as 
- * in the case of Apache Flink. A circle is defined as a list of node ids ordered in topological 
+ * This class contains all logic needed in order to mark cycles in job graphs explicitly such as 
+ * in the case of Apache Flink. A cycle is defined as a list of node ids ordered in topological 
  * (DFS) order.
  * 
  */
-public class CircleDetection {
+public class CycleDetection {
 	private int[] index;
 	private int[] lowLink;
 	private int counter;
@@ -40,12 +40,12 @@ public class CircleDetection {
 	List<Integer>[] graph;
 
 
-	public CircleDetection() {
-		stack = new Stack<Integer>();
+	public CycleDetection() {
+		stack = new Stack<>();
 		scc = new ArrayList<>();
 	}
 
-	public List<List<Integer>> getCircles(List<Integer>[] adjacencyList) {
+	public List<List<Integer>> getCycles(List<Integer>[] adjacencyList) {
 		graph = adjacencyList;
 		index = new int[adjacencyList.length];
 		lowLink = new int[adjacencyList.length];
@@ -82,7 +82,7 @@ public class CircleDetection {
 					w = stack.pop();
 					sccComponent.add(w);
 				} while (neighbor != w);
-				//add neighbor again, just in case it is a member of another circle 
+				//add neighbor again, just in case it is a member of another cycle 
 				stack.add(neighbor); 
 				scc.add(sccComponent);
 			}

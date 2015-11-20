@@ -36,46 +36,44 @@ import java.io.Serializable;
 public class FlinkStream extends AbstractStream implements FlinkComponent, Serializable {
 
 	private static int outputCounter = 0;
-	private FlinkComponent procItem;
-	private transient DataStream<SamoaType> dataStream;
-	private int sourcePiId;
-	private String flinkStreamId;
+	private FlinkComponent sourceComponent;
+	private transient DataStream<SamoaType> filteredStream;
+	private String filterID;
 
 	public FlinkStream(FlinkComponent sourcePi) {
-		this.procItem = sourcePi;
-		this.sourcePiId = sourcePi.getComponentId();
+		this.sourceComponent = sourcePi;
 		setStreamId("stream-" + Integer.toString(outputCounter));
-		flinkStreamId = "stream-" + Integer.toString(outputCounter);
+		filterID = "stream-" + Integer.toString(outputCounter);
 		outputCounter++;
 	}
 
 	@Override
 	public void initialise() {
-		if (procItem instanceof FlinkProcessingItem) {
-			dataStream = procItem.getOutStream().filter(Utils.getFilter(getStreamId()))
-			.setParallelism(((FlinkProcessingItem) procItem).getParallelism());
+		if (sourceComponent instanceof FlinkProcessingItem) {
+			filteredStream = sourceComponent.getOutStream().filter(Utils.getFilter(getStreamId()))
+			.setParallelism(((FlinkProcessingItem) sourceComponent).getParallelism());
 		} else
-			dataStream = procItem.getOutStream();
+			filteredStream = sourceComponent.getOutStream();
 	}
 
 	@Override
 	public boolean canBeInitialised() {
-		return procItem.isInitialised();
+		return sourceComponent.isInitialised();
 	}
 
 	@Override
 	public boolean isInitialised() {
-		return dataStream != null;
+		return filteredStream != null;
 	}
 
 	@Override
 	public DataStream getOutStream() {
-		return dataStream;
+		return filteredStream;
 	}
 
 	@Override
 	public void put(ContentEvent event) {
-		((FlinkProcessingItem) procItem).putToStream(event, this);
+		((FlinkProcessingItem) sourceComponent).putToStream(event, this);
 	}
 
 	@Override
@@ -84,11 +82,11 @@ public class FlinkStream extends AbstractStream implements FlinkComponent, Seria
 	}
 
 	public int getSourcePiId() {
-		return sourcePiId;
+		return sourceComponent.getComponentId();
 	}
 
 	@Override
 	public String getStreamId() {
-		return flinkStreamId;
+		return filterID;
 	}
 }
