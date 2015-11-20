@@ -32,8 +32,6 @@ import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.flink.topology.impl.SamoaType;
 import org.apache.samoa.utils.PartitioningScheme;
 
-import java.util.List;
-
 import static org.apache.flink.api.common.typeinfo.BasicTypeInfo.STRING_TYPE_INFO;
 
 public class Utils {
@@ -45,7 +43,7 @@ public class Utils {
 			case BROADCAST:
 				return stream.broadcast();
 			case GROUP_BY_KEY:
-				return stream.groupBy(new KeySelector<SamoaType, String>() {
+				return stream.keyBy(new KeySelector<SamoaType, String>() {
 					@Override
 					public String getKey(SamoaType samoaType) throws Exception {
 						return samoaType.f0;

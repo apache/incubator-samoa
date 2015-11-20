@@ -22,20 +22,20 @@ package org.apache.samoa.flink.topology.impl;
 
 
 import com.google.common.collect.Lists;
-
 import org.apache.flink.api.common.functions.Function;
 import org.apache.flink.api.java.tuple.Tuple3;
-import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.operators.AbstractUdfStreamOperator;
+import org.apache.flink.streaming.api.operators.OneInputStreamOperator;
+import org.apache.flink.streaming.api.watermark.Watermark;
+import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.core.Processor;
 import org.apache.samoa.flink.helpers.Utils;
 import org.apache.samoa.topology.ProcessingItem;
 import org.apache.samoa.topology.Stream;
 import org.apache.samoa.utils.PartitioningScheme;
-import org.apache.flink.streaming.api.operators.AbstractUdfStreamOperator;
-import org.apache.flink.streaming.api.operators.OneInputStreamOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,9 +60,8 @@ public class FlinkProcessingItem extends AbstractUdfStreamOperator<SamoaType, Fl
 	private int parallelism;
 	private static int numberOfPIs = 0;
 	private int piID;
-	private List<Integer> circleId; //check if we can refactor this
+	private List<Integer> cycleId; //check if we can refactor this
 	private boolean onIteration;
-	//private int circleId; //check if we can refactor this
 
 	public FlinkProcessingItem(StreamExecutionEnvironment env, Processor proc) {
 		this(env, proc, 1);
@@ -79,8 +78,8 @@ public class FlinkProcessingItem extends AbstractUdfStreamOperator<SamoaType, Fl
 		this.processor = proc;
 		this.parallelism = parallelism;
 		this.piID = numberOfPIs++;
-		this.circleId = new ArrayList<Integer>() {
-		}; // if size equals 0, then it is part of no circle
+		this.cycleId = new ArrayList<Integer>() {
+		}; // if size equals 0, then it is part of no cycle
 	}
 
 	public Stream createStream() {
@@ -90,12 +89,12 @@ public class FlinkProcessingItem extends AbstractUdfStreamOperator<SamoaType, Fl
 	}
 
 	public void putToStream(ContentEvent data, Stream targetStream) {
-		output.collect(SamoaType.of(data, targetStream.getStreamId()));
+		output.collect(new StreamRecord<>(SamoaType.of(data, targetStream.getStreamId())));
 	}
-
+	
 	@Override
-	public void open(Configuration parameters) throws Exception {
-		super.open(parameters);
+	public void open() throws Exception {
+		super.open();
 		this.processor.onCreate(getComponentId());
 	}
 
@@ -148,8 +147,13 @@ public class FlinkProcessingItem extends AbstractUdfStreamOperator<SamoaType, Fl
 	}
 
 	@Override
-	public void processElement(SamoaType samoaType) throws Exception {
-		fun.processEvent(samoaType.f1);
+	public void processElement(StreamRecord<SamoaType> streamRecord) throws Exception {
+		fun.processEvent(streamRecord.getValue().f1);
+	}
+
+	@Override
+	public void processWatermark(Watermark watermark) throws Exception {
+
 	}
 
 	@Override
@@ -175,10 +179,6 @@ public class FlinkProcessingItem extends AbstractUdfStreamOperator<SamoaType, Fl
 		return parallelism;
 	}
 
-	public void setParallelism(int parallelism) {
-		this.parallelism = parallelism;
-	}
-
 	public List<FlinkStream> getOutputStreams() {
 		return outputStreams;
 	}
@@ -187,28 +187,24 @@ public class FlinkProcessingItem extends AbstractUdfStreamOperator<SamoaType, Fl
 		return this.outStream;
 	}
 
-	public void setOutStream(DataStream outStream) {
-		this.outStream = outStream;
-	}
-
 	@Override
 	public int getComponentId() {
 		return piID;
 	}
 
-	public boolean isPartOfCircle() {
-		return this.circleId.size() > 0;
+	public boolean isPartOfCycle() {
+		return this.cycleId.size() > 0;
 	}
 
-	public List<Integer> getCircleIds() {
-		return circleId;
+	public List<Integer> getCycleIds() {
+		return cycleId;
 	}
 
-	public void addPItoLoop(int piId) {
-		this.circleId.add(piId);
+	public void addPItoCycle(int piId) {
+		this.cycleId.add(piId);
 	}
 
-	public DataStream<SamoaType> getInStream() {
+	public DataStream<SamoaType> getDataStream() {
 		return inStream;
 	}
 
@@ -219,6 +215,7 @@ public class FlinkProcessingItem extends AbstractUdfStreamOperator<SamoaType, Fl
 	public void setOnIteration(boolean onIteration) {
 		this.onIteration = onIteration;
 	}
+	
 
 	static class SamoaDelegateFunction implements Function, Serializable {
 		private final Processor proc;
