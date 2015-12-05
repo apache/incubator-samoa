@@ -19,6 +19,7 @@ Apache SAMOA is simple and fun to use! This documentation is intended to give an
     * [1.1 Executing SAMOA with Apache Storm](Executing-SAMOA-with-Apache-Storm.html)
     * [1.2 Executing SAMOA with Apache S4](Executing-SAMOA-with-Apache-S4.html)
     * [1.3 Executing SAMOA with Apache Samza](Executing-SAMOA-with-Apache-Samza.html)
+	* [1.4 Executing SAMOA with Apache Avro Files](Executing-SAMOA-with-Apache-Avro-Files.html)
 * [2 Machine Learning Methods in SAMOA](SAMOA-and-Machine-Learning.html)
     * [2.1 Prequential Evaluation Task](Prequential-Evaluation-Task.html)
     * [2.2 Vertical Hoeffding Tree Classifier](Vertical-Hoeffding-Tree-Classifier.html)
