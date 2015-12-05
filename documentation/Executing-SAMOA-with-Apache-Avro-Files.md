@@ -23,29 +23,26 @@ It is required that the input Avro files to the SAMOA framework follow certain I
 
 
 1. Avro Primitive Types & Enums are allowed for the data as is. 
-2. Avro Complex-types (e.g maps/arrays) may not be used with the exception of enum & union. I.e. no sub-structure will be allowed
-3. Avro Enums may be used to represent nominal attributes.
-```
-E.g  
-{"name":"species","type":{"type":"enum","name":"Labels","symbols":["setosa","versicolor","virginica"]}}
-```
+2. Avro Complex-types (e.g maps/arrays) may not be used with the exception of enum & union. I.e. no sub-structure will be allowed.
+3. Label (if any) would be the last attribute.
+4. Timestamps are not supported as of now within SAMOA.
+5. Avro Enums may be used to represent nominal attributes.
+6. Avro unions may be used to represent nullability of value. However unions may not be used for different data types.  
 
-4. Avro unions may be used to represent nullability of value. However unions may not be used for different data types. 
 ```
-E.g  
-{"name":"attribute1","type":["null","int"]}  - Allowed to denote that value for attribute1 is optional
-{"name":" attribute2","type":["string","int"]}  – Not allowed
+E.g  Enums  
+{"name":"species","type":{"type":"enum","name":"Labels","symbols":["setosa","versicolor","virginica"]}}  
+E.g  Unions  
+{"name":"attribute1","type":["null","int"]}  -Allowed to denote that value for attribute1 is optional  
+{"name":" attribute2","type":["string","int"]}  -Not allowed  
 ```
-
-5. Label (if any) would be the last attribute.
-6. Timestamps are not supported as of now within SAMOA.
 
 
 
 ### SAMOA task execution with Avro
 
 You may execute a SAMOA task using the aforementioned `bin/samoa` script with the following format: `bin/samoa <platform> <jar> "<task>"`.
-Follow this [link](Executing-SAMOA-with-Apache-S4)  and this [link](Executing-SAMOA-with-Apache-Storm) to learn more about deploying SAMOA on Apache S4 and Apache Storm respectively. The Avro files can be used as data sources for any of the aforementioned platforms. The only addition that needs to be made in the commands is as follows:  `AvroFileStream <file_name> -e <file_format>` . Examples are given below for different modes
+Follow this [link](Executing-SAMOA-with-Apache-S4)  and this [link](Executing-SAMOA-with-Apache-Storm) to learn more about deploying SAMOA on Apache S4 and Apache Storm respectively. The Avro files can be used as data sources for any of the aforementioned platforms. The only addition that needs to be made in the commands is as follows:  `AvroFileStream <file_name> -e <file_format>` . Examples are given below for different modes. Though the examples below use [Prequential Evaluation task](Prequential-Evaluation-Task) the commands are applicable to all other tasks as well.
 
 #### Local - Avro JSON
 ```
@@ -68,7 +65,7 @@ bin/samoa storm target/SAMOA-Storm-0.4.0-incubating-SNAPSHOT.jar "PrequentialEva
 
 ### Sample Avro Data for SAMOA
 
-The samples below describes how the default ARFF file formats may be converted to JSON/Binary Encoded Avro formats.
+The samples below describe how the default ARFF file formats may be converted to JSON/Binary encoded Avro formats.
 
 #### Iris Dataset - Default ARFF Format
 
