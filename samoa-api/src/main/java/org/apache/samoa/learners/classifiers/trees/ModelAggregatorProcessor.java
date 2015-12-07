@@ -439,22 +439,24 @@ final class ModelAggregatorProcessor implements Processor {
    *          The data structure to represents the filtering of the instance using the tree model.
    */
   private void attemptToSplit(ActiveLearningNode activeLearningNode, FoundNode foundNode) {
-    // Increment the split ID
-    this.splitId++;
+    if (!activeLearningNode.observedClassDistributionIsPure()) {
+      // Increment the split ID
+      this.splitId++;
 
-    // Schedule time-out thread
-    ScheduledFuture<?> timeOutHandler = this.executor.schedule(new AggregationTimeOutHandler(this.splitId,
-        this.timedOutSplittingNodes), this.timeOut, TimeUnit.SECONDS);
+      // Schedule time-out thread
+      ScheduledFuture<?> timeOutHandler = this.executor.schedule(new AggregationTimeOutHandler(this.splitId,
+              this.timedOutSplittingNodes), this.timeOut, TimeUnit.SECONDS);
 
-    // Keep track of the splitting node information, so that we can continue the
-    // split
-    // once we receive all local statistic calculation from Local Statistic PI
-    // this.splittingNodes.put(Long.valueOf(this.splitId), new
-    // SplittingNodeInfo(activeLearningNode, foundNode, null));
-    this.splittingNodes.put(this.splitId, new SplittingNodeInfo(activeLearningNode, foundNode, timeOutHandler));
+      // Keep track of the splitting node information, so that we can continue the
+      // split
+      // once we receive all local statistic calculation from Local Statistic PI
+      // this.splittingNodes.put(Long.valueOf(this.splitId), new
+      // SplittingNodeInfo(activeLearningNode, foundNode, null));
+      this.splittingNodes.put(this.splitId, new SplittingNodeInfo(activeLearningNode, foundNode, timeOutHandler));
 
-    // Inform Local Statistic PI to perform local statistic calculation
-    activeLearningNode.requestDistributedSuggestions(this.splitId, this);
+      // Inform Local Statistic PI to perform local statistic calculation
+      activeLearningNode.requestDistributedSuggestions(this.splitId, this);
+    }
   }
 
   /**

@@ -178,6 +178,8 @@ final class ActiveLearningNode extends LearningNode {
     this.isSplitting = false;
     logger.trace("wasted instance: {}", this.thrownAwayInstance);
     this.thrownAwayInstance = 0;
+    this.bestSuggestion = null;
+    this.secondBestSuggestion = null;
   }
 
   AttributeSplitSuggestion getDistributedBestSuggestion() {
