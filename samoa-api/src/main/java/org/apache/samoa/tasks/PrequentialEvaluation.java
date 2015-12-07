@@ -99,13 +99,13 @@ public class PrequentialEvaluation implements Task, Configurable {
   public IntOption batchDelayOption = new IntOption("delayBatchSize", 'b',
       "The delay batch size: delay of x milliseconds after each batch ", 1, 1, Integer.MAX_VALUE);
 
-  private PrequentialSourceProcessor preqSource;
+  protected PrequentialSourceProcessor preqSource;
 
   // private PrequentialSourceTopologyStarter preqStarter;
 
   // private EntranceProcessingItem sourcePi;
 
-  private Stream sourcePiOutputStream;
+  protected Stream sourcePiOutputStream;
 
   private Learner classifier;
 
@@ -115,9 +115,9 @@ public class PrequentialEvaluation implements Task, Configurable {
 
   // private Stream evaluatorPiInputStream;
 
-  private Topology prequentialTopology;
+  protected Topology prequentialTopology;
 
-  private TopologyBuilder builder;
+  protected TopologyBuilder builder;
 
   public void getDescription(StringBuilder sb, int indent) {
     sb.append("Prequential evaluation");
@@ -205,12 +205,12 @@ public class PrequentialEvaluation implements Task, Configurable {
   // return this.preqStarter;
   // }
 
-  private static boolean isLearnerAndEvaluatorCompatible(Learner learner, PerformanceEvaluator evaluator) {
+  protected static boolean isLearnerAndEvaluatorCompatible(Learner learner, PerformanceEvaluator evaluator) {
     return (learner instanceof RegressionLearner && evaluator instanceof RegressionPerformanceEvaluator) ||
         (learner instanceof ClassificationLearner && evaluator instanceof ClassificationPerformanceEvaluator);
   }
 
-  private static PerformanceEvaluator getDefaultPerformanceEvaluatorForLearner(Learner learner) {
+  protected static PerformanceEvaluator getDefaultPerformanceEvaluatorForLearner(Learner learner) {
     if (learner instanceof RegressionLearner) {
       return new BasicRegressionPerformanceEvaluator();
     }
