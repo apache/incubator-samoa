@@ -86,7 +86,7 @@ Journal of Machine Learning Research, 16(Jan):149−153, 2015.
 
 ## Apache SAMOA Developer's Guide
 
-<p><a href="http://samoa.incubator.apache.org/SAMOA-Developers-Guide-0-0-1.pdf"><img style="max-width:95%;border:3px solid black;" src="http://samoa.incubator.apache.org/Manual.png" alt="SAMOA Developer's Guide" height="250"> </a></p>
+<p><a href="https://samoa.incubator.apache.org/documentation/SAMOA-Developers-Guide-0.0.1.pdf"><img style="max-width:95%;border:3px solid black;" src="http://samoa.incubator.apache.org/Manual.png" alt="SAMOA Developer's Guide" height="250"> </a></p>
 
 ## Contributors
 [List of contributors to the Apache SAMOA project](http://samoa.incubator.apache.org/documentation/Team.html)
