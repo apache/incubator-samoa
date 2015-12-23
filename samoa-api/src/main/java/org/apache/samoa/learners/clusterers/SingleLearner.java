@@ -69,7 +69,7 @@ public final class SingleLearner implements Learner, Configurable {
 
   protected void setLayout() {
     learnerP = new LocalClustererProcessor();
-    LocalClustererAdapter learner = (LocalClustererAdapter) this.learnerOption.getValue();
+    LocalClustererAdapter learner = this.learnerOption.getValue();
     learner.setDataset(this.dataset);
     learnerP.setLearner(learner);
 
@@ -96,7 +96,6 @@ public final class SingleLearner implements Learner, Configurable {
    */
   @Override
   public Set<Stream> getResultStreams() {
-    Set<Stream> streams = ImmutableSet.of(this.resultStream);
-    return streams;
+    return ImmutableSet.of(this.resultStream);
   }
 }

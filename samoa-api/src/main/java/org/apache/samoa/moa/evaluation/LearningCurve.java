@@ -39,11 +39,11 @@ public class LearningCurve extends AbstractMOAObject {
 
   private static final long serialVersionUID = 1L;
 
-  protected List<String> measurementNames = new ArrayList<String>();
+  protected List<String> measurementNames = new ArrayList<>();
 
-  protected List<String> voteNames = new ArrayList<String>();
+  protected List<String> voteNames = new ArrayList<>();
 
-  protected List<double[]> measurementValues = new ArrayList<double[]>();
+  protected List<double[]> measurementValues = new ArrayList<>();
 
   protected List<String> voteValues = new ArrayList<String>();
 
@@ -154,7 +154,7 @@ public class LearningCurve extends AbstractMOAObject {
   /**
    * This method is used to set generate header line of a text file containing predictions and votes (for classification
    * only)
-   * 
+   *
    * @return String This returns the text of the header of a file containing predictions and votes.
    */
   public String voteHeaderToString() {
@@ -174,7 +174,7 @@ public class LearningCurve extends AbstractMOAObject {
   /**
    * This method is used to set generate one body line of a text file containing predictions and votes (for
    * classification only)
-   * 
+   *
    * @return String This returns the text of one line of a file containing predictions and votes.
    */
   public String voteEntryToString() {

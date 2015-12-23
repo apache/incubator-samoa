@@ -35,7 +35,7 @@ public class MembershipMatrix {
   int total_entries;
   int class_distribution[];
   int total_class_entries;
-  int initalBuildTimestamp = -1;
+  int initialBuildTimestamp = -1;
 
   public MembershipMatrix(Clustering foundClustering, ArrayList<DataPoint> points) {
     classmap = Clustering.classValues(points);
@@ -50,13 +50,13 @@ public class MembershipMatrix {
     class_sums = new int[numClasses];
     total_entries = 0;
     total_class_entries = points.size();
-    for (int p = 0; p < points.size(); p++) {
-      int worklabel = classmap.get((int) points.get(p).classValue());
+    for (DataPoint point : points) {
+      int worklabel = classmap.get((int) point.classValue());
       // real class distribution
       class_distribution[worklabel]++;
       boolean covered = false;
       for (int c = 0; c < numCluster - 1; c++) {
-        double prob = foundClustering.get(c).getInclusionProbability(points.get(p));
+        double prob = foundClustering.get(c).getInclusionProbability(point);
         if (prob >= 1) {
           cluster_class_weights[c][worklabel]++;
           class_sums[worklabel]++;
@@ -74,7 +74,7 @@ public class MembershipMatrix {
 
     }
 
-    initalBuildTimestamp = points.get(0).getTimestamp();
+    initialBuildTimestamp = points.get(0).getTimestamp();
   }
 
   public int getClusterClassWeight(int i, int j) {
@@ -119,7 +119,7 @@ public class MembershipMatrix {
 
   @Override
   public String toString() {
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     sb.append("Membership Matrix\n");
     for (int i = 0; i < cluster_class_weights.length; i++) {
       for (int j = 0; j < cluster_class_weights[i].length; j++) {
@@ -128,22 +128,22 @@ public class MembershipMatrix {
       sb.append("| " + cluster_sums[i] + "\n");
     }
     // sb.append("-----------\n");
-    for (int i = 0; i < class_sums.length; i++) {
-      sb.append(class_sums[i] + "\t ");
+    for (int class_sum : class_sums) {
+      sb.append(class_sum + "\t ");
     }
     sb.append("| " + total_entries + "\n");
 
     sb.append("Real class distribution \n");
-    for (int i = 0; i < class_distribution.length; i++) {
-      sb.append(class_distribution[i] + "\t ");
+    for (int aClass_distribution : class_distribution) {
+      sb.append(aClass_distribution + "\t ");
     }
     sb.append("| " + total_class_entries + "\n");
 
     return sb.toString();
   }
 
-  public int getInitalBuildTimestamp() {
-    return initalBuildTimestamp;
+  public int getInitialBuildTimestamp() {
+    return initialBuildTimestamp;
   }
 
 }

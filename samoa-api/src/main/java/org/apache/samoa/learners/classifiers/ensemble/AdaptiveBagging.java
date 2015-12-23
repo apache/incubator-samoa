@@ -67,9 +67,6 @@ public class AdaptiveBagging implements ClassificationLearner, Configurable {
   /** The distributor processor. */
   private BaggingDistributorProcessor distributorP;
 
-  /** The input streams for the ensemble, one per member. */
-  private Stream[] ensembleStreams;
-  
   /** The result stream. */
   protected Stream resultStream;
 
@@ -117,7 +114,8 @@ public class AdaptiveBagging implements ClassificationLearner, Configurable {
       }
     }
 
-    ensembleStreams = new Stream[ensembleSize];
+    /* The input streams for the ensemble, one per member. */
+    Stream[] ensembleStreams = new Stream[ensembleSize];
     for (int i = 0; i < ensembleSize; i++) {
       ensembleStreams[i] = builder.createStream(distributorP);
       builder.connectInputShuffleStream(ensembleStreams[i], ensemble[i].getInputProcessor()); // connect streams one-to-one with ensemble members (the type of connection does not matter)

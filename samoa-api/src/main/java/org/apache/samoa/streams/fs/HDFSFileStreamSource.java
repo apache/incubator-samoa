@@ -40,7 +40,7 @@ import org.apache.hadoop.io.IOUtils;
 public class HDFSFileStreamSource implements FileStreamSource {
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = -3887354805787167400L;
 
@@ -63,7 +63,7 @@ public class HDFSFileStreamSource implements FileStreamSource {
         org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
     config.set("fs.file.impl",
         org.apache.hadoop.fs.LocalFileSystem.class.getName());
-    this.filePaths = new ArrayList<String>();
+    this.filePaths = new ArrayList<>();
     Path hdfsPath = new Path(path);
     FileSystem fs;
     try {
@@ -72,14 +72,14 @@ public class HDFSFileStreamSource implements FileStreamSource {
       if (fileStat.isDirectory()) {
         Path filterPath = hdfsPath;
         if (ext != null) {
-          filterPath = new Path(path.toString(), "*." + ext);
+          filterPath = new Path(path, "*." + ext);
         } else {
-          filterPath = new Path(path.toString(), "*");
+          filterPath = new Path(path, "*");
         }
         FileStatus[] filesInDir = fs.globStatus(filterPath);
-        for (int i = 0; i < filesInDir.length; i++) {
-          if (filesInDir[i].isFile()) {
-            filePaths.add(filesInDir[i].getPath().toString());
+        for (FileStatus aFilesInDir : filesInDir) {
+          if (aFilesInDir.isFile()) {
+            filePaths.add(aFilesInDir.getPath().toString());
           }
         }
       } else {
