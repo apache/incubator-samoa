@@ -163,7 +163,7 @@ public class AMRulesRegressorProcessor implements Processor {
     int numberOfRulesCovering = 0;
 
     for (ActiveRule rule : ruleSet) {
-      if (rule.isCovering(instance) == true) {
+      if (rule.isCovering(instance)) {
         numberOfRulesCovering++;
         double[] vote = rule.getPrediction(instance);
         double error = rule.getCurrentError();
@@ -179,9 +179,8 @@ public class AMRulesRegressorProcessor implements Processor {
       double error = defaultRule.getCurrentError();
       errorWeightedVote.addVote(vote, error);
     }
-    double[] weightedVote = errorWeightedVote.computeWeightedVote();
 
-    return weightedVote;
+    return errorWeightedVote.computeWeightedVote();
   }
 
   public ErrorWeightedVote newErrorWeightedVote() {
@@ -223,13 +222,13 @@ public class AMRulesRegressorProcessor implements Processor {
     Iterator<ActiveRule> ruleIterator = this.ruleSet.iterator();
     while (ruleIterator.hasNext()) {
       ActiveRule rule = ruleIterator.next();
-      if (rule.isCovering(instance) == true) {
+      if (rule.isCovering(instance)) {
         rulesCoveringInstance = true;
-        if (isAnomaly(instance, rule) == false) {
+        if (!isAnomaly(instance, rule)) {
           // Update Change Detection Tests
           double error = rule.computeError(instance); // Use adaptive mode error
           boolean changeDetected = ((RuleActiveRegressionNode) rule.getLearningNode()).updateChangeDetection(error);
-          if (changeDetected == true) {
+          if (changeDetected) {
             ruleIterator.remove();
           } else {
             rule.updateStatistics(instance);
@@ -245,10 +244,10 @@ public class AMRulesRegressorProcessor implements Processor {
       }
     }
 
-    if (rulesCoveringInstance == false) {
+    if (!rulesCoveringInstance) {
       defaultRule.updateStatistics(instance);
       if (defaultRule.getInstancesSeen() % this.gracePeriod == 0.0) {
-        if (defaultRule.tryToExpand(this.splitConfidence, this.tieThreshold) == true) {
+        if (defaultRule.tryToExpand(this.splitConfidence, this.tieThreshold)) {
           ActiveRule newDefaultRule = newRule(defaultRule.getRuleNumberID(),
               (RuleActiveRegressionNode) defaultRule.getLearningNode(),
               ((RuleActiveRegressionNode) defaultRule.getLearningNode()).getStatisticsOtherBranchSplit()); // other branch
@@ -274,7 +273,7 @@ public class AMRulesRegressorProcessor implements Processor {
     // AMRUles is equipped with anomaly detection. If on, compute the anomaly
     // value.
     boolean isAnomaly = false;
-    if (this.noAnomalyDetection == false) {
+    if (!this.noAnomalyDetection) {
       if (rule.getInstancesSeen() >= this.anomalyNumInstThreshold) {
         isAnomaly = rule.isAnomaly(instance,
             this.univariateAnomalyprobabilityThreshold,
@@ -308,19 +307,19 @@ public class AMRulesRegressorProcessor implements Processor {
         }
       }
     }
-    if (statistics != null && ((RuleActiveRegressionNode) r.getLearningNode()).getTargetMean() != null)
+    if (statistics != null && (r.getLearningNode()).getTargetMean() != null)
     {
       double mean;
       if (statistics[0] > 0) {
         mean = statistics[1] / statistics[0];
-        ((RuleActiveRegressionNode) r.getLearningNode()).getTargetMean().reset(mean, (long) statistics[0]);
+        (r.getLearningNode()).getTargetMean().reset(mean, (long) statistics[0]);
       }
     }
     return r;
   }
 
   private ActiveRule newRule(int ID) {
-    ActiveRule r = new ActiveRule.Builder().
+    return new ActiveRule.Builder().
         threshold(this.pageHinckleyThreshold).
         alpha(this.pageHinckleyAlpha).
         changeDetection(this.driftDetection).
@@ -329,7 +328,6 @@ public class AMRulesRegressorProcessor implements Processor {
         learningRatio(this.learningRatio).
         numericObserver(numericObserver).
         id(ID).build();
-    return r;
   }
 
   /*
@@ -342,7 +340,7 @@ public class AMRulesRegressorProcessor implements Processor {
     this.ruleNumberID = 0;
     this.defaultRule = newRule(++this.ruleNumberID);
 
-    this.ruleSet = new LinkedList<ActiveRule>();
+    this.ruleSet = new LinkedList<>();
   }
 
   /*

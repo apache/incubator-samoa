@@ -46,7 +46,7 @@ public class LearningEvaluation extends AbstractMOAObject {
 
   public LearningEvaluation(Measurement[] evaluationMeasurements,
       LearningPerformanceEvaluator cpe, Learner model) {
-    List<Measurement> measurementList = new LinkedList<Measurement>();
+    List<Measurement> measurementList = new LinkedList<>();
     measurementList.addAll(Arrays.asList(evaluationMeasurements));
     measurementList.addAll(Arrays.asList(cpe.getPerformanceMeasurements()));
     measurementList.addAll(Arrays.asList(model.getModelMeasurements()));

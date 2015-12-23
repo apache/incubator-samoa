@@ -20,6 +20,7 @@ package org.apache.samoa.moa.clusterers;
  * #L%
  */
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -134,21 +135,19 @@ public abstract class AbstractClusterer extends AbstractOptionHandler
   }
 
   public Measurement[] getModelMeasurements() {
-    List<Measurement> measurementList = new LinkedList<Measurement>();
+    List<Measurement> measurementList = new LinkedList<>();
     measurementList.add(new Measurement("model training instances",
         trainingWeightSeenByModel()));
     measurementList.add(new Measurement("model serialized size (bytes)",
         measureByteSize()));
     Measurement[] modelMeasurements = getModelMeasurementsImpl();
     if (modelMeasurements != null) {
-      for (Measurement measurement : modelMeasurements) {
-        measurementList.add(measurement);
-      }
+      Collections.addAll(measurementList, modelMeasurements);
     }
     // add average of sub-model measurements
     Clusterer[] subModels = getSubClusterers();
     if ((subModels != null) && (subModels.length > 0)) {
-      List<Measurement[]> subMeasurements = new LinkedList<Measurement[]>();
+      List<Measurement[]> subMeasurements = new LinkedList<>();
       for (Clusterer subModel : subModels) {
         if (subModel != null) {
           subMeasurements.add(subModel.getModelMeasurements());
@@ -157,9 +156,7 @@ public abstract class AbstractClusterer extends AbstractOptionHandler
       Measurement[] avgMeasurements = Measurement
           .averageMeasurements(subMeasurements
               .toArray(new Measurement[subMeasurements.size()][]));
-      for (Measurement measurement : avgMeasurements) {
-        measurementList.add(measurement);
-      }
+      Collections.addAll(measurementList, avgMeasurements);
     }
     return measurementList.toArray(new Measurement[measurementList.size()]);
   }
@@ -295,5 +292,5 @@ public abstract class AbstractClusterer extends AbstractOptionHandler
 
   public Clustering getMicroClusteringResult() {
     return null;
-  };
+  }
 }

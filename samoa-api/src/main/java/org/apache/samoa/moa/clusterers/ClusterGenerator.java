@@ -58,7 +58,6 @@ public class ClusterGenerator extends AbstractClusterer {
   public FloatOption clusterAddOption = new FloatOption("clusterAdd", 'A',
       "Adds additional clusters.", 0, 0, 1);
 
-  private static double err_intervall_width = 0.0;
   private ArrayList<DataPoint> points;
   private int instanceCounter;
   private int windowCounter;
@@ -67,7 +66,7 @@ public class ClusterGenerator extends AbstractClusterer {
 
   @Override
   public void resetLearningImpl() {
-    points = new ArrayList<DataPoint>();
+    points = new ArrayList<>();
     instanceCounter = 0;
     windowCounter = 0;
     random = new Random(227);
@@ -169,8 +168,9 @@ public class ClusterGenerator extends AbstractClusterer {
       double radius = sourceCluster.getRadius();
 
       // move cluster center
+      double err_interval_width = 0.0;
       if (errLevelPosition > 0) {
-        double errOffset = random.nextDouble() * err_intervall_width / 2.0;
+        double errOffset = random.nextDouble() * err_interval_width / 2.0;
         double errOffsetDirection = ((random.nextBoolean()) ? 1 : -1);
         double level = errLevelPosition + errOffsetDirection * errOffset;
         double[] vector = new double[center.length];
@@ -203,20 +203,15 @@ public class ClusterGenerator extends AbstractClusterer {
         }
         center = newCenter;
         for (int d = 0; d < center.length; d++) {
-          if (newCenter[d] >= 0 && newCenter[d] <= 1) {
-          }
-          else {
-            System.out
-                .println("This shouldnt have happend, Cluster center out of bounds:" + Arrays.toString(newCenter));
+          if (newCenter[d] < 0 || newCenter[d] > 1) {
+            System.out.println("This shouldnt have happend, Cluster center out of bounds:" + Arrays.toString(newCenter));
           }
         }
-        // System.out.println("new Center "+Arrays.toString(newCenter));
-
       }
 
       // alter radius
       if (errLevelRadiusDecrease > 0 || errLevelRadiusIncrease > 0) {
-        double errOffset = random.nextDouble() * err_intervall_width / 2.0;
+        double errOffset = random.nextDouble() * err_interval_width / 2.0;
         int errOffsetDirection = ((random.nextBoolean()) ? 1 : -1);
 
         if (errLevelRadiusDecrease > 0 && (errLevelRadiusIncrease == 0 || random.nextBoolean())) {
@@ -289,9 +284,7 @@ public class ClusterGenerator extends AbstractClusterer {
       for (int c1 = 0; c1 < clustering.size(); c1++) {
         SphereCluster sc1 = (SphereCluster) clustering.get(c1);
         double minDist = Double.MAX_VALUE;
-        double minOver = 1;
-        int maxindexCon = -1;
-        int maxindexOver = -1;
+        int maxIndexCon = -1;
         for (int c2 = 0; c2 < clustering.size(); c2++) {
           SphereCluster sc2 = (SphereCluster) clustering.get(c2);
           // double over = sc1.overlapRadiusDegree(sc2);
@@ -303,14 +296,11 @@ public class ClusterGenerator extends AbstractClusterer {
           double threshold = Math.min(sc1.getRadius(), sc2.getRadius()) * radiusFactor;
           if (dist > 0 && dist < minDist && dist < threshold) {
             minDist = dist;
-            maxindexCon = c2;
+            maxIndexCon = c2;
           }
         }
-        int maxindex = -1;
-        if (maxindexOver != -1)
-          maxindex = maxindexOver;
-        else
-          maxindex = maxindexCon;
+        int maxindex;
+        maxindex = maxIndexCon;
 
         if (maxindex != -1 && !merged[c1]) {
           merged[c1] = true;

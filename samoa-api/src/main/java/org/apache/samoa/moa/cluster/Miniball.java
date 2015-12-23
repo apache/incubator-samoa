@@ -20,7 +20,6 @@ package org.apache.samoa.moa.cluster;
  * #L%
  */
 
-import com.dreizak.miniball.model.ArrayPointSet;
 import com.dreizak.miniball.model.PointSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +61,7 @@ public class Miniball {
 
     public PointStorage(int dimension) {
       this.dimension = dimension;
-      this.L = new ArrayList<double[]>();
+      this.L = new ArrayList<>();
     }
 
     public void add(double[] array) {

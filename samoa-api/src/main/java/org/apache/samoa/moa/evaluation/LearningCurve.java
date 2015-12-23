@@ -38,9 +38,9 @@ public class LearningCurve extends AbstractMOAObject {
 
   private static final long serialVersionUID = 1L;
 
-  protected List<String> measurementNames = new ArrayList<String>();
+  protected List<String> measurementNames = new ArrayList<>();
 
-  protected List<double[]> measurementValues = new ArrayList<double[]>();
+  protected List<double[]> measurementValues = new ArrayList<>();
 
   public LearningCurve(String orderingMeasurementName) {
     this.measurementNames.add(orderingMeasurementName);

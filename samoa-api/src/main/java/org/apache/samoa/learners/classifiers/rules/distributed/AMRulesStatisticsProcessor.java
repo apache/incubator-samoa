@@ -49,10 +49,7 @@ public class AMRulesStatisticsProcessor implements Processor {
 	 */
   private static final long serialVersionUID = 5268933189695395573L;
 
-  private static final Logger logger =
-      LoggerFactory.getLogger(AMRulesStatisticsProcessor.class);
-
-  private int processorId;
+  private static final Logger logger = LoggerFactory.getLogger(AMRulesStatisticsProcessor.class);
 
   private transient List<ActiveRule> ruleSet;
 
@@ -98,10 +95,10 @@ public class AMRulesStatisticsProcessor implements Processor {
       if (rule.getRuleNumberID() == ruleID) {
         // Check (again) for coverage
         // Skip anomaly check as Aggregator's perceptron should be well-updated
-        if (rule.isCovering(instance) == true) {
+        if (rule.isCovering(instance)) {
           double error = rule.computeError(instance); // Use adaptive mode error
           boolean changeDetected = ((RuleActiveRegressionNode) rule.getLearningNode()).updateChangeDetection(error);
-          if (changeDetected == true) {
+          if (changeDetected) {
             ruleIterator.remove();
 
             this.sendRemoveRuleEvent(ruleID);
@@ -143,8 +140,7 @@ public class AMRulesStatisticsProcessor implements Processor {
 
   @Override
   public void onCreate(int id) {
-    this.processorId = id;
-    this.ruleSet = new LinkedList<ActiveRule>();
+    this.ruleSet = new LinkedList<>();
   }
 
   @Override
