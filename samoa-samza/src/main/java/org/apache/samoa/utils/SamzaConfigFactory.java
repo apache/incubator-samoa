@@ -243,6 +243,10 @@ public class SamzaConfigFactory {
     // Number of containers
     setNumberOfContainers(map, pi.getParallelism(), this.piPerContainerRatio);
 
+    // Job Coordinator
+    setValue(map, "job.coordinator.system", "kafka");
+    setValue(map, "job.coordinator.replication.factor", "2");
+
     return map;
   }
 
