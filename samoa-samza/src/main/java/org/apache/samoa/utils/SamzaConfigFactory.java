@@ -45,7 +45,7 @@ import org.apache.samoa.topology.impl.SamzaStream;
 import org.apache.samoa.topology.impl.SamzaTopology;
 import org.apache.samoa.topology.impl.SamzaStream.SamzaSystemStream;
 import org.apache.samza.config.MapConfig;
-import org.apache.samza.job.local.LocalJobFactory;
+import org.apache.samza.job.local.ProcessJobFactory;
 import org.apache.samza.job.yarn.YarnJobFactory;
 import org.apache.samza.system.kafka.KafkaSystemFactory;
 
@@ -396,7 +396,7 @@ public class SamzaConfigFactory {
     Map<String, String> map = new HashMap<String, String>();
     // Job & Task
     if (this.isLocalMode)
-      map.put(JOB_FACTORY_CLASS_KEY, LocalJobFactory.class.getName());
+      map.put(JOB_FACTORY_CLASS_KEY, ProcessJobFactory.class.getName());
     else {
       map.put(JOB_FACTORY_CLASS_KEY, YarnJobFactory.class.getName());
 

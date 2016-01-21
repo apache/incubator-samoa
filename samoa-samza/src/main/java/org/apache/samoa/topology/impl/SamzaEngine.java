@@ -105,7 +105,7 @@ public class SamzaEngine {
     for (MapConfig config : configs) {
       logger.info("Config:{}", config);
       JobRunner jobRunner = new JobRunner(config);
-      jobRunner.run();
+      jobRunner.run(true);
     }
   }
 
