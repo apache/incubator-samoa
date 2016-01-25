@@ -96,6 +96,20 @@ public class SystemsUtils {
     private static String hdfsConfPath;
     private static String configHomePath;
     private static String samoaDir = null;
+    
+    private static Configuration getConfig() {
+      Configuration config = new Configuration();
+      config.addResource(new Path(coreConfPath));
+      config.addResource(new Path(hdfsConfPath));
+      /* will do same differently - see http://www.lucidelectricdreams.com/2013/11/no-filesystem-for-scheme-hdfs.html
+      config.set("fs.hdfs.impl",
+              org.apache.hadoop.hdfs.DistributedFileSystem.class.getName()
+      );
+      config.set("fs.file.impl",
+              org.apache.hadoop.fs.LocalFileSystem.class.getName()
+      ); */
+      return config;
+    }
 
     static void setHadoopConfigHome(String hadoopConfPath) {
       logger.info("Hadoop config home:{}", hadoopConfPath);
