@@ -78,4 +78,22 @@ public class AlgosTest {
         .build();
     TestUtils.test(vhtConfig);
   }
+
+  @Test
+  public void testCVPreqVHTLocal() throws Exception {
+    TestParams vhtConfig = new TestParams.Builder()
+            .inputInstances(200_000)
+            .samplingSize(20_000)
+            .evaluationInstances(200_000)
+            .classifiedInstances(200_000)
+            .classificationsCorrect(75f)
+            .kappaStat(0f)
+            .kappaTempStat(0f)
+            .cliStringTemplate(TestParams.Templates.PREQCVEVAL_VHT_RANDOMTREE)
+            .resultFilePollTimeout(10)
+            .prePollWait(10)
+            .taskClassName(LocalDoTask.class.getName())
+            .build();
+    TestUtils.test(vhtConfig);
+  }
 }

@@ -101,16 +101,18 @@ public class TestUtils {
     CSVRecord last = null;
     Iterator<CSVRecord> iterator = records.iterator();
     CSVRecord header = iterator.next();
-    Assert.assertEquals("Invalid number of columns", 5, header.size());
+    // Results of Standard Evaluation have 5 columns, and cv Evaluation have 9 columns
+    int cvEvaluation = (header.size() == 9) ? 1: 0;
+    String cvText = (header.size() == 9) ? "[avg] " : "";
 
     Assert
         .assertEquals("Unexpected column", org.apache.samoa.TestParams.EVALUATION_INSTANCES, header.get(0).trim());
     Assert
-        .assertEquals("Unexpected column", org.apache.samoa.TestParams.CLASSIFIED_INSTANCES, header.get(1).trim());
-    Assert.assertEquals("Unexpected column", org.apache.samoa.TestParams.CLASSIFICATIONS_CORRECT, header.get(2)
+        .assertEquals("Unexpected column", cvText + org.apache.samoa.TestParams.CLASSIFIED_INSTANCES, header.get(1).trim());
+    Assert.assertEquals("Unexpected column", cvText + org.apache.samoa.TestParams.CLASSIFICATIONS_CORRECT, header.get(2 + cvEvaluation)
         .trim());
-    Assert.assertEquals("Unexpected column", org.apache.samoa.TestParams.KAPPA_STAT, header.get(3).trim());
-    Assert.assertEquals("Unexpected column", org.apache.samoa.TestParams.KAPPA_TEMP_STAT, header.get(4).trim());
+    Assert.assertEquals("Unexpected column", cvText + org.apache.samoa.TestParams.KAPPA_STAT, header.get(3 + 2 * cvEvaluation).trim());
+    Assert.assertEquals("Unexpected column", cvText + org.apache.samoa.TestParams.KAPPA_TEMP_STAT, header.get(4 + 3 * cvEvaluation).trim());
 
     // 2. check last line result
     while (iterator.hasNext()) {
@@ -124,14 +126,14 @@ public class TestUtils {
         Float.parseFloat(last.get(1))),
         testParams.getClassifiedInstances() <= Float.parseFloat(last.get(1)));
     assertTrue(String.format("Unmet threshold expected %f got %f",
-        testParams.getClassificationsCorrect(), Float.parseFloat(last.get(2))),
-        testParams.getClassificationsCorrect() <= Float.parseFloat(last.get(2)));
+        testParams.getClassificationsCorrect(), Float.parseFloat(last.get(2 + cvEvaluation))),
+        testParams.getClassificationsCorrect() <= Float.parseFloat(last.get(2 + cvEvaluation)));
     assertTrue(String.format("Unmet threshold expected %f got %f",
-        testParams.getKappaStat(), Float.parseFloat(last.get(3))),
-        testParams.getKappaStat() <= Float.parseFloat(last.get(3)));
+        testParams.getKappaStat(), Float.parseFloat(last.get(3 + 2 * cvEvaluation))),
+        testParams.getKappaStat() <= Float.parseFloat(last.get(3 + 2 * cvEvaluation)));
     assertTrue(String.format("Unmet threshold expected %f got %f",
-        testParams.getKappaTempStat(), Float.parseFloat(last.get(4))),
-        testParams.getKappaTempStat() <= Float.parseFloat(last.get(4)));
+        testParams.getKappaTempStat(), Float.parseFloat(last.get(4 + 3 * cvEvaluation))),
+        testParams.getKappaTempStat() <= Float.parseFloat(last.get(4 + 3 * cvEvaluation)));
 
   }
 
