@@ -25,7 +25,6 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,12 +48,12 @@ public class LocalFileStreamSource implements FileStreamSource {
   }
 
   public void init(String path, String ext) {
-    this.filePaths = new ArrayList<String>();
+    this.filePaths = new ArrayList<>();
     File fileAtPath = new File(path);
     if (fileAtPath.isDirectory()) {
       File[] filesInDir = fileAtPath.listFiles(new FileExtensionFilter(ext));
-      for (int i = 0; i < filesInDir.length; i++) {
-        filePaths.add(filesInDir[i].getAbsolutePath());
+      for (File aFilesInDir : filesInDir) {
+        filePaths.add(aFilesInDir.getAbsolutePath());
       }
     }
     else {

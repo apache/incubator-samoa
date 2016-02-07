@@ -50,10 +50,7 @@ public class AMRLearnerProcessor implements Processor {
 	 */
   private static final long serialVersionUID = -2302897295090248013L;
 
-  private static final Logger logger =
-      LoggerFactory.getLogger(AMRLearnerProcessor.class);
-
-  private int processorId;
+  private static final Logger logger = LoggerFactory.getLogger(AMRLearnerProcessor.class);
 
   private transient List<ActiveRule> ruleSet;
 
@@ -105,10 +102,10 @@ public class AMRLearnerProcessor implements Processor {
       ActiveRule rule = ruleIterator.next();
       if (rule.getRuleNumberID() == ruleID) {
         // Check (again) for coverage
-        if (rule.isCovering(instance) == true) {
+        if (rule.isCovering(instance)) {
           double error = rule.computeError(instance); // Use adaptive mode error
           boolean changeDetected = ((RuleActiveRegressionNode) rule.getLearningNode()).updateChangeDetection(error);
-          if (changeDetected == true) {
+          if (changeDetected) {
             ruleIterator.remove();
 
             this.sendRemoveRuleEvent(ruleID);
@@ -137,7 +134,7 @@ public class AMRLearnerProcessor implements Processor {
     // AMRUles is equipped with anomaly detection. If on, compute the anomaly
     // value.
     boolean isAnomaly = false;
-    if (this.noAnomalyDetection == false) {
+    if (!this.noAnomalyDetection) {
       if (rule.getInstancesSeen() >= this.anomalyNumInstThreshold) {
         isAnomaly = rule.isAnomaly(instance,
             this.univariateAnomalyprobabilityThreshold,
@@ -167,8 +164,7 @@ public class AMRLearnerProcessor implements Processor {
 
   @Override
   public void onCreate(int id) {
-    this.processorId = id;
-    this.ruleSet = new LinkedList<ActiveRule>();
+    this.ruleSet = new LinkedList<>();
   }
 
   @Override

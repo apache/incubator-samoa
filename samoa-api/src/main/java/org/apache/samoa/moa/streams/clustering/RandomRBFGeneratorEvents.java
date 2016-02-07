@@ -37,7 +37,6 @@ import org.apache.samoa.moa.cluster.Clustering;
 import org.apache.samoa.moa.cluster.SphereCluster;
 import org.apache.samoa.moa.core.AutoExpandVector;
 import org.apache.samoa.moa.core.DataPoint;
-import org.apache.samoa.moa.core.FastVector;
 import org.apache.samoa.moa.core.InstanceExample;
 import org.apache.samoa.moa.core.ObjectRepository;
 import org.apache.samoa.moa.streams.InstanceStream;
@@ -48,7 +47,7 @@ import com.github.javacliparser.FloatOption;
 import com.github.javacliparser.IntOption;
 
 public class RandomRBFGeneratorEvents extends ClusteringStream {
-  private transient Vector listeners;
+  private transient Vector<ClusterEventListener> listeners;
 
   private static final long serialVersionUID = 1L;
 
@@ -135,10 +134,10 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
     int currentMovementSteps;
     boolean isSplitting = false;
 
-    LinkedList<DataPoint> points = new LinkedList<DataPoint>();
-    ArrayList<SphereCluster> microClusters = new ArrayList<SphereCluster>();
-    ArrayList<ArrayList<DataPoint>> microClustersPoints = new ArrayList();
-    ArrayList<Integer> microClustersDecay = new ArrayList();
+    LinkedList<DataPoint> points = new LinkedList<>();
+    ArrayList<SphereCluster> microClusters = new ArrayList<>();
+    ArrayList<ArrayList<DataPoint>> microClustersPoints = new ArrayList<>();
+    ArrayList<Integer> microClustersDecay = new ArrayList<>();
 
     public GeneratorCluster(int label) {
       boolean outofbounds = true;
@@ -230,8 +229,7 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
       int minMicroIndex = -1;
       double minHullDist = Double.MAX_VALUE;
       boolean inserted = false;
-      // we favour more recently build clusters so we can remove earlier cluster
-      // sooner
+      // we favour more recently build clusters so we can remove earlier cluster sooner
       for (int m = microClusters.size() - 1; m >= 0; m--) {
         SphereCluster micro = microClusters.get(m);
         double hulldist = micro.getCenterDistance(point) - micro.getRadius();
@@ -251,49 +249,25 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
         }
       }
       // Reseting index choice for alternative cluster building
-      int alt = 1;
-      if (alt == 1)
-        minMicroIndex = -1;
       if (!inserted) {
         // add to closest cluster and expand cluster
-        if (minMicroIndex != -1) {
-          microClustersPoints.get(minMicroIndex).add(point);
-          // we should keep the miniball instances and just check in
-          // new points instead of rebuilding the whole thing
-          SphereCluster s = new SphereCluster(microClustersPoints.get(minMicroIndex), numAttsOption.getValue());
-          // check if current microcluster is bigger then generating cluster
-          if (s.getRadius() > generator.getRadius()) {
-            // remove previously added point
-            microClustersPoints.get(minMicroIndex).remove(microClustersPoints.get(minMicroIndex).size() - 1);
-            minMicroIndex = -1;
-          }
-          else {
-            microClusters.set(minMicroIndex, s);
-            microClustersDecay.set(minMicroIndex, numGeneratedInstances);
-          }
-        }
         // minMicroIndex might have been reset above
         // create new micro cluster
-        if (minMicroIndex == -1) {
-          ArrayList<DataPoint> microPoints = new ArrayList<DataPoint>();
-          microPoints.add(point);
-          SphereCluster s;
-          if (alt == 0)
-            s = new SphereCluster(microPoints, numAttsOption.getValue());
-          else
-            s = new SphereCluster(generator.getCenter(), generator.getRadius(), 1);
+        ArrayList<DataPoint> microPoints = new ArrayList<>();
+        microPoints.add(point);
+        SphereCluster s;
+        s = new SphereCluster(generator.getCenter(), generator.getRadius(), 1);
 
-          microClusters.add(s);
-          microClustersPoints.add(microPoints);
-          microClustersDecay.add(numGeneratedInstances);
-          int id = 0;
-          while (id < kernels.size()) {
-            if (kernels.get(id) == this)
-              break;
-            id++;
-          }
-          s.setGroundTruth(id);
+        microClusters.add(s);
+        microClustersPoints.add(microPoints);
+        microClustersDecay.add(numGeneratedInstances);
+        int id = 0;
+        while (id < kernels.size()) {
+          if (kernels.get(id) == this)
+            break;
+          id++;
         }
+        s.setGroundTruth(id);
       }
 
     }
@@ -301,10 +275,7 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
     private void move() {
       if (currentMovementSteps < totalMovementSteps) {
         currentMovementSteps++;
-        if (moveVector == null) {
-          return;
-        }
-        else {
+        if (moveVector != null) {
           double[] center = generator.getCenter();
           boolean outofbounds = true;
           while (outofbounds) {
@@ -426,24 +397,17 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
       double radius = kernelRadiiOption.getValue();
       double avgWeight = 1.0 / numClusterOption.getValue();
       double weight = avgWeight + avgWeight * densityRangeOption.getValue() * instanceRandom.nextDouble();
-      SphereCluster spcluster = null;
+      SphereCluster spcluster;
 
       double[] center = generator.getCenter();
       spcluster = new SphereCluster(center, radius, weight);
 
-      if (spcluster != null) {
-        GeneratorCluster gc = new GeneratorCluster(clusterIdCounter++, spcluster);
-        gc.isSplitting = true;
-        kernels.add(gc);
-        normalizeWeights();
-        numActiveKernels++;
-        return "Split from Kernel " + generator.getId();
-      }
-      else {
-        System.out.println("Tried to split new kernel from C" + generator.getId() +
-            ". Not enough room for new cluster, decrease average radii, number of clusters or enable overlap.");
-        return "";
-      }
+      GeneratorCluster gc = new GeneratorCluster(clusterIdCounter++, spcluster);
+      gc.isSplitting = true;
+      kernels.add(gc);
+      normalizeWeights();
+      numActiveKernels++;
+      return "Split from Kernel " + generator.getId();
     }
 
     private String fadeOut() {
@@ -493,18 +457,18 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
     numGeneratedInstances = 0;
     clusterIdCounter = 0;
     mergeClusterA = mergeClusterB = null;
-    kernels = new AutoExpandVector<GeneratorCluster>();
+    kernels = new AutoExpandVector<>();
 
     initKernels();
   }
 
   protected void generateHeader() { // 2013/06/02: Noise label
-    ArrayList<Attribute> attributes = new ArrayList<Attribute>();
+    ArrayList<Attribute> attributes = new ArrayList<>();
     for (int i = 0; i < this.numAttsOption.getValue(); i++) {
       attributes.add(new Attribute("att" + (i + 1)));
     }
 
-    ArrayList<String> classLabels = new ArrayList<String>();
+    ArrayList<String> classLabels = new ArrayList<>();
     for (int i = 0; i < this.numClusterOption.getValue(); i++) {
       classLabels.add("class" + (i + 1));
     }
@@ -531,7 +495,7 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
 
     // make room for the classlabel
     double[] values_new = new double[numAttsOption.getValue()]; // +1
-    double[] values = null;
+    double[] values;
     int clusterChoice = -1;
 
     if (instanceRandom.nextDouble() > noiseLevelOption.getValue()) {
@@ -539,7 +503,7 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
       values = kernels.get(clusterChoice).generator.sample(instanceRandom).toDoubleArray();
     }
     else {
-      // get ranodm noise point
+      // get random noise point
       values = getNoisePoint();
     }
 
@@ -569,8 +533,8 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
 
   public Clustering getGeneratingClusters() {
     Clustering clustering = new Clustering();
-    for (int c = 0; c < kernels.size(); c++) {
-      clustering.add(kernels.get(c).generator);
+    for (GeneratorCluster kernel : kernels) {
+      clustering.add(kernel.generator);
     }
     return clustering;
   }
@@ -579,11 +543,11 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
     Clustering clustering = new Clustering();
     int id = 0;
 
-    for (int c = 0; c < kernels.size(); c++) {
-      for (int m = 0; m < kernels.get(c).microClusters.size(); m++) {
-        kernels.get(c).microClusters.get(m).setId(id);
-        kernels.get(c).microClusters.get(m).setGroundTruth(kernels.get(c).generator.getId());
-        clustering.add(kernels.get(c).microClusters.get(m));
+    for (GeneratorCluster kernel : kernels) {
+      for (int m = 0; m < kernel.microClusters.size(); m++) {
+        kernel.microClusters.get(m).setId(id);
+        kernel.microClusters.get(m).setGroundTruth(kernel.generator.getId());
+        clustering.add(kernel.microClusters.get(m));
         id++;
       }
     }
@@ -595,8 +559,8 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
   /**************************** EVENTS ******************************************/
   private void eventScheduler() {
 
-    for (int i = 0; i < kernels.size(); i++) {
-      kernels.get(i).updateKernel();
+    for (GeneratorCluster kernel : kernels) {
+      kernel.updateKernel();
     }
 
     nextEventCounter--;
@@ -604,8 +568,8 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
     // should this be randomized as well???
     if (nextEventCounter % kernelMovePointFrequency == 0) {
       // move kernels
-      for (int i = 0; i < kernels.size(); i++) {
-        kernels.get(i).move();
+      for (GeneratorCluster kernel : kernels) {
+        kernel.move();
         // overlapControl();
       }
     }
@@ -715,8 +679,7 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
     while (kernels.get(id).kill != -1)
       id = instanceRandom.nextInt(kernels.size());
 
-    String message = kernels.get(id).fadeOut();
-    return message;
+    return kernels.get(id).fadeOut();
   }
 
   private String fadeIn() {
@@ -782,9 +745,7 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
     while (kernels.get(id).kill != -1)
       id = instanceRandom.nextInt(kernels.size());
 
-    String message = kernels.get(id).splitKernel();
-
-    return message;
+    return kernels.get(id).splitKernel();
   }
 
   private String mergeKernels(int steps) {
@@ -796,10 +757,7 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
       // System.out.println("DisredDist:"+(2*diseredDist));
       for (int i = 0; i < kernels.size(); i++) {
         for (int j = 0; j < i; j++) {
-          if (kernels.get(i).kill != -1 || kernels.get(j).kill != -1) {
-            continue;
-          }
-          else {
+          if (kernels.get(i).kill == -1 && kernels.get(j).kill == -1) {
             double kernelDist = kernels.get(i).generator.getCenterDistance(kernels.get(j).generator);
             double d = kernelDist - 2 * diseredDist;
             // System.out.println("Dist:"+i+" / "+j+" "+d);
@@ -866,10 +824,10 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
       incluster = false;
       if (!noiseInClusterOption.isSet() && counter > 0) {
         counter--;
-        for (int c = 0; c < kernels.size(); c++) {
-          for (int m = 0; m < kernels.get(c).microClusters.size(); m++) {
+        for (GeneratorCluster kernel : kernels) {
+          for (int m = 0; m < kernel.microClusters.size(); m++) {
             Instance inst = new DenseInstance(1, sample);
-            if (kernels.get(c).microClusters.get(m).getInclusionProbability(inst) > 0) {
+            if (kernel.microClusters.get(m).getInclusionProbability(inst) > 0) {
               incluster = true;
               break;
             }
@@ -904,11 +862,11 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
 
   private void normalizeWeights() {
     double sumWeights = 0.0;
-    for (int i = 0; i < kernels.size(); i++) {
-      sumWeights += kernels.get(i).generator.getWeight();
+    for (GeneratorCluster kernel : kernels) {
+      sumWeights += kernel.generator.getWeight();
     }
-    for (int i = 0; i < kernels.size(); i++) {
-      kernels.get(i).generator.setWeight(kernels.get(i).generator.getWeight() / sumWeights);
+    for (GeneratorCluster kernel : kernels) {
+      kernel.generator.setWeight(kernel.generator.getWeight() / sumWeights);
     }
   }
 
@@ -919,14 +877,14 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
   /** Add a listener */
   synchronized public void addClusterChangeListener(ClusterEventListener l) {
     if (listeners == null)
-      listeners = new Vector();
+      listeners = new Vector<>();
     listeners.addElement(l);
   }
 
   /** Remove a listener */
   synchronized public void removeClusterChangeListener(ClusterEventListener l) {
     if (listeners == null)
-      listeners = new Vector();
+      listeners = new Vector<>();
     listeners.removeElement(l);
   }
 
@@ -940,9 +898,9 @@ public class RandomRBFGeneratorEvents extends ClusteringStream {
 
       // make a copy of the listener list in case
       // anyone adds/removes listeners
-      Vector targets;
+      Vector<ClusterEventListener> targets;
       synchronized (this) {
-        targets = (Vector) listeners.clone();
+        targets = (Vector<ClusterEventListener>) listeners.clone();
       }
 
       // walk through the listener list and

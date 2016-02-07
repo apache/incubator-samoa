@@ -38,8 +38,6 @@ public class ActiveRule extends LearningRule {
 
   private static final long serialVersionUID = 1L;
 
-  private double[] statisticsOtherBranchSplit;
-
   private Builder builder;
 
   private RuleActiveRegressionNode learningNode;
@@ -89,10 +87,6 @@ public class ActiveRule extends LearningRule {
     this.learningNode = (RuleActiveRegressionNode) learningNode;
   }
 
-  public double[] statisticsOtherBranchSplit() {
-    return this.statisticsOtherBranchSplit;
-  }
-
   public RuleSplitNode getLastUpdatedRuleSplitNode() {
     return this.lastUpdatedRuleSplitNode;
   }
@@ -104,7 +98,6 @@ public class ActiveRule extends LearningRule {
 
     private static final long serialVersionUID = 1712887264918475622L;
     protected boolean changeDetection;
-    protected boolean usePerceptron;
     protected double threshold;
     protected double alpha;
     protected int predictionFunction;
@@ -114,8 +107,6 @@ public class ActiveRule extends LearningRule {
     protected double[] statistics;
 
     protected FIMTDDNumericAttributeClassLimitObserver numericObserver;
-
-    protected double lastTargetMean;
 
     public int id;
 
@@ -182,8 +173,7 @@ public class ActiveRule extends LearningRule {
    */
   public boolean tryToExpand(double splitConfidence, double tieThreshold) {
 
-    boolean shouldSplit = this.learningNode.tryToExpand(splitConfidence, tieThreshold);
-    return shouldSplit;
+    return this.learningNode.tryToExpand(splitConfidence, tieThreshold);
 
   }
 

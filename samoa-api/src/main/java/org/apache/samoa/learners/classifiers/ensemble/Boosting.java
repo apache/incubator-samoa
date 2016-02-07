@@ -103,9 +103,6 @@ public class Boosting implements Learner, Configurable {
     Stream predictionStream = this.builder.createStream(distributorP);
     this.builder.connectInputKeyStream(predictionStream, classifier.getInputProcessor());
 
-//    distributorP.setOutputStream(testingStream);
-//    distributorP.setPredictionStream(predictionStream);
-
     // Addition to Bagging: stream to train
     /* The training stream. */
     Stream trainingStream = this.builder.createStream(predictionCombinerP);

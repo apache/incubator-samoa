@@ -20,7 +20,6 @@ package org.apache.samoa;
  * #L%
  */
 
-import org.apache.samoa.LocalDoTask;
 import org.junit.Test;
 
 public class AlgosTest {

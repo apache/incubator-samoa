@@ -45,8 +45,7 @@ final public class LocalClustererProcessor implements Processor {
      *
      */
   private static final long serialVersionUID = -1577910988699148691L;
-  private static final Logger logger = LoggerFactory
-      .getLogger(LocalClustererProcessor.class);
+  private static final Logger logger = LoggerFactory.getLogger(LocalClustererProcessor.class);
   private LocalClustererAdapter model;
   private Stream outputStream;
   private int modelId;
@@ -84,7 +83,7 @@ final public class LocalClustererProcessor implements Processor {
    * Set the output streams.
    * 
    * @param outputStream
-   *          the new output stream {@link PredictionCombinerPE}.
+   *          the new output stream {@link Stream}.
    */
   public void setOutputStream(Stream outputStream) {
 
