@@ -139,7 +139,8 @@ public class AvroFileStream extends FileStream {
   public void prepareForUseImpl(TaskMonitor monitor, ObjectRepository repository) {
     super.prepareForUseImpl(monitor, repository);
     String filePath = this.avroFileOption.getFile().getAbsolutePath();
-    this.fileSource.init(filePath, AvroFileStream.AVRO_FILE_EXTENSION);
+    //this.fileSource.init(filePath, AvroFileStream.AVRO_FILE_EXTENSION);
+    this.fileSource.init(filePath, null);
     this.lastInstanceRead = null;
   }
 
