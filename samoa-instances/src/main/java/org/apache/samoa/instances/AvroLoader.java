@@ -254,7 +254,10 @@ public abstract class AvroLoader implements Loader {
         List<String> attributeLabels = attributeSchema.getEnumSymbols();
         attributes.add(new Attribute(field.name(), attributeLabels));
       }
-      else
+      else if (attributeSchema.getType() == Schema.Type.DOUBLE
+              || attributeSchema.getType() == Schema.Type.FLOAT
+              || attributeSchema.getType() == Schema.Type.LONG
+              || attributeSchema.getType() == Schema.Type.INT)
         attributes.add(new Attribute(field.name()));
     }
     return new InstanceInformation(relation, attributes);
