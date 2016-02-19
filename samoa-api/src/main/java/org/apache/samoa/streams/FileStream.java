@@ -52,7 +52,8 @@ public abstract class FileStream extends AbstractOptionHandler implements Instan
       "LocalFileStreamSource");
 
   protected transient FileStreamSource fileSource;
-  protected transient Reader fileReader;
+  //protected transient Reader fileReader;
+  protected transient InputStream inputStream;
   protected Instances instances;
 
   protected boolean hitEndOfStream;
@@ -81,7 +82,7 @@ public abstract class FileStream extends AbstractOptionHandler implements Instan
   @Override
   public boolean hasMoreInstances() {
     if (this.hitEndOfStream) {
-      if (getNextFileReader()) {
+      if (getNextFileStream()) {
         this.hitEndOfStream = false;
         return hasMoreInstances();
       } else {
@@ -115,38 +116,18 @@ public abstract class FileStream extends AbstractOptionHandler implements Instan
 
   protected void reset() {
     try {
-      if (this.fileReader != null)
-        this.fileReader.close();
-
       fileSource.reset();
     } catch (IOException ioe) {
       throw new RuntimeException("FileStream restart failed.", ioe);
     }
 
-    if (!getNextFileReader()) {
+    if (!getNextFileStream()) {
       hitEndOfStream = true;
       throw new RuntimeException("FileStream is empty.");
     }
-
-    this.instances = new Instances(this.fileReader, 1, -1);
-    this.instances.setClassIndex(this.instances.numAttributes() - 1);
   }
 
-  protected boolean getNextFileReader() {
-    if (this.fileReader != null)
-      try {
-        this.fileReader.close();
-      } catch (IOException ioe) {
-        ioe.printStackTrace();
-      }
-
-    InputStream inputStream = this.fileSource.getNextInputStream();
-    if (inputStream == null)
-      return false;
-
-    this.fileReader = new BufferedReader(new InputStreamReader(inputStream));
-    return true;
-  }
+  protected abstract boolean getNextFileStream();
 
   protected boolean readNextInstanceFromStream() {
     if (!hasStarted) {
@@ -158,7 +139,7 @@ public abstract class FileStream extends AbstractOptionHandler implements Instan
       if (readNextInstanceFromFile())
         return true;
 
-      if (!getNextFileReader()) {
+      if (!getNextFileStream()) {
         this.hitEndOfStream = true;
         return false;
       }

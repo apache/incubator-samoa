@@ -20,7 +20,9 @@ package org.apache.samoa.streams;
  * #L%
  */
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import org.apache.samoa.instances.Instances;
 import org.apache.samoa.moa.core.InstanceExample;
@@ -44,6 +46,7 @@ public class ArffFileStream extends FileStream {
       -1, -1, Integer.MAX_VALUE);
 
   protected InstanceExample lastInstanceRead;
+  private BufferedReader fileReader;
 
   @Override
   public void prepareForUseImpl(TaskMonitor monitor, ObjectRepository repository) {
@@ -56,32 +59,39 @@ public class ArffFileStream extends FileStream {
   @Override
   protected void reset() {
     try {
-      if (this.fileReader != null)
-        this.fileReader.close();
-
       fileSource.reset();
     } catch (IOException ioe) {
       throw new RuntimeException("FileStream restart failed.", ioe);
     }
 
-    if (!getNextFileReader()) {
+    if (!getNextFileStream()) {
       hitEndOfStream = true;
       throw new RuntimeException("FileStream is empty.");
     }
   }
 
   @Override
-  protected boolean getNextFileReader() {
-    boolean ret = super.getNextFileReader();
-    if (ret) {
-      this.instances = new Instances(this.fileReader, 1, -1);
-      if (this.classIndexOption.getValue() < 0) {
-        this.instances.setClassIndex(this.instances.numAttributes() - 1);
-      } else if (this.classIndexOption.getValue() > 0) {
-        this.instances.setClassIndex(this.classIndexOption.getValue() - 1);
+  protected boolean getNextFileStream() {
+    if (this.fileReader != null)
+      try {
+        this.fileReader.close();
+      } catch (IOException ioe) {
+        ioe.printStackTrace();
       }
+
+    this.inputStream = this.fileSource.getNextInputStream();
+    if (inputStream == null)
+      return false;
+
+    this.fileReader = new BufferedReader(new InputStreamReader(this.inputStream));
+    this.instances = new Instances(this.fileReader, 1, -1);
+    if (this.classIndexOption.getValue() < 0) {
+      this.instances.setClassIndex(this.instances.numAttributes() - 1);
+    } else if (this.classIndexOption.getValue() > 0) {
+      this.instances.setClassIndex(this.classIndexOption.getValue() - 1);
     }
-    return ret;
+
+    return true;
   }
 
   @Override
