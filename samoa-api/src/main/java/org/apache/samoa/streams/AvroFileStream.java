@@ -54,7 +54,7 @@ public class AvroFileStream extends FileStream {
   protected InstanceExample lastInstanceRead;
 
   /** Represents the binary input stream of avro data **/
-  protected transient InputStream inputStream = null;
+  //protected transient InputStream inputStream = null;
 
   /** The extension to be considered for the files **/
   private static final String AVRO_FILE_EXTENSION = "avro";
@@ -87,6 +87,7 @@ public class AvroFileStream extends FileStream {
    * 
    * @return
    */
+  @Override
   protected boolean getNextFileStream() {
     if (this.inputStream != null)
       try {
@@ -97,8 +98,7 @@ public class AvroFileStream extends FileStream {
       }
 
     this.inputStream = this.fileSource.getNextInputStream();
-
-    if (this.inputStream == null)
+    if (inputStream == null)
       return false;
 
     this.instances = new Instances(this.inputStream, classIndexOption.getValue(), encodingFormatOption.getValue());
