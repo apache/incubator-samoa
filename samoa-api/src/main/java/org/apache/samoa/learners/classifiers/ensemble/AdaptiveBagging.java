@@ -31,6 +31,7 @@ import java.util.Set;
 import org.apache.samoa.core.Processor;
 import org.apache.samoa.instances.Instances;
 import org.apache.samoa.learners.AdaptiveLearner;
+import org.apache.samoa.learners.ClassificationLearner;
 import org.apache.samoa.learners.Learner;
 import org.apache.samoa.learners.classifiers.trees.VerticalHoeffdingTree;
 import org.apache.samoa.moa.classifiers.core.driftdetection.ADWINChangeDetector;
@@ -47,7 +48,7 @@ import com.github.javacliparser.IntOption;
 /**
  * An adaptive version of the Bagging Classifier by Oza and Russell.
  */
-public class AdaptiveBagging implements Learner, Configurable {
+public class AdaptiveBagging implements ClassificationLearner, Configurable {
 
   private static final long serialVersionUID = 8217274236558839040L;
   private static final Logger logger = LoggerFactory.getLogger(AdaptiveBagging.class);

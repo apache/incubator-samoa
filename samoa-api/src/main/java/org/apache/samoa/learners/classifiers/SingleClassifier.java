@@ -31,6 +31,7 @@ import java.util.Set;
 import org.apache.samoa.core.Processor;
 import org.apache.samoa.instances.Instances;
 import org.apache.samoa.learners.AdaptiveLearner;
+import org.apache.samoa.learners.ClassificationLearner;
 import org.apache.samoa.learners.Learner;
 import org.apache.samoa.moa.classifiers.core.driftdetection.ChangeDetector;
 import org.apache.samoa.topology.Stream;
@@ -44,7 +45,7 @@ import com.github.javacliparser.Configurable;
  * Classifier that contain a single classifier.
  * 
  */
-public final class SingleClassifier implements Learner, AdaptiveLearner, Configurable {
+public final class SingleClassifier implements ClassificationLearner, AdaptiveLearner, Configurable {
 
   private static final long serialVersionUID = 684111382631697031L;
 

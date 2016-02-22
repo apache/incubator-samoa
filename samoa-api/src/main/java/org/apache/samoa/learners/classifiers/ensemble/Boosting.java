@@ -30,6 +30,7 @@ import java.util.Set;
 
 import org.apache.samoa.core.Processor;
 import org.apache.samoa.instances.Instances;
+import org.apache.samoa.learners.ClassificationLearner;
 import org.apache.samoa.learners.Learner;
 import org.apache.samoa.learners.classifiers.SingleClassifier;
 import org.apache.samoa.topology.Stream;
@@ -42,7 +43,7 @@ import com.github.javacliparser.IntOption;
 /**
  * The Bagging Classifier by Oza and Russell.
  */
-public class Boosting implements Learner, Configurable {
+public class Boosting implements ClassificationLearner, Configurable {
 
   /** The Constant serialVersionUID. */
   private static final long serialVersionUID = -2971850264864952099L;
