@@ -48,6 +48,7 @@ public class F1ClassificationPerformanceEvaluator extends AbstractMOAObject impl
 
     public void reset(int numClasses) {
         this.numClasses = numClasses;
+        this.support = new long[numClasses];
         this.truePos = new long[numClasses];
         this.falsePos = new long[numClasses];
         this.trueNeg = new long[numClasses];
