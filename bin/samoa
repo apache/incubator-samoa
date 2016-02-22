@@ -47,7 +47,7 @@ JAR_PATH=$2
 JAR_FILE=$(basename $JAR_PATH)
 JAR_DIR=$(dirname $JAR_PATH)
 OPTIONS=$3
-
+#JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
 
 if [ $PLATFORM = 'S4' ]; then
 
@@ -274,8 +274,11 @@ elif [ $PLATFORM = 'SAMZA' ]; then
         done
 
         DEPLOYABLE=$JAR_PATH
-        java -Dsamza.log.dir=$BASE_DIR/logs -Dsamza.container.name=client -cp $DEPLOYABLE org.apache.samoa.SamzaDoTask $COMPLETE_ARG --mode=$MODE_ARG \
-               --yarn_home=$YARN_HOME/conf --zookeeper=$ZOOKEEPER_HOST:$ZOOKEEPER_PORT --kafka=$KAFKA_BROKER_LIST \
+        #HADOOP_CLASSPATH=`hadoop classpath`
+        YARN_CLASSPATH=`yarn classpath`
+        java -Dsamza.log.dir=$BASE_DIR/logs -Dsamza.container.name=client \
+               -cp $YARN_CLASSPATH:$DEPLOYABLE org.apache.samoa.SamzaDoTask $COMPLETE_ARG \
+               --mode=$MODE_ARG --yarn_home=$YARN_HOME/conf --zookeeper=$ZOOKEEPER_HOST:$ZOOKEEPER_PORT --kafka=$KAFKA_BROKER_LIST \
                --jar_package=$JAR_PATH --yarn_am_mem=$YARN_AM_MEMORY --yarn_container_mem=$YARN_CONTAINER_MEMORY \
                --kafka_replication_factor=$KAFKA_REPLICATION_FACTOR --checkpoint_frequency=$CHECKPOINT_FREQUENCY \
                --kryo_register=$BASE_DIR/$KRYO_REGISTER_FILE --pi_per_container=$PI_PER_CONTAINER \
