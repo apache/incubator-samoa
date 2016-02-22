@@ -116,7 +116,7 @@
 
         <commons-lang3.version>3.1</commons-lang3.version>
         <guava.version>17.0</guava.version>
-        <hadoop.version>2.2.0</hadoop.version>
+        <hadoop.version>2.6.0</hadoop.version>
         <javacliparser.version>0.5.0</javacliparser.version>
         <jcip-annotations.version>1.0</jcip-annotations.version>
         <jmockit.version>1.13</jmockit.version>
@@ -125,7 +125,7 @@
         <kryo.version>2.21</kryo.version>
         <metrics-core.version>2.2.0</metrics-core.version>
         <miniball.version>1.0.3</miniball.version>
-        <samza.version>0.7.0</samza.version>
+        <samza.version>0.10</samza.version>
         <flink.version>0.10.1</flink.version>
         <slf4j-log4j12.version>1.7.2</slf4j-log4j12.version>
         <slf4j-simple.version>1.7.5</slf4j-simple.version>
@@ -156,10 +156,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.5</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
