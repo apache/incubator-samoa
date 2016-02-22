@@ -33,7 +33,7 @@ public class F1ClassificationPerformanceEvaluator extends AbstractMOAObject impl
         ClassificationPerformanceEvaluator {
 
     private static final long serialVersionUID = 1L;
-    protected int numClasses;
+    protected int numClasses = -1;
 
     protected long[] support;
     protected long[] truePos;
@@ -63,6 +63,7 @@ public class F1ClassificationPerformanceEvaluator extends AbstractMOAObject impl
 
     @Override
     public void addResult(Instance inst, double[] classVotes) {
+        if (numClasses==-1) reset(inst.numClasses());
         int trueClass = (int) inst.classValue();
         this.support[trueClass] += 1;
         int predictedClass = Utils.maxIndex(classVotes);
