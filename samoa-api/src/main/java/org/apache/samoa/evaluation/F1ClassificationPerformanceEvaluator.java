@@ -26,6 +26,10 @@ import org.apache.samoa.instances.Utils;
 import org.apache.samoa.moa.AbstractMOAObject;
 import org.apache.samoa.moa.core.Measurement;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Vector;
+
 /**
  * Created by Edi Bice (edi.bice gmail com) on 2/22/2016.
  */
@@ -84,7 +88,12 @@ public class F1ClassificationPerformanceEvaluator extends AbstractMOAObject impl
 
     @Override
     public Measurement[] getPerformanceMeasurements() {
-        return getF1Measurements();
+        List<Measurement> measurements = new Vector<>();
+        Collections.addAll(measurements, getSupportMeasurements());
+        Collections.addAll(measurements, getPrecisionMeasurements());
+        Collections.addAll(measurements, getRecallMeasurements());
+        Collections.addAll(measurements, getF1Measurements());
+        return measurements.toArray(new Measurement[measurements.size()]);
     }
 
     private Measurement[] getSupportMeasurements() {
