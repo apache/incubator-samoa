@@ -36,12 +36,17 @@ public class Measurement extends AbstractMOAObject {
   private static final long serialVersionUID = 1L;
 
   protected String name;
-
   protected double value;
+  protected int fractionDigits;
 
   public Measurement(String name, double value) {
     this.name = name;
     this.value = value;
+  }
+
+  public Measurement(String name, double value, int fractionDigits) {
+    this(name, value);
+    this.fractionDigits = fractionDigits;
   }
 
   public String getName() {
@@ -110,6 +115,6 @@ public class Measurement extends AbstractMOAObject {
   public void getDescription(StringBuilder sb, int indent) {
     sb.append(getName());
     sb.append(" = ");
-    sb.append(StringUtils.doubleToString(getValue(), 3));
+    sb.append(StringUtils.doubleToString(getValue(), this.fractionDigits));
   }
 }

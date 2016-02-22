@@ -100,7 +100,7 @@ public class F1ClassificationPerformanceEvaluator extends AbstractMOAObject impl
         Measurement[] measurements = new Measurement[this.numClasses];
         for (int i = 0; i < this.numClasses; i++) {
             String ml = String.format("class %s precision", i);
-            measurements[i] = new Measurement(ml, getPrecision(i));
+            measurements[i] = new Measurement(ml, getPrecision(i), 10);
         }
         return measurements;
     }
@@ -109,7 +109,7 @@ public class F1ClassificationPerformanceEvaluator extends AbstractMOAObject impl
         Measurement[] measurements = new Measurement[this.numClasses];
         for (int i = 0; i < this.numClasses; i++) {
             String ml = String.format("class %s recall", i);
-            measurements[i] = new Measurement(ml, getRecall(i));
+            measurements[i] = new Measurement(ml, getRecall(i), 10);
         }
         return measurements;
     }
@@ -118,7 +118,7 @@ public class F1ClassificationPerformanceEvaluator extends AbstractMOAObject impl
         Measurement[] measurements = new Measurement[this.numClasses];
         for (int i = 0; i < this.numClasses; i++) {
             String ml = String.format("class %s f1-score", i);
-            measurements[i] = new Measurement(ml, getF1Score(i));
+            measurements[i] = new Measurement(ml, getF1Score(i), 10);
         }
         return measurements;
     }
