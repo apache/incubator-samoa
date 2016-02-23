@@ -254,13 +254,28 @@ public abstract class AvroLoader implements Loader {
         List<String> attributeLabels = attributeSchema.getEnumSymbols();
         attributes.add(new Attribute(field.name(), attributeLabels));
       }
-      else if (attributeSchema.getType() == Schema.Type.DOUBLE
-              || attributeSchema.getType() == Schema.Type.FLOAT
-              || attributeSchema.getType() == Schema.Type.LONG
-              || attributeSchema.getType() == Schema.Type.INT)
+      else if (isNumeric(field))
         attributes.add(new Attribute(field.name()));
     }
     return new InstanceInformation(relation, attributes);
+  }
+
+  private boolean isNumeric(Field field) {
+    if (field.schema().getType() == Schema.Type.DOUBLE
+            || field.schema().getType() == Schema.Type.FLOAT
+            || field.schema().getType() == Schema.Type.LONG
+            || field.schema().getType() == Schema.Type.INT)
+      return true;
+    if (field.schema().getType() == Schema.Type.UNION) {
+      for (Schema schema: field.schema().getTypes()) {
+        if (schema.getType() == Schema.Type.DOUBLE
+                || schema.getType() == Schema.Type.FLOAT
+                || schema.getType() == Schema.Type.LONG
+                || schema.getType() == Schema.Type.INT)
+          return true;
+      }
+    }
+    return false;
   }
 
   /**
