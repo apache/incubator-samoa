@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.apache.avro.Schema;
 import org.apache.avro.Schema.Field;
+import org.apache.avro.SchemaBuilder;
 import org.apache.avro.generic.GenericData.EnumSymbol;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.DatumReader;
@@ -164,8 +165,10 @@ public abstract class AvroLoader implements Loader {
 
       if (isNumeric)
       {
-        if (value instanceof Double)
-          this.setSparseValue(instance, indexValues, attributeValues, numAttribute, (double) value);
+        if (value instanceof Double) {
+          Double v = (double) value;
+          if (Double.isFinite(v)) this.setSparseValue(instance, indexValues, attributeValues, numAttribute, (double) value);
+        }
         else if (value instanceof Long)
           this.setSparseValue(instance, indexValues, attributeValues, numAttribute, (long) value);
         else if (value instanceof Integer)
