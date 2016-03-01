@@ -31,6 +31,7 @@ import org.apache.samoa.streams.fs.FileStreamSource;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 /**
  * InstanceStream for files (Abstract class: subclass this class for different file formats)
@@ -58,7 +59,7 @@ public abstract class FileStream extends AbstractOptionHandler implements Instan
   //protected transient Reader fileReader;
   protected transient InputStream inputStream;
   protected Instances instances;
-  protected FloatOption[] classWeights;
+  protected FloatOption[] classWeights; // = new FloatOption[0];
 
   protected boolean hitEndOfStream;
   private boolean hasStarted;
@@ -169,7 +170,7 @@ public abstract class FileStream extends AbstractOptionHandler implements Instan
   @Override
   public void prepareForUseImpl(TaskMonitor monitor, ObjectRepository repository) {
     this.fileSource = sourceTypeOption.getValue();
-    this.classWeights = (FloatOption[]) classWeightsOption.getList();
+    this.classWeights = Arrays.copyOf(classWeightsOption.getList(), classWeightsOption.getList().length, FloatOption[].class);
     this.hasStarted = false;
   }
 
