@@ -41,9 +41,9 @@ public class ArffFileStream extends FileStream {
   public FileOption arffFileOption = new FileOption("arffFile", 'f',
       "ARFF File(s) to load.", null, null, false);
 
-  public IntOption classIndexOption = new IntOption("classIndex", 'c',
+  /*public IntOption classIndexOption = new IntOption("classIndex", 'c',
       "Class index of data. 0 for none or -1 for last attribute in file.",
-      -1, -1, Integer.MAX_VALUE);
+      -1, -1, Integer.MAX_VALUE);*/
 
   protected InstanceExample lastInstanceRead;
   private BufferedReader fileReader;
