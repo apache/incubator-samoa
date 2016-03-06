@@ -54,7 +54,7 @@ public class AlgosTest {
         .samplingSize(10_000)
         .inputDelayMicroSec(100) // prevents saturating the system due to unbounded queues
         .evaluationInstances(90_000)
-        .classifiedInstances(105_000)
+        .classifiedInstances(100_000)
         .classificationsCorrect(55f)
         .kappaStat(0f)
         .kappaTempStat(0f)
