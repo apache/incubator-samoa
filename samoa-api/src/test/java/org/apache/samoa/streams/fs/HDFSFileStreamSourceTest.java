@@ -1,5 +1,9 @@
 package org.apache.samoa.streams.fs;
 
+import static org.junit.Assert.*;
+
+import java.io.BufferedReader;
+
 /*
  * #%L
  * SAMOA
@@ -21,29 +25,20 @@ package org.apache.samoa.streams.fs;
  */
 
 import java.io.BufferedWriter;
-import java.io.BufferedReader;
-import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.HashSet;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hdfs.MiniDFSCluster;
-import org.apache.hadoop.hdfs.MiniDFSCluster.Builder;
 import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.Path;
-import org.apache.samoa.streams.fs.HDFSFileStreamSource;
-
-import static org.junit.Assert.*;
-
+import org.apache.hadoop.hdfs.MiniDFSCluster;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -63,7 +58,9 @@ public class HDFSFileStreamSourceTest {
   @Before
   public void setUp() throws Exception {
     // Start MiniDFSCluster
-    MiniDFSCluster.Builder builder = new MiniDFSCluster.Builder(new Configuration()).hosts(HOSTS).numDataNodes(1)
+    config = new Configuration();
+    config.set("hdfs.minidfs.basedir", "target/build/test/data/dfs");
+    MiniDFSCluster.Builder builder = new MiniDFSCluster.Builder(config).hosts(HOSTS).numDataNodes(1)
         .format(true);
     hdfsCluster = builder.build();
     hdfsCluster.waitActive();
@@ -73,7 +70,6 @@ public class HDFSFileStreamSourceTest {
     streamSource = new HDFSFileStreamSource();
 
     // General config
-    config = new Configuration();
     config.set("fs.defaultFS", hdfsURI);
   }
 
