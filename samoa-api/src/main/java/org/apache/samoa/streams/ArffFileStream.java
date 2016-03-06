@@ -33,7 +33,6 @@ import com.github.javacliparser.IntOption;
 /**
  * InstanceStream for ARFF file
  * 
- * @author Casey
  */
 public class ArffFileStream extends FileStream {
 

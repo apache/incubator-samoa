@@ -1,4 +1,4 @@
-package org.apache.samoa.moa.streams;
+package org.apache.samoa.streams;
 
 /*
  * #%L
@@ -27,7 +27,6 @@ import org.apache.samoa.instances.Instances;
 import org.apache.samoa.moa.core.InstanceExample;
 import org.apache.samoa.moa.core.ObjectRepository;
 import org.apache.samoa.moa.tasks.TaskMonitor;
-import org.apache.samoa.streams.FileStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
