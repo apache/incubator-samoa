@@ -76,15 +76,6 @@
             </modules>
         </profile>
         <profile>
-            <id>s4</id>
-            <modules>
-                <module>samoa-instances</module>
-                <module>samoa-api</module>
-                <module>samoa-s4</module>
-                <module>samoa-test</module>
-            </modules>
-        </profile>
-        <profile>
             <id>flink</id>
             <modules>
                 <module>samoa-instances</module>
@@ -111,7 +102,6 @@
                 <module>samoa-threads</module>
                 <module>samoa-storm</module>
                 <module>samoa-flink</module>
-                <module>samoa-s4</module>
                 <module>samoa-samza</module>
                 <module>samoa-test</module>
             </modules>
@@ -135,7 +125,6 @@
         <kryo.version>2.21</kryo.version>
         <metrics-core.version>2.2.0</metrics-core.version>
         <miniball.version>1.0.3</miniball.version>
-        <s4.version>0.6.0-incubating</s4.version>
         <samza.version>0.7.0</samza.version>
         <flink.version>0.10.1</flink.version>
         <slf4j-log4j12.version>1.7.2</slf4j-log4j12.version>
@@ -219,7 +208,6 @@
                         <root>samoa-instances</root>
                         <root>samoa-local</root>
                         <root>samoa-storm</root>
-                        <root>samoa-s4</root>
                         <root>samoa-flink</root>
                         <root>samoa-samza</root>
                         <root>samoa-test</root>
