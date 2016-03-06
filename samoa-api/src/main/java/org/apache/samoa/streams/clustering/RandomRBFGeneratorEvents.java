@@ -1,4 +1,4 @@
-package org.apache.samoa.moa.streams.clustering;
+package org.apache.samoa.streams.clustering;
 
 /*
  * #%L
@@ -40,8 +40,8 @@ import org.apache.samoa.moa.core.DataPoint;
 import org.apache.samoa.moa.core.FastVector;
 import org.apache.samoa.moa.core.InstanceExample;
 import org.apache.samoa.moa.core.ObjectRepository;
-import org.apache.samoa.moa.streams.InstanceStream;
 import org.apache.samoa.moa.tasks.TaskMonitor;
+import org.apache.samoa.streams.InstanceStream;
 
 import com.github.javacliparser.FlagOption;
 import com.github.javacliparser.FloatOption;

@@ -32,7 +32,6 @@ import org.apache.samoa.instances.Instance;
 import org.apache.samoa.instances.Instances;
 import org.apache.samoa.learners.InstanceContentEvent;
 import org.apache.samoa.moa.options.AbstractOptionHandler;
-import org.apache.samoa.moa.streams.InstanceStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

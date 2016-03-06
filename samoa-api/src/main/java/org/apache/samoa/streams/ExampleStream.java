@@ -1,4 +1,4 @@
-package org.apache.samoa.moa.streams;
+package org.apache.samoa.streams;
 
 /*
  * #%L

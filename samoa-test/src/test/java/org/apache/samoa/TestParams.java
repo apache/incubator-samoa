@@ -36,18 +36,18 @@ public class TestParams {
 
     public final static String PREQEVAL_VHT_RANDOMTREE = "PrequentialEvaluation -d %s -i %d -f %d -w %d "
         + "-l (org.apache.samoa.learners.classifiers.trees.VerticalHoeffdingTree -p 4) " +
-        "-s (org.apache.samoa.moa.streams.generators.RandomTreeGenerator -c 2 -o 10 -u 10)";
+        "-s (org.apache.samoa.streams.generators.RandomTreeGenerator -c 2 -o 10 -u 10)";
 
     public final static String PREQEVAL_NAIVEBAYES_HYPERPLANE = "PrequentialEvaluation -d %s -i %d -f %d -w %d "
         + "-l (classifiers.SingleClassifier -l org.apache.samoa.learners.classifiers.NaiveBayes) " +
-        "-s (org.apache.samoa.moa.streams.generators.HyperplaneGenerator -c 2)";
+        "-s (org.apache.samoa.streams.generators.HyperplaneGenerator -c 2)";
 
     // setting the number of nominal attributes to zero significantly reduces
     // the processing time,
     // so that it's acceptable in a test case
     public final static String PREQEVAL_BAGGING_RANDOMTREE = "PrequentialEvaluation -d %s -i %d -f %d -w %d "
         + "-l (org.apache.samoa.learners.classifiers.ensemble.Bagging) " +
-        "-s (org.apache.samoa.moa.streams.generators.RandomTreeGenerator -c 2 -o 0 -u 10)";
+        "-s (org.apache.samoa.streams.generators.RandomTreeGenerator -c 2 -o 0 -u 10)";
 
   }
 

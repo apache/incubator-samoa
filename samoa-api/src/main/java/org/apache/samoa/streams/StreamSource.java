@@ -26,7 +26,6 @@ package org.apache.samoa.streams;
 
 import org.apache.samoa.instances.Instance;
 import org.apache.samoa.moa.core.Example;
-import org.apache.samoa.moa.streams.InstanceStream;
 
 /**
  * The Class StreamSource.

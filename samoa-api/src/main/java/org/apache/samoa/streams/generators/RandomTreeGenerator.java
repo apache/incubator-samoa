@@ -1,4 +1,4 @@
-package org.apache.samoa.moa.streams.generators;
+package org.apache.samoa.streams.generators;
 
 /*
  * #%L
@@ -33,8 +33,8 @@ import org.apache.samoa.moa.core.FastVector;
 import org.apache.samoa.moa.core.InstanceExample;
 import org.apache.samoa.moa.core.ObjectRepository;
 import org.apache.samoa.moa.options.AbstractOptionHandler;
-import org.apache.samoa.moa.streams.InstanceStream;
 import org.apache.samoa.moa.tasks.TaskMonitor;
+import org.apache.samoa.streams.InstanceStream;
 
 import com.github.javacliparser.FloatOption;
 import com.github.javacliparser.IntOption;

@@ -1,4 +1,4 @@
-package org.apache.samoa.moa.streams.clustering;
+package org.apache.samoa.streams.clustering;
 
 /*
  * #%L
@@ -21,7 +21,7 @@ package org.apache.samoa.moa.streams.clustering;
  */
 
 import org.apache.samoa.moa.options.AbstractOptionHandler;
-import org.apache.samoa.moa.streams.InstanceStream;
+import org.apache.samoa.streams.InstanceStream;
 
 import com.github.javacliparser.FloatOption;
 import com.github.javacliparser.IntOption;

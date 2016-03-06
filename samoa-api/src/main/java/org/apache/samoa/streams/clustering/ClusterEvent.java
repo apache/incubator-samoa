@@ -1,4 +1,4 @@
-package org.apache.samoa.moa.streams.clustering;
+package org.apache.samoa.streams.clustering;
 
 /*
  * #%L
@@ -20,10 +20,30 @@ package org.apache.samoa.moa.streams.clustering;
  * #L%
  */
 
-import java.util.EventListener;
+import java.util.EventObject;
 
-public interface ClusterEventListener extends EventListener {
+public class ClusterEvent extends EventObject {
 
-  public void changeCluster(ClusterEvent e);
+  private String type;
+  private String message;
+  private long timestamp;
 
+  public ClusterEvent(Object source, long timestamp, String type, String message) {
+    super(source);
+    this.type = type;
+    this.message = message;
+    this.timestamp = timestamp;
+  }
+
+  public String getMessage() {
+    return message;
+  }
+
+  public long getTimestamp() {
+    return timestamp;
+  }
+
+  public String getType() {
+    return type;
+  }
 }

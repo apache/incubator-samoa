@@ -32,9 +32,8 @@ import org.apache.samoa.learners.clusterers.ClusteringContentEvent;
 import org.apache.samoa.moa.cluster.Clustering;
 import org.apache.samoa.moa.core.DataPoint;
 import org.apache.samoa.moa.options.AbstractOptionHandler;
-import org.apache.samoa.moa.streams.InstanceStream;
-import org.apache.samoa.moa.streams.clustering.ClusteringStream;
-import org.apache.samoa.moa.streams.clustering.RandomRBFGeneratorEvents;
+import org.apache.samoa.streams.clustering.ClusteringStream;
+import org.apache.samoa.streams.clustering.RandomRBFGeneratorEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

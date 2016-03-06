@@ -31,7 +31,6 @@ import org.apache.samoa.instances.InstancesHeader;
 import org.apache.samoa.moa.core.InstanceExample;
 import org.apache.samoa.moa.core.ObjectRepository;
 import org.apache.samoa.moa.options.AbstractOptionHandler;
-import org.apache.samoa.moa.streams.InstanceStream;
 import org.apache.samoa.moa.tasks.TaskMonitor;
 import org.apache.samoa.streams.fs.FileStreamSource;
 
