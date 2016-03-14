@@ -62,12 +62,6 @@
       <version>${samza.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.apache.samza</groupId>
-      <artifactId>samza-serializers_2.10</artifactId>
-      <version>${samza.version}</version>
-    </dependency>
-
     <!--<dependency> <groupId>org.apache.samza</groupId> <artifactId>samza-shell</artifactId> <classifier>dist</classifier> 
       <type>tgz</type> <version>${samza.version}</version> </dependency> -->
 

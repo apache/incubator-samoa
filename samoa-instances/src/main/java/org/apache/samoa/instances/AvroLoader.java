@@ -167,7 +167,9 @@ public abstract class AvroLoader implements Loader {
       {
         if (value instanceof Double) {
           Double v = (double) value;
-          if (Double.isFinite(v)) this.setSparseValue(instance, indexValues, attributeValues, numAttribute, (double) value);
+          //if (Double.isFinite(v))
+          if (!Double.isNaN(v) && !Double.isInfinite(v))
+            this.setSparseValue(instance, indexValues, attributeValues, numAttribute, (double) value);
         }
         else if (value instanceof Long)
           this.setSparseValue(instance, indexValues, attributeValues, numAttribute, (long) value);
