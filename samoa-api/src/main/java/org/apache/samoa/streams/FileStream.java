@@ -20,7 +20,10 @@ package org.apache.samoa.streams;
  * #L%
  */
 
-import com.github.javacliparser.*;
+import com.github.javacliparser.ClassOption;
+import com.github.javacliparser.FloatOption;
+import com.github.javacliparser.IntOption;
+import com.github.javacliparser.ListOption;
 import org.apache.samoa.instances.Instances;
 import org.apache.samoa.instances.InstancesHeader;
 import org.apache.samoa.moa.core.InstanceExample;
@@ -107,7 +110,7 @@ public abstract class FileStream extends AbstractOptionHandler implements Instan
     if (classWeights != null && classWeights.length > 0) {
       int i = (int) prevInstance.instance.classValue();
       double w = 1.0;
-      if (i>=0 && i<classWeights.length)
+      if (i >= 0 && i < classWeights.length)
         w = classWeights[i].getValue();
       prevInstance.setWeight(w);
     }
