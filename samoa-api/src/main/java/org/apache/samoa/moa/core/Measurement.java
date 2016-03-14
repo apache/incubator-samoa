@@ -40,12 +40,12 @@ public class Measurement extends AbstractMOAObject {
   protected int fractionDigits;
 
   public Measurement(String name, double value) {
-    this.name = name;
-    this.value = value;
+    this(name, value, 3);
   }
 
   public Measurement(String name, double value, int fractionDigits) {
-    this(name, value);
+    this.name = name;
+    this.value = value;
     this.fractionDigits = fractionDigits;
   }
 
