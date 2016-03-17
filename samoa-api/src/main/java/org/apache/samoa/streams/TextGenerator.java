@@ -25,7 +25,7 @@ import org.apache.samoa.instances.*;
 import org.apache.samoa.moa.core.InstanceExample;
 import org.apache.samoa.moa.core.ObjectRepository;
 import org.apache.samoa.moa.options.AbstractOptionHandler;
-import org.apache.samoa.moa.streams.InstanceStream;
+import org.apache.samoa.streams.InstanceStream;
 import org.apache.samoa.moa.tasks.TaskMonitor;
 
 import java.util.ArrayList;

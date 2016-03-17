@@ -22,8 +22,8 @@ package org.apache.samoa.tasks;
 
 import com.github.javacliparser.*;
 import org.apache.samoa.moa.options.AbstractOptionHandler;
-import org.apache.samoa.moa.streams.InstanceStream;
-import org.apache.samoa.moa.streams.clustering.RandomRBFGeneratorEvents;
+import org.apache.samoa.streams.InstanceStream;
+import org.apache.samoa.streams.clustering.RandomRBFGeneratorEvents;
 import org.apache.samoa.streams.PrequentialSourceProcessor;
 import org.apache.samoa.topology.ComponentFactory;
 import org.apache.samoa.topology.Stream;
