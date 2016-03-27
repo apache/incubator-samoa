@@ -22,7 +22,7 @@ In this way, epochs never overlap.If `fpmGap` is small and the StreamSourceProce
 Following is an example of the command used to run the SAMOA FIM task.
 
 ```
-bin/samoa storm target/SAMOA-Storm-0.0.1-SNAPSHOT.jar "FpmTask -t Myfpmtopology -r (com.yahoo.labs.samoa.fpm.processors.FileReaderProcessor -i /datasets/freqDataCombined.txt) -m (com.yahoo.labs.samoa.fpm.processors.ParmaStreamFpmMiner -e .1 -d .1 -f 10 -t 20 -n 23 -p 0.08   -b 100000 -s com.yahoo.labs.samoa.samplers.reservoir.TimeBiasedReservoirSampler) -w (com.yahoo.labs.samoa.fpm.processors.FileWriterProcessor -o /output/outPARMA) "
+bin/samoa storm target/SAMOA-Storm-0.0.1-SNAPSHOT.jar "FpmTask -t Myfpmtopology -r (org.apache.samoa.fpm.processors.FileReaderProcessor -i /datasets/freqDataCombined.txt) -m (org.apache.samoa.fpm.processors.ParmaStreamFpmMiner -e .1 -d .1 -f 10 -t 20 -n 23 -p 0.08   -b 100000 -s org.apache.samoa.samplers.reservoir.TimeBiasedReservoirSampler) -w (org.apache.samoa.fpm.processors.FileWriterProcessor -o /output/outPARMA) "
 ```
 
 Parameters:

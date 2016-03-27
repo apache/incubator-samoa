@@ -9,7 +9,7 @@ A message or an event is called Content Event in SAMOA. As the name suggests, it
 ContentEvent has been implemented as an interface in SAMOA. Users need to implement `ContentEvent` interface to create their custom message classes. As it can be seen in the following code, key is the necessary part of a message.
 
 ```
-package com.yahoo.labs.samoa.core;
+package org.apache.samoa.core;
 
 public interface ContentEvent extends java.io.Serializable {
 	
@@ -36,7 +36,7 @@ This method lets SAMOA know that this message is the last message.
 Following is the example of a `Message` class which implements `ContentEvent` interface. As `ContentEvent` is an interface, it can not hold variables. A user-defined message class should have its own data variables and its getter methods. In the following example, `value` variable of type `Object` is added to the class. Using a generic type `Object` is beneficial in the sense that any object can be passed to it and later it can be casted back to the original type. The following example also adds a `streamId` variable which stores the `id` of the stream the message belongs to. This is not a requirement but can be beneficial in certain applications.
 
 ```
-import com.yahoo.labs.samoa.core.ContentEvent;
+import org.apache.samoa.core.ContentEvent;
 
 /**
  * A general key-value message class which adds a stream id in the class variables

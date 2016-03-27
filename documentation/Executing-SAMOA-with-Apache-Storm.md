@@ -22,8 +22,8 @@ nimbus.host: "<enter your nimbus host name here>"
 
 ## List of custom serializations
 kryo.register:
-    - com.yahoo.labs.samoa.learners.classifiers.trees.AttributeContentEvent: com.yahoo.labs.samoa.learners.classifiers.trees.AttributeContentEvent$AttributeCEFullPrecSerializer
-    - com.yahoo.labs.samoa.learners.classifiers.trees.ComputeContentEvent: com.yahoo.labs.samoa.learners.classifiers.trees.ComputeContentEvent$ComputeCEFullPrecSerializer
+    - org.apache.samoa.learners.classifiers.trees.AttributeContentEvent: org.apache.samoa.learners.classifiers.trees.AttributeContentEvent$AttributeCEFullPrecSerializer
+    - org.apache.samoa.learners.classifiers.trees.ComputeContentEvent: org.apache.samoa.learners.classifiers.trees.ComputeContentEvent$ComputeCEFullPrecSerializer
 ```
 <!--
 Or, if you are using SAMOA with optimized VHT, you should use this following configuration file:
@@ -33,8 +33,8 @@ nimbus.host: "<enter your nimbus host name here>"
 
 ## List of custom serializations
 kryo.register:
-     - com.yahoo.labs.samoa.learners.classifiers.trees.NaiveAttributeContentEvent: com.yahoo.labs.samoa.classifiers.trees.NaiveAttributeContentEvent$NaiveAttributeCEFullPrecSerializer
-     - com.yahoo.labs.samoa.learners.classifiers.trees.ComputeContentEvent: com.yahoo.labs.samoa.classifiers.trees.ComputeContentEvent$ComputeCEFullPrecSerializer
+     - org.apache.samoa.learners.classifiers.trees.NaiveAttributeContentEvent: org.apache.samoa.classifiers.trees.NaiveAttributeContentEvent$NaiveAttributeCEFullPrecSerializer
+     - org.apache.samoa.learners.classifiers.trees.ComputeContentEvent: org.apache.samoa.classifiers.trees.ComputeContentEvent$ComputeCEFullPrecSerializer
 ```
 -->
 
@@ -86,7 +86,7 @@ You can execute a SAMOA task using the aforementioned `bin/samoa` script with th
 The complete command to execute SAMOA is:
 
 ```
-bin/samoa storm target/SAMOA-Storm-0.0.1-SNAPSHOT.jar "PrequentialEvaluation -d /tmp/dump.csv -i 1000000 -f 100000 -l (com.yahoo.labs.samoa.learners.classifiers.trees.VerticalHoeffdingTree -p 4) -s (com.yahoo.labs.samoa.moa.streams.generators.RandomTreeGenerator -c 2 -o 10 -u 10)"
+bin/samoa storm target/SAMOA-Storm-0.0.1-SNAPSHOT.jar "PrequentialEvaluation -d /tmp/dump.csv -i 1000000 -f 100000 -l (org.apache.samoa.learners.classifiers.trees.VerticalHoeffdingTree -p 4) -s (org.apache.samoa.moa.streams.generators.RandomTreeGenerator -c 2 -o 10 -u 10)"
 ```
 The example above uses [Prequential Evaluation task](Prequential-Evaluation-Task) and [Vertical Hoeffding Tree](Vertical-Hoeffding-Tree-Classifier) classifier. 
 

@@ -87,7 +87,7 @@ The samples below describe how the default ARFF file formats may be converted to
 #### Iris Dataset - JSON Encoded AVRO Format
 
 ```
-{"type":"record","name":"Iris","namespace":"com.yahoo.labs.samoa.avro.iris","fields":[{"name":"sepallength","type":"double"},{"name":"sepalwidth","type":"double"},{"name":"petallength","type":"double"},{"name":"petalwidth","type":"double"},{"name":"class","type":{"type":"enum","name":"Labels","symbols":["setosa","versicolor","virginica"]}}]}  
+{"type":"record","name":"Iris","namespace":"org.apache.samoa.avro.iris","fields":[{"name":"sepallength","type":"double"},{"name":"sepalwidth","type":"double"},{"name":"petallength","type":"double"},{"name":"petalwidth","type":"double"},{"name":"class","type":{"type":"enum","name":"Labels","symbols":["setosa","versicolor","virginica"]}}]}  
 {"sepallength":5.1,"sepalwidth":3.5,"petallength":1.4,"petalwidth":0.2,"class":"setosa"}  
 {"sepallength":3.0,"sepalwidth":1.4,"petallength":4.9,"petalwidth":0.2,"class":"virginica"}  
 {"sepallength":4.7,"sepalwidth":3.2,"petallength":1.3,"petalwidth":0.2,"class":"virginica"}  
@@ -97,7 +97,7 @@ The samples below describe how the default ARFF file formats may be converted to
 #### Iris Dataset - Binary Encoded AVRO Format
 
 ```
-Objavro.schema΅{"type":"record","name":"Iris","namespace":"com.yahoo.labs.samoa.avro.iris","fields":[{"name":"sepallength","type":"double"},{"name":"sepalwidth","type":"double"},{"name":"petallength","type":"double"},{"name":"petalwidth","type":"double"},{"name":"class","type":{"type":"enum","name":"Labels","symbols":["setosa","versicolor","virginica"]}}]} !<khCrֱS빧ީȂffffff@      @ffffffٙٙɿ       @ffffffٙٙ@ڙٙٙɿΌ͌͌@ڙٙٙ	@Ό͌͌ٙٙɿΌ͌͌@      𿦦ffff@ڙٙٙɿ !<khCrֱS빧ީ
+Objavro.schema΅{"type":"record","name":"Iris","namespace":"org.apache.samoa.avro.iris","fields":[{"name":"sepallength","type":"double"},{"name":"sepalwidth","type":"double"},{"name":"petallength","type":"double"},{"name":"petalwidth","type":"double"},{"name":"class","type":{"type":"enum","name":"Labels","symbols":["setosa","versicolor","virginica"]}}]} !<khCrֱS빧ީȂffffff@      @ffffffٙٙɿ       @ffffffٙٙ@ڙٙٙɿΌ͌͌@ڙٙٙ	@Ό͌͌ٙٙɿΌ͌͌@      𿦦ffff@ڙٙٙɿ !<khCrֱS빧ީ
 ```
 
 #### Forest CoverType Dataset 

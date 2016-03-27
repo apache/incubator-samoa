@@ -22,7 +22,7 @@ If data is evolving, it is better to use an adaptive version of bagging, where e
 `(classifiers.ensemble.AdaptiveBagging -s 10 -l (classifiers.trees.VerticalHoeffdingTree))`
 
 ###### Only with SAMOA-MOA adapter
-`(classifiers.ensemble.AdaptiveBagging -s 10 -l (classifiers.SingleClassifier -l (com.yahoo.labs.samoa.learners.classifiers.MOAClassifierAdapter -l moa.classifiers.trees.HoeffdingTree)))`
+`(classifiers.ensemble.AdaptiveBagging -s 10 -l (classifiers.SingleClassifier -l (org.apache.samoa.learners.classifiers.MOAClassifierAdapter -l moa.classifiers.trees.HoeffdingTree)))`
 
 ### Boosting
 Boosting is a well known ensemble method, that has a very good performance in non-streaming setting. SAMOA implements the version of Oza and Russel (_Nikunj C. Oza, Stuart J. Russell: Experimental comparisons of online and batch versions of bagging and boosting. KDD 2001:359-364_)

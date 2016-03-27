@@ -7,10 +7,10 @@ Task is similar to a job in Hadoop. Task is an execution entity. A topology must
 
 ###1. Implementation
 ```
-package com.yahoo.labs.samoa.tasks;
+package org.apache.samoa.tasks;
 
-import com.yahoo.labs.samoa.topology.ComponentFactory;
-import com.yahoo.labs.samoa.topology.Topology;
+import org.apache.samoa.topology.ComponentFactory;
+import org.apache.samoa.topology.Topology;
 
 /**
  * Task interface, the mother of all SAMOA tasks!

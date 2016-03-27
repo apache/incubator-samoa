@@ -19,7 +19,7 @@ For each incoming instance from _Source PI_, _Model Aggregator PI_ appies the cu
 The number of _Learner PIs_ can be set with the `-p` option:
 
 ```
-PrequentialEvaluationTask -l (com.yahoo.labs.samoa.learners.classifiers.rules.VerticalAMRulesRegressor -p 4)
+PrequentialEvaluationTask -l (org.apache.samoa.learners.classifiers.rules.VerticalAMRulesRegressor -p 4)
 ```
 
 ### Horizontal Adaptive Model Rules Regressor
@@ -35,6 +35,6 @@ Newly created rules are sent from _Default Rule Learner PI_ to all _Model Aggreg
 The number of _Learner PIs_ can be set with the `-p` option and the number of _Model Aggregator PIs_ can be set with the `-r` option:
 
 ```
-PrequentialEvaluationTask -l (com.yahoo.labs.samoa.learners.classifiers.rules.HorizontalAMRulesRegressor -r 4 -p 2)
+PrequentialEvaluationTask -l (org.apache.samoa.learners.classifiers.rules.HorizontalAMRulesRegressor -r 4 -p 2)
 ```
 

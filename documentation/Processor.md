@@ -48,7 +48,7 @@ is very simple to implement. This method is just a technical overhead that has n
 
 ### Preview of EntranceProcessor
 ```
-package com.yahoo.labs.samoa.core;
+package org.apache.samoa.core;
 
 public interface EntranceProcessor extends Processor {
     public boolean isFinished();

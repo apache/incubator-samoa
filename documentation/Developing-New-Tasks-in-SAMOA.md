@@ -12,7 +12,7 @@ The Hello World task consists of a source processor, a destination processor wit
 
 ![Hello World Task](images/HelloWorldTask.png)
 
-To develop the task, we create a new class that implements the interface `com.yahoo.labs.samoa.tasks.Task`. For convenience we also implement `com.github.javacliparser.Configurable` which allows to parse command-line options.
+To develop the task, we create a new class that implements the interface `org.apache.samoa.tasks.Task`. For convenience we also implement `com.github.javacliparser.Configurable` which allows to parse command-line options.
 
 The `init` method builds the topology by instantiating the necessary `Processors`, `Streams` and connecting the source processor with the destination processor.
 
@@ -151,13 +151,13 @@ Once we have created all the components, we use the builder to build the topolog
 To run the example in local mode:
 
 ```
-bin/samoa local target/SAMOA-Local-0.0.1-SNAPSHOT.jar "com.yahoo.labs.samoa.examples.HelloWorldTask -p 4 -i 100"
+bin/samoa local target/SAMOA-Local-0.0.1-SNAPSHOT.jar "org.apache.samoa.examples.HelloWorldTask -p 4 -i 100"
 ```
 
 To run the example in Storm local mode:
 
 ```
-java -cp $STORM_HOME/lib/*:$STORM_HOME/storm-0.8.2.jar:target/SAMOA-Storm-0.0.1-SNAPSHOT.jar com.yahoo.labs.samoa.LocalStormDoTask "com.yahoo.labs.samoa.examples.HelloWorldTask -p 4 -i 1000"
+java -cp $STORM_HOME/lib/*:$STORM_HOME/storm-0.8.2.jar:target/SAMOA-Storm-0.0.1-SNAPSHOT.jar org.apache.samoa.LocalStormDoTask "org.apache.samoa.examples.HelloWorldTask -p 4 -i 1000"
 ```
 
-All the code for the HelloWorldTask and its components can be found [here](https://github.com/yahoo/samoa/tree/master/samoa-api/src/main/java/com/yahoo/labs/samoa/examples).
+All the code for the HelloWorldTask and its components can be found [here](https://github.com/yahoo/samoa/tree/master/samoa-api/src/main/java/org/apache/samoa/examples).
