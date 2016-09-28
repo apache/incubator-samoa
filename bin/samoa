@@ -205,6 +205,36 @@ elif [ $PLATFORM = 'STORM' ]; then
 		java -cp $CLASSPATH org.apache.samoa.LocalStormDoTask $COMPLETE_ARG $NUM_WORKER
 	fi
 
+elif [ $PLATFORM = 'GEARPUMP' ]; then
+
+	echo "Deploying to $PLATFORM"
+	if [ -z $GEARPUMP_HOME ];then
+	    echo "GEARPUMP_HOME is not set!"
+	    echo "Please set GEARPUMP_HOME to point to your Gearpump installation"
+	    exit -1
+	fi
+
+	if [ ! -f $2 ];then
+	    echo "$2 does not exist!"
+	    echo "Please use a valid jar file for Gearpump execution"
+	    exit -1
+	fi
+
+	GEARPUMP_EXEC="sh $GEARPUMP_HOME/bin/gear"
+
+	COMPLETE_ARG=""
+	COUNTER=0
+	for var in "$@"
+	do
+	    COUNTER=`expr $COUNTER + 1`
+	    if [ $COUNTER -gt 2 ];then
+	        COMPLETE_ARG="$COMPLETE_ARG $var"
+	    fi
+	done
+
+	DEPLOYABLE=$JAR_PATH
+	$GEARPUMP_EXEC app -jar $DEPLOYABLE org.apache.samoa.topology.impl.gearpump.DoTask $COMPLETE_ARG
+
 elif [ $PLATFORM = 'SAMZA' ]; then
 	echo "Deploying to SAMZA"
 

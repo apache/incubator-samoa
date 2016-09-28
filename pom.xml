@@ -94,6 +94,15 @@
             </modules>
         </profile>
         <profile>
+            <id>gearpump</id>
+            <modules>
+                <module>samoa-instances</module>
+                <module>samoa-api</module>
+                <module>samoa-gearpump</module>
+                <module>samoa-test</module>
+            </modules>
+        </profile>
+        <profile>
             <id>all</id>
             <modules>
                 <module>samoa-instances</module>
@@ -103,6 +112,7 @@
                 <module>samoa-storm</module>
                 <module>samoa-flink</module>
                 <module>samoa-samza</module>
+                <module>samoa-gearpump</module>
                 <module>samoa-test</module>
             </modules>
         </profile>
@@ -127,6 +137,9 @@
         <miniball.version>1.0.3</miniball.version>
         <samza.version>0.7.0</samza.version>
         <flink.version>0.10.1</flink.version>
+        <gearpump.version>0.8.1</gearpump.version>
+        <scala.binary.version>2.11</scala.binary.version>
+        <scala.version>2.11.5</scala.version>
         <slf4j-log4j12.version>1.7.2</slf4j-log4j12.version>
         <slf4j-simple.version>1.7.5</slf4j-simple.version>
         <maven-surefire-plugin.version>2.18</maven-surefire-plugin.version>
@@ -210,6 +223,7 @@
                         <root>samoa-storm</root>
                         <root>samoa-flink</root>
                         <root>samoa-samza</root>
+                        <root>samoa-gearpump</root>
                         <root>samoa-test</root>
                         <root>samoa-threads</root>
                         <root>bin</root>
