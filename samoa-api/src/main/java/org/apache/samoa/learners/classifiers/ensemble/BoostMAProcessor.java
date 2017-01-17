@@ -1,4 +1,4 @@
-package org.apache.samoa.learners.classifiers.trees;
+package org.apache.samoa.learners.classifiers.ensemble;
 
 /*
  * #%L
@@ -20,7 +20,29 @@ package org.apache.samoa.learners.classifiers.trees;
  * #L%
  */
 
-import static org.apache.samoa.moa.core.Utils.maxIndex;
+import org.apache.samoa.core.ContentEvent;
+import org.apache.samoa.core.Processor;
+import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.Instances;
+import org.apache.samoa.instances.InstancesHeader;
+import org.apache.samoa.learners.InstanceContentEvent;
+import org.apache.samoa.learners.InstancesContentEvent;
+import org.apache.samoa.learners.classifiers.ModelAggregator;
+import org.apache.samoa.learners.classifiers.trees.ActiveLearningNode;
+import org.apache.samoa.learners.classifiers.trees.AttributeBatchContentEvent;
+import org.apache.samoa.learners.classifiers.trees.FoundNode;
+import org.apache.samoa.learners.classifiers.trees.InactiveLearningNode;
+import org.apache.samoa.learners.classifiers.trees.LearningNode;
+import org.apache.samoa.learners.classifiers.trees.LocalResultContentEvent;
+import org.apache.samoa.learners.classifiers.trees.Node;
+import org.apache.samoa.learners.classifiers.trees.SplitNode;
+import org.apache.samoa.moa.classifiers.core.AttributeSplitSuggestion;
+import org.apache.samoa.moa.classifiers.core.driftdetection.ChangeDetector;
+import org.apache.samoa.moa.classifiers.core.splitcriteria.InfoGainSplitCriterion;
+import org.apache.samoa.moa.classifiers.core.splitcriteria.SplitCriterion;
+import org.apache.samoa.topology.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,22 +61,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.samoa.core.ContentEvent;
-import org.apache.samoa.core.Processor;
-import org.apache.samoa.instances.Instance;
-import org.apache.samoa.instances.Instances;
-import org.apache.samoa.instances.InstancesHeader;
-import org.apache.samoa.learners.InstanceContent;
-import org.apache.samoa.learners.InstancesContentEvent;
-import org.apache.samoa.learners.ResultContentEvent;
-import org.apache.samoa.learners.classifiers.ModelAggregator;
-import org.apache.samoa.moa.classifiers.core.AttributeSplitSuggestion;
-import org.apache.samoa.moa.classifiers.core.driftdetection.ChangeDetector;
-import org.apache.samoa.moa.classifiers.core.splitcriteria.InfoGainSplitCriterion;
-import org.apache.samoa.moa.classifiers.core.splitcriteria.SplitCriterion;
-import org.apache.samoa.topology.Stream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.apache.samoa.moa.core.Utils.maxIndex;
 
 /**
  * Model Aggegator Processor consists of the decision tree model. It connects to local-statistic PI via attribute stream
@@ -68,11 +75,11 @@ import org.slf4j.LoggerFactory;
  * @author Arinto Murdopo
  * 
  */
-public class ModelAggregatorProcessor implements ModelAggregator, Processor {
+public final class BoostMAProcessor implements ModelAggregator, Processor {
 
   private static final long serialVersionUID = -1685875718300564886L;
-  private static final Logger logger = LoggerFactory.getLogger(ModelAggregatorProcessor.class);
-
+  private static final Logger logger = LoggerFactory.getLogger(BoostMAProcessor.class);
+  
   private int processorId;
 
   private Node treeRoot;
@@ -90,7 +97,7 @@ public class ModelAggregatorProcessor implements ModelAggregator, Processor {
   private BlockingQueue<Long> timedOutSplittingNodes;
 
   // available streams
-  private Stream resultStream;
+//  private Stream resultStream;
   private Stream attributeStream;
   private Stream controlStream;
 
@@ -103,30 +110,50 @@ public class ModelAggregatorProcessor implements ModelAggregator, Processor {
   private final int parallelismHint;
   private final long timeOut;
   
-  //------
   private long instancesSeenAtModelUpdate ;
-  
+ 
   private File metrics;
-  private String datapath = "/Users/fobeligi/Documents/GBDT/experiments-output/classification/classification";
+  private String datapath = "/Users/fobeligi/Documents/GBDT/experiments-output-310317/forestCoverType/forestCoverType";
   private PrintStream metadataStream = null;
   private boolean firstEvent = true;
-  //------
   
+  
+  private double weightSeenByModel = 0.0;
+  
+  //the "parent" processor that boosting takes place. We need it for the streams
+//  private final BoostVHTProcessor boostProc;
+
   // private constructor based on Builder pattern
-  private ModelAggregatorProcessor(Builder builder) {
+  private BoostMAProcessor(Builder builder) {
     this.dataset = builder.dataset;
+    this.processorId = builder.processorID;
     this.splitCriterion = builder.splitCriterion;
     this.splitConfidence = builder.splitConfidence;
     this.tieThreshold = builder.tieThreshold;
     this.gracePeriod = builder.gracePeriod;
     this.parallelismHint = builder.parallelismHint;
     this.timeOut = builder.timeOut;
-    this.changeDetector = builder.changeDetector;
+//    this.boostProc = builder.boostProc;
+
 
     InstancesHeader ih = new InstancesHeader(dataset);
     this.setModelContext(ih);
+    
+    // These used to happen in onCreate which no longer gets called.
+
+    this.activeLeafNodeCount = 0;
+    this.inactiveLeafNodeCount = 0;
+    this.decisionNodeCount = 0;
+    this.growthAllowed = true;
+
+    this.splittingNodes = new ConcurrentHashMap<>();
+    this.timedOutSplittingNodes = new LinkedBlockingQueue<>();
+    this.splitId = 0;
+    
+// Executor for scheduling time-out threads
+    this.executor = Executors.newScheduledThreadPool(8);
   }
-  
+
   @Override
   public boolean process(ContentEvent event) {
 
@@ -137,19 +164,20 @@ public class ModelAggregatorProcessor implements ModelAggregator, Processor {
       SplittingNodeInfo splittingNode = splittingNodes.get(timedOutSplitId);
       if (splittingNode != null) {
         this.splittingNodes.remove(timedOutSplitId);
-        this.continueAttemptToSplit(splittingNode.activeLearningNode, splittingNode.foundNode);
+        this.continueAttemptToSplit(splittingNode.activeLearningNode, splittingNode.foundNode,timedOutSplitId);
 
       }
 
     }
 
     // Receive a new instance from source
-    if (event instanceof InstancesContentEvent) {
+    if (event instanceof InstanceContentEvent) {
       instancesSeenAtModelUpdate++;//
-  
+      
+      //creating the model_updates file for test purposes.It will be deleted later
       if (firstEvent) {
         try {
-          metrics = new File(datapath+"_model_updates.csv");
+          metrics = new File(datapath+"_model_"+this.getProcessorId()+"_updates.csv");
           metadataStream = new PrintStream(
                   new FileOutputStream(metrics), true);
           metadataStream.println("Instances seen,model id,splitId, active Leaf Nodes,decision Nodes" );
@@ -159,8 +187,8 @@ public class ModelAggregatorProcessor implements ModelAggregator, Processor {
         firstEvent=false;
       }
       
-      InstancesContentEvent instancesEvent = (InstancesContentEvent) event;
-      this.processInstanceContentEvent(instancesEvent);
+      InstanceContentEvent instanceEvent = (InstanceContentEvent) event;
+      this.processInstanceContentEvent(instanceEvent);
       // Send information to local-statistic PI
       // for each of the nodes
       if (this.foundNodeSet != null) {
@@ -182,6 +210,9 @@ public class ModelAggregatorProcessor implements ModelAggregator, Processor {
               attemptToSplit(leafNode, foundNode);
             }
           }
+          //todo(faye) the below is added for boostVHT
+          //set the weight seen by model
+          this.weightSeenByModel = leafNode.getWeightSeen();
         }
       }
       this.foundNodeSet = null;
@@ -193,14 +224,15 @@ public class ModelAggregatorProcessor implements ModelAggregator, Processor {
       if (splittingNodeInfo != null) { // if null, that means
         // activeLearningNode has been
         // removed by timeout thread
+//        logger.info("----------------EnsembleId in LRCE: " + lrce.getEnsembleId()+", ProcessorId: " + this.getProcessorId());
         ActiveLearningNode activeLearningNode = splittingNodeInfo.activeLearningNode;
-
+        
         activeLearningNode.addDistributedSuggestions(lrce.getBestSuggestion(), lrce.getSecondBestSuggestion());
 
         if (activeLearningNode.isAllSuggestionsCollected()) {
           splittingNodeInfo.scheduledFuture.cancel(false);
           this.splittingNodes.remove(lrceSplitId);
-          this.continueAttemptToSplit(activeLearningNode, splittingNodeInfo.foundNode);
+          this.continueAttemptToSplit(activeLearningNode, splittingNodeInfo.foundNode,lrceSplitId);
         }
       }
     }
@@ -211,29 +243,17 @@ public class ModelAggregatorProcessor implements ModelAggregator, Processor {
 
   @Override
   public void onCreate(int id) {
-    this.processorId = id;
-
-    this.activeLeafNodeCount = 0;
-    this.inactiveLeafNodeCount = 0;
-    this.decisionNodeCount = 0;
-    this.growthAllowed = true;
-
-    this.splittingNodes = new ConcurrentHashMap<>();
-    this.timedOutSplittingNodes = new LinkedBlockingQueue<>();
-    this.splitId = 0;
-
-    // Executor for scheduling time-out threads
-    this.executor = Executors.newScheduledThreadPool(8);
+    this.resetLearning();
   }
 
   @Override
   public Processor newProcessor(Processor p) {
-    ModelAggregatorProcessor oldProcessor = (ModelAggregatorProcessor) p;
-    ModelAggregatorProcessor newProcessor = new ModelAggregatorProcessor.Builder(oldProcessor).build();
+    BoostMAProcessor oldProcessor = (BoostMAProcessor) p;
+    BoostMAProcessor newProcessor = new BoostMAProcessor.Builder(oldProcessor).build();
 
-    newProcessor.setResultStream(oldProcessor.resultStream);
-    newProcessor.setAttributeStream(oldProcessor.attributeStream);
-    newProcessor.setControlStream(oldProcessor.controlStream);
+    newProcessor.setAttributeStream(oldProcessor.getAttributeStream());
+    newProcessor.setControlStream(oldProcessor.getControlStream());
+    
     return newProcessor;
   }
 
@@ -248,11 +268,7 @@ public class ModelAggregatorProcessor implements ModelAggregator, Processor {
     sb.append("Growth allowed: ").append(growthAllowed);
     return sb.toString();
   }
-
-  public void setResultStream(Stream resultStream) {
-    this.resultStream = resultStream;
-  }
-
+  
   public void setAttributeStream(Stream attributeStream) {
     this.attributeStream = attributeStream;
   }
@@ -261,31 +277,16 @@ public class ModelAggregatorProcessor implements ModelAggregator, Processor {
     this.controlStream = controlStream;
   }
 
-  void sendToAttributeStream(ContentEvent event) {
+  //todo:: is there any reason to synchronize these two methods?
+  public void sendToAttributeStream(ContentEvent event) {
     this.attributeStream.put(event);
   }
 
-  void sendToControlStream(ContentEvent event) {
+  public void sendToControlStream(ContentEvent event) {
+//    this.boostProc.getControlStream().put(event);
     this.controlStream.put(event);
   }
-
-  /**
-   * Helper method to generate new ResultContentEvent based on an instance and its prediction result.
-   * 
-   * @param prediction
-   *          The predicted class label from the decision tree model.
-   * @param inEvent
-   *          The associated instance content event
-   * @return ResultContentEvent to be sent into Evaluator PI or other destination PI.
-   */
-  private ResultContentEvent newResultContentEvent(double[] prediction, InstanceContent inEvent) {
-    ResultContentEvent rce = new ResultContentEvent(inEvent.getInstanceIndex(), inEvent.getInstance(),
-        inEvent.getClassId(), prediction, inEvent.isLastEvent());
-    rce.setClassifierIndex(this.processorId);
-    rce.setEvaluationIndex(inEvent.getEvaluationIndex());
-    return rce;
-  }
-
+  
   private List<InstancesContentEvent> contentEventList = new LinkedList<>();
 
   /**
@@ -293,59 +294,41 @@ public class ModelAggregatorProcessor implements ModelAggregator, Processor {
    * 
    * @param instContentEvent
    */
-  private void processInstanceContentEvent(InstancesContentEvent instContentEvent) {
-    this.numBatches++;
-    this.contentEventList.add(instContentEvent);
-    if (this.numBatches == 1 || this.numBatches > 4) {
-      this.processInstances(this.contentEventList.remove(0));
+  private void processInstanceContentEvent(InstanceContentEvent instContentEvent) {
+    Instance inst = instContentEvent.getInstance();
+    boolean isTesting = instContentEvent.isTesting();
+    boolean isTraining = instContentEvent.isTraining();
+    inst.setDataset(this.dataset);
+    // Check the instance whether it is used for testing or training
+    // boolean testAndTrain = isTraining; //Train after testing
+    double[] prediction = null;
+    if (isTesting) {
+      //todo(faye) no need to put any result in the stream (this would be a sub-result)
+//        prediction = getVotesForInstance(inst, false);
+//        this.boostProc.getResultStream().put(newResultContentEvent(prediction, instContent));
     }
 
-    if (instContentEvent.isLastEvent()) {
-      // drain remaining instances
-      while (!contentEventList.isEmpty()) {
-        processInstances(contentEventList.remove(0));
-      }
-    }
-
-  }
-
-  private int numBatches = 0;
-
-  private void processInstances(InstancesContentEvent instContentEvent) {
-    for (InstanceContent instContent : instContentEvent.getList()) {
-      Instance inst = instContent.getInstance();
-      boolean isTesting = instContent.isTesting();
-      boolean isTraining = instContent.isTraining();
-      inst.setDataset(this.dataset);
-      // Check the instance whether it is used for testing or training
-      // boolean testAndTrain = isTraining; //Train after testing
-      double[] prediction = null;
-      if (isTesting) {
-        prediction = getVotesForInstance(inst, false);
-        this.resultStream.put(newResultContentEvent(prediction, instContent));
-      }
-
-      if (isTraining) {
-        trainOnInstanceImpl(inst);
-        if (this.changeDetector != null) {
-          if (prediction == null) {
-            prediction = getVotesForInstance(inst);
-          }
-          boolean correctlyClassifies = this.correctlyClassifies(inst, prediction);
-          double oldEstimation = this.changeDetector.getEstimation();
-          this.changeDetector.input(correctlyClassifies ? 0 : 1);
-          if (this.changeDetector.getEstimation() > oldEstimation) {
-            // Start a new classifier
-            logger.info("Change detected, resetting the classifier");
-            this.resetLearning();
-            this.changeDetector.resetLearning();
-          }
+    if (isTraining) {
+      // Does the actual training
+      trainOnInstanceImpl(inst);
+      if (this.changeDetector != null) {
+        if (prediction == null) {
+          prediction = getVotesForInstance(inst);
+        }
+        boolean correctlyClassifies = this.correctlyClassifies(inst, prediction);
+        double oldEstimation = this.changeDetector.getEstimation();
+        this.changeDetector.input(correctlyClassifies ? 0 : 1);
+        if (this.changeDetector.getEstimation() > oldEstimation) {
+          // Start a new classifier
+          logger.info("Change detected, resetting the classifier");
+          this.resetLearning();
+          this.changeDetector.resetLearning();
         }
       }
     }
   }
 
-  private boolean correctlyClassifies(Instance inst, double[] prediction) {
+  protected boolean correctlyClassifies(Instance inst, double[] prediction) {
     return maxIndex(prediction) == (int) inst.classValue();
   }
 
@@ -483,7 +466,7 @@ public class ModelAggregatorProcessor implements ModelAggregator, Processor {
       this.splittingNodes.put(this.splitId, new SplittingNodeInfo(activeLearningNode, foundNode, timeOutHandler));
 
       // Inform Local Statistic PI to perform local statistic calculation
-      activeLearningNode.requestDistributedSuggestions(this.splitId, this);
+      activeLearningNode.requestDistributedSuggestions(this.splitId, this); // todo:: what to do???
     }
   }
 
@@ -495,7 +478,7 @@ public class ModelAggregatorProcessor implements ModelAggregator, Processor {
    * @param foundNode
    *          The data structure to represents the filtering of the instance using the tree model.
    */
-  private void continueAttemptToSplit(ActiveLearningNode activeLearningNode, FoundNode foundNode) {
+  private void continueAttemptToSplit(ActiveLearningNode activeLearningNode, FoundNode foundNode,Long splitId) {
     AttributeSplitSuggestion bestSuggestion = activeLearningNode.getDistributedBestSuggestion();
     AttributeSplitSuggestion secondBestSuggestion = activeLearningNode.getDistributedSecondBestSuggestion();
 
@@ -551,12 +534,11 @@ public class ModelAggregatorProcessor implements ModelAggregator, Processor {
         } else {
           parent.setChild(parentBranch, newSplit);
         }
+        //metrics = ("Instances seen,model id,splitId, active Leaf Nodes,decision Nodes")
+        String metricsData = this.instancesSeenAtModelUpdate + "," + this.processorId+"," + splitId +"," + this.activeLeafNodeCount + "," + this.decisionNodeCount;
+        this.metadataStream.println(metricsData);
+        //---
       }
-      //metrics = ("Instances seen,model id,splitId, active Leaf Nodes,decision Nodes")
-      String metricsData = instancesSeenAtModelUpdate + "," + this.processorId+"," + this.splitId +"," + this.activeLeafNodeCount + "," + this.decisionNodeCount;
-      this.metadataStream.println(metricsData);
-      setInstancesSeenAtModelUpdate(0) ;
-      //---
       // TODO: add check on the model's memory size
     }
 
@@ -594,7 +576,9 @@ public class ModelAggregatorProcessor implements ModelAggregator, Processor {
   private LearningNode newLearningNode(double[] initialClassObservations, int parallelismHint) {
     // for VHT optimization, we need to dynamically instantiate the appropriate
     // ActiveLearningNode
-    return new ActiveLearningNode(initialClassObservations, parallelismHint);
+    ActiveLearningNode newNode = new ActiveLearningNode(initialClassObservations, parallelismHint);
+    newNode.setEnsembleId(this.processorId);
+    return newNode;
   }
 
   /**
@@ -678,14 +662,15 @@ public class ModelAggregatorProcessor implements ModelAggregator, Processor {
 
   /**
    * Builder class to replace constructors with many parameters
-   * 
+   *
    * @author Arinto Murdopo
-   * 
+   *
    */
   public static class Builder {
 
     // required parameters
     private final Instances dataset;
+    private int processorID;
 
     // default values
     private SplitCriterion splitCriterion = new InfoGainSplitCriterion();
@@ -693,21 +678,23 @@ public class ModelAggregatorProcessor implements ModelAggregator, Processor {
     private double tieThreshold = 0.05;
     private int gracePeriod = 200;
     private int parallelismHint = 1;
-    private long timeOut = 30;
-    private ChangeDetector changeDetector = null;
-
+    private long timeOut = Integer.MAX_VALUE;
+    private BoostVHTProcessor boostProc = null;
+  
     public Builder(Instances dataset) {
       this.dataset = dataset;
     }
 
-    public Builder(ModelAggregatorProcessor oldProcessor) {
-      this.dataset = oldProcessor.dataset;
-      this.splitCriterion = oldProcessor.splitCriterion;
-      this.splitConfidence = oldProcessor.splitConfidence;
-      this.tieThreshold = oldProcessor.tieThreshold;
-      this.gracePeriod = oldProcessor.gracePeriod;
-      this.parallelismHint = oldProcessor.parallelismHint;
-      this.timeOut = oldProcessor.timeOut;
+    public Builder(BoostMAProcessor oldProcessor) {
+      this.dataset = oldProcessor.getDataset();
+      this.processorID = oldProcessor.getProcessorId();
+      this.splitCriterion = oldProcessor.getSplitCriterion();
+      this.splitConfidence = oldProcessor.getSplitConfidence();
+      this.tieThreshold = oldProcessor.getTieThreshold();
+      this.gracePeriod = oldProcessor.getGracePeriod();
+      this.parallelismHint = oldProcessor.getParallelismHint();
+      this.timeOut = oldProcessor.getTimeOut();
+//      this.boostProc = oldProcessor.getBoostProc();
     }
   
     public Builder splitCriterion(SplitCriterion splitCriterion) {
@@ -739,19 +726,70 @@ public class ModelAggregatorProcessor implements ModelAggregator, Processor {
       this.timeOut = timeOut;
       return this;
     }
-  
-    public Builder changeDetector(ChangeDetector changeDetector) {
-      this.changeDetector = changeDetector;
+    
+//    public Builder boostProcessor(BoostVHTProcessor boostProc){
+//      this.boostProc = boostProc;
+//      return this;
+//    }
+
+    public Builder processorID(int processorID) {
+      this.processorID = processorID;
       return this;
     }
   
-    public ModelAggregatorProcessor build() {
-      return new ModelAggregatorProcessor(this);
+    public BoostMAProcessor build() {
+      return new BoostMAProcessor(this);
     }
   }
+
+  //added for boostVHT
   
-  public void setInstancesSeenAtModelUpdate(long instancesSeenAtModelUpdate) {
-    this.instancesSeenAtModelUpdate = instancesSeenAtModelUpdate;
+  
+  public Instances getDataset() {
+    return dataset;
   }
   
+  public Stream getAttributeStream() {
+    return attributeStream;
+  }
+  
+  public Stream getControlStream() {
+    return controlStream;
+  }
+  
+  public SplitCriterion getSplitCriterion() {
+    return splitCriterion;
+  }
+  
+  public double getSplitConfidence() {
+    return splitConfidence;
+  }
+  
+  public double getTieThreshold() {
+    return tieThreshold;
+  }
+  
+  public int getGracePeriod() {
+    return gracePeriod;
+  }
+  
+  public int getParallelismHint() {
+    return parallelismHint;
+  }
+  
+  public long getTimeOut() {
+    return timeOut;
+  }
+  
+//  public BoostVHTProcessor getBoostProc() {
+//    return boostProc;
+//  }
+  
+  public double getWeightSeenByModel() {
+    return weightSeenByModel;
+  }
+  
+  public int getProcessorId() {
+    return processorId;
+  }
 }

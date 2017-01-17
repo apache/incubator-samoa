@@ -30,13 +30,15 @@ import org.apache.samoa.moa.classifiers.core.AttributeSplitSuggestion;
  * @author Arinto Murdopo
  * 
  */
-final class LocalResultContentEvent implements ContentEvent {
+public final class LocalResultContentEvent implements ContentEvent {
 
   private static final long serialVersionUID = -4206620993777418571L;
 
   private final AttributeSplitSuggestion bestSuggestion;
   private final AttributeSplitSuggestion secondBestSuggestion;
   private final long splitId;
+  
+  private int ensembleId;//faye boostVHT
 
   public LocalResultContentEvent() {
     bestSuggestion = null;
@@ -60,7 +62,7 @@ final class LocalResultContentEvent implements ContentEvent {
    * 
    * @return The best attribute split suggestion.
    */
-  AttributeSplitSuggestion getBestSuggestion() {
+  public AttributeSplitSuggestion getBestSuggestion() {
     return this.bestSuggestion;
   }
 
@@ -69,7 +71,7 @@ final class LocalResultContentEvent implements ContentEvent {
    * 
    * @return The second best attribute split suggestion.
    */
-  AttributeSplitSuggestion getSecondBestSuggestion() {
+  public AttributeSplitSuggestion getSecondBestSuggestion() {
     return this.secondBestSuggestion;
   }
 
@@ -78,7 +80,7 @@ final class LocalResultContentEvent implements ContentEvent {
    * 
    * @return The split id of this local calculation result
    */
-  long getSplitId() {
+  public long getSplitId() {
     return this.splitId;
   }
 
@@ -91,5 +93,14 @@ final class LocalResultContentEvent implements ContentEvent {
   @Override
   public boolean isLastEvent() {
     return false;
+  }
+  
+  //-------//faye boostVHT
+  public int getEnsembleId() {
+    return ensembleId;
+  }
+  
+  public void setEnsembleId(int ensembleId) {
+    this.ensembleId = ensembleId;
   }
 }

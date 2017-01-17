@@ -22,6 +22,7 @@ package org.apache.samoa.learners.classifiers.trees;
 
 import org.apache.samoa.core.DoubleVector;
 import org.apache.samoa.instances.Instance;
+import org.apache.samoa.learners.classifiers.ModelAggregator;
 
 /**
  * Abstract class that represents a node in the tree model.
@@ -29,7 +30,7 @@ import org.apache.samoa.instances.Instance;
  * @author Arinto Murdopo
  * 
  */
-abstract class Node implements java.io.Serializable {
+public abstract class Node implements java.io.Serializable {
 
   private static final long serialVersionUID = 4008521239214180548L;
 
@@ -46,7 +47,7 @@ abstract class Node implements java.io.Serializable {
    *          The index of the current node in the parent
    * @return FoundNode which is the data structure to represent the resulting leaf.
    */
-  abstract FoundNode filterInstanceToLeaf(Instance inst, SplitNode parent, int parentBranch);
+  public abstract FoundNode filterInstanceToLeaf(Instance inst, SplitNode parent, int parentBranch);
 
   /**
    * Method to return the predicted class of the instance based on the statistic inside the node.
@@ -57,7 +58,7 @@ abstract class Node implements java.io.Serializable {
    *          ModelAggregatorProcessor
    * @return The prediction result in the form of class distribution
    */
-  abstract double[] getClassVotes(Instance inst, ModelAggregatorProcessor map);
+  public abstract double[] getClassVotes(Instance inst, ModelAggregator map);
 
   /**
    * Method to check whether the node is a leaf node or not.
@@ -72,7 +73,7 @@ abstract class Node implements java.io.Serializable {
    * @param classObservation
    *          distribution of the observed classes.
    */
-  protected Node(double[] classObservation) {
+  public Node(double[] classObservation) {
     this.observedClassDistribution = new DoubleVector(classObservation);
   }
 
@@ -81,7 +82,8 @@ abstract class Node implements java.io.Serializable {
    * 
    * @return Observed class distribution
    */
-  protected double[] getObservedClassDistribution() {
+//  protected
+  public double[] getObservedClassDistribution() {
     return this.observedClassDistribution.getArrayCopy();
   }
 
@@ -90,7 +92,8 @@ abstract class Node implements java.io.Serializable {
    * 
    * @return Flag whether class distribution is pure or not.
    */
-  protected boolean observedClassDistributionIsPure() {
+//  protected
+  public boolean observedClassDistributionIsPure() {
     return (observedClassDistribution.numNonZeroEntries() < 2);
   }
 

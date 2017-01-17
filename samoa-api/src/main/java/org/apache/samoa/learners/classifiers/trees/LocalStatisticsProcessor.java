@@ -47,7 +47,7 @@ import com.google.common.collect.Table;
  * @author Arinto Murdopo
  * 
  */
-final class LocalStatisticsProcessor implements Processor {
+public final class LocalStatisticsProcessor implements Processor {
 
   /**
 	 * 
@@ -111,6 +111,7 @@ final class LocalStatisticsProcessor implements Processor {
        * ace.getClassVal(), ace.getWeight());
        */
     } else if (event instanceof ComputeContentEvent) {
+//      logger.info("_____________________ LocalStatisticsProcessor logger");
       // process ComputeContentEvent by calculating the local statistic
       // and send back the calculation results via computation result stream.
       ComputeContentEvent cce = (ComputeContentEvent) event;
@@ -150,6 +151,7 @@ final class LocalStatisticsProcessor implements Processor {
       // create the local result content event
       LocalResultContentEvent lcre =
           new LocalResultContentEvent(cce.getSplitId(), bestSuggestion, secondBestSuggestion);
+      lcre.setEnsembleId(cce.getEnsembleId()); //faye boostVHT
       computationResultStream.put(lcre);
       logger.debug("Finish compute event");
     } else if (event instanceof DeleteContentEvent) {
@@ -170,7 +172,7 @@ final class LocalStatisticsProcessor implements Processor {
     LocalStatisticsProcessor oldProcessor = (LocalStatisticsProcessor) p;
     LocalStatisticsProcessor newProcessor = new LocalStatisticsProcessor.Builder(oldProcessor).build();
 
-    newProcessor.setComputationResultStream(oldProcessor.computationResultStream);
+    newProcessor.setComputationResultStream(oldProcessor.getComputationResultStream());
 
     return newProcessor;
   }
@@ -180,7 +182,7 @@ final class LocalStatisticsProcessor implements Processor {
    * 
    * @param computeStream
    */
-  void setComputationResultStream(Stream computeStream) {
+  public void setComputationResultStream(Stream computeStream) {
     this.computationResultStream = computeStream;
   }
 
@@ -198,45 +200,66 @@ final class LocalStatisticsProcessor implements Processor {
    * @author Arinto Murdopo
    * 
    */
-  static class Builder {
+  public static class Builder {
 
     private SplitCriterion splitCriterion = new InfoGainSplitCriterion();
     private boolean binarySplit = false;
     private AttributeClassObserver nominalClassObserver = new NominalAttributeClassObserver();
     private AttributeClassObserver numericClassObserver = new GaussianNumericAttributeClassObserver();
 
-    Builder() {
+    public Builder() {
 
     }
 
-    Builder(LocalStatisticsProcessor oldProcessor) {
-      this.splitCriterion = oldProcessor.splitCriterion;
-      this.binarySplit = oldProcessor.binarySplit;
+    public Builder(LocalStatisticsProcessor oldProcessor) {
+      this.splitCriterion = oldProcessor.getSplitCriterion();
+      this.binarySplit = oldProcessor.isBinarySplit();
+      this.nominalClassObserver = oldProcessor.getNominalClassObserver();
+      this.numericClassObserver = oldProcessor.getNumericClassObserver();
     }
 
-    Builder splitCriterion(SplitCriterion splitCriterion) {
+    public Builder splitCriterion(SplitCriterion splitCriterion) {
       this.splitCriterion = splitCriterion;
       return this;
     }
 
-    Builder binarySplit(boolean binarySplit) {
+    public Builder binarySplit(boolean binarySplit) {
       this.binarySplit = binarySplit;
       return this;
     }
 
-    Builder nominalClassObserver(AttributeClassObserver nominalClassObserver) {
+    public Builder nominalClassObserver(AttributeClassObserver nominalClassObserver) {
       this.nominalClassObserver = nominalClassObserver;
       return this;
     }
 
-    Builder numericClassObserver(AttributeClassObserver numericClassObserver) {
+    public Builder numericClassObserver(AttributeClassObserver numericClassObserver) {
       this.numericClassObserver = numericClassObserver;
       return this;
     }
 
-    LocalStatisticsProcessor build() {
+    public LocalStatisticsProcessor build() {
       return new LocalStatisticsProcessor(this);
     }
   }
-
+  
+  public SplitCriterion getSplitCriterion() {
+    return splitCriterion;
+  }
+  
+  public boolean isBinarySplit() {
+    return binarySplit;
+  }
+  
+  public AttributeClassObserver getNominalClassObserver() {
+    return nominalClassObserver;
+  }
+  
+  public AttributeClassObserver getNumericClassObserver() {
+    return numericClassObserver;
+  }
+  
+  public Stream getComputationResultStream() {
+    return computationResultStream;
+  }
 }

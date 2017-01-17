@@ -23,6 +23,7 @@ package org.apache.samoa.learners.classifiers.trees;
 import org.apache.samoa.instances.Instance;
 import org.apache.samoa.moa.classifiers.core.conditionaltests.InstanceConditionalTest;
 import org.apache.samoa.moa.core.AutoExpandVector;
+import org.apache.samoa.learners.classifiers.ModelAggregator;
 
 /**
  * SplitNode represents the node that contains one or more questions in the decision tree model, in order to route the
@@ -46,7 +47,7 @@ public class SplitNode extends Node {
   }
 
   @Override
-  FoundNode filterInstanceToLeaf(Instance inst, SplitNode parent, int parentBranch) {
+  public FoundNode filterInstanceToLeaf(Instance inst, SplitNode parent, int parentBranch) {
     int childIndex = instanceChildIndex(inst);
     if (childIndex >= 0) {
       Node child = getChild(childIndex);
@@ -64,7 +65,7 @@ public class SplitNode extends Node {
   }
 
   @Override
-  double[] getClassVotes(Instance inst, ModelAggregatorProcessor vht) {
+  public double[] getClassVotes(Instance inst, ModelAggregator vht) {
     return this.observedClassDistribution.getArrayCopy();
   }
 
@@ -73,7 +74,7 @@ public class SplitNode extends Node {
    * 
    * @return number of children
    */
-  int numChildren() {
+  public int numChildren() {
     return this.children.size();
   }
 
@@ -85,7 +86,7 @@ public class SplitNode extends Node {
    * @param child
    *          The child node
    */
-  void setChild(int index, Node child) {
+  public void setChild(int index, Node child) {
     if ((this.splitTest.maxBranches() >= 0)
         && (index >= this.splitTest.maxBranches())) {
       throw new IndexOutOfBoundsException();
@@ -100,7 +101,7 @@ public class SplitNode extends Node {
    *          The child node index
    * @return The child node in the given index
    */
-  Node getChild(int index) {
+  public Node getChild(int index) {
     return this.children.get(index);
   }
 

@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.apache.samoa.topology.impl;
+package org.apache.samoa.learners.classifiers;
 
 /*
  * #%L
  * SAMOA
  * %%
- * Copyright (C) 2014 - 2015 Apache Software Foundation
+ * Copyright (C) 2014 - 2017 Apache Software Foundation
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,15 +20,6 @@ package org.apache.samoa.topology.impl;
  * #L%
  */
 
-import org.apache.samoa.topology.Topology;
-
-public class SimpleEngine {
-
-  public static void submitTopology(Topology topology) {
-    SimpleTopology simpleTopology = (SimpleTopology) topology;
-    simpleTopology.run();
-    // runs until completion
-//    System.exit(0);
-  }
+public interface ModelAggregator {
 
 }
