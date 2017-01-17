@@ -46,7 +46,7 @@ public class SplitNode extends Node {
   }
 
   @Override
-  FoundNode filterInstanceToLeaf(Instance inst, SplitNode parent, int parentBranch) {
+  public FoundNode filterInstanceToLeaf(Instance inst, SplitNode parent, int parentBranch) {
     int childIndex = instanceChildIndex(inst);
     if (childIndex >= 0) {
       Node child = getChild(childIndex);
@@ -85,7 +85,7 @@ public class SplitNode extends Node {
    * @param child
    *          The child node
    */
-  void setChild(int index, Node child) {
+  public void setChild(int index, Node child) {
     if ((this.splitTest.maxBranches() >= 0)
         && (index >= this.splitTest.maxBranches())) {
       throw new IndexOutOfBoundsException();

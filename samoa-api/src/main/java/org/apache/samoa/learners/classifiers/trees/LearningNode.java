@@ -38,13 +38,13 @@ public abstract class LearningNode extends Node {
 
   /**
    * Method to process the instance for learning
-   * 
+   *
    * @param inst
    *          The processed instance
    * @param proc
    *          The model aggregator processor where this learning node exists
    */
-  abstract void learnFromInstance(Instance inst, ModelAggregatorProcessor proc);
+  public abstract void learnFromInstance(Instance inst, ModelAggregatorProcessor proc);
 
   @Override
   protected boolean isLeaf() {
@@ -52,7 +52,7 @@ public abstract class LearningNode extends Node {
   }
 
   @Override
-  protected FoundNode filterInstanceToLeaf(Instance inst, SplitNode parent,
+  public FoundNode filterInstanceToLeaf(Instance inst, SplitNode parent,
       int parentBranch) {
     return new FoundNode(this, parent, parentBranch);
   }

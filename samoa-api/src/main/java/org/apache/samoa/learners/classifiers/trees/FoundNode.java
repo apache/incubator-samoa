@@ -50,7 +50,7 @@ public final class FoundNode implements java.io.Serializable {
    * 
    * @return The node where the instance is routed/filtered
    */
-  Node getNode() {
+  public Node getNode() {
     return this.node;
   }
 
@@ -71,7 +71,7 @@ public final class FoundNode implements java.io.Serializable {
    * 
    * @return The parent of the node
    */
-  SplitNode getParent() {
+  public SplitNode getParent() {
     return this.parent;
   }
 
@@ -81,7 +81,7 @@ public final class FoundNode implements java.io.Serializable {
    * 
    * @return The index of the node in its parent node.
    */
-  int getParentBranch() {
+  public int getParentBranch() {
     return this.parentBranch;
   }
 

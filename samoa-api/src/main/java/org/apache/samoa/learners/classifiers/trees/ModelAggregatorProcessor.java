@@ -64,44 +64,45 @@ import org.slf4j.LoggerFactory;
  * @author Arinto Murdopo
  * 
  */
-public final class ModelAggregatorProcessor implements Processor {
+public class ModelAggregatorProcessor implements Processor {
 
   private static final long serialVersionUID = -1685875718300564886L;
   private static final Logger logger = LoggerFactory.getLogger(ModelAggregatorProcessor.class);
 
-  private int processorId;
+  protected int processorId;
 
-  private Node treeRoot;
+  protected Node treeRoot;
 
-  private int activeLeafNodeCount;
-  private int inactiveLeafNodeCount;
-  private int decisionNodeCount;
-  private boolean growthAllowed;
+  protected int activeLeafNodeCount;
+  protected int inactiveLeafNodeCount;
+  protected int decisionNodeCount;
+  protected boolean growthAllowed;
 
-  private final Instances dataset;
+  protected final Instances dataset;
 
   // to support concurrent split
-  private long splitId;
-  private ConcurrentMap<Long, SplittingNodeInfo> splittingNodes;
-  private BlockingQueue<Long> timedOutSplittingNodes;
+  protected long splitId;
+  protected ConcurrentMap<Long, SplittingNodeInfo> splittingNodes;
+  public BlockingQueue<Long> timedOutSplittingNodes;
 
   // available streams
-  private Stream resultStream;
-  private Stream attributeStream;
-  private Stream controlStream;
+  public Stream resultStream;
+  public Stream attributeStream;
+  public Stream controlStream;
 
-  private transient ScheduledExecutorService executor;
+  protected transient ScheduledExecutorService executor;
 
-  private final SplitCriterion splitCriterion;
-  private final double splitConfidence;
-  private final double tieThreshold;
-  private final int gracePeriod;
-  private final int parallelismHint;
-  private final long timeOut;
+  public final SplitCriterion splitCriterion;
+  public final double splitConfidence;
+  public final double tieThreshold;
+  public final int gracePeriod;
+  public final int parallelismHint;
+  public final long timeOut;
 
   // private constructor based on Builder pattern
-  private ModelAggregatorProcessor(Builder builder) {
+  protected ModelAggregatorProcessor(Builder<?> builder) {
     this.dataset = builder.dataset;
+    this.processorId = builder.processorID;
     this.splitCriterion = builder.splitCriterion;
     this.splitConfidence = builder.splitConfidence;
     this.tieThreshold = builder.tieThreshold;
@@ -226,19 +227,19 @@ public final class ModelAggregatorProcessor implements Processor {
     this.resultStream = resultStream;
   }
 
-  void setAttributeStream(Stream attributeStream) {
+  public void setAttributeStream(Stream attributeStream) {
     this.attributeStream = attributeStream;
   }
 
-  void setControlStream(Stream controlStream) {
+  public void setControlStream(Stream controlStream) {
     this.controlStream = controlStream;
   }
 
-  void sendToAttributeStream(ContentEvent event) {
+  public void sendToAttributeStream(ContentEvent event) {
     this.attributeStream.put(event);
   }
 
-  void sendToControlStream(ContentEvent event) {
+  public void sendToControlStream(ContentEvent event) {
     this.controlStream.put(event);
   }
 
@@ -318,11 +319,11 @@ public final class ModelAggregatorProcessor implements Processor {
     }
   }
 
-  private boolean correctlyClassifies(Instance inst, double[] prediction) {
+  public boolean correctlyClassifies(Instance inst, double[] prediction) {
     return maxIndex(prediction) == (int) inst.classValue();
   }
 
-  private void resetLearning() {
+  public void resetLearning() {
     this.treeRoot = null;
     // Remove nodes
     FoundNode[] learningNodes = findNodes();
@@ -338,13 +339,13 @@ public final class ModelAggregatorProcessor implements Processor {
     }
   }
 
-  protected FoundNode[] findNodes() {
+  public FoundNode[] findNodes() {
     List<FoundNode> foundList = new LinkedList<>();
     findNodes(this.treeRoot, null, -1, foundList);
     return foundList.toArray(new FoundNode[foundList.size()]);
   }
 
-  protected void findNodes(Node node, SplitNode parent, int parentBranch, List<FoundNode> found) {
+  public void findNodes(Node node, SplitNode parent, int parentBranch, List<FoundNode> found) {
     if (node != null) {
       found.add(new FoundNode(node, parent, parentBranch));
       if (node instanceof SplitNode) {
@@ -362,7 +363,7 @@ public final class ModelAggregatorProcessor implements Processor {
    * @param inst
    * @return
    */
-  private double[] getVotesForInstance(Instance inst) {
+  public double[] getVotesForInstance(Instance inst) {
     return getVotesForInstance(inst, false);
   }
 
@@ -383,7 +384,7 @@ public final class ModelAggregatorProcessor implements Processor {
 
     }
 
-    // Training after testing to speed up the process
+    // Training after testing to speed up the process. Never called for BoostMAProcessor
     if (isTraining) {
       if (this.treeRoot == null) {
         this.treeRoot = newLearningNode(this.parallelismHint);
@@ -401,7 +402,7 @@ public final class ModelAggregatorProcessor implements Processor {
    * 
    * @param inst
    */
-  private void trainOnInstanceImpl(Instance inst) {
+  public void trainOnInstanceImpl(Instance inst) {
     if (this.treeRoot == null) {
       this.treeRoot = newLearningNode(this.parallelismHint);
       this.activeLeafNodeCount = 1;
@@ -411,7 +412,7 @@ public final class ModelAggregatorProcessor implements Processor {
     trainOnInstanceImpl(foundNode, inst);
   }
 
-  private void trainOnInstanceImpl(FoundNode foundNode, Instance inst) {
+  public void trainOnInstanceImpl(FoundNode foundNode, Instance inst) {
 
     Node leafNode = foundNode.getNode();
 
@@ -440,7 +441,7 @@ public final class ModelAggregatorProcessor implements Processor {
    * @param foundNode
    *          The data structure to represents the filtering of the instance using the tree model.
    */
-  private void attemptToSplit(ActiveLearningNode activeLearningNode, FoundNode foundNode) {
+  public void attemptToSplit(ActiveLearningNode activeLearningNode, FoundNode foundNode) {
     if (!activeLearningNode.observedClassDistributionIsPure()) {
       // Increment the split ID
       this.splitId++;
@@ -469,7 +470,7 @@ public final class ModelAggregatorProcessor implements Processor {
    * @param foundNode
    *          The data structure to represents the filtering of the instance using the tree model.
    */
-  private void continueAttemptToSplit(ActiveLearningNode activeLearningNode, FoundNode foundNode) {
+  protected void continueAttemptToSplit(ActiveLearningNode activeLearningNode, FoundNode foundNode) {
     AttributeSplitSuggestion bestSuggestion = activeLearningNode.getDistributedBestSuggestion();
     AttributeSplitSuggestion secondBestSuggestion = activeLearningNode.getDistributedSecondBestSuggestion();
 
@@ -490,7 +491,7 @@ public final class ModelAggregatorProcessor implements Processor {
     boolean shouldSplit = false;
 
     if (secondBestSuggestion == null) {
-      shouldSplit = (bestSuggestion != null);
+      shouldSplit = true;
     } else {
       double hoeffdingBound = computeHoeffdingBound(
           this.splitCriterion.getRangeOfMerit(activeLearningNode.getObservedClassDistribution()), this.splitConfidence,
@@ -544,7 +545,7 @@ public final class ModelAggregatorProcessor implements Processor {
    * @param parentBranch
    *          the branch index of the node in the parent node
    */
-  private void deactivateLearningNode(ActiveLearningNode toDeactivate, SplitNode parent, int parentBranch) {
+  public void deactivateLearningNode(ActiveLearningNode toDeactivate, SplitNode parent, int parentBranch) {
     Node newLeaf = new InactiveLearningNode(toDeactivate.getObservedClassDistribution());
     if (parent == null) {
       this.treeRoot = newLeaf;
@@ -556,11 +557,11 @@ public final class ModelAggregatorProcessor implements Processor {
     this.inactiveLeafNodeCount++;
   }
 
-  private LearningNode newLearningNode(int parallelismHint) {
+  protected LearningNode newLearningNode(int parallelismHint) {
     return newLearningNode(new double[0], parallelismHint);
   }
 
-  private LearningNode newLearningNode(double[] initialClassObservations, int parallelismHint) {
+  protected LearningNode newLearningNode(double[] initialClassObservations, int parallelismHint) {
     // for VHT optimization, we need to dynamically instantiate the appropriate
     // ActiveLearningNode
     return new ActiveLearningNode(initialClassObservations, parallelismHint);
@@ -571,7 +572,7 @@ public final class ModelAggregatorProcessor implements Processor {
    * 
    * @param ih
    */
-  private void setModelContext(InstancesHeader ih) {
+  public void setModelContext(InstancesHeader ih) {
     // TODO possibly refactored
     if ((ih != null) && (ih.classIndex() < 0)) {
       throw new IllegalArgumentException("Context for a classifier must include a class to learn");
@@ -582,7 +583,7 @@ public final class ModelAggregatorProcessor implements Processor {
     logger.trace("Model context: {}", ih.toString());
   }
 
-  private static double computeHoeffdingBound(double range, double confidence, double n) {
+  public static double computeHoeffdingBound(double range, double confidence, double n) {
     return Math.sqrt((Math.pow(range, 2.0) * Math.log(1.0 / confidence)) / (2.0 * n));
   }
 
@@ -593,7 +594,7 @@ public final class ModelAggregatorProcessor implements Processor {
    * @author Arinto Murdopo
    * 
    */
-  static class AggregationTimeOutHandler implements Runnable {
+  protected static class AggregationTimeOutHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(AggregationTimeOutHandler.class);
     private final Long splitId;
@@ -622,16 +623,29 @@ public final class ModelAggregatorProcessor implements Processor {
    * @author Arinto Murdopo
    * 
    */
-  static class SplittingNodeInfo implements Serializable {
+  protected static class SplittingNodeInfo implements Serializable {
 
     private final ActiveLearningNode activeLearningNode;
     private final FoundNode foundNode;
-    private final transient ScheduledFuture<?> scheduledFuture;
+    private transient ScheduledFuture<?> scheduledFuture;
 
     SplittingNodeInfo(ActiveLearningNode activeLearningNode, FoundNode foundNode, ScheduledFuture<?> scheduledFuture) {
       this.activeLearningNode = activeLearningNode;
       this.foundNode = foundNode;
       this.scheduledFuture = scheduledFuture;
+    }
+
+    public SplittingNodeInfo(BoostVHTActiveLearningNode activeLearningNode, FoundNode foundNode) {
+      this.activeLearningNode = activeLearningNode;
+      this.foundNode = foundNode;
+    }
+
+    public ActiveLearningNode getActiveLearningNode() {
+      return activeLearningNode;
+    }
+
+    public FoundNode getFoundNode() {
+      return foundNode;
     }
   }
 
@@ -651,10 +665,11 @@ public final class ModelAggregatorProcessor implements Processor {
    * @author Arinto Murdopo
    * 
    */
-  static class Builder {
+  public static class Builder<T extends Builder<T>>{
 
     // required parameters
     private final Instances dataset;
+    private int processorID;
 
     // default values
     private SplitCriterion splitCriterion = new InfoGainSplitCriterion();
@@ -665,11 +680,11 @@ public final class ModelAggregatorProcessor implements Processor {
     private long timeOut = 30;
     private ChangeDetector changeDetector = null;
 
-    Builder(Instances dataset) {
+    public Builder(Instances dataset) {
       this.dataset = dataset;
     }
 
-    Builder(ModelAggregatorProcessor oldProcessor) {
+    public Builder(ModelAggregatorProcessor oldProcessor) {
       this.dataset = oldProcessor.dataset;
       this.splitCriterion = oldProcessor.splitCriterion;
       this.splitConfidence = oldProcessor.splitConfidence;
@@ -677,46 +692,96 @@ public final class ModelAggregatorProcessor implements Processor {
       this.gracePeriod = oldProcessor.gracePeriod;
       this.parallelismHint = oldProcessor.parallelismHint;
       this.timeOut = oldProcessor.timeOut;
+      this.processorID = oldProcessor.getProcessorId();
     }
 
-    Builder splitCriterion(SplitCriterion splitCriterion) {
+    public T splitCriterion(SplitCriterion splitCriterion) {
       this.splitCriterion = splitCriterion;
-      return this;
+      return getThis();
     }
 
-    Builder splitConfidence(double splitConfidence) {
+    public T splitConfidence(double splitConfidence) {
       this.splitConfidence = splitConfidence;
-      return this;
+      return getThis();
     }
 
-    Builder tieThreshold(double tieThreshold) {
+    public T tieThreshold(double tieThreshold) {
       this.tieThreshold = tieThreshold;
-      return this;
+      return getThis();
     }
 
-    Builder gracePeriod(int gracePeriod) {
+    public T gracePeriod(int gracePeriod) {
       this.gracePeriod = gracePeriod;
-      return this;
+      return getThis();
     }
 
-    Builder parallelismHint(int parallelismHint) {
+    public T parallelismHint(int parallelismHint) {
       this.parallelismHint = parallelismHint;
-      return this;
+      return getThis();
     }
 
-    Builder timeOut(long timeOut) {
+    public T timeOut(long timeOut) {
       this.timeOut = timeOut;
-      return this;
+      return getThis();
     }
 
-    Builder changeDetector(ChangeDetector changeDetector) {
+    public T processorID(int processorID) {
+      this.processorID = processorID;
+      return getThis();
+    }
+
+    T changeDetector(ChangeDetector changeDetector) {
       this.changeDetector = changeDetector;
-      return this;
+      return getThis();
     }
 
-    ModelAggregatorProcessor build() {
+    public T getThis(){
+      return (T) this;
+    }
+
+    public ModelAggregatorProcessor build() {
       return new ModelAggregatorProcessor(this);
     }
+
   }
 
+  public Instances getDataset() {
+    return dataset;
+  }
+
+  public Stream getAttributeStream() {
+    return attributeStream;
+  }
+
+  public Stream getControlStream() {
+    return controlStream;
+  }
+
+  public SplitCriterion getSplitCriterion() {
+    return splitCriterion;
+  }
+
+  public double getSplitConfidence() {
+    return splitConfidence;
+  }
+
+  public double getTieThreshold() {
+    return tieThreshold;
+  }
+
+  public int getGracePeriod() {
+    return gracePeriod;
+  }
+
+  public int getParallelismHint() {
+    return parallelismHint;
+  }
+
+  public long getTimeOut() {
+    return timeOut;
+  }
+
+  public int getProcessorId() {
+    return processorId;
+  }
 }

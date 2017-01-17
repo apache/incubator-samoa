@@ -29,7 +29,7 @@ import org.apache.samoa.instances.Instance;
  * @author Arinto Murdopo
  * 
  */
-abstract class Node implements java.io.Serializable {
+public abstract class Node implements java.io.Serializable {
 
   private static final long serialVersionUID = 4008521239214180548L;
 
@@ -46,7 +46,7 @@ abstract class Node implements java.io.Serializable {
    *          The index of the current node in the parent
    * @return FoundNode which is the data structure to represent the resulting leaf.
    */
-  abstract FoundNode filterInstanceToLeaf(Instance inst, SplitNode parent, int parentBranch);
+  public abstract FoundNode filterInstanceToLeaf(Instance inst, SplitNode parent, int parentBranch);
 
   /**
    * Method to return the predicted class of the instance based on the statistic inside the node.
@@ -81,7 +81,7 @@ abstract class Node implements java.io.Serializable {
    * 
    * @return Observed class distribution
    */
-  protected double[] getObservedClassDistribution() {
+  public double[] getObservedClassDistribution() {
     return this.observedClassDistribution.getArrayCopy();
   }
 
@@ -90,7 +90,7 @@ abstract class Node implements java.io.Serializable {
    * 
    * @return Flag whether class distribution is pure or not.
    */
-  protected boolean observedClassDistributionIsPure() {
+  public boolean observedClassDistributionIsPure() {
     return (observedClassDistribution.numNonZeroEntries() < 2);
   }
 

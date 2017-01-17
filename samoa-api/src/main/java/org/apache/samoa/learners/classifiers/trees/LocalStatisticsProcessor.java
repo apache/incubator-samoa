@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Vector;
 
 import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.core.Processor;
@@ -65,6 +64,7 @@ public final class LocalStatisticsProcessor implements Processor {
   private final boolean binarySplit;
   private final AttributeClassObserver nominalClassObserver;
   private final AttributeClassObserver numericClassObserver;
+  private int id;
 
   // the two observer classes below are also needed to be setup from the Tree
   private LocalStatisticsProcessor(Builder builder) {
@@ -102,66 +102,94 @@ public final class LocalStatisticsProcessor implements Processor {
        * = (AttributeContentEvent) event; Long learningNodeId =
        * Long.valueOf(ace.getLearningNodeId()); Integer obsIndex =
        * Integer.valueOf(ace.getObsIndex());
-       * 
+       *
        * AttributeClassObserver obs = localStats.get( learningNodeId, obsIndex);
-       * 
+       *
        * if (obs == null) { obs = ace.isNominal() ? newNominalClassObserver() :
        * newNumericClassObserver(); localStats.put(ace.getLearningNodeId(),
        * obsIndex, obs); } obs.observeAttributeClass(ace.getAttrVal(),
        * ace.getClassVal(), ace.getWeight());
        */
-    } else if (event instanceof ComputeContentEvent) {
-      // process ComputeContentEvent by calculating the local statistic
-      // and send back the calculation results via computation result stream.
+    } else if (event instanceof AttributeSliceEvent) {
+      AttributeSliceEvent ase = (AttributeSliceEvent) event;
+      processAttributeSlice(ase);
+
+    } else if (event instanceof ComputeContentEvent){
       ComputeContentEvent cce = (ComputeContentEvent) event;
-      Long learningNodeId = cce.getLearningNodeId();
-      double[] preSplitDist = cce.getPreSplitDist();
+      processComputeEvent(cce);
 
-      Map<Integer, AttributeClassObserver> learningNodeRowMap = localStats
-          .row(learningNodeId);
-      List<AttributeSplitSuggestion> suggestions = new Vector<>();
-
-      for (Entry<Integer, AttributeClassObserver> entry : learningNodeRowMap.entrySet()) {
-        AttributeClassObserver obs = entry.getValue();
-        AttributeSplitSuggestion suggestion = obs
-            .getBestEvaluatedSplitSuggestion(splitCriterion,
-                preSplitDist, entry.getKey(), binarySplit);
-        if (suggestion != null) {
-          suggestions.add(suggestion);
-        }
-      }
-
-      AttributeSplitSuggestion[] bestSuggestions = suggestions
-          .toArray(new AttributeSplitSuggestion[suggestions.size()]);
-
-      Arrays.sort(bestSuggestions);
-
-      AttributeSplitSuggestion bestSuggestion = null;
-      AttributeSplitSuggestion secondBestSuggestion = null;
-
-      if (bestSuggestions.length >= 1) {
-        bestSuggestion = bestSuggestions[bestSuggestions.length - 1];
-
-        if (bestSuggestions.length >= 2) {
-          secondBestSuggestion = bestSuggestions[bestSuggestions.length - 2];
-        }
-      }
-
-      // create the local result content event
-      LocalResultContentEvent lcre =
-          new LocalResultContentEvent(cce.getSplitId(), bestSuggestion, secondBestSuggestion);
-      computationResultStream.put(lcre);
-      logger.debug("Finish compute event");
     } else if (event instanceof DeleteContentEvent) {
       DeleteContentEvent dce = (DeleteContentEvent) event;
       Long learningNodeId = dce.getLearningNodeId();
       localStats.rowMap().remove(learningNodeId);
     }
-    return false;
+    return true;
+  }
+
+  private void processComputeEvent(ComputeContentEvent cce) {
+    Long learningNodeId = cce.getLearningNodeId();
+    double[] preSplitDist = cce.getPreSplitDist();
+
+    Map<Integer, AttributeClassObserver> learningNodeRowMap = localStats.row(learningNodeId);
+    AttributeSplitSuggestion[] suggestions = new AttributeSplitSuggestion[learningNodeRowMap.size()];
+
+    int curIndex = 0;
+    for (Entry<Integer, AttributeClassObserver> entry : learningNodeRowMap.entrySet()) {
+      AttributeClassObserver obs = entry.getValue();
+      AttributeSplitSuggestion suggestion = obs
+          .getBestEvaluatedSplitSuggestion(splitCriterion,
+              preSplitDist, entry.getKey(), binarySplit);
+      if (suggestion == null) {
+        suggestion = new AttributeSplitSuggestion();
+      }
+      suggestions[curIndex] = suggestion;
+      curIndex++;
+    }
+
+    // Doing this sort instead of keeping the max and second max seems faster for some reason
+    Arrays.sort(suggestions);
+
+    AttributeSplitSuggestion bestSuggestion = null;
+    AttributeSplitSuggestion secondBestSuggestion = null;
+
+    if (suggestions.length >= 1) {
+    bestSuggestion = suggestions[suggestions.length - 1];
+
+      if (suggestions.length >= 2) {
+        secondBestSuggestion = suggestions[suggestions.length - 2];
+      }
+    }
+
+    // create the local result content event
+    LocalResultContentEvent lcre =
+        new LocalResultContentEvent(cce.getSplitId(), bestSuggestion, secondBestSuggestion);
+    lcre.setEnsembleId(cce.getEnsembleId());
+    computationResultStream.put(lcre);
+  }
+
+  private void processAttributeSlice(AttributeSliceEvent ase) {
+    //      System.out.printf("Event with key: %s processed by LSP: %d%n", ase.getKey(), id);
+    double[] attributeSlice = ase.getAttributeSlice();
+    boolean[] isNominal = ase.getIsNominalSlice();
+    int startingIndex = ase.getAttributeStartingIndex();
+    Long learningNodeId = ase.getLearningNodeId();
+    int classValue = ase.getClassValue();
+    double weight = ase.getWeight();
+
+    for (int i = 0; i < attributeSlice.length; i++) {
+      Integer obsIndex = i + startingIndex;
+      AttributeClassObserver obs = localStats.get(learningNodeId, obsIndex);
+      if (obs == null) {
+        obs = isNominal[i] ? newNominalClassObserver() : newNumericClassObserver();
+        localStats.put(learningNodeId, obsIndex, obs);
+      }
+      obs.observeAttributeClass(attributeSlice[i], classValue, weight);
+    }
   }
 
   @Override
   public void onCreate(int id) {
+    this.id = id;
     this.localStats = HashBasedTable.create();
   }
 
@@ -170,7 +198,7 @@ public final class LocalStatisticsProcessor implements Processor {
     LocalStatisticsProcessor oldProcessor = (LocalStatisticsProcessor) p;
     LocalStatisticsProcessor newProcessor = new LocalStatisticsProcessor.Builder(oldProcessor).build();
 
-    newProcessor.setComputationResultStream(oldProcessor.computationResultStream);
+    newProcessor.setComputationResultStream(oldProcessor.getComputationResultStream());
 
     return newProcessor;
   }
@@ -180,16 +208,16 @@ public final class LocalStatisticsProcessor implements Processor {
    * 
    * @param computeStream
    */
-  void setComputationResultStream(Stream computeStream) {
+  public void setComputationResultStream(Stream computeStream) {
     this.computationResultStream = computeStream;
   }
 
   private AttributeClassObserver newNominalClassObserver() {
-    return (AttributeClassObserver) this.nominalClassObserver.copy();
+    return new NominalAttributeClassObserver(); //further investigate this change
   }
 
   private AttributeClassObserver newNumericClassObserver() {
-    return (AttributeClassObserver) this.numericClassObserver.copy();
+    return new GaussianNumericAttributeClassObserver();//further investigate this change
   }
 
   /**
@@ -198,45 +226,66 @@ public final class LocalStatisticsProcessor implements Processor {
    * @author Arinto Murdopo
    * 
    */
-  static class Builder {
+  public static class Builder {
 
     private SplitCriterion splitCriterion = new InfoGainSplitCriterion();
     private boolean binarySplit = false;
     private AttributeClassObserver nominalClassObserver = new NominalAttributeClassObserver();
     private AttributeClassObserver numericClassObserver = new GaussianNumericAttributeClassObserver();
 
-    Builder() {
+    public Builder() {
 
     }
 
-    Builder(LocalStatisticsProcessor oldProcessor) {
-      this.splitCriterion = oldProcessor.splitCriterion;
-      this.binarySplit = oldProcessor.binarySplit;
+    public Builder(LocalStatisticsProcessor oldProcessor) {
+      this.splitCriterion = oldProcessor.getSplitCriterion();
+      this.binarySplit = oldProcessor.isBinarySplit();
+      this.nominalClassObserver = oldProcessor.getNominalClassObserver();
+      this.numericClassObserver = oldProcessor.getNumericClassObserver();
     }
 
-    Builder splitCriterion(SplitCriterion splitCriterion) {
+    public Builder splitCriterion(SplitCriterion splitCriterion) {
       this.splitCriterion = splitCriterion;
       return this;
     }
 
-    Builder binarySplit(boolean binarySplit) {
+    public Builder binarySplit(boolean binarySplit) {
       this.binarySplit = binarySplit;
       return this;
     }
 
-    Builder nominalClassObserver(AttributeClassObserver nominalClassObserver) {
+    public Builder nominalClassObserver(AttributeClassObserver nominalClassObserver) {
       this.nominalClassObserver = nominalClassObserver;
       return this;
     }
 
-    Builder numericClassObserver(AttributeClassObserver numericClassObserver) {
+    public Builder numericClassObserver(AttributeClassObserver numericClassObserver) {
       this.numericClassObserver = numericClassObserver;
       return this;
     }
 
-    LocalStatisticsProcessor build() {
+    public LocalStatisticsProcessor build() {
       return new LocalStatisticsProcessor(this);
     }
   }
-
+  
+  public SplitCriterion getSplitCriterion() {
+    return splitCriterion;
+  }
+  
+  public boolean isBinarySplit() {
+    return binarySplit;
+  }
+  
+  public AttributeClassObserver getNominalClassObserver() {
+    return nominalClassObserver;
+  }
+  
+  public AttributeClassObserver getNumericClassObserver() {
+    return numericClassObserver;
+  }
+  
+  public Stream getComputationResultStream() {
+    return computationResultStream;
+  }
 }

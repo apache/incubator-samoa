@@ -36,12 +36,12 @@ public final class InactiveLearningNode extends LearningNode {
 	 */
   private static final long serialVersionUID = -814552382883472302L;
 
-  InactiveLearningNode(double[] initialClassObservation) {
+  public InactiveLearningNode(double[] initialClassObservation) {
     super(initialClassObservation);
   }
 
   @Override
-  void learnFromInstance(Instance inst, ModelAggregatorProcessor proc) {
+  public void learnFromInstance(Instance inst, ModelAggregatorProcessor proc) {
     this.observedClassDistribution.addToValue(
         (int) inst.classValue(), inst.weight());
   }

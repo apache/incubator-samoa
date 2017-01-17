@@ -38,6 +38,8 @@ public final class ComputeContentEvent extends ControlContentEvent {
 
   private final double[] preSplitDist;
   private final long splitId;
+  
+  private int ensembleId; //the id of the ensemble that send the event
 
   public ComputeContentEvent() {
     super(-1);
@@ -142,4 +144,11 @@ public final class ComputeContentEvent extends ControlContentEvent {
 
   }
 
+  public int getEnsembleId() {
+    return ensembleId;
+  }
+  
+  public void setEnsembleId(int ensembleId) {
+    this.ensembleId = ensembleId;
+  }
 }
