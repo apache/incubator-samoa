@@ -32,7 +32,9 @@ import java.util.Map;
 import java.util.Properties;
 
 import kafka.admin.AdminUtils;
+import kafka.admin.RackAwareMode;
 import kafka.utils.ZKStringSerializer;
+import kafka.utils.ZkUtils;
 
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.exception.ZkMarshallingError;
@@ -72,7 +74,9 @@ public class SystemsUtils {
      * Create Kafka topic/stream
      */
     static void createKafkaTopic(String name, int partitions, int replicas) {
-      AdminUtils.createTopic(zkClient, name, partitions, replicas, new Properties());
+        // Fix for Apache Kafka 0.10
+        ZkUtils zkUtils = ZkUtils.apply(zkClient, false);
+      AdminUtils.createTopic(zkUtils, name, partitions, replicas, new Properties(), RackAwareMode.Disabled$.MODULE$);
     }
 
     static class ZKStringSerializerWrapper implements ZkSerializer {
