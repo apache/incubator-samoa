@@ -15,28 +15,63 @@
  */
 package org.apache.samoa.streams.kafka;
 
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.core.Processor;
 
 /**
- *
+ * Destination processor that writes data to Apache Kafka
  * @author pwawrzyniak
+ * @version 0.5.0-incubating-SNAPSHOT
+ * @since 0.5.0-incubating
  */
 public class KafkaDestinationProcessor implements Processor {
 
+    private final KafkaUtils kafkaUtils;
+    private final String topic;
+    private final KafkaSerializer serializer;
+
+    /**
+     * Class constructor
+     * @param props Properties of Kafka Producer
+     * @see <a href="http://kafka.apache.org/documentation/#producerconfigs">Kafka Producer configuration</a>
+     * @param topic Topic this destination processor will write into
+     * @param serializer Implementation of KafkaSerializer that handles arriving data serialization
+     */
+    public KafkaDestinationProcessor(Properties props, String topic, KafkaSerializer serializer) {
+        this.kafkaUtils = new KafkaUtils(null, props, 0);
+        this.topic = topic;
+        this.serializer = serializer;
+    }
+    
+    private KafkaDestinationProcessor(KafkaUtils kafkaUtils, String topic, KafkaSerializer serializer){
+        this.kafkaUtils = kafkaUtils;
+        this.topic = topic;
+        this.serializer = serializer;
+    }
+
     @Override
     public boolean process(ContentEvent event) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            kafkaUtils.sendKafkaMessage(topic, serializer.serialize(event));
+        } catch (Exception ex) {
+            Logger.getLogger(KafkaEntranceProcessor.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        return true;
     }
 
     @Override
     public void onCreate(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        kafkaUtils.initializeProducer();
     }
 
     @Override
     public Processor newProcessor(Processor processor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        KafkaDestinationProcessor kdp = (KafkaDestinationProcessor)processor;
+        return new KafkaDestinationProcessor(new KafkaUtils(kdp.kafkaUtils), kdp.topic, kdp.serializer);
     }
-    
+
 }
