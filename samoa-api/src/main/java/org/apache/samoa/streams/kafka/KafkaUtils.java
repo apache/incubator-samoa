@@ -24,6 +24,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 
 /**
  * Internal class responsible for Kafka Stream handling (both consume and produce)
@@ -76,6 +77,13 @@ class KafkaUtils {
         consumer.subscribe(topics);
     }
 
+    public void initializeProducer(){
+        // lazy instantiation
+        if(producer==null){
+            producer = new KafkaProducer<>(producerProperties);
+        }        
+    }
+    
     /**
      * Method for reading new messages from Kafka topics
      * @return Collection of read messages
@@ -103,5 +111,12 @@ class KafkaUtils {
             ret.add(iterator.next().value());
         }
         return ret;
+    }
+    
+    public void sendKafkaMessage(String topic, byte[] message){
+        if(producer!=null){
+            producer.send(new ProducerRecord<String, byte[]>(topic, message));
+            producer.flush();
+        }
     }
 }
