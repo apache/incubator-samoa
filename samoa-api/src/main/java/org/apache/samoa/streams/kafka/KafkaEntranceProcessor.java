@@ -15,7 +15,12 @@
  */
 package org.apache.samoa.streams.kafka;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.core.EntranceProcessor;
 import org.apache.samoa.core.Processor;
@@ -27,39 +32,57 @@ import org.apache.samoa.core.Processor;
 public class KafkaEntranceProcessor implements EntranceProcessor {
 
     transient private KafkaUtils kafkaUtils;
+    List<byte[]> buffer;
+    private final KafkaDeserializer deserializer;
 
-    public KafkaEntranceProcessor(Properties props, String topic, int batchSize) {
-        kafkaUtils = new KafkaUtils(props, null, batchSize);
+    public KafkaEntranceProcessor(Properties props, String topic, int timeout, KafkaDeserializer deserializer) {
+        this.kafkaUtils = new KafkaUtils(props, null, timeout);
+        this.deserializer = deserializer;
+    }
+
+    private KafkaEntranceProcessor(KafkaUtils kafkaUtils, KafkaDeserializer deserializer) {
+        this.kafkaUtils = kafkaUtils;
+        this.deserializer = deserializer;
     }
 
     @Override
     public void onCreate(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.buffer = new ArrayList<>(100);
     }
 
     @Override
     public boolean isFinished() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return false;
     }
 
     @Override
     public boolean hasNext() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (buffer.isEmpty()) {
+            try {
+                buffer.addAll(kafkaUtils.getKafkaMessages());
+            } catch (Exception ex) {
+                Logger.getLogger(KafkaEntranceProcessor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return buffer.size() > 0;
     }
 
     @Override
     public ContentEvent nextEvent() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // assume this will never be called when buffer is empty!
+        return this.deserializer.deserialize(buffer.remove(buffer.size() - 1));
+
     }
 
     @Override
     public boolean process(ContentEvent event) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return false;
     }
 
     @Override
     public Processor newProcessor(Processor processor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        KafkaEntranceProcessor kep = (KafkaEntranceProcessor) processor;
+        return new KafkaEntranceProcessor(new KafkaUtils(kep.kafkaUtils), deserializer);
     }
 
 }

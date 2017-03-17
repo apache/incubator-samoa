@@ -15,8 +15,12 @@
  */
 package org.apache.samoa.streams.kafka;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -46,6 +50,12 @@ class KafkaUtils {
         this.consumerTimeout = consumerTimeout;
     }
 
+    KafkaUtils(KafkaUtils kafkaUtils) {
+        this.consumerProperties = kafkaUtils.consumerProperties;
+        this.producerProperties = kafkaUtils.producerProperties;
+        this.consumerTimeout = kafkaUtils.consumerTimeout;
+    }
+
     public void initializeConsumer(Collection<String> topics) {
         // lazy initialization
         if (consumer == null) {
@@ -54,11 +64,11 @@ class KafkaUtils {
         consumer.subscribe(topics);
     }
 
-    public ConsumerRecords<String, byte[]> getMessages() throws Exception {
+    public List<byte[]> getKafkaMessages() throws Exception {
 
         if (consumer != null) {
             if (!consumer.subscription().isEmpty()) {
-                return consumer.poll(consumerTimeout);
+                return getMessagesBytes(consumer.poll(consumerTimeout));
             } else {
                 // TODO: do it more elegant way
                 throw new Exception("Consumer subscribed to no topics!");
@@ -67,5 +77,14 @@ class KafkaUtils {
             // TODO: do more elegant way
             throw new Exception("Consumer not initialised");
         }
+    }
+
+    private List<byte[]> getMessagesBytes(ConsumerRecords<String, byte[]> poll) {
+        Iterator<ConsumerRecord<String, byte[]>> iterator = poll.iterator();
+        List<byte[]> ret = new ArrayList<>();
+        while(iterator.hasNext()){
+            ret.add(iterator.next().value());
+        }
+        return ret;
     }
 }
