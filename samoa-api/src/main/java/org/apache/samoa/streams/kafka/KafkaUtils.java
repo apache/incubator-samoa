@@ -26,9 +26,11 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 
 /**
- * Internal class responsible for Kafka Stream handling
+ * Internal class responsible for Kafka Stream handling (both consume and produce)
  *
  * @author pwawrzyniak
+ * @version 0.5.0-incubating-SNAPSHOT
+ * @since 0.5.0-incubating
  */
 class KafkaUtils {
 
@@ -38,12 +40,18 @@ class KafkaUtils {
     private KafkaProducer<String, byte[]> producer;
 
     // Properties of the consumer, as defined in Kafka documentation
-    private Properties consumerProperties;
-    private Properties producerProperties;
+    private final Properties consumerProperties;
+    private final Properties producerProperties;
 
-    // Batch size for Kafka Consumer    
+    // Timeout for Kafka Consumer    
     private int consumerTimeout;
 
+    /**
+     * Class constructor
+     * @param consumerProperties Properties of consumer
+     * @param producerProperties Properties of producer
+     * @param consumerTimeout Timeout for consumer poll requests
+     */
     public KafkaUtils(Properties consumerProperties, Properties producerProperties, int consumerTimeout) {
         this.consumerProperties = consumerProperties;
         this.producerProperties = producerProperties;
@@ -56,14 +64,23 @@ class KafkaUtils {
         this.consumerTimeout = kafkaUtils.consumerTimeout;
     }
 
+    /**
+     * Method used to initialize Kafka Consumer, i.e. instantiate it and subscribe to configured topic
+     * @param topics List of Kafka topics that consumer should subscribe to
+     */
     public void initializeConsumer(Collection<String> topics) {
-        // lazy initialization
+        // lazy instantiation
         if (consumer == null) {
-            consumer = new KafkaConsumer<String, byte[]>(consumerProperties);
+            consumer = new KafkaConsumer<>(consumerProperties);
         }
         consumer.subscribe(topics);
     }
 
+    /**
+     * Method for reading new messages from Kafka topics
+     * @return Collection of read messages
+     * @throws Exception Exception is thrown when consumer was not initialized or is not subscribed to any topic.
+     */
     public List<byte[]> getKafkaMessages() throws Exception {
 
         if (consumer != null) {
