@@ -26,6 +26,10 @@ public interface KafkaSerializer<T extends ContentEvent> {
     
     // TODO: Consider Key-Value schema?
     
-    
+    /**
+     * Method that provides serialization algorithm
+     * @param message Message received from topology, to be serialized
+     * @return Serialized form of the message
+     */
     byte[] serialize(T message);
 }

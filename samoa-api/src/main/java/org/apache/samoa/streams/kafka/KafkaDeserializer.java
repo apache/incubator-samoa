@@ -25,6 +25,10 @@ import org.apache.samoa.core.ContentEvent;
 public interface KafkaDeserializer<T extends ContentEvent> {
     
     // TODO: Consider key-value schema?
-    
+    /**
+     * Method that provides deserialization algorithm
+     * @param message Message as received from Apache Kafka
+     * @return Deserialized form of message, to be passed to topology
+     */
     T deserialize(byte[] message);
 }
