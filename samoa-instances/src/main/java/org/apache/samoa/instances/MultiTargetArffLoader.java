@@ -1,4 +1,5 @@
 /*
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -35,51 +36,28 @@ package org.apache.samoa.instances;
  */
 
 
-/**
- * The Class SparseInstance.
- *
- * @author abifet
- */
-public class SparseInstance extends InstanceImpl {
+import java.io.Reader;
 
-    /**
-     * Instantiates a new sparse instance.
-     *
-     * @param d the d
-     * @param res the res
-     */
-    public SparseInstance(double d, double[] res) {
-        super(d, res);
+public class MultiTargetArffLoader extends ArffLoader {
+
+    public MultiTargetArffLoader(Reader reader) {
+        super(reader);
     }
 
-    /**
-     * Instantiates a new sparse instance.
-     *
-     * @param inst the inst
-     */
-    public SparseInstance(InstanceImpl inst) {
-        super(inst);
+    public MultiTargetArffLoader(Reader reader, Range range) {
+        super(reader, range);
     }
 
-    /**
-     * Instantiates a new sparse instance.
-     *
-     * @param numberAttributes the number attributes
-     */
-    public SparseInstance(double numberAttributes) {
-        super(1, null, null, (int) numberAttributes);
+    @Override
+    protected Instance newSparseInstance(double d, double[] res) {
+        return new SparseInstance(d, res); // TODO
     }
 
-    /**
-     * Instantiates a new sparse instance.
-     *
-     * @param weight the weight
-     * @param attributeValues the attribute values
-     * @param indexValues the index values
-     * @param numberAttributes the number attributes
-     */
-    public SparseInstance(double weight, double[] attributeValues, int[] indexValues, int numberAttributes) {
-        super(weight, attributeValues, indexValues, numberAttributes);
+    @Override
+    protected Instance newDenseInstance(int numAttributes) {
+        // numAttributes is this.instanceInformation.numAttributes()
+        this.range.setUpper(numAttributes);
+        return new DenseInstance(numAttributes);
     }
 
 }
