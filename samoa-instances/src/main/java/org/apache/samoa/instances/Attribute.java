@@ -1,6 +1,17 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * 	        http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific
+ * language governing permissions and limitations under the
+ * License.  
  */
 package org.apache.samoa.instances;
 
@@ -8,7 +19,7 @@ package org.apache.samoa.instances;
  * #%L
  * SAMOA
  * %%
- * Copyright (C) 2014 - 2015 Apache Software Foundation
+ * Copyright (C) 2014 - 2017 Apache Software Foundation
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,188 +35,285 @@ package org.apache.samoa.instances;
  * #L%
  */
 
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+//import org.apache.samoa.moa.core.Utils;
 /**
- * @author abifet
+ * The Class Attribute.
  */
 public class Attribute implements Serializable {
 
-  public static final String ARFF_ATTRIBUTE = "@attribute";
-  public static final String ARFF_ATTRIBUTE_NUMERIC = "NUMERIC";
-  public static final String ARFF_ATTRIBUTE_NOMINAL = "NOMINAL";
-  public static final String ARFF_ATTRIBUTE_DATE = "DATE";
+    /** The keyword used to denote the start of an arff attribute declaration */
+    public final static String ARFF_ATTRIBUTE = "@attribute";
 
-  /**
-   *
-   */
-  protected boolean isNominal;
-  /**
-   *
-   */
-  protected boolean isNumeric;
-  /**
-   *
-   */
-  protected boolean isDate;
-  /**
-   *
-   */
-  protected String name;
-  /**
-   *
-   */
-  protected List<String> attributeValues;
+    /** A keyword used to denote a numeric attribute */
+    public final static String ARFF_ATTRIBUTE_INTEGER = "integer";
 
-  /**
-   *
-   * @return
-   */
-  public List<String> getAttributeValues() {
-    return attributeValues;
-  }
+    /** A keyword used to denote a numeric attribute */
+    public final static String ARFF_ATTRIBUTE_REAL = "real";
 
-  /**
-   *
-   */
-  protected int index;
+    /** A keyword used to denote a numeric attribute */
+    public final static String ARFF_ATTRIBUTE_NUMERIC = "numeric";
 
-  /**
-   *
-   * @param string
-   */
-  public Attribute(String string) {
-    this.name = string;
-    this.isNumeric = true;
-  }
+    /** The keyword used to denote a string attribute */
+    public final static String ARFF_ATTRIBUTE_STRING = "string";
 
-  /**
-   *
-   * @param attributeName
-   * @param attributeValues
-   */
-  public Attribute(String attributeName, List<String> attributeValues) {
-    this.name = attributeName;
-    this.attributeValues = attributeValues;
-    this.isNominal = true;
-  }
+    /** The keyword used to denote a date attribute */
+    public final static String ARFF_ATTRIBUTE_DATE = "date";
 
-  /**
-   *
-   */
-  public Attribute() {
-    this("");
-  }
+    /** The keyword used to denote a relation-valued attribute */
+    public final static String ARFF_ATTRIBUTE_RELATIONAL = "relational";
 
-  /**
-   *
-   * @return
-   */
-  public boolean isNominal() {
-    return this.isNominal;
-  }
+    /** The keyword used to denote the end of the declaration of a subrelation */
+    public final static String ARFF_END_SUBRELATION = "@end";
 
-  /**
-   *
-   * @return
-   */
-  public String name() {
-    return this.name;
-  }
+    /** Strings longer than this will be stored compressed. */
+    private static final int STRING_COMPRESS_THRESHOLD = 200;
 
-  /**
-   *
-   * @param value
-   * @return
-   */
-  public String value(int value) {
-    return attributeValues.get(value);
-  }
+    /**
+     * The is nominal.
+     */
+    protected boolean isNominal;
 
-  /**
-   *
-   * @return
-   */
-  public boolean isNumeric() {
-    return isNumeric;
-  }
+    /**
+     * The is numeric.
+     */
+    protected boolean isNumeric;
 
-  /**
-   *
-   * @return
-   */
-  public int numValues() {
-    if (isNumeric()) {
-      return 0;
-    } else {
-      return attributeValues.size();
+    /**
+    * The is date.
+    */
+    protected boolean isDate;
+
+     /** 
+     * Date format specification for date attributes 
+     */
+    protected SimpleDateFormat m_DateFormat;
+  
+    /**
+     * The name.
+     */
+    protected String name;
+
+    /**
+     * The attribute values.
+     */
+    protected List<String> attributeValues;
+
+    /**
+     * Gets the attribute values.
+     *
+     * @return the attribute values
+     */
+    public List<String> getAttributeValues() {
+        return attributeValues;
     }
-  }
+    
 
-  /**
-   *
-   * @return
-   */
-  public int index() { // RuleClassifier
-    return this.index;
-  }
-
-  String formatDate(double value) {
-    SimpleDateFormat sdf = new SimpleDateFormat();
-    return sdf.format(new Date((long) value));
-  }
-
-  boolean isDate() {
-    return isDate;
-  }
-
-  private Map<String, Integer> valuesStringAttribute;
-
-  /**
-   *
-   * @param value
-   * @return
-   */
-  public final int indexOfValue(String value) {
-
-    if (isNominal() == false) {
-      return -1;
+    /**
+     * Instantiates a new attribute.
+     *
+     * @param string the string
+     */
+    public Attribute(String string) {
+        this.name = string;
+        this.isNumeric = true;
     }
-    if (this.valuesStringAttribute == null) {
-      this.valuesStringAttribute = new HashMap<String, Integer>();
-      int count = 0;
-      for (String stringValue : attributeValues) {
-        this.valuesStringAttribute.put(stringValue, count);
-        count++;
-      }
-    }
-    Integer val = (Integer) this.valuesStringAttribute.get(value);
-    if (val == null) {
-      return -1;
-    } else {
-      return val.intValue();
-    }
-  }
 
-  @Override
-  public String toString() {
+    /**
+     * Instantiates a new attribute.
+     *
+     * @param attributeName the attribute name
+     * @param attributeValues the attribute values
+     */
+    public Attribute(String attributeName, List<String> attributeValues) {
+        this.name = attributeName;
+        this.attributeValues = attributeValues;
+        this.isNominal = true;
+    }
+
+    /**
+     * Instantiates a new attribute.
+     *
+     * @param attributeName the attribute name
+     * @param dateFormat the format of the date used
+     */
+    public Attribute(String attributeName, String dateFormat) {
+        this.name = attributeName;        
+        this.valuesStringAttribute = null;
+        this.isDate = true;
+        
+        if (dateFormat != null) {
+          m_DateFormat = new SimpleDateFormat(dateFormat);
+        } else {
+          m_DateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        }
+  }
+                   
+    /**
+     * Instantiates a new attribute.
+     */
+    public Attribute() {
+        this("");
+    }
+
+    /**
+     * Checks if is nominal.
+     *
+     * @return true, if is nominal
+     */
+    public boolean isNominal() {
+        return this.isNominal;
+    }
+
+    /**
+     * Name.
+     *
+     * @return the string
+     */
+    public String name() {
+        return this.name;
+    }
+
+    /**
+     * Value.
+     *
+     * @param value the value
+     * @return the string
+     */
+    public String value(int value) {
+        return attributeValues.get(value);
+    }
+
+    /**
+     * Checks if is numeric.
+     *
+     * @return true, if is numeric
+     */
+    public boolean isNumeric() {
+        return isNumeric;
+    }
+
+    /**
+     * Num values.
+     *
+     * @return the int
+     */
+    public int numValues() {
+        if (isNumeric()) {
+            return 0;
+        } else {
+            return attributeValues.size();
+        }
+    }
+
+    /**
+     * Index.
+     *
+     * @return the int
+     */
+//    public int index() { //RuleClassifier        
+//        return this.index;
+//    }
+
+    /**
+     * Format date.
+     *
+     * @param value the value
+     * @return the string
+     */
+    String formatDate(double value) {
+        return this.m_DateFormat.format(new Date((long) value));
+    }
+
+    /**
+     * Checks if is date.
+     *
+     * @return true, if is date
+     */
+    boolean isDate() {
+        return isDate;
+    }
+
+    /**
+     * The values string attribute.
+     */
+    private Map<String, Integer> valuesStringAttribute;
+
+    /**
+     * Index of value.
+     *
+     * @param value the value
+     * @return the int
+     */
+    public final int indexOfValue(String value) {
+
+        if (isNominal() == false) {
+            return -1;
+        }
+        if (this.valuesStringAttribute == null) {
+            this.valuesStringAttribute = new HashMap<String, Integer>();
+            int count = 0;
+            for (String stringValue : attributeValues) {
+                this.valuesStringAttribute.put(stringValue, count);
+                count++;
+            }
+        }
+        Integer val = (Integer) this.valuesStringAttribute.get(value);
+        if (val == null) {
+            return -1;
+        } else {
+            return val.intValue();
+        }
+    }
+    
+    /**
+    * Returns a description of this attribute in ARFF format. Quotes
+    * strings if they contain whitespace characters, or if they
+     * are a question mark.
+     *
+     * @return a description of this attribute as a string
+     */
+    public final String toString() {
+    
     StringBuffer text = new StringBuffer();
-
-    text.append(ARFF_ATTRIBUTE).append(" ").append(Utils.quote(this.name)).append(" ");
-
-    if (isNominal) {
-      text.append(ARFF_ATTRIBUTE_NOMINAL);
-    } else if (isNumeric) {
-      text.append(ARFF_ATTRIBUTE_NUMERIC);
-    } else if (isDate) {
-      text.append(ARFF_ATTRIBUTE_DATE);
+    
+    text.append(ARFF_ATTRIBUTE).append(" ").append(Utils.quote(this.name())).append(" ");
+    
+    if (this.isNominal){
+        text.append('{');
+        Enumeration enu =  enumerateValues();
+        while (enu.hasMoreElements()) {
+            text.append(Utils.quote((String) enu.nextElement()));
+            if (enu.hasMoreElements())
+                text.append(',');
+        }
+        text.append('}');
+    } else if (this.isNumeric){
+        text.append(ARFF_ATTRIBUTE_NUMERIC);
+    } else if (this.isDate){
+        text.append(ARFF_ATTRIBUTE_DATE).append(" ").append(Utils.quote(m_DateFormat.toPattern()));
+    } else{
+        text.append("UNKNOW");
     }
-
+    
     return text.toString();
+  }
+  
+    /**
+   * Returns an enumeration of all the attribute's values if the
+   * attribute is nominal, null otherwise.
+   *
+   * @return enumeration of all the attribute's values
+   */
+  public final /*@ pure @*/ Enumeration enumerateValues() {
+
+    if (this.isNominal()) {
+      return Collections.enumeration(this.attributeValues);
+    }
+    return null;
   }
 }
