@@ -66,7 +66,7 @@ public class ArffLoader {
      * Class attribute
      */
 
-    protected int classAttribute_2;
+    protected int classAttribute;
 
     /**
      * Instantiates a new arff loader.
@@ -78,7 +78,7 @@ public class ArffLoader {
     public ArffLoader(Reader reader, int size, int classAttribute) {
         // size is not used
         this(reader);
-        classAttribute_2 = classAttribute;
+        this.classAttribute = classAttribute;
         if (classAttribute < 0) {
             this.instanceInformation.setClassIndex(this.instanceInformation.numAttributes() - 1);
             //System.out.print(this.instanceInformation.classIndex());
@@ -181,11 +181,11 @@ public class ArffLoader {
         streamTokenizer.eolIsSignificant(true);
 
         this.instanceInformation = this.getHeader();
-        if (classAttribute_2 < 0) {
+        if (this.classAttribute < 0) {
             this.instanceInformation.setClassIndex(this.instanceInformation.numAttributes() - 1);
             // System.out.print(this.instanceInformation.classIndex());
-        } else if (classAttribute_2 > 0) {
-            this.instanceInformation.setClassIndex(classAttribute_2 - 1);
+        } else if (this.classAttribute > 0) {
+            this.instanceInformation.setClassIndex(this.classAttribute - 1);
         }
     }
 
@@ -218,7 +218,7 @@ public class ArffLoader {
      * @return the instance
      */
     public Instance readInstanceDense() {
-        Instance instance = new DenseInstance(this.instanceInformation.numAttributes() + 1);
+        Instance instance = newDenseInstance(this.instanceInformation.numAttributes());
         // System.out.println(this.instanceInformation.numAttributes());
         int numAttribute = 0;
         try {
@@ -376,7 +376,7 @@ public class ArffLoader {
      */
     private Instance readDenseInstanceSparse() {
         //Returns a dense instance
-        Instance instance = newDenseInstance(this.instanceInformation.numAttributes());
+        Instance instance = new DenseInstance(this.instanceInformation.numAttributes());
         //System.out.println(this.instanceInformation.numAttributes());
         int numAttribute;
         try {
@@ -528,8 +528,6 @@ public class ArffLoader {
         // this.range.setUpper(inputAttributes.size()+outputAttributes.size());
         return new InstanceInformation(relation, auxAttributes);
     }
-
-    protected List<Attribute> attributes;
 
     protected Instance newSparseInstance(double d, double[] res) {
         Instance inst = new SparseInstance(d, res); //is it dense?

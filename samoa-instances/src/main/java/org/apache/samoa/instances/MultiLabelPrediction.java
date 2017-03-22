@@ -23,9 +23,9 @@ package org.apache.samoa.instances;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,13 +44,13 @@ public class MultiLabelPrediction implements Prediction, Serializable {
 	public MultiLabelPrediction() {
 		this(0);
 	}
-	
+
 	public MultiLabelPrediction(int numOutputAttributes) {
-		prediction = new ArrayList< ArrayList<Double> >(numOutputAttributes);
+		prediction = new ArrayList< ArrayList<Double> >();
 		for (int i=0; i<numOutputAttributes;i++)
-			prediction.add(i, new ArrayList<Double>());
+			prediction.add(new ArrayList<Double>());
 	}
-	
+
 	@Override
 	public int numOutputAttributes() {
 		return prediction.size();
@@ -67,15 +67,19 @@ public class MultiLabelPrediction implements Prediction, Serializable {
 
 	@Override
 	public double[] getVotes(int outputAttributeIndex) {
-		double ret[] = new double[prediction.size()];
+		int s = prediction.get(outputAttributeIndex).size();
+		double ret[] = null;
 		if (prediction.size() > outputAttributeIndex) {
-			for (int i=0; i < prediction.size(); i++) {
-				ret[i] = prediction.get(outputAttributeIndex).get(i);
+			ArrayList<Double> aux = prediction.get(outputAttributeIndex);
+			ret = new double[s];
+			for (int i =0;i < s;i++) {
+				ret[i] = aux.get(i).doubleValue();
 			}
 		}
+
 		return ret;
 	}
-	
+
 	@Override
 	public double[] getVotes() {
 		return getVotes(0);
@@ -93,10 +97,18 @@ public class MultiLabelPrediction implements Prediction, Serializable {
 
 	@Override
 	public void setVotes(int outputAttributeIndex, double[] votes) {
-		for(int i=0; i<votes.length; i++)
+		for(int i=0; i<votes.length; i++) {
+			if (i >= prediction.get(outputAttributeIndex).size()) {
+				prediction.get(outputAttributeIndex).ensureCapacity(i+1);
+				while (prediction.get(outputAttributeIndex).size() < i+1) {
+					prediction.get(outputAttributeIndex).add(0.0);
+				}
+			}
+
 			prediction.get(outputAttributeIndex).set(i,votes[i]);
+		}
 	}
-	
+
 	@Override
 	public void setVotes(double[] votes) {
 		setVotes(0, votes);
@@ -104,9 +116,16 @@ public class MultiLabelPrediction implements Prediction, Serializable {
 
 	@Override
 	public void setVote(int outputAttributeIndex, int classIndex, double vote) {
+		if (outputAttributeIndex >= prediction.get(outputAttributeIndex).size()) {
+			prediction.get(outputAttributeIndex).ensureCapacity(classIndex+1);
+			while (prediction.get(outputAttributeIndex).size() < classIndex+1) {
+				prediction.get(outputAttributeIndex).add(0.0);
+			}
+		}
+
 		prediction.get(outputAttributeIndex).set(classIndex, vote);
 	}
-	
+
 	@Override
 	public String toString(){
 		StringBuffer sb= new StringBuffer();
@@ -123,13 +142,13 @@ public class MultiLabelPrediction implements Prediction, Serializable {
 	@Override
 	public boolean hasVotesForAttribute(int outputAttributeIndex) {
 		if(prediction.size()<(outputAttributeIndex+1))
-				return false;
+			return false;
 		return (prediction.get(outputAttributeIndex).size()==0) ? false : true;
 	}
 
-    @Override
-    public int size() {
-        return prediction.size();
-    }
+	@Override
+	public int size() {
+		return prediction.size();
+	}
 
 }
