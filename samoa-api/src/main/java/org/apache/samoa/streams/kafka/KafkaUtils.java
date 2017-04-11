@@ -121,6 +121,12 @@ class KafkaUtils {
         }
     }
 
+    public void closeProducer(){
+        if(producer != null){
+            producer.close(1, TimeUnit.MINUTES);
+        }
+    }
+    
     /**
      * Method for reading new messages from Kafka topics
      *
