@@ -31,7 +31,7 @@ in multiple SPEs, i.e., code the algorithms once and execute them in multiple SP
 
 ## Build
 
-###Storm mode
+### Storm mode
 
 Simply clone the repository and install SAMOA.
 
@@ -43,7 +43,7 @@ mvn -Pstorm package
 
 The deployable jar for SAMOA will be in `target/SAMOA-Storm-0.3.0-SNAPSHOT.jar`.
 
-###S4 mode
+### S4 mode
 
 If you want to compile SAMOA for S4, you will need to install the S4 dependencies
 manually as explained in [Executing SAMOA with Apache S4](http://samoa.incubator.apache.org/documentation/Executing-SAMOA-with-Apache-S4.html).
@@ -56,7 +56,7 @@ cd incubator-samoa
 mvn -Ps4 package
 ```
 
-###Apex mode
+### Apex mode
 
 Simply clone the repository and and create SAMOA with Apex package.
 ```bash
@@ -65,7 +65,7 @@ cd incubator-samoa
 mvn -Papex package
 ```
 
-###Local mode
+### Local mode
 
 If you want to test SAMOA in a local environment, simply clone the repository and install SAMOA.
 
