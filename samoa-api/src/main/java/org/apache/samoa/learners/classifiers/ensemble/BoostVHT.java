@@ -34,6 +34,7 @@ import org.apache.samoa.core.Processor;
 import org.apache.samoa.instances.Instances;
 import org.apache.samoa.learners.ClassificationLearner;
 import org.apache.samoa.learners.Learner;
+import org.apache.samoa.learners.classifiers.trees.ActiveLearningNode.SplittingOption;
 import org.apache.samoa.learners.classifiers.trees.LocalStatisticsProcessor;
 import org.apache.samoa.learners.classifiers.trees.VerticalHoeffdingTree;
 import org.apache.samoa.moa.classifiers.core.attributeclassobservers.AttributeClassObserver;
@@ -87,22 +88,29 @@ public class BoostVHT implements ClassificationLearner, Configurable {
           200, 0, Integer.MAX_VALUE);
 
   public IntOption timeOutOption = new IntOption("timeOut", 'o',
-          "The duration to wait all distributed computation results from local statistics PI",
+          "The duration to wait all distributed computation results from local statistics PI, in miliseconds",
           Integer.MAX_VALUE, 1, Integer.MAX_VALUE);
 
   public FlagOption binarySplitsOption = new FlagOption("binarySplits", 'b',
           "Only allow binary splits.");
+
+  public FlagOption splittingOption = new FlagOption("keepInstanceWhileSplitting",'q',
+      "Keep instances in a buffer while splitting");
+
+  public IntOption maxBufferSizeOption = new IntOption("maxBufferSizeWhileSplitting",'z',
+      "Maximum buffer size while splitting, use in conjunction with 'q' option. Size 0 means we don't use buffer while splitting",
+      0, 0, Integer.MAX_VALUE);
   
     /** The ensemble size option. */
   public IntOption ensembleSizeOption = new IntOption("ensembleSize", 's',
       "The number of models in the bag.", 10, 1, Integer.MAX_VALUE);
 
+  public IntOption seedOption = new IntOption("seed", 'u',
+      "the seed for the rng.", (int) System.currentTimeMillis());
+
   /** The Model Aggregator boosting processor. */
   private BoostVHTProcessor boostVHTProcessor;
-  
-  /** The Local statistics processor. */
-  private LocalStatisticsProcessor locStatProcessor;
-  
+
   /** The result stream. */
   protected Stream resultStream;
   
@@ -123,8 +131,6 @@ public class BoostVHT implements ClassificationLearner, Configurable {
   //for SAMMME
   public IntOption numberOfClassesOption = new IntOption("numberOfClasses", 'k',
           "The number of classes.", 2, 2, Integer.MAX_VALUE); //for SAMME
-  
-  //---
 
   /**
    * Sets the layout.
@@ -146,6 +152,9 @@ public class BoostVHT implements ClassificationLearner, Configurable {
           .gracePeriod(this.gracePeriodOption.getValue())
           .parallelismHint(this.ensembleSizeOption.getValue())
           .timeOut(this.timeOutOption.getValue())
+          .splittingOption(this.splittingOption.isSet() ? SplittingOption.KEEP: SplittingOption.THROW_AWAY)
+          .maxBufferSize(this.maxBufferSizeOption.getValue())
+          .seed(this.seedOption.getValue())
           .build();
     } catch (Exception e) {
       e.printStackTrace();
@@ -160,12 +169,13 @@ public class BoostVHT implements ClassificationLearner, Configurable {
     controlStream = this.topologyBuilder.createStream(boostVHTProcessor);
     
     //local statistics processor.
-    locStatProcessor = new LocalStatisticsProcessor.Builder()
-            .splitCriterion((SplitCriterion) this.splitCriterionOption.getValue())
-            .binarySplit(this.binarySplitsOption.isSet())
-            .nominalClassObserver((AttributeClassObserver) this.nominalEstimatorOption.getValue())
-            .numericClassObserver((AttributeClassObserver) this.numericEstimatorOption.getValue())
-            .build();
+    /* The Local statistics processor. */
+    LocalStatisticsProcessor locStatProcessor = new LocalStatisticsProcessor.Builder()
+        .splitCriterion((SplitCriterion) this.splitCriterionOption.getValue())
+        .binarySplit(this.binarySplitsOption.isSet())
+        .nominalClassObserver((AttributeClassObserver) this.nominalEstimatorOption.getValue())
+        .numericClassObserver((AttributeClassObserver) this.numericEstimatorOption.getValue())
+        .build();
     
     this.topologyBuilder.addProcessor(locStatProcessor, ensembleSize);
   

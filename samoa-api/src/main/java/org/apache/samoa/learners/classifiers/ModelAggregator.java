@@ -20,6 +20,10 @@ package org.apache.samoa.learners.classifiers;
  * #L%
  */
 
-public interface ModelAggregator {
+import org.apache.samoa.core.ContentEvent;
 
+public interface ModelAggregator {
+  void sendToControlStream(ContentEvent event);
+
+  void sendToAttributeStream(ContentEvent event);
 }

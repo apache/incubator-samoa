@@ -40,6 +40,7 @@ public class AttributeSplitSuggestion extends AbstractMOAObject implements Compa
   public double merit;
 
   public AttributeSplitSuggestion() {
+    merit = Double.NEGATIVE_INFINITY;
   }
 
   public AttributeSplitSuggestion(InstanceConditionalTest splitTest,
