@@ -52,10 +52,10 @@ import org.apache.samoa.moa.core.FastVector;
  */
 public class TestUtilsForKafka {
 
-    private static final String ZKHOST = "127.0.0.1";
-    private static final String BROKERHOST = "127.0.0.1";
-    private static final String BROKERPORT = "9092";
-    private static final String TOPIC = "test";
+    private static final String ZKHOST = "10.255.251.202"; 		//10.255.251.202
+    private static final String BROKERHOST = "10.255.251.214";	//10.255.251.214
+    private static final String BROKERPORT = "6667";		//6667, local: 9092
+    private static final String TOPIC = "samoa_test";				//samoa_test, local: test
 
     protected static InstanceContentEvent getData(Random instanceRandom, int numAtts, InstancesHeader header) {
         double[] attVals = new double[numAtts + 1];
@@ -126,7 +126,22 @@ public class TestUtilsForKafka {
         consumerProps.setProperty("value.deserializer", "org.apache.kafka.common.serialization.ByteArrayDeserializer");
         consumerProps.setProperty("group.id", "test");
         consumerProps.setProperty("auto.offset.reset", "earliest");
-//        consumerProps.setProperty("client.id", "consumer0");
+        //consumerProps.setProperty("client.id", "consumer0");
         return consumerProps;
+    }
+    
+    protected static Properties getConsumerProducerProperties() {
+        Properties props = new Properties();
+        props.setProperty("bootstrap.servers", BROKERHOST + ":" + BROKERPORT);
+        props.put("enable.auto.commit", "true");
+        props.put("auto.commit.interval.ms", "1000");
+        props.setProperty("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        props.setProperty("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
+        props.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        props.setProperty("value.deserializer", "org.apache.kafka.common.serialization.ByteArrayDeserializer");
+        props.setProperty("group.id", "burrito");
+        props.setProperty("auto.offset.reset", "earliest");
+        props.setProperty("client.id", "burrito");
+        return props;
     }
 }
