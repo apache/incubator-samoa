@@ -56,6 +56,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import kafka.admin.AdminUtils;
@@ -84,15 +85,16 @@ import org.apache.samoa.streams.InstanceStream;
  *
  * @author pwawrzyniak
  */
+//@Ignore
 public class KafkaEntranceProcessorTest {
 
 //    @Tested
 //    private KafkaEntranceProcessor kep;
-    private static final String ZKHOST = "127.0.0.1";
-    private static final String BROKERHOST = "127.0.0.1";
-    private static final String BROKERPORT = "9092";
-    private static final String TOPIC = "test";
-    private static final int NUM_INSTANCES = 500;
+    private static final String ZKHOST = "10.255.251.202"; 		//10.255.251.202
+    private static final String BROKERHOST = "10.255.251.214";	//10.255.251.214
+    private static final String BROKERPORT = "6667";		//6667, local: 9092
+    private static final String TOPIC = "samoa_test";				//samoa_test, local: test
+    private static final int NUM_INSTANCES = 50;
     
     
     private static KafkaServer kafkaServer;
@@ -108,28 +110,28 @@ public class KafkaEntranceProcessorTest {
     public static void setUpClass() throws IOException {
         // setup Zookeeper
         zkServer = new EmbeddedZookeeper();
-        zkConnect = ZKHOST + ":" + zkServer.port();
+        zkConnect = ZKHOST + ":" + "2181"; //+ zkServer.port();
         zkClient = new ZkClient(zkConnect, 30000, 30000, ZKStringSerializer$.MODULE$);
         ZkUtils zkUtils = ZkUtils.apply(zkClient, false);
 
         // setup Broker
-        Properties brokerProps = new Properties();
+        /*Properties brokerProps = new Properties();
         brokerProps.setProperty("zookeeper.connect", zkConnect);
         brokerProps.setProperty("broker.id", "0");
         brokerProps.setProperty("log.dirs", Files.createTempDirectory("kafka-").toAbsolutePath().toString());
         brokerProps.setProperty("listeners", "PLAINTEXT://" + BROKERHOST + ":" + BROKERPORT);
         KafkaConfig config = new KafkaConfig(brokerProps);
         Time mock = new MockTime();
-        kafkaServer = TestUtils.createServer(config, mock);
+        kafkaServer = TestUtils.createServer(config, mock);*/
 
         // create topic
-        AdminUtils.createTopic(zkUtils, TOPIC, 1, 1, new Properties(), RackAwareMode.Disabled$.MODULE$);
+        //AdminUtils.createTopic(zkUtils, TOPIC, 1, 1, new Properties(), RackAwareMode.Disabled$.MODULE$);
 
     }
 
     @AfterClass
     public static void tearDownClass() {
-        kafkaServer.shutdown();
+        //kafkaServer.shutdown();
         zkClient.close();
         zkServer.shutdown();
     }
@@ -144,7 +146,7 @@ public class KafkaEntranceProcessorTest {
 
     }
 
-    @Test
+    /*@Test
     public void testFetchingNewData() throws InterruptedException, ExecutionException, TimeoutException {
 
         Logger logger = Logger.getLogger(KafkaEntranceProcessorTest.class.getName());
@@ -169,6 +171,56 @@ public class KafkaEntranceProcessorTest {
                         long stat = producer.send(record).get(10, TimeUnit.DAYS).offset();
                         Thread.sleep(5);
                         Logger.getLogger(KafkaEntranceProcessorTest.class.getName()).log(Level.INFO, "Sent message with ID={0} to Kafka!, offset={1}", new Object[]{i, stat});
+                    } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+                        Logger.getLogger(KafkaEntranceProcessorTest.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                producer.flush();
+                producer.close();
+            }
+        });
+        th.start();
+
+        int z = 0;
+        while (kep.hasNext() && z < NUM_INSTANCES) {
+            logger.log(Level.INFO, "{0} {1}", new Object[]{z++, kep.nextEvent().toString()});
+        }       
+
+        assertEquals("Number of sent and received instances", NUM_INSTANCES, z);        
+      
+     
+    }*/
+    
+    @Test
+    public void testFetchingNewDataWithAvro() throws InterruptedException, ExecutionException, TimeoutException {
+        Logger logger = Logger.getLogger(KafkaEntranceProcessorTest.class.getName());
+        logger.log(Level.INFO, "AVRO");
+    	logger.log(Level.INFO, "testFetchingNewDataWithAvro");
+        Properties props = TestUtilsForKafka.getConsumerProperties();
+        props.setProperty("auto.offset.reset", "earliest");
+        KafkaEntranceProcessor kep = new KafkaEntranceProcessor(props, TOPIC, 10000, new KafkaAvroMapper());
+        kep.onCreate(1);
+
+//         prepare new thread for data producing
+        Thread th = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                KafkaProducer<String, byte[]> producer = new KafkaProducer<>(TestUtilsForKafka.getProducerProperties());
+
+                Random r = new Random();
+                InstancesHeader header = TestUtilsForKafka.generateHeader(10);
+                KafkaAvroMapper avroMapper = new KafkaAvroMapper();
+                int i = 0;
+                for (i = 0; i < NUM_INSTANCES; i++) {
+                    try {
+                    	//byte[] data = avroMapper.serialize(TestUtilsForKafka.getData(r, 10, header));
+                    	byte[] data = KafkaAvroMapper.avroBurrSerialize(InstanceContentEvent.class, TestUtilsForKafka.getData(r, 10, header));
+                    	if(data == null)
+                    		Logger.getLogger(KafkaEntranceProcessorTest.class.getName()).log(Level.INFO, "Serialize result: null ("+i+")");
+                        ProducerRecord<String, byte[]> record = new ProducerRecord(TOPIC, data);
+                        long stat = producer.send(record).get(10, TimeUnit.DAYS).offset();
+                        Thread.sleep(5);
+                        Logger.getLogger(KafkaEntranceProcessorTest.class.getName()).log(Level.INFO, "Sent avro message with ID={0} to Kafka!, offset={1}", new Object[]{i, stat});
                     } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                         Logger.getLogger(KafkaEntranceProcessorTest.class.getName()).log(Level.SEVERE, null, ex);
                     }

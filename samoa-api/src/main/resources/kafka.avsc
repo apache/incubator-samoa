@@ -1,0 +1,61 @@
+[
+{
+  "type": "record",
+  "name": "InstanceData",
+  "fields": [
+	]
+},
+{
+  "type": "record",
+  "name": "SingleClassInstanceData",
+  "fields": [
+		{"name":"classValue", "type": "double"}
+	]
+},
+{
+  "type": "record",
+  "name": "DenseInstanceData",
+  "fields": [
+		{"name":"attributeValues", "type": {"type": "array", "items": "double"}}
+	]
+},
+{
+  "type": "record",
+  "name": "SparseInstanceData",
+  "fields": [
+		{"name":"attributeValues", "type": {"type": "array", "items": "double"}},
+		{"name":"indexValues", "type": {"type": "array", "items": "int"}},
+		{"name":"numberAttributes", "type": "int"}
+	]
+},
+{
+  "type": "record",
+  "name": "SerializableInstance",
+  "fields": [
+		{"name": "weight", "type": "double"},
+		{"name": "instanceData", "type": ["null", "InstanceData", "DenseInstanceData", "SparseInstanceData", "SingleClassInstanceData"]},
+		{"name": "classData", "type": "InstanceData"}
+	]
+},
+{
+  "type": "record",
+  "name": "InstanceContent",
+  "fields": [
+		{"name": "instanceIndex", "type": "long"},
+		{"name": "classifierIndex", "type": "int"},
+		{"name": "evaluationIndex", "type": "int"},
+		{"name":"instance", "type":"SerializableInstance"},
+		{"name": "isTraining", "type": "boolean"},
+		{"name": "isTesting", "type": "boolean"},
+		{"name": "isLast", "type": "boolean"}
+	]
+},
+{
+ "type": "record",
+ "name": "InstanceContentEvent",
+ "fields": [
+     {"name": "instanceContent", "type": "InstanceContent"}
+ ]
+}
+]
+   
