@@ -50,6 +50,12 @@ import org.apache.samoa.core.Processor;
  */
 public class KafkaDestinationProcessor implements Processor {
 
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        kafkaUtils.closeProducer();
+    }
+
     private final KafkaUtils kafkaUtils;
     private final String topic;
     private final KafkaSerializer serializer;
