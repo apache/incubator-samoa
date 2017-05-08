@@ -72,9 +72,6 @@ public class ThreadsEngine {
   private static void submitTopology(Topology topology) {
     ThreadsTopology tTopology = (ThreadsTopology) topology;
     tTopology.run();
-  
-    // runs until completion
-//    System.exit(0);
   }
 
   public static void submitTopology(Topology topology, int numThreads) {

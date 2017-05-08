@@ -34,7 +34,7 @@ import org.apache.samoa.core.Processor;
 import org.apache.samoa.instances.Instances;
 import org.apache.samoa.learners.ClassificationLearner;
 import org.apache.samoa.learners.Learner;
-import org.apache.samoa.learners.classifiers.trees.ActiveLearningNode.SplittingOption;
+import org.apache.samoa.learners.classifiers.trees.BoostVHTActiveLearningNode.SplittingOption;
 import org.apache.samoa.learners.classifiers.trees.LocalStatisticsProcessor;
 import org.apache.samoa.learners.classifiers.trees.VerticalHoeffdingTree;
 import org.apache.samoa.moa.classifiers.core.attributeclassobservers.AttributeClassObserver;
@@ -56,12 +56,7 @@ public class BoostVHT implements ClassificationLearner, Configurable {
   /** The Constant serialVersionUID. */
   private static final long serialVersionUID = -7523211543185584536L;
   
-  private static final Logger logger =
-          LoggerFactory.getLogger(BoostVHT.class);
-  
-  /** The base learner option. */ //TODO(tvas): Not being used currently, adding it to ease the automated Python scripts
-  public ClassOption baseLearnerOption = new ClassOption("baseLearner", 'l',
-      "Classifier to train.", Learner.class, VerticalHoeffdingTree.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(BoostVHT.class);
   
   public ClassOption numericEstimatorOption = new ClassOption("numericEstimator",
           'n', "Numeric estimator to use.", NumericAttributeClassObserver.class,
@@ -130,7 +125,7 @@ public class BoostVHT implements ClassificationLearner, Configurable {
   
   //for SAMMME
   public IntOption numberOfClassesOption = new IntOption("numberOfClasses", 'k',
-          "The number of classes.", 2, 2, Integer.MAX_VALUE); //for SAMME
+          "The number of classes.", 2, 2, Integer.MAX_VALUE);
 
   /**
    * Sets the layout.
@@ -169,7 +164,6 @@ public class BoostVHT implements ClassificationLearner, Configurable {
     controlStream = this.topologyBuilder.createStream(boostVHTProcessor);
     
     //local statistics processor.
-    /* The Local statistics processor. */
     LocalStatisticsProcessor locStatProcessor = new LocalStatisticsProcessor.Builder()
         .splitCriterion((SplitCriterion) this.splitCriterionOption.getValue())
         .binarySplit(this.binarySplitsOption.isSet())

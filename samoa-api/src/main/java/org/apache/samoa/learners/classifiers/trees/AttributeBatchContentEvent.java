@@ -31,7 +31,7 @@ import org.apache.samoa.core.ContentEvent;
  * @author Arinto Murdopo
  * 
  */
-public final class AttributeBatchContentEvent implements ContentEvent {
+final class AttributeBatchContentEvent implements ContentEvent {
 
   private static final long serialVersionUID = 6652815649846676832L;
 

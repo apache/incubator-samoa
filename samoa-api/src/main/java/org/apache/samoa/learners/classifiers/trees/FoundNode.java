@@ -38,7 +38,7 @@ public final class FoundNode implements java.io.Serializable {
   private final SplitNode parent;
   private final int parentBranch;
 
-  public FoundNode(Node node, SplitNode splitNode, int parentBranch) {
+  FoundNode(Node node, SplitNode splitNode, int parentBranch) {
     this.node = node;
     this.parent = splitNode;
     this.parentBranch = parentBranch;

@@ -39,7 +39,7 @@ public final class ComputeContentEvent extends ControlContentEvent {
   private final double[] preSplitDist;
   private final long splitId;
   
-  private int ensembleId;//faye boostVHT, works only for Local
+  private int ensembleId; //the id of the ensemble that send the event
 
   public ComputeContentEvent() {
     super(-1);
@@ -143,8 +143,7 @@ public final class ComputeContentEvent extends ControlContentEvent {
     }
 
   }
-  
-  //----------//faye boostVHT
+
   public int getEnsembleId() {
     return ensembleId;
   }

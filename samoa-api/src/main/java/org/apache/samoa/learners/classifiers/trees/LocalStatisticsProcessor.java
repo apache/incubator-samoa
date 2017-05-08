@@ -24,11 +24,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Vector;
 
 import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.core.Processor;
-import org.apache.samoa.learners.classifiers.ensemble.AttributeSliceEvent;
 import org.apache.samoa.moa.classifiers.core.AttributeSplitSuggestion;
 import org.apache.samoa.moa.classifiers.core.attributeclassobservers.AttributeClassObserver;
 import org.apache.samoa.moa.classifiers.core.attributeclassobservers.GaussianNumericAttributeClassObserver;
@@ -78,60 +76,115 @@ public final class LocalStatisticsProcessor implements Processor {
 
   @Override
   public boolean process(ContentEvent event) {
+    // process AttributeContentEvent by updating the subset of local statistics
+    if (event instanceof AttributeBatchContentEvent) {
+      AttributeBatchContentEvent abce = (AttributeBatchContentEvent) event;
+      List<ContentEvent> contentEventList = abce.getContentEventList();
+      for (ContentEvent contentEvent : contentEventList) {
+        AttributeContentEvent ace = (AttributeContentEvent) contentEvent;
+        Long learningNodeId = ace.getLearningNodeId();
+        Integer obsIndex = ace.getObsIndex();
 
-    if (event instanceof AttributeSliceEvent) {
-      AttributeSliceEvent ase = (AttributeSliceEvent) event;
-//      System.out.printf("Event with key: %s processed by LSP: %d%n", ase.getKey(), id);
-      double[] attributeSlice = ase.getAttributeSlice();
-      boolean[] isNominal = ase.getIsNominalSlice();
-      int startingIndex = ase.getAttributeStartingIndex();
-      Long learningNodeId = ase.getLearningNodeId();
+        AttributeClassObserver obs = localStats.get(
+            learningNodeId, obsIndex);
 
-      for (int i = 0; i < attributeSlice.length; i++) {
-        Integer obsIndex = i + startingIndex;
-        AttributeClassObserver obs = localStats.get(learningNodeId, obsIndex);
         if (obs == null) {
-          obs = isNominal[i] ? newNominalClassObserver() : newNumericClassObserver();
-          localStats.put(learningNodeId, obsIndex, obs);
+          obs = ace.isNominal() ? newNominalClassObserver()
+              : newNumericClassObserver();
+          localStats.put(ace.getLearningNodeId(), obsIndex, obs);
         }
-        obs.observeAttributeClass(attributeSlice[i], ase.getClassValue(),
-            ase.getWeight());
+        obs.observeAttributeClass(ace.getAttrVal(), ace.getClassVal(),
+            ace.getWeight());
       }
-    } else {
+
+      /*
+       * if (event instanceof AttributeContentEvent) { AttributeContentEvent ace
+       * = (AttributeContentEvent) event; Long learningNodeId =
+       * Long.valueOf(ace.getLearningNodeId()); Integer obsIndex =
+       * Integer.valueOf(ace.getObsIndex());
+       *
+       * AttributeClassObserver obs = localStats.get( learningNodeId, obsIndex);
+       *
+       * if (obs == null) { obs = ace.isNominal() ? newNominalClassObserver() :
+       * newNumericClassObserver(); localStats.put(ace.getLearningNodeId(),
+       * obsIndex, obs); } obs.observeAttributeClass(ace.getAttrVal(),
+       * ace.getClassVal(), ace.getWeight());
+       */
+    } else if (event instanceof AttributeSliceEvent) {
+      AttributeSliceEvent ase = (AttributeSliceEvent) event;
+      processAttributeSlice(ase);
+
+    } else if (event instanceof ComputeContentEvent){
       ComputeContentEvent cce = (ComputeContentEvent) event;
-      Long learningNodeId = cce.getLearningNodeId();
-      double[] preSplitDist = cce.getPreSplitDist();
+      processComputeEvent(cce);
 
-      Map<Integer, AttributeClassObserver> learningNodeRowMap = localStats
-          .row(learningNodeId);
-      AttributeSplitSuggestion[] suggestions = new AttributeSplitSuggestion[learningNodeRowMap.size()];
-
-      int curIndex = 0;
-      for (Entry<Integer, AttributeClassObserver> entry : learningNodeRowMap.entrySet()) {
-        AttributeClassObserver obs = entry.getValue();
-        AttributeSplitSuggestion suggestion = obs
-            .getBestEvaluatedSplitSuggestion(splitCriterion,
-                preSplitDist, entry.getKey(), binarySplit);
-        if (suggestion == null) {
-          suggestion = new AttributeSplitSuggestion();
-        }
-        suggestions[curIndex] = suggestion;
-        curIndex++;
-      }
-
-      Arrays.sort(suggestions);
-
-      AttributeSplitSuggestion bestSuggestion = suggestions[suggestions.length - 1];
-      AttributeSplitSuggestion secondBestSuggestion = suggestions[suggestions.length - 2];
-
-      // create the local result content event
-      LocalResultContentEvent lcre =
-          new LocalResultContentEvent(cce.getSplitId(), bestSuggestion, secondBestSuggestion);
-      lcre.setEnsembleId(cce.getEnsembleId()); //faye boostVHT
-      computationResultStream.put(lcre);
-      logger.debug("Finish compute event");
+    } else if (event instanceof DeleteContentEvent) {
+      DeleteContentEvent dce = (DeleteContentEvent) event;
+      Long learningNodeId = dce.getLearningNodeId();
+      localStats.rowMap().remove(learningNodeId);
     }
     return true;
+  }
+
+  private void processComputeEvent(ComputeContentEvent cce) {
+    Long learningNodeId = cce.getLearningNodeId();
+    double[] preSplitDist = cce.getPreSplitDist();
+
+    Map<Integer, AttributeClassObserver> learningNodeRowMap = localStats.row(learningNodeId);
+    AttributeSplitSuggestion[] suggestions = new AttributeSplitSuggestion[learningNodeRowMap.size()];
+
+    int curIndex = 0;
+    for (Entry<Integer, AttributeClassObserver> entry : learningNodeRowMap.entrySet()) {
+      AttributeClassObserver obs = entry.getValue();
+      AttributeSplitSuggestion suggestion = obs
+          .getBestEvaluatedSplitSuggestion(splitCriterion,
+              preSplitDist, entry.getKey(), binarySplit);
+      if (suggestion == null) {
+        suggestion = new AttributeSplitSuggestion();
+      }
+      suggestions[curIndex] = suggestion;
+      curIndex++;
+    }
+
+    // Doing this sort instead of keeping the max and second max seems faster for some reason
+    Arrays.sort(suggestions);
+
+    AttributeSplitSuggestion bestSuggestion = null;
+    AttributeSplitSuggestion secondBestSuggestion = null;
+
+    if (suggestions.length >= 1) {
+    bestSuggestion = suggestions[suggestions.length - 1];
+
+      if (suggestions.length >= 2) {
+        secondBestSuggestion = suggestions[suggestions.length - 2];
+      }
+    }
+
+    // create the local result content event
+    LocalResultContentEvent lcre =
+        new LocalResultContentEvent(cce.getSplitId(), bestSuggestion, secondBestSuggestion);
+    lcre.setEnsembleId(cce.getEnsembleId());
+    computationResultStream.put(lcre);
+  }
+
+  private void processAttributeSlice(AttributeSliceEvent ase) {
+    //      System.out.printf("Event with key: %s processed by LSP: %d%n", ase.getKey(), id);
+    double[] attributeSlice = ase.getAttributeSlice();
+    boolean[] isNominal = ase.getIsNominalSlice();
+    int startingIndex = ase.getAttributeStartingIndex();
+    Long learningNodeId = ase.getLearningNodeId();
+    int classValue = ase.getClassValue();
+    double weight = ase.getWeight();
+
+    for (int i = 0; i < attributeSlice.length; i++) {
+      Integer obsIndex = i + startingIndex;
+      AttributeClassObserver obs = localStats.get(learningNodeId, obsIndex);
+      if (obs == null) {
+        obs = isNominal[i] ? newNominalClassObserver() : newNumericClassObserver();
+        localStats.put(learningNodeId, obsIndex, obs);
+      }
+      obs.observeAttributeClass(attributeSlice[i], classValue, weight);
+    }
   }
 
   @Override
@@ -160,11 +213,11 @@ public final class LocalStatisticsProcessor implements Processor {
   }
 
   private AttributeClassObserver newNominalClassObserver() {
-    return new NominalAttributeClassObserver();
+    return new NominalAttributeClassObserver(); //further investigate this change
   }
 
   private AttributeClassObserver newNumericClassObserver() {
-    return new GaussianNumericAttributeClassObserver();
+    return new GaussianNumericAttributeClassObserver();//further investigate this change
   }
 
   /**

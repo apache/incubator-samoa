@@ -1,4 +1,4 @@
-package org.apache.samoa.learners.classifiers.ensemble;
+package org.apache.samoa.learners.classifiers.trees;
 /*
  * #%L
  * SAMOA
@@ -8,9 +8,9 @@ package org.apache.samoa.learners.classifiers.ensemble;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,6 +20,13 @@ package org.apache.samoa.learners.classifiers.ensemble;
  */
 
 import org.apache.samoa.core.ContentEvent;
+
+/**
+ * Attribute Slice Event represents the instances that split into parallelismHint (no. of local stats processors - LSP)
+ * and send only one message per LSP for BoostVHT algorithm which contains that slice of the attributes along with required information
+ * to update the class observers.
+ *
+ */
 
 public class AttributeSliceEvent implements ContentEvent{
   private static final long serialVersionUID = 6752449086753238767L;

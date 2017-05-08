@@ -25,7 +25,6 @@ package org.apache.samoa.learners.classifiers;
 import org.apache.samoa.instances.Instance;
 import org.apache.samoa.instances.Instances;
 import org.apache.samoa.instances.InstancesHeader;
-import org.apache.samoa.moa.classifiers.functions.DecisionStump;
 import org.apache.samoa.moa.classifiers.functions.MajorityClass;
 
 import com.github.javacliparser.ClassOption;
@@ -44,7 +43,7 @@ public class SimpleClassifierAdapter implements LocalLearner, Configurable {
   private static final long serialVersionUID = 4372366401338704353L;
 
   public ClassOption learnerOption = new ClassOption("learner", 'l',
-      "Classifier to train.", org.apache.samoa.moa.classifiers.Classifier.class, DecisionStump.class.getName());
+      "Classifier to train.", org.apache.samoa.moa.classifiers.Classifier.class, MajorityClass.class.getName());
   /**
    * The learner.
    */

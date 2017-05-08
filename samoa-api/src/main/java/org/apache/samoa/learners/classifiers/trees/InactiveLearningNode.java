@@ -21,7 +21,6 @@ package org.apache.samoa.learners.classifiers.trees;
  */
 
 import org.apache.samoa.instances.Instance;
-import org.apache.samoa.learners.classifiers.ModelAggregator;
 
 /**
  * Class that represents inactive learning node. Inactive learning node is a node which only keeps track of the observed
@@ -42,13 +41,13 @@ public final class InactiveLearningNode extends LearningNode {
   }
 
   @Override
-  public void learnFromInstance(Instance inst, ModelAggregator proc) {
+  public void learnFromInstance(Instance inst, ModelAggregatorProcessor proc) {
     this.observedClassDistribution.addToValue(
         (int) inst.classValue(), inst.weight());
   }
 
   @Override
-  public double[] getClassVotes(Instance inst, ModelAggregator map) {
+  double[] getClassVotes(Instance inst, ModelAggregatorProcessor map) {
     return this.observedClassDistribution.getArrayCopy();
   }
 
