@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.avro.Schema;
-import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.avro.io.BinaryEncoder;
 import org.apache.avro.io.DatumReader;
@@ -126,7 +125,7 @@ public class KafkaAvroMapper implements KafkaDeserializer<InstanceContentEvent>,
 		try {
 			Schema schema = new Schema.Parser().parse(new File("C:/java/avro/kafka.avsc"));
 			ByteArrayInputStream in = new ByteArrayInputStream(avroBytes);
-			DatumReader<V> reader = new GenericDatumReader<>(schema);
+			DatumReader<V> reader = new ReflectDatumReader<>(schema);
 			
 			Decoder decoder = DecoderFactory.get().directBinaryDecoder(in, null);
 			
