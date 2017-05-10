@@ -214,7 +214,7 @@ public class KafkaEntranceProcessorTest {
                 for (i = 0; i < NUM_INSTANCES; i++) {
                     try {
                     	//byte[] data = avroMapper.serialize(TestUtilsForKafka.getData(r, 10, header));
-                    	byte[] data = KafkaAvroMapper.avroBurrSerialize(InstanceContentEvent.class, TestUtilsForKafka.getData(r, 10, header));
+                    	byte[] data = KafkaAvroMapper.avroSerialize(InstanceContentEvent.class, TestUtilsForKafka.getData(r, 10, header));
                     	if(data == null)
                     		Logger.getLogger(KafkaEntranceProcessorTest.class.getName()).log(Level.INFO, "Serialize result: null ("+i+")");
                         ProducerRecord<String, byte[]> record = new ProducerRecord(TOPIC, data);
@@ -233,7 +233,8 @@ public class KafkaEntranceProcessorTest {
 
         int z = 0;
         while (kep.hasNext() && z < NUM_INSTANCES) {
-            logger.log(Level.INFO, "{0} {1}", new Object[]{z++, kep.nextEvent().toString()});
+        	InstanceContentEvent event = (InstanceContentEvent)kep.nextEvent();
+            logger.log(Level.INFO, "{0} {1}", new Object[]{z++, event.getInstance().toString()});
         }       
 
         assertEquals("Number of sent and received instances", NUM_INSTANCES, z);        
