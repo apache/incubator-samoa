@@ -104,7 +104,7 @@ public class KafkaEntranceProcessor implements EntranceProcessor {
 
     @Override
     public ContentEvent nextEvent() {
-        // assume this will never be called when buffer is empty!
+        // assume this will never be called when buffer is empty!        
         return this.deserializer.deserialize(buffer.remove(buffer.size() - 1));
     }
 
