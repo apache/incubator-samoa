@@ -15,6 +15,25 @@
  */
 package org.apache.samoa.streams.kafka;
 
+/*
+ * #%L
+ * SAMOA
+ * %%
+ * Copyright (C) 2014 - 2017 Apache Software Foundation
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -51,7 +70,7 @@ import org.junit.Test;
 
 /**
  *
- * @author pwawrzyniak <your.name at your.org>
+ * @author pwawrzyniak
  */
 public class KafkaDestinationProcessorTest {
 
@@ -59,7 +78,7 @@ public class KafkaDestinationProcessorTest {
     private static final String BROKERHOST = "127.0.0.1";
     private static final String BROKERPORT = "9092";
     private static final String TOPIC = "test-kdp";
-    private static final int NUM_INSTANCES = 500;
+    private static final int NUM_INSTANCES = 11111;
     private static final int CONSUMER_TIMEOUT = 1000;
 
     private static KafkaServer kafkaServer;
@@ -94,7 +113,7 @@ public class KafkaDestinationProcessorTest {
     }
 
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() {        
         kafkaServer.shutdown();
         zkClient.close();
         zkServer.shutdown();
@@ -114,34 +133,28 @@ public class KafkaDestinationProcessorTest {
     public void testSendingData() throws InterruptedException, ExecutionException, TimeoutException {
 
         final Logger logger = Logger.getLogger(KafkaDestinationProcessorTest.class.getName());
-        Properties props = TestUtilsForKafka.getProducerProperties();
+        Properties props = TestUtilsForKafka.getProducerProperties(BROKERHOST,BROKERPORT);
         props.setProperty("auto.offset.reset", "earliest");
         KafkaDestinationProcessor kdp = new KafkaDestinationProcessor(props, TOPIC, new KafkaJsonMapper(Charset.defaultCharset()));
         kdp.onCreate(1);
 
         final int[] i = {0};
-        
-//         prepare new thread for data receiveing
+
+        // prepare new thread for data receiveing
         Thread th = new Thread(new Runnable() {
             @Override
             public void run() {
-                KafkaConsumer<String, byte[]> consumer = new KafkaConsumer<>(TestUtilsForKafka.getConsumerProperties());
+                KafkaConsumer<String, byte[]> consumer = new KafkaConsumer<>(TestUtilsForKafka.getConsumerProperties(BROKERHOST, BROKERPORT));
                 consumer.subscribe(Arrays.asList(TOPIC));
                 while (i[0] < NUM_INSTANCES) {
                     try {
                         ConsumerRecords<String, byte[]> cr = consumer.poll(CONSUMER_TIMEOUT);
-
                         Iterator<ConsumerRecord<String, byte[]>> it = cr.iterator();
                         while (it.hasNext()) {
                             ConsumerRecord<String, byte[]> record = it.next();
-                            logger.info(new String(record.value()));
-                            logger.log(Level.INFO, "Current read offset is: {0}", record.offset());
                             i[0]++;
                         }
-                        
-                        Thread.sleep(1);
-
-                    } catch (InterruptedException ex) {
+                    } catch (Exception ex) {
                         Logger.getLogger(KafkaDestinationProcessorTest.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -157,11 +170,11 @@ public class KafkaDestinationProcessorTest {
         for (z = 0; z < NUM_INSTANCES; z++) {
             InstanceContentEvent event = TestUtilsForKafka.getData(r, 10, header);
             kdp.process(event);
-            logger.log(Level.INFO, "{0} {1}", new Object[]{"Sent item with id: ", z});
-            Thread.sleep(5);
+//            logger.log(Level.INFO, "{0} {1}", new Object[]{"Sent item with id: ", z});
         }
+
         // wait for all instances to be read
-        Thread.sleep(100);        
+        Thread.sleep(2 * CONSUMER_TIMEOUT);
         assertEquals("Number of sent and received instances", z, i[0]);
     }
 }

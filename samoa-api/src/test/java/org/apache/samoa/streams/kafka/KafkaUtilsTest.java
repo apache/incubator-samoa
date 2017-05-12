@@ -34,8 +34,6 @@ package org.apache.samoa.streams.kafka;
  * limitations under the License.
  * #L%
  */
-
-
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -47,7 +45,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,32 +67,31 @@ import org.apache.kafka.common.utils.Time;
 import org.apache.samoa.instances.InstancesHeader;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author pwawrzyniak
  */
-@Ignore
 public class KafkaUtilsTest {
 
-    private static final String ZKHOST = "10.255.251.202"; 		//10.255.251.202
-    private static final String BROKERHOST = "10.255.251.214";	//10.255.251.214
-    private static final String BROKERPORT = "6667";		//6667, local: 9092
+    private static final String ZKHOST = "127.0.0.1";
+    private static final String BROKERHOST = "127.0.0.1";
+    private static final String BROKERPORT = "9092";
     private static final String TOPIC_R = "test-r";
     private static final String TOPIC_S = "test-s";
+    private static final int NUM_INSTANCES = 50;
 
     private static KafkaServer kafkaServer;
     private static EmbeddedZookeeper zkServer;
     private static ZkClient zkClient;
     private static String zkConnect;
 
-    private Logger logger = Logger.getLogger(KafkaUtilsTest.class.getCanonicalName());
-    private long CONSUMER_TIMEOUT = 1000;
+    private static final Logger logger = Logger.getLogger(KafkaUtilsTest.class.getCanonicalName());
+    private final long CONSUMER_TIMEOUT = 1000;
 
     public KafkaUtilsTest() {
     }
@@ -104,29 +100,29 @@ public class KafkaUtilsTest {
     public static void setUpClass() throws IOException {
         // setup Zookeeper
         zkServer = new EmbeddedZookeeper();
-        zkConnect = ZKHOST + ":" + "2181"; //+ zkServer.port();
+        zkConnect = ZKHOST + ":" + zkServer.port();
         zkClient = new ZkClient(zkConnect, 30000, 30000, ZKStringSerializer$.MODULE$);
         ZkUtils zkUtils = ZkUtils.apply(zkClient, false);
 
         // setup Broker
-        /*Properties brokerProps = new Properties();
+        Properties brokerProps = new Properties();
         brokerProps.setProperty("zookeeper.connect", zkConnect);
         brokerProps.setProperty("broker.id", "0");
         brokerProps.setProperty("log.dirs", Files.createTempDirectory("kafkaUtils-").toAbsolutePath().toString());
         brokerProps.setProperty("listeners", "PLAINTEXT://" + BROKERHOST + ":" + BROKERPORT);
         KafkaConfig config = new KafkaConfig(brokerProps);
         Time mock = new MockTime();
-        kafkaServer = TestUtils.createServer(config, mock);*/
+        kafkaServer = TestUtils.createServer(config, mock);
 
         // create topics
-        //AdminUtils.createTopic(zkUtils, TOPIC_R, 1, 1, new Properties(), RackAwareMode.Disabled$.MODULE$);
-        //AdminUtils.createTopic(zkUtils, TOPIC_S, 1, 1, new Properties(), RackAwareMode.Disabled$.MODULE$);
+        AdminUtils.createTopic(zkUtils, TOPIC_R, 1, 1, new Properties(), RackAwareMode.Disabled$.MODULE$);
+        AdminUtils.createTopic(zkUtils, TOPIC_S, 1, 1, new Properties(), RackAwareMode.Disabled$.MODULE$);
 
     }
 
     @AfterClass
     public static void tearDownClass() {
-        //kafkaServer.shutdown();
+        kafkaServer.shutdown();
         zkClient.close();
         zkServer.shutdown();
     }
@@ -146,13 +142,19 @@ public class KafkaUtilsTest {
     public void testInitializeConsumer() throws Exception {
         logger.log(Level.INFO, "initializeConsumer");
         Collection<String> topics = Arrays.asList(TOPIC_R);
-        KafkaUtils instance = new KafkaUtils(TestUtilsForKafka.getConsumerProperties(), TestUtilsForKafka.getProducerProperties(), CONSUMER_TIMEOUT);
+        KafkaUtils instance = new KafkaUtils(TestUtilsForKafka.getConsumerProperties(BROKERHOST,BROKERPORT), TestUtilsForKafka.getProducerProperties(BROKERHOST,BROKERPORT), CONSUMER_TIMEOUT);
         assertNotNull(instance);
 
         instance.initializeConsumer(topics);
-
-        assertNotNull(instance.getKafkaMessages());
+        Thread.sleep(1000);
         instance.closeConsumer();
+
+        Thread.sleep(CONSUMER_TIMEOUT);
+
+        instance.initializeConsumer(topics);
+        Thread.sleep(1000);
+        instance.closeConsumer();
+        assertTrue(true);
     }
 
     /**
@@ -162,14 +164,17 @@ public class KafkaUtilsTest {
     public void testGetKafkaMessages() throws Exception {
         logger.log(Level.INFO, "getKafkaMessages");
         Collection<String> topics = Arrays.asList(TOPIC_R);
-        KafkaUtils instance = new KafkaUtils(TestUtilsForKafka.getConsumerProperties(), TestUtilsForKafka.getProducerProperties(), CONSUMER_TIMEOUT);
+        KafkaUtils instance = new KafkaUtils(TestUtilsForKafka.getConsumerProperties(BROKERHOST,BROKERPORT), TestUtilsForKafka.getProducerProperties(BROKERHOST,BROKERPORT), CONSUMER_TIMEOUT);
         assertNotNull(instance);
 
         logger.log(Level.INFO, "Initialising consumer");
         instance.initializeConsumer(topics);
 
         logger.log(Level.INFO, "Produce data");
-        List expResult = sendAndGetMessages(50);
+        List expResult = sendAndGetMessages(NUM_INSTANCES);
+
+        logger.log(Level.INFO, "Wait a moment");
+        Thread.sleep(CONSUMER_TIMEOUT);
 
         logger.log(Level.INFO, "Get results from Kafka");
         List<byte[]> result = instance.getKafkaMessages();
@@ -180,7 +185,7 @@ public class KafkaUtilsTest {
 
     private List<byte[]> sendAndGetMessages(int maxNum) throws InterruptedException, ExecutionException, TimeoutException {
         List<byte[]> ret;
-        try (KafkaProducer<String, byte[]> producer = new KafkaProducer<>(TestUtilsForKafka.getProducerProperties("sendM-test"))) {
+        try (KafkaProducer<String, byte[]> producer = new KafkaProducer<>(TestUtilsForKafka.getProducerProperties("sendM-test",BROKERHOST,BROKERPORT))) {
             ret = new ArrayList<>();
             Random r = new Random();
             InstancesHeader header = TestUtilsForKafka.generateHeader(10);
@@ -190,25 +195,28 @@ public class KafkaUtilsTest {
                 ProducerRecord<String, byte[]> record = new ProducerRecord(TOPIC_R, gson.toJson(TestUtilsForKafka.getData(r, 10, header)).getBytes());
                 ret.add(record.value());
                 producer.send(record);
-            }   producer.flush();
+            }
+            producer.flush();
         }
         return ret;
     }
 
     /**
      * Test of sendKafkaMessage method, of class KafkaUtils.
+     *
+     * @throws java.lang.InterruptedException
      */
     @Test
-    public void testSendKafkaMessage() {
+    public void testSendKafkaMessage() throws InterruptedException {
         logger.log(Level.INFO, "sendKafkaMessage");
 
         logger.log(Level.INFO, "Initialising producer");
-        KafkaUtils instance = new KafkaUtils(TestUtilsForKafka.getConsumerProperties(), TestUtilsForKafka.getProducerProperties("rcv-test"), CONSUMER_TIMEOUT);
+        KafkaUtils instance = new KafkaUtils(TestUtilsForKafka.getConsumerProperties(BROKERHOST,BROKERPORT), TestUtilsForKafka.getProducerProperties("rcv-test", BROKERHOST,BROKERPORT), CONSUMER_TIMEOUT);
         instance.initializeProducer();
 
         logger.log(Level.INFO, "Initialising consumer");
         KafkaConsumer<String, byte[]> consumer;
-        consumer = new KafkaConsumer<>(TestUtilsForKafka.getConsumerProperties());
+        consumer = new KafkaConsumer<>(TestUtilsForKafka.getConsumerProperties(BROKERHOST,BROKERPORT));
         consumer.subscribe(Arrays.asList(TOPIC_S));
 
         logger.log(Level.INFO, "Produce data");
@@ -216,11 +224,13 @@ public class KafkaUtilsTest {
         Random r = new Random();
         InstancesHeader header = TestUtilsForKafka.generateHeader(10);
         Gson gson = new Gson();
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < NUM_INSTANCES; i++) {
             byte[] val = gson.toJson(TestUtilsForKafka.getData(r, 10, header)).getBytes();
             sent.add(val);
             instance.sendKafkaMessage(TOPIC_S, val);
         }
+        // wait for Kafka a bit :)
+        Thread.sleep(CONSUMER_TIMEOUT);
 
         logger.log(Level.INFO, "Get results from Kafka");
         ConsumerRecords<String, byte[]> records = consumer.poll(CONSUMER_TIMEOUT);

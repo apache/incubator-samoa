@@ -48,14 +48,12 @@ import org.apache.samoa.moa.core.FastVector;
 
 /**
  *
- * @author pwawrzyniak <your.name at your.org>
+ * @author pwawrzyniak
  */
 public class TestUtilsForKafka {
 
-    private static final String ZKHOST = "10.255.251.202"; 		//10.255.251.202
-    private static final String BROKERHOST = "10.255.251.214";	//10.255.251.214
-    private static final String BROKERPORT = "6667";		//6667, local: 9092
-    private static final String TOPIC = "samoa_test";				//samoa_test, local: test
+//    private static final String BROKERHOST = "127.0.0.1";
+//    private static final String BROKERPORT = "9092";				
 
     protected static InstanceContentEvent getData(Random instanceRandom, int numAtts, InstancesHeader header) {
         double[] attVals = new double[numAtts + 1];
@@ -63,8 +61,7 @@ public class TestUtilsForKafka {
         double sumWeights = 0.0;
         for (int i = 0; i < numAtts; i++) {
             attVals[i] = instanceRandom.nextDouble();
-//            sum += this.weights[i] * attVals[i];
-//            sumWeights += this.weights[i];
+
         }
         int classLabel;
         if (sum >= sumWeights * 0.5) {
@@ -98,8 +95,8 @@ public class TestUtilsForKafka {
     }
 
     
-        protected static Properties getProducerProperties() {
-        return getProducerProperties("test");
+        protected static Properties getProducerProperties(String BROKERHOST, String BROKERPORT) {
+        return getProducerProperties("test", BROKERHOST, BROKERPORT);
     }
     
     /**
@@ -107,7 +104,7 @@ public class TestUtilsForKafka {
      * @param clientId
      * @return
      */
-    protected static Properties getProducerProperties(String clientId) {
+    protected static Properties getProducerProperties(String clientId, String BROKERHOST, String BROKERPORT) {
         Properties producerProps = new Properties();
         producerProps.setProperty("bootstrap.servers", BROKERHOST + ":" + BROKERPORT);
         producerProps.setProperty("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
@@ -117,7 +114,7 @@ public class TestUtilsForKafka {
         return producerProps;
     }
 
-    protected static Properties getConsumerProperties() {
+    protected static Properties getConsumerProperties(String BROKERHOST, String BROKERPORT) {
         Properties consumerProps = new Properties();
         consumerProps.setProperty("bootstrap.servers", BROKERHOST + ":" + BROKERPORT);
         consumerProps.put("enable.auto.commit", "true");
@@ -126,11 +123,10 @@ public class TestUtilsForKafka {
         consumerProps.setProperty("value.deserializer", "org.apache.kafka.common.serialization.ByteArrayDeserializer");
         consumerProps.setProperty("group.id", "test");
         consumerProps.setProperty("auto.offset.reset", "earliest");
-        //consumerProps.setProperty("client.id", "consumer0");
         return consumerProps;
     }
     
-    protected static Properties getConsumerProducerProperties() {
+    protected static Properties getConsumerProducerProperties(String BROKERHOST, String BROKERPORT) {
         Properties props = new Properties();
         props.setProperty("bootstrap.servers", BROKERHOST + ":" + BROKERPORT);
         props.put("enable.auto.commit", "true");

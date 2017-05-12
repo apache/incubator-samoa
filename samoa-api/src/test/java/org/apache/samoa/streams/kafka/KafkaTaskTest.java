@@ -15,11 +15,14 @@
  */
 package org.apache.samoa.streams.kafka;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.Properties;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,6 +47,9 @@ import kafka.utils.TestUtils;
 import kafka.utils.ZKStringSerializer$;
 import kafka.utils.ZkUtils;
 import kafka.zk.EmbeddedZookeeper;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.samoa.instances.InstancesHeader;
 
 /*
  * #%L
@@ -72,11 +78,11 @@ import kafka.zk.EmbeddedZookeeper;
 @Ignore
 public class KafkaTaskTest {
 	
-    private static final String ZKHOST = "10.255.251.202"; 		//10.255.251.202
-    private static final String BROKERHOST = "10.255.251.214";	//10.255.251.214
-    private static final String BROKERPORT = "6667";		//6667, local: 9092
+    private static final String ZKHOST = "127.0.0.1";//10.255.251.202"; 		//10.255.251.202
+    private static final String BROKERHOST = "127.0.0.1";//"10.255.251.214";	//10.255.251.214
+    private static final String BROKERPORT = "9092";		//6667, local: 9092
     private static final String TOPIC = "samoa_test";				//samoa_test, local: test
-    private static final int NUM_INSTANCES = 500;
+    private static final int NUM_INSTANCES = 125922;
     
     
     private static KafkaServer kafkaServer;
@@ -87,10 +93,10 @@ public class KafkaTaskTest {
     @BeforeClass
     public static void setUpClass() throws IOException {
         // setup Zookeeper
-        zkServer = new EmbeddedZookeeper();
-        zkConnect = ZKHOST + ":" + "2181"; //+ zkServer.port();
-        zkClient = new ZkClient(zkConnect, 30000, 30000, ZKStringSerializer$.MODULE$);
-        ZkUtils zkUtils = ZkUtils.apply(zkClient, false);
+//        zkServer = new EmbeddedZookeeper();
+//        zkConnect = ZKHOST + ":" + "2181"; //+ zkServer.port();
+//        zkClient = new ZkClient(zkConnect, 30000, 30000, ZKStringSerializer$.MODULE$);
+//        ZkUtils zkUtils = ZkUtils.apply(zkClient, false);
 
         // setup Broker
         /*Properties brokerProps = new Properties();
@@ -109,8 +115,8 @@ public class KafkaTaskTest {
     @AfterClass
     public static void tearDownClass() {
         //kafkaServer.shutdown(); 
-        zkClient.close();
-        zkServer.shutdown();
+//        zkClient.close();
+//        zkServer.shutdown();
     }
 
     @Before
@@ -127,12 +133,38 @@ public class KafkaTaskTest {
     public void testKafkaTask() throws InterruptedException, ExecutionException, TimeoutException {
         Logger logger = Logger.getLogger(KafkaTaskTest.class.getName());
         logger.log(Level.INFO, "KafkaTask");
-        Properties producerProps = TestUtilsForKafka.getProducerProperties();
-        Properties consumerProps = TestUtilsForKafka.getConsumerProperties();
+        Properties producerProps = TestUtilsForKafka.getProducerProperties(BROKERHOST,BROKERPORT);
+        Properties consumerProps = TestUtilsForKafka.getConsumerProperties(BROKERHOST,BROKERPORT);
     	     
         KafkaTask task = new KafkaTask(producerProps, consumerProps, "kafkaTaskTest", 10000, new KafkaJsonMapper(Charset.defaultCharset()), new KafkaJsonMapper(Charset.defaultCharset()));
         task.setFactory(new SimpleComponentFactory());
         task.init();
         SimpleEngine.submitTopology(task.getTopology());
+        
+                Thread th = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                KafkaProducer<String, byte[]> producer = new KafkaProducer<>(TestUtilsForKafka.getProducerProperties(BROKERHOST,BROKERPORT));
+
+                Random r = new Random();
+                InstancesHeader header = TestUtilsForKafka.generateHeader(10);
+                Gson gson = new Gson();
+                int i = 0;
+                for (i = 0; i < NUM_INSTANCES; i++) {
+                    try {
+                        ProducerRecord<String, byte[]> record = new ProducerRecord(TOPIC, gson.toJson(TestUtilsForKafka.getData(r, 10, header)).getBytes());
+                        long stat = producer.send(record).get(10, TimeUnit.DAYS).offset();
+//                        Thread.sleep(5);
+                        Logger.getLogger(KafkaEntranceProcessorTest.class.getName()).log(Level.INFO, "Sent message with ID={0} to Kafka!, offset={1}", new Object[]{i, stat});
+                    } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+                        Logger.getLogger(KafkaEntranceProcessorTest.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                producer.flush();
+                producer.close();
+            }
+        });
+        th.start();
+        
     }
 }

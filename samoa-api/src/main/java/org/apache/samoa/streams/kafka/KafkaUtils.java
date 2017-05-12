@@ -61,8 +61,7 @@ import java.util.logging.Logger;
  */
 class KafkaUtils {
 
-    // Consumer class for internal use to retrieve messages from Kafka
-    private transient KafkaConsumer<String, byte[]> consumer;
+    private transient KafkaConsumerThread kafkaConsumerThread;
 
     private transient KafkaProducer<String, byte[]> producer;
 
@@ -72,6 +71,7 @@ class KafkaUtils {
 
     // Timeout for Kafka Consumer    
     private long consumerTimeout;
+        
 
     /**
      * Class constructor
@@ -86,6 +86,10 @@ class KafkaUtils {
         this.consumerTimeout = consumerTimeout;
     }
 
+    /**
+     * Creates new KafkaUtils from existing instance
+     * @param kafkaUtils Instance of KafkaUtils
+     */
     KafkaUtils(KafkaUtils kafkaUtils) {
         this.consumerProperties = kafkaUtils.consumerProperties;
         this.producerProperties = kafkaUtils.producerProperties;
@@ -93,25 +97,18 @@ class KafkaUtils {
     }
 
     /**
-     * Method used to initialize Kafka Consumer, i.e. instantiate it and
+     * Method used to initialize Kafka Consumer Thread, i.e. instantiate it and
      * subscribe to configured topic
      *
      * @param topics List of Kafka topics that consumer should subscribe to
      */
-    public void initializeConsumer(Collection<String> topics) {
-        // lazy instantiation
-        if (consumer == null) {
-            consumer = new KafkaConsumer<>(consumerProperties);
-        }
-        consumer.subscribe(topics);
-//        consumer.seekToBeginning(consumer.assignment());
+    public void initializeConsumer(Collection<String> topics) {        
+        kafkaConsumerThread = new KafkaConsumerThread(consumerProperties, topics, consumerTimeout);
+        kafkaConsumerThread.start();        
     }
 
     public void closeConsumer() {
-        if (consumer != null) {
-            consumer.unsubscribe();
-            consumer.close();
-        }
+        kafkaConsumerThread.close();
     }
 
     public void initializeProducer() {
@@ -135,27 +132,7 @@ class KafkaUtils {
      * or is not subscribed to any topic.
      */
     public List<byte[]> getKafkaMessages() throws Exception {
-
-        if (consumer != null) {
-            if (!consumer.subscription().isEmpty()) {
-                return getMessagesBytes(consumer.poll(consumerTimeout));
-            } else {
-                // TODO: do it more elegant way
-                throw new Exception("Consumer subscribed to no topics!");
-            }
-        } else {
-            // TODO: do more elegant way
-            throw new Exception("Consumer not initialised");
-        }
-    }
-
-    private List<byte[]> getMessagesBytes(ConsumerRecords<String, byte[]> poll) {
-        Iterator<ConsumerRecord<String, byte[]>> iterator = poll.iterator();
-        List<byte[]> ret = new ArrayList<>();
-        while (iterator.hasNext()) {
-            ret.add(iterator.next().value());
-        }
-        return ret;
+        return kafkaConsumerThread.getKafkaMessages();
     }
 
     public long sendKafkaMessage(String topic, byte[] message) {
