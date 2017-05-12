@@ -91,7 +91,7 @@ public class KafkaUtilsTest {
     private static String zkConnect;
 
     private static final Logger logger = Logger.getLogger(KafkaUtilsTest.class.getCanonicalName());
-    private final long CONSUMER_TIMEOUT = 1000;
+    private final long CONSUMER_TIMEOUT = 1500;
 
     public KafkaUtilsTest() {
     }
@@ -230,7 +230,7 @@ public class KafkaUtilsTest {
             instance.sendKafkaMessage(TOPIC_S, val);
         }
         // wait for Kafka a bit :)
-        Thread.sleep(CONSUMER_TIMEOUT);
+        Thread.sleep(2*CONSUMER_TIMEOUT);
 
         logger.log(Level.INFO, "Get results from Kafka");
         ConsumerRecords<String, byte[]> records = consumer.poll(CONSUMER_TIMEOUT);
