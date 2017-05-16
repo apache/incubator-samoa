@@ -38,6 +38,8 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
@@ -70,6 +72,7 @@ import org.apache.samoa.instances.InstancesHeader;
 /**
  *
  * @author pwawrzyniak
+ * @author Jakub Jankowski
  */
 public class KafkaEntranceProcessorTest {
 
@@ -137,7 +140,7 @@ public class KafkaEntranceProcessorTest {
     @Test
     public void testFetchingNewDataWithJson() throws InterruptedException, ExecutionException, TimeoutException {
 
-        Logger logger = Logger.getLogger(KafkaEntranceProcessorTest.class.getName());
+        final Logger logger = Logger.getLogger(KafkaEntranceProcessorTest.class.getName());
         logger.log(Level.INFO, "JSON");
         logger.log(Level.INFO, "testFetchingNewDataWithJson");
         Properties props = TestUtilsForKafka.getConsumerProperties(BROKERHOST, BROKERPORT);
@@ -145,7 +148,7 @@ public class KafkaEntranceProcessorTest {
         KafkaEntranceProcessor kep = new KafkaEntranceProcessor(props, TOPIC_JSON, TIMEOUT, new KafkaJsonMapper(Charset.defaultCharset()));
 
         kep.onCreate(1);
-
+       
         // prepare new thread for data producing
         Thread th = new Thread(new Runnable() {
             @Override
@@ -159,6 +162,7 @@ public class KafkaEntranceProcessorTest {
                 for (i = 0; i < NUM_INSTANCES; i++) {
                     try {
                         InstanceContentEvent event = TestUtilsForKafka.getData(r, 10, header);
+                                             
                         ProducerRecord<String, byte[]> record = new ProducerRecord(TOPIC_JSON, gson.toJson(event).getBytes());
                         long stat = producer.send(record).get(10, TimeUnit.SECONDS).offset();
                     } catch (InterruptedException | ExecutionException | TimeoutException ex) {
@@ -173,11 +177,10 @@ public class KafkaEntranceProcessorTest {
 
         int z = 0;
         while (z < NUM_INSTANCES && kep.hasNext()) {
-            InstanceContentEvent event = (InstanceContentEvent) kep.nextEvent();
+            InstanceContentEvent event = (InstanceContentEvent) kep.nextEvent();            
             z++;
-//            logger.log(Level.INFO, "{0} {1}", new Object[]{z, event.getInstance().toString()});
         }
-
+        
         assertEquals("Number of sent and received instances", NUM_INSTANCES, z);
 
     }
