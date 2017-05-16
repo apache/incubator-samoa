@@ -21,21 +21,18 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.avro.Schema;
-import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.avro.io.BinaryEncoder;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.Decoder;
 import org.apache.avro.io.DecoderFactory;
-import org.apache.avro.io.Encoder;
 import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.reflect.ReflectData;
-import org.apache.avro.reflect.ReflectDatumReader;
 import org.apache.avro.reflect.ReflectDatumWriter;
-import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecord;
 import org.apache.samoa.learners.InstanceContentEvent;
+import org.apache.samoa.streams.kafka.avro.SamoaDatumReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,7 +88,7 @@ public class KafkaAvroMapper implements KafkaDeserializer<InstanceContentEvent>,
 	public static <V> byte[] avroSerialize(final Class<V> cls, final V v) {
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		try {
-			Schema schema = new Schema.Parser().parse(new File("C:/java/avro/kafka.avsc"));
+			Schema schema = new Schema.Parser().parse(KafkaAvroMapper.class.getResourceAsStream("/kafka.avsc"));
 			DatumWriter<V> writer;
 
 			if (v instanceof SpecificRecord) {
@@ -123,9 +120,9 @@ public class KafkaAvroMapper implements KafkaDeserializer<InstanceContentEvent>,
 	public static <V> V avroDeserialize(byte[] avroBytes, Class<V> clazz) {
 		V ret = null;
 		try {
-			Schema schema = new Schema.Parser().parse(new File("C:/java/avro/kafka.avsc"));
+			Schema schema = new Schema.Parser().parse(KafkaAvroMapper.class.getResourceAsStream("/kafka.avsc"));
 			ByteArrayInputStream in = new ByteArrayInputStream(avroBytes);
-			DatumReader<V> reader = new ReflectDatumReader<>(schema);
+			DatumReader<V> reader = new SamoaDatumReader<>(schema);
 			
 			Decoder decoder = DecoderFactory.get().directBinaryDecoder(in, null);
 			
