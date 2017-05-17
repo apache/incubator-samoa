@@ -88,8 +88,13 @@ public class PrequentialEvaluation implements Task, Configurable {
       "Prequential_"
           + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
 
+
   public FileOption dumpFileOption = new FileOption("dumpFile", 'd', "File to append intermediate csv results to",
       null, "csv", true);
+  
+  public FileOption resultFileOption = new FileOption("resultFile", 'r', "File to append intermediate model output to",
+	      null, "csv", true);
+  
 
   // Default=0: no delay/waiting
   public IntOption sourceDelayOption = new IntOption("sourceDelay", 'w',
@@ -167,7 +172,8 @@ public class PrequentialEvaluation implements Task, Configurable {
       evaluatorOptionValue = getDefaultPerformanceEvaluatorForLearner(classifier);
     }
     evaluator = new EvaluatorProcessor.Builder(evaluatorOptionValue)
-        .samplingFrequency(sampleFrequencyOption.getValue()).dumpFile(dumpFileOption.getFile()).build();
+        .samplingFrequency(sampleFrequencyOption.getValue()).dumpFile(dumpFileOption.getFile())
+        .resultFile(resultFileOption.getFile()).build();
 
     // evaluatorPi = builder.createPi(evaluator);
     // evaluatorPi.connectInputShuffleStream(evaluatorPiInputStream);

@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
@@ -53,9 +54,12 @@ public class EvaluatorProcessor implements Processor {
   private final PerformanceEvaluator evaluator;
   private final int samplingFrequency;
   private final File dumpFile;
+  private final File resultFile;
   private transient PrintStream immediateResultStream = null;
+  private transient PrintStream immediateOutputStream = null;
   private transient boolean firstDump = true;
-
+  private transient boolean firstResult = true;
+  
   private long totalCount = 0;
   private long experimentStart = 0;
 
@@ -68,6 +72,7 @@ public class EvaluatorProcessor implements Processor {
     this.evaluator = builder.evaluator;
     this.samplingFrequency = builder.samplingFrequency;
     this.dumpFile = builder.dumpFile;
+    this.resultFile = builder.resultFile;
   }
 
   @Override
@@ -83,6 +88,18 @@ public class EvaluatorProcessor implements Processor {
       logger.info("{} seconds for {} instances", sampleDuration, samplingFrequency);
       this.addMeasurement();
     }
+    
+    if (immediateOutputStream != null) {
+      if (this.firstResult)
+      {
+    	  immediateOutputStream.println("Class votes");
+    	  this.firstResult=false;
+      }
+        String votes = Arrays.toString(result.getClassVotes());
+        votes = votes.substring(1, votes.length() - 1);
+        immediateOutputStream.println(votes);
+        immediateOutputStream.flush();
+      }
 
     if (result.isLastEvent()) {
       this.concludeMeasurement();
@@ -124,6 +141,24 @@ public class EvaluatorProcessor implements Processor {
         logger.error("Exception when creating {}:{}", this.dumpFile.getAbsolutePath(), e.toString());
       }
     }
+    
+    
+    if (this.resultFile != null) {
+        try {
+                this.immediateOutputStream = new PrintStream(
+                new FileOutputStream(resultFile), true);
+        } catch (FileNotFoundException e) {
+          this.immediateOutputStream = null;
+          logger.error("File not found exception for {}:{}", this.resultFile.getAbsolutePath(), e.toString());
+
+        } catch (Exception e) {
+          this.immediateOutputStream = null;
+          logger.error("Exception when creating {}:{}", this.resultFile.getAbsolutePath(), e.toString());
+        }
+      }
+      
+    
+    
 
     this.firstDump = true;
   }
@@ -177,6 +212,7 @@ public class EvaluatorProcessor implements Processor {
       immediateResultStream.println(learningCurve.entryToString(learningCurve.numEntries() - 1));
       immediateResultStream.flush();
     }
+    
   }
 
   private void concludeMeasurement() {
@@ -203,6 +239,8 @@ public class EvaluatorProcessor implements Processor {
     private final PerformanceEvaluator evaluator;
     private int samplingFrequency = 100000;
     private File dumpFile = null;
+    private File resultFile = null;
+
 
     public Builder(PerformanceEvaluator evaluator) {
       this.evaluator = evaluator;
@@ -212,6 +250,7 @@ public class EvaluatorProcessor implements Processor {
       this.evaluator = oldProcessor.evaluator;
       this.samplingFrequency = oldProcessor.samplingFrequency;
       this.dumpFile = oldProcessor.dumpFile;
+      this.resultFile = oldProcessor.resultFile;
     }
 
     public Builder samplingFrequency(int samplingFrequency) {
@@ -222,6 +261,12 @@ public class EvaluatorProcessor implements Processor {
     public Builder dumpFile(File file) {
       this.dumpFile = file;
       return this;
+    }
+    
+    public Builder resultFile(File file)
+    {
+    	this.resultFile = file;
+    	return this;
     }
 
     public EvaluatorProcessor build() {
