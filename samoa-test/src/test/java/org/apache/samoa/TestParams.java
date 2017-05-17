@@ -1,5 +1,7 @@
 package org.apache.samoa;
 
+import org.apache.samoa.TestParams.Builder;
+
 /*
  * #%L
  * SAMOA
@@ -34,18 +36,22 @@ public class TestParams {
    */
   public static class Templates {
 
-    public final static String PREQEVAL_VHT_RANDOMTREE = "PrequentialEvaluation -d %s -i %d -f %d -w %d "
+    /*public final static String PREQEVAL_VHT_RANDOMTREE = "PrequentialEvaluation -d %s -i %d -f %d -w %d "
+        + "-l (org.apache.samoa.learners.classifiers.trees.VerticalHoeffdingTree -p 4) " +
+        "-s (org.apache.samoa.streams.generators.RandomTreeGenerator -c 2 -o 10 -u 10)";*/
+    
+    public final static String PREQEVAL_VHT_RANDOMTREE = "PrequentialEvaluation -d %s -i %d -f %d -w %d -g %s "
         + "-l (org.apache.samoa.learners.classifiers.trees.VerticalHoeffdingTree -p 4) " +
         "-s (org.apache.samoa.streams.generators.RandomTreeGenerator -c 2 -o 10 -u 10)";
 
-    public final static String PREQEVAL_NAIVEBAYES_HYPERPLANE = "PrequentialEvaluation -d %s -i %d -f %d -w %d "
+    public final static String PREQEVAL_NAIVEBAYES_HYPERPLANE = "PrequentialEvaluation -d %s -i %d -f %d -w %d -g %s "
         + "-l (classifiers.SingleClassifier -l org.apache.samoa.learners.classifiers.NaiveBayes) " +
         "-s (org.apache.samoa.streams.generators.HyperplaneGenerator -c 2)";
 
     // setting the number of nominal attributes to zero significantly reduces
     // the processing time,
     // so that it's acceptable in a test case
-    public final static String PREQEVAL_BAGGING_RANDOMTREE = "PrequentialEvaluation -d %s -i %d -f %d -w %d "
+    public final static String PREQEVAL_BAGGING_RANDOMTREE = "PrequentialEvaluation -d %s -i %d -f %d -w %d -g %s "
         + "-l (org.apache.samoa.learners.classifiers.ensemble.Bagging) " +
         "-s (org.apache.samoa.streams.generators.RandomTreeGenerator -c 2 -o 0 -u 10)";
 
@@ -60,6 +66,11 @@ public class TestParams {
   public static final String CLASSIFICATIONS_CORRECT = "classifications correct (percent)";
   public static final String KAPPA_STAT = "Kappa Statistic (percent)";
   public static final String KAPPA_TEMP_STAT = "Kappa Temporal Statistic (percent)";
+  
+  public static final String INSTANCE_ID = "instance number";
+  public static final String TRUE_CLASS_VALUE = "true class value";
+  public static final String PREDICTED_CLASS_VALUE = "predicted class value";
+  public static final String VOTES = "votes";
 
   private long inputInstances;
   private long samplingSize;
@@ -73,6 +84,7 @@ public class TestParams {
   private final int prePollWait;
   private int inputDelayMicroSec;
   private String taskClassName;
+  private boolean labelFileCreated;
 
   private TestParams(String taskClassName,
       long inputInstances,
@@ -85,7 +97,8 @@ public class TestParams {
       String cliStringTemplate,
       int pollTimeoutSeconds,
       int prePollWait,
-      int inputDelayMicroSec) {
+      int inputDelayMicroSec,
+      boolean labelFileCreated) {
     this.taskClassName = taskClassName;
     this.inputInstances = inputInstances;
     this.samplingSize = samplingSize;
@@ -98,6 +111,11 @@ public class TestParams {
     this.pollTimeoutSeconds = pollTimeoutSeconds;
     this.prePollWait = prePollWait;
     this.inputDelayMicroSec = inputDelayMicroSec;
+    this.labelFileCreated = labelFileCreated;
+  }
+  
+  public boolean getLabelFileCreated() {
+    return labelFileCreated;
   }
 
   public String getTaskClassName() {
@@ -163,6 +181,7 @@ public class TestParams {
         "prePollWait=" + prePollWait + "\n" +
         "taskClassName='" + taskClassName + '\'' + "\n" +
         "inputDelayMicroSec=" + inputDelayMicroSec + "\n" +
+        "labelFileCreated=" + labelFileCreated + "\n" +
         '}';
   }
 
@@ -179,6 +198,7 @@ public class TestParams {
     private int prePollWaitSeconds = 10;
     private String taskClassName;
     private int inputDelayMicroSec = 0;
+    private boolean labelFileCreated = true;
 
     public Builder taskClassName(String taskClassName) {
       this.taskClassName = taskClassName;
@@ -239,6 +259,11 @@ public class TestParams {
       this.prePollWaitSeconds = prePollWaitSeconds;
       return this;
     }
+    
+    public Builder labelFileCreated(boolean labelFileCreated) {
+      this.labelFileCreated = labelFileCreated;
+      return this;
+    }
 
     public TestParams build() {
       return new TestParams(taskClassName,
@@ -252,7 +277,8 @@ public class TestParams {
           cliStringTemplate,
           pollTimeoutSeconds,
           prePollWaitSeconds,
-          inputDelayMicroSec);
+          inputDelayMicroSec,
+          labelFileCreated);
     }
   }
 }

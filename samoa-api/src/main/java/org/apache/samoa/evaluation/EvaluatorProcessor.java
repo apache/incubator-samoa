@@ -32,12 +32,16 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.core.Processor;
+import org.apache.samoa.instances.Attribute;
+import org.apache.samoa.instances.Utils;
 import org.apache.samoa.learners.ResultContentEvent;
 import org.apache.samoa.moa.core.Measurement;
 import org.apache.samoa.moa.evaluation.LearningCurve;
 import org.apache.samoa.moa.evaluation.LearningEvaluation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.esotericsoftware.minlog.Log;
 
 public class EvaluatorProcessor implements Processor {
 
@@ -58,8 +62,8 @@ public class EvaluatorProcessor implements Processor {
   private transient PrintStream immediateResultStream = null;
   private transient PrintStream immediateOutputStream = null;
   private transient boolean firstDump = true;
-  private transient boolean firstResult = true;
-  
+  private transient boolean firstResult = true;  
+
   private long totalCount = 0;
   private long experimentStart = 0;
 
@@ -90,16 +94,44 @@ public class EvaluatorProcessor implements Processor {
     }
     
     if (immediateOutputStream != null) {
-      if (this.firstResult)
-      {
-    	  immediateOutputStream.println("Class votes");
-    	  this.firstResult=false;
-      }
-        String votes = Arrays.toString(result.getClassVotes());
-        votes = votes.substring(1, votes.length() - 1);
-        immediateOutputStream.println(votes);
+      String instanceIndex = String.valueOf(result.getInstanceIndex());
+      Attribute classAttribute = result.getInstance().dataset().classAttribute();
+      int numClasses = result.getInstance().dataset().numClasses();
+      double trueValue = result.getInstance().classValue();
+      //for classification
+      if (classAttribute.isNominal()) {
+        List<String> classAttributeValues = classAttribute.getAttributeValues();
+        if (this.firstResult) {
+          //immediateOutputStream.println("Class votes");
+          String classHeader = "";
+          for (String value : classAttributeValues) {
+            classHeader += "votes_" + value + ",";
+          }
+          //immediateOutputStream.println("instance number,true class value,predicted class value," + "votes:" + classAttributeValues.toString().replaceAll("\\s+",""));
+          immediateOutputStream.println("instance number,true class value,predicted class value," + classHeader.substring(0, classHeader.length() - 1));
+          this.firstResult=false;
+        }        
+        int trueNominalIndex = (int) trueValue;
+        String trueNominalValue = classAttributeValues.get(trueNominalIndex);
+        double[] votes =  Arrays.copyOf(result.getClassVotes(), numClasses);
+        //votes = votes.substring(1, votes.length() - 1);      
+        String predictedNominalValue = classAttributeValues.get(Utils.maxIndex(votes));
+        immediateOutputStream.println(instanceIndex + "," + trueNominalValue + "," + predictedNominalValue + "," + Arrays.toString(votes).replaceAll("\\s+","").replaceAll("\\[", "").replaceAll("\\]",""));
         immediateOutputStream.flush();
       }
+      //for regression
+      if (classAttribute.isNumeric()) {
+        if (this.firstResult) {
+          immediateOutputStream.println("instance_number,true_value,predicted_value");
+          this.firstResult=false;
+        }
+        //logger.info("result: " + Arrays.toString(result.getClassVotes()));
+        double predictedValue = 0;
+        if (result.getClassVotes().length > 0)
+          predictedValue = result.getClassVotes()[0];
+        immediateOutputStream.println(instanceIndex + "," + trueValue + "," + predictedValue);
+      }      
+    }
 
     if (result.isLastEvent()) {
       this.concludeMeasurement();
@@ -142,23 +174,17 @@ public class EvaluatorProcessor implements Processor {
       }
     }
     
-    
     if (this.resultFile != null) {
-        try {
-                this.immediateOutputStream = new PrintStream(
-                new FileOutputStream(resultFile), true);
-        } catch (FileNotFoundException e) {
-          this.immediateOutputStream = null;
-          logger.error("File not found exception for {}:{}", this.resultFile.getAbsolutePath(), e.toString());
-
-        } catch (Exception e) {
-          this.immediateOutputStream = null;
-          logger.error("Exception when creating {}:{}", this.resultFile.getAbsolutePath(), e.toString());
-        }
+      try {
+        this.immediateOutputStream = new PrintStream(new FileOutputStream(resultFile), true);
+      } catch (FileNotFoundException e) {
+        this.immediateOutputStream = null;
+        logger.error("File not found exception for {}:{}", this.resultFile.getAbsolutePath(), e.toString());
+      } catch (Exception e) {
+        this.immediateOutputStream = null;
+        logger.error("Exception when creating {}:{}", this.resultFile.getAbsolutePath(), e.toString());
       }
-      
-    
-    
+    }
 
     this.firstDump = true;
   }
@@ -212,7 +238,6 @@ public class EvaluatorProcessor implements Processor {
       immediateResultStream.println(learningCurve.entryToString(learningCurve.numEntries() - 1));
       immediateResultStream.flush();
     }
-    
   }
 
   private void concludeMeasurement() {
@@ -228,6 +253,8 @@ public class EvaluatorProcessor implements Processor {
 
     if (immediateResultStream != null) {
       immediateResultStream.println("# COMPLETED");
+      //
+      immediateResultStream.println("# Total evaluation time: " + totalExperimentTime + " seconds for "  + totalCount + " instances");
       immediateResultStream.flush();
     }
     // logger.info("average throughput rate: {} instances/seconds",
@@ -240,7 +267,6 @@ public class EvaluatorProcessor implements Processor {
     private int samplingFrequency = 100000;
     private File dumpFile = null;
     private File resultFile = null;
-
 
     public Builder(PerformanceEvaluator evaluator) {
       this.evaluator = evaluator;
@@ -263,10 +289,9 @@ public class EvaluatorProcessor implements Processor {
       return this;
     }
     
-    public Builder resultFile(File file)
-    {
-    	this.resultFile = file;
-    	return this;
+    public Builder resultFile(File file) {
+      this.resultFile = file;
+      return this;
     }
 
     public EvaluatorProcessor build() {

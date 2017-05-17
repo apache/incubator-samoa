@@ -22,6 +22,7 @@ package org.apache.samoa;
 
 import org.apache.samoa.LocalDoTask;
 import org.junit.Test;
+import org.apache.samoa.TestParams;
 
 public class AlgosTest {
 
@@ -93,6 +94,7 @@ public class AlgosTest {
             .resultFilePollTimeout(10)
             .prePollWait(10)
             .taskClassName(LocalDoTask.class.getName())
+            .labelFileCreated(false)
             .build();
     TestUtils.test(vhtConfig);
   }
