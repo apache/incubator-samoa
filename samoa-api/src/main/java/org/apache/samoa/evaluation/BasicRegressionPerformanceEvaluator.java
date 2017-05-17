@@ -1,5 +1,9 @@
 package org.apache.samoa.evaluation;
 
+import java.util.List;
+
+import org.apache.samoa.instances.Attribute;
+
 /*
  * #%L
  * SAMOA
@@ -21,8 +25,10 @@ package org.apache.samoa.evaluation;
  */
 
 import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.Utils;
 import org.apache.samoa.moa.AbstractMOAObject;
 import org.apache.samoa.moa.core.Measurement;
+import org.apache.samoa.moa.core.Vote;
 
 /**
  * Regression evaluator that performs basic incremental evaluation.
@@ -34,6 +40,10 @@ public class BasicRegressionPerformanceEvaluator extends AbstractMOAObject
     implements RegressionPerformanceEvaluator {
 
   private static final long serialVersionUID = 1L;
+
+  // the number of decimal places placed for double values in prediction file
+  // the value of 10 is used since some predicted values can be relatively small
+  public static final int DECIMAL_PLACES = 10;
 
   protected double weightObserved;
 
@@ -47,6 +57,10 @@ public class BasicRegressionPerformanceEvaluator extends AbstractMOAObject
 
   protected double averageTargetError;
 
+  private String instanceIdentifier;
+  private Instance lastSeenInstance;
+  private double lastPredictedValue;
+
   @Override
   public void reset() {
     this.weightObserved = 0.0;
@@ -59,19 +73,23 @@ public class BasicRegressionPerformanceEvaluator extends AbstractMOAObject
   }
 
   @Override
-  public void addResult(Instance inst, double[] prediction) {
+  public void addResult(Instance inst, double[] prediction, String instanceIdentifier) {
     double weight = inst.weight();
     double classValue = inst.classValue();
     if (weight > 0.0) {
       if (prediction.length > 0) {
-        double meanTarget = this.weightObserved != 0 ?
-            this.sumTarget / this.weightObserved : 0.0;
+        double meanTarget = this.weightObserved != 0 ? this.sumTarget / this.weightObserved : 0.0;
         this.squareError += (classValue - prediction[0]) * (classValue - prediction[0]);
         this.averageError += Math.abs(classValue - prediction[0]);
         this.squareTargetError += (classValue - meanTarget) * (classValue - meanTarget);
         this.averageTargetError += Math.abs(classValue - meanTarget);
         this.sumTarget += classValue;
         this.weightObserved += weight;
+        this.lastPredictedValue = prediction[0];
+        this.lastSeenInstance = inst;
+        this.instanceIdentifier = instanceIdentifier;
+      } else {
+        this.lastPredictedValue = Double.NaN;
       }
     }
   }
@@ -89,6 +107,22 @@ public class BasicRegressionPerformanceEvaluator extends AbstractMOAObject
             getRelativeMeanError()),
         new Measurement("relative root mean squared error",
             getRelativeSquareError())
+    };
+  }
+
+  /**
+   * This method is used to retrieve predictions
+   * 
+   * @return String This returns an array of predictions and votes objects.
+   */
+  @Override
+  public Vote[] getPredictionVotes() {
+    double trueValue = this.lastSeenInstance.classValue();
+    return new Vote[] {
+        new Vote("instance number",
+            this.instanceIdentifier),
+        new Vote("true value", trueValue, this.DECIMAL_PLACES),
+        new Vote("predicted value", this.lastPredictedValue, this.DECIMAL_PLACES)
     };
   }
 
@@ -123,12 +157,10 @@ public class BasicRegressionPerformanceEvaluator extends AbstractMOAObject
   }
 
   private double getRelativeMeanError() {
-    return this.averageTargetError > 0 ?
-        this.averageError / this.averageTargetError : 0.0;
+    return this.averageTargetError > 0 ? this.averageError / this.averageTargetError : 0.0;
   }
 
   private double getRelativeSquareError() {
-    return Math.sqrt(this.squareTargetError > 0 ?
-        this.squareError / this.squareTargetError : 0.0);
+    return Math.sqrt(this.squareTargetError > 0 ? this.squareError / this.squareTargetError : 0.0);
   }
 }

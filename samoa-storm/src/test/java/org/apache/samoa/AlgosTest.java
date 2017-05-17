@@ -35,9 +35,10 @@ public class AlgosTest {
         .samplingSize(20_000)
         .evaluationInstances(200_000)
         .classifiedInstances(200_000)
+        .labelSamplingSize(10l)
         .classificationsCorrect(55f)
-        .kappaStat(0f)
-        .kappaTempStat(0f)
+        .kappaStat(-0.1f)
+        .kappaTempStat(-0.1f)
         .cliStringTemplate(TestParams.Templates.PREQEVAL_VHT_RANDOMTREE)
         .resultFilePollTimeout(30)
         .prePollWait(15)
@@ -54,6 +55,7 @@ public class AlgosTest {
         .samplingSize(20_000)
         .evaluationInstances(180_000)
         .classifiedInstances(190_000)
+        .labelSamplingSize(10l)
         .classificationsCorrect(60f)
         .kappaStat(0f)
         .kappaTempStat(0f)
@@ -70,18 +72,19 @@ public class AlgosTest {
   public void testCVPReqVHTWithStorm() throws Exception {
 
     TestParams vhtConfig = new TestParams.Builder()
-            .inputInstances(200_000)
-            .samplingSize(20_000)
-            .evaluationInstances(200_000)
-            .classifiedInstances(200_000)
-            .classificationsCorrect(55f)
-            .kappaStat(0f)
-            .kappaTempStat(0f)
-            .cliStringTemplate(TestParams.Templates.PREQCVEVAL_VHT_RANDOMTREE)
-            .resultFilePollTimeout(30)
-            .prePollWait(15)
-            .taskClassName(LocalStormDoTask.class.getName())
-            .build();
+        .inputInstances(200_000)
+        .samplingSize(20_000)
+        .evaluationInstances(200_000)
+        .classifiedInstances(200_000)
+        .classificationsCorrect(55f)
+        .kappaStat(0f)
+        .kappaTempStat(0f)
+        .cliStringTemplate(TestParams.Templates.PREQCVEVAL_VHT_RANDOMTREE)
+        .resultFilePollTimeout(30)
+        .prePollWait(15)
+        .taskClassName(LocalStormDoTask.class.getName())
+        .labelFileCreated(false)
+        .build();
     TestUtils.test(vhtConfig);
 
   }

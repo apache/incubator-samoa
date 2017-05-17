@@ -39,12 +39,11 @@ import java.util.concurrent.TimeUnit;
 public class EvaluatorCVProcessor implements Processor {
 
   /**
-	 *
-	 */
+   *
+   */
   private static final long serialVersionUID = -2778051819116753612L;
 
-  private static final Logger logger =
-      LoggerFactory.getLogger(EvaluatorCVProcessor.class);
+  private static final Logger logger = LoggerFactory.getLogger(EvaluatorCVProcessor.class);
 
   private static final String ORDERING_MEASUREMENT_NAME = "evaluation instances";
 
@@ -90,7 +89,8 @@ public class EvaluatorCVProcessor implements Processor {
 
     addStatisticsForInstanceReceived(instanceIndex, result.getEvaluationIndex(), 1);
 
-    evaluators[result.getEvaluationIndex()].addResult(result.getInstance(), result.getClassVotes());
+    evaluators[result.getEvaluationIndex()].addResult(result.getInstance(), result.getClassVotes(),
+        String.valueOf(instanceIndex));
 
     if (hasAllVotesArrivedInstance(instanceIndex)) {
       totalCount += 1;
@@ -110,8 +110,6 @@ public class EvaluatorCVProcessor implements Processor {
       }
     }
 
-
-
     return false;
   }
 
@@ -122,6 +120,7 @@ public class EvaluatorCVProcessor implements Processor {
     int count = map.get(instanceIndex);
     return (count == this.foldNumber);
   }
+
   protected void addStatisticsForInstanceReceived(int instanceIndex, int evaluationIndex, int add) {
     if (this.mapCountsforInstanceReceived == null) {
       this.mapCountsforInstanceReceived = new HashMap<>();
@@ -190,10 +189,10 @@ public class EvaluatorCVProcessor implements Processor {
 
   private void addMeasurement() {
     List<Measurement> measurements = new Vector<>();
-    measurements.add(new Measurement(ORDERING_MEASUREMENT_NAME, totalCount ));
+    measurements.add(new Measurement(ORDERING_MEASUREMENT_NAME, totalCount));
 
     Measurement[] finalMeasurements = getEvaluationMeasurements(
-            measurements.toArray(new Measurement[measurements.size()]), evaluators);
+        measurements.toArray(new Measurement[measurements.size()]), evaluators);
 
     LearningEvaluation learningEvaluation = new LearningEvaluation(finalMeasurements);
     learningCurve.insertEntry(learningEvaluation);
@@ -220,7 +219,7 @@ public class EvaluatorCVProcessor implements Processor {
 
     long experimentEnd = System.nanoTime();
     long totalExperimentTime = TimeUnit.SECONDS.convert(experimentEnd - experimentStart, TimeUnit.NANOSECONDS);
-    logger.info("total evaluation time: {} seconds for {} instances", totalExperimentTime, totalCount );
+    logger.info("total evaluation time: {} seconds for {} instances", totalExperimentTime, totalCount);
 
     if (immediateResultStream != null) {
       immediateResultStream.println("# COMPLETED");
@@ -257,7 +256,7 @@ public class EvaluatorCVProcessor implements Processor {
       return this;
     }
 
-    public Builder foldNumber(int foldNumber){
+    public Builder foldNumber(int foldNumber) {
       this.foldNumber = foldNumber;
       return this;
     }
@@ -267,7 +266,8 @@ public class EvaluatorCVProcessor implements Processor {
     }
   }
 
-  public Measurement[] getEvaluationMeasurements(Measurement[] modelMeasurements, PerformanceEvaluator[] subEvaluators) {
+  public Measurement[] getEvaluationMeasurements(Measurement[] modelMeasurements,
+      PerformanceEvaluator[] subEvaluators) {
     List<Measurement> measurementList = new LinkedList<Measurement>();
     if (modelMeasurements != null) {
       measurementList.addAll(Arrays.asList(modelMeasurements));
@@ -280,7 +280,8 @@ public class EvaluatorCVProcessor implements Processor {
           subMeasurements.add(subEvaluator.getPerformanceMeasurements());
         }
       }
-      Measurement[] avgMeasurements = Measurement.averageMeasurements(subMeasurements.toArray(new Measurement[subMeasurements.size()][]));
+      Measurement[] avgMeasurements = Measurement
+          .averageMeasurements(subMeasurements.toArray(new Measurement[subMeasurements.size()][]));
       measurementList.addAll(Arrays.asList(avgMeasurements));
     }
     return measurementList.toArray(new Measurement[measurementList.size()]);

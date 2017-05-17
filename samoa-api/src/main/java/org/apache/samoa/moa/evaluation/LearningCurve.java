@@ -27,6 +27,7 @@ import org.apache.samoa.moa.AbstractMOAObject;
 import org.apache.samoa.moa.core.DoubleVector;
 import org.apache.samoa.moa.core.Measurement;
 import org.apache.samoa.moa.core.StringUtils;
+import org.apache.samoa.moa.core.Vote;
 
 /**
  * Class that stores and keeps the history of evaluation measurements.
@@ -40,7 +41,11 @@ public class LearningCurve extends AbstractMOAObject {
 
   protected List<String> measurementNames = new ArrayList<String>();
 
+  protected List<String> voteNames = new ArrayList<String>();
+
   protected List<double[]> measurementValues = new ArrayList<double[]>();
+
+  protected List<String> voteValues = new ArrayList<String>();
 
   public LearningCurve(String orderingMeasurementName) {
     this.measurementNames.add(orderingMeasurementName);
@@ -128,5 +133,62 @@ public class LearningCurve extends AbstractMOAObject {
 
   public String getMeasurementName(int measurementIndex) {
     return this.measurementNames.get(measurementIndex);
+  }
+
+  protected int addVoteName(String name) {
+    int index = this.voteNames.indexOf(name);
+    if (index < 0) {
+      index = this.voteNames.size();
+      this.voteNames.add(name);
+    }
+    return index;
+  }
+
+  public void setVote(Vote[] votes) {
+    this.voteValues.clear();
+    for (Vote vote : votes) {
+      voteValues.add(addVoteName(vote.getName()), vote.getValue());
+    }
+  }
+
+  /**
+   * This method is used to set generate header line of a text file containing predictions and votes (for classification
+   * only)
+   * 
+   * @return String This returns the text of the header of a file containing predictions and votes.
+   */
+  public String voteHeaderToString() {
+    StringBuilder sb = new StringBuilder();
+    boolean first = true;
+    for (String name : this.voteNames) {
+      if (!first) {
+        sb.append(',');
+      } else {
+        first = false;
+      }
+      sb.append(name);
+    }
+    return sb.toString();
+  }
+
+  /**
+   * This method is used to set generate one body line of a text file containing predictions and votes (for
+   * classification only)
+   * 
+   * @return String This returns the text of one line of a file containing predictions and votes.
+   */
+  public String voteEntryToString() {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < this.voteNames.size(); i++) {
+      if (i > 0) {
+        sb.append(',');
+      }
+      if ((i >= voteValues.size())) {
+        sb.append('?');
+      } else {
+        sb.append(voteValues.get(i));
+      }
+    }
+    return sb.toString();
   }
 }

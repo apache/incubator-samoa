@@ -35,6 +35,7 @@ public class AlgosTest {
         .samplingSize(20_000)
         .evaluationInstances(200_000)
         .classifiedInstances(200_000)
+        .labelSamplingSize(10l)
         .classificationsCorrect(55f)
         .kappaStat(-0.1f)
         .kappaTempStat(-0.1f)
@@ -55,6 +56,7 @@ public class AlgosTest {
         .inputDelayMicroSec(100) // prevents saturating the system due to unbounded queues
         .evaluationInstances(90_000)
         .classifiedInstances(100_000)
+        .labelSamplingSize(10l)
         .classificationsCorrect(55f)
         .kappaStat(0f)
         .kappaTempStat(0f)
