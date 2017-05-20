@@ -26,10 +26,7 @@ package org.apache.samoa.instances;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author abifet
@@ -37,9 +34,9 @@ import java.util.Map;
 public class Attribute implements Serializable {
 
   public static final String ARFF_ATTRIBUTE = "@attribute";
-  public static final String ARFF_ATTRIBUTE_NUMERIC = "NUMERIC";
-  public static final String ARFF_ATTRIBUTE_NOMINAL = "NOMINAL";
-  public static final String ARFF_ATTRIBUTE_DATE = "DATE";
+  public static final String ARFF_ATTRIBUTE_NUMERIC = "numeric";
+  public static final String ARFF_ATTRIBUTE_NOMINAL = "nominal";
+  public static final String ARFF_ATTRIBUTE_DATE = "date";
 
   /**
    *
@@ -199,7 +196,14 @@ public class Attribute implements Serializable {
     text.append(ARFF_ATTRIBUTE).append(" ").append(Utils.quote(this.name)).append(" ");
 
     if (isNominal) {
-      text.append(ARFF_ATTRIBUTE_NOMINAL);
+      text.append('{');
+      Enumeration enu =  enumerateValues();
+      while (enu.hasMoreElements()) {
+        text.append(Utils.quote((String) enu.nextElement()));
+        if (enu.hasMoreElements())
+          text.append(',');
+      }
+      text.append('}');
     } else if (isNumeric) {
       text.append(ARFF_ATTRIBUTE_NUMERIC);
     } else if (isDate) {
@@ -207,5 +211,19 @@ public class Attribute implements Serializable {
     }
 
     return text.toString();
+  }
+
+  /**
+   * Returns an enumeration of all the attribute's values if the
+   * attribute is nominal, null otherwise.
+   *
+   * @return enumeration of all the attribute's values
+   */
+  public final /*@ pure @*/ Enumeration enumerateValues() {
+
+    if (this.isNominal()) {
+      return Collections.enumeration(this.attributeValues);
+    }
+    return null;
   }
 }

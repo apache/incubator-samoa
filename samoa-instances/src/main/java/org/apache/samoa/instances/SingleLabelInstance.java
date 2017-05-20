@@ -212,13 +212,13 @@ public class SingleLabelInstance implements Instance {
 
   @Override
   public Attribute classAttribute() {
-    return this.instanceInformation.attribute(0);
+    //return the class attribute
+    return this.instanceInformation.attribute(classIndex());
   }
 
   @Override
   public void setClassValue(double d) {
     this.classData.setValue(0, d);
-    // this.classValue = d;
   }
 
   @Override
