@@ -36,6 +36,7 @@ import org.apache.samoa.instances.Attribute;
 import org.apache.samoa.instances.Utils;
 import org.apache.samoa.learners.ResultContentEvent;
 import org.apache.samoa.moa.core.Measurement;
+import org.apache.samoa.moa.core.Vote;
 import org.apache.samoa.moa.evaluation.LearningCurve;
 import org.apache.samoa.moa.evaluation.LearningEvaluation;
 import org.slf4j.Logger;
@@ -46,23 +47,22 @@ import com.esotericsoftware.minlog.Log;
 public class EvaluatorProcessor implements Processor {
 
   /**
-	 * 
-	 */
+   * 
+   */
   private static final long serialVersionUID = -2778051819116753612L;
 
-  private static final Logger logger =
-      LoggerFactory.getLogger(EvaluatorProcessor.class);
+  private static final Logger logger = LoggerFactory.getLogger(EvaluatorProcessor.class);
 
   private static final String ORDERING_MEASUREMENT_NAME = "evaluation instances";
 
   private final PerformanceEvaluator evaluator;
   private final int samplingFrequency;
   private final File dumpFile;
-  private final File resultFile;
+  private final File predictionFile;
   private transient PrintStream immediateResultStream = null;
-  private transient PrintStream immediateOutputStream = null;
+  private transient PrintStream immediatePredictionStream = null;
   private transient boolean firstDump = true;
-  private transient boolean firstResult = true;  
+  private transient boolean firstVoteDump = true;
 
   private long totalCount = 0;
   private long experimentStart = 0;
@@ -76,7 +76,7 @@ public class EvaluatorProcessor implements Processor {
     this.evaluator = builder.evaluator;
     this.samplingFrequency = builder.samplingFrequency;
     this.dumpFile = builder.dumpFile;
-    this.resultFile = builder.resultFile;
+    this.predictionFile = builder.predictionFile;
   }
 
   @Override
@@ -92,58 +92,23 @@ public class EvaluatorProcessor implements Processor {
       logger.info("{} seconds for {} instances", sampleDuration, samplingFrequency);
       this.addMeasurement();
     }
-    
-    if (immediateOutputStream != null) {
-      String instanceIndex = String.valueOf(result.getInstanceIndex());
-      Attribute classAttribute = result.getInstance().dataset().classAttribute();
-      int numClasses = result.getInstance().dataset().numClasses();
-      double trueValue = result.getInstance().classValue();
-      //for classification
-      if (classAttribute.isNominal()) {
-        List<String> classAttributeValues = classAttribute.getAttributeValues();
-        if (this.firstResult) {
-          //immediateOutputStream.println("Class votes");
-          String classHeader = "";
-          for (String value : classAttributeValues) {
-            classHeader += "votes_" + value + ",";
-          }
-          //immediateOutputStream.println("instance number,true class value,predicted class value," + "votes:" + classAttributeValues.toString().replaceAll("\\s+",""));
-          immediateOutputStream.println("instance number,true class value,predicted class value," + classHeader.substring(0, classHeader.length() - 1));
-          this.firstResult=false;
-        }        
-        int trueNominalIndex = (int) trueValue;
-        String trueNominalValue = classAttributeValues.get(trueNominalIndex);
-        double[] votes =  Arrays.copyOf(result.getClassVotes(), numClasses);
-        //votes = votes.substring(1, votes.length() - 1);      
-        String predictedNominalValue = classAttributeValues.get(Utils.maxIndex(votes));
-        immediateOutputStream.println(instanceIndex + "," + trueNominalValue + "," + predictedNominalValue + "," + Arrays.toString(votes).replaceAll("\\s+","").replaceAll("\\[", "").replaceAll("\\]",""));
-        immediateOutputStream.flush();
-      }
-      //for regression
-      if (classAttribute.isNumeric()) {
-        if (this.firstResult) {
-          immediateOutputStream.println("instance_number,true_value,predicted_value");
-          this.firstResult=false;
-        }
-        //logger.info("result: " + Arrays.toString(result.getClassVotes()));
-        double predictedValue = 0;
-        if (result.getClassVotes().length > 0)
-          predictedValue = result.getClassVotes()[0];
-        immediateOutputStream.println(instanceIndex + "," + trueValue + "," + predictedValue);
-      }      
-    }
 
     if (result.isLastEvent()) {
       this.concludeMeasurement();
       return true;
     }
-
-    evaluator.addResult(result.getInstance(), result.getClassVotes());
+    String instanceIndex = String.valueOf(result.getInstanceIndex());
+    evaluator.addResult(result.getInstance(), result.getClassVotes(), instanceIndex);
     totalCount += 1;
 
     if (totalCount == 1) {
       sampleStart = System.nanoTime();
       experimentStart = sampleStart;
+    }
+
+    //
+    if (immediatePredictionStream != null) {
+      this.addVote();
     }
 
     return false;
@@ -173,20 +138,21 @@ public class EvaluatorProcessor implements Processor {
         logger.error("Exception when creating {}:{}", this.dumpFile.getAbsolutePath(), e.toString());
       }
     }
-    
-    if (this.resultFile != null) {
+
+    if (this.predictionFile != null) {
       try {
-        this.immediateOutputStream = new PrintStream(new FileOutputStream(resultFile), true);
+        this.immediatePredictionStream = new PrintStream(new FileOutputStream(predictionFile), true);
       } catch (FileNotFoundException e) {
-        this.immediateOutputStream = null;
-        logger.error("File not found exception for {}:{}", this.resultFile.getAbsolutePath(), e.toString());
+        this.immediatePredictionStream = null;
+        logger.error("File not found exception for {}:{}", this.predictionFile.getAbsolutePath(), e.toString());
       } catch (Exception e) {
-        this.immediateOutputStream = null;
-        logger.error("Exception when creating {}:{}", this.resultFile.getAbsolutePath(), e.toString());
+        this.immediatePredictionStream = null;
+        logger.error("Exception when creating {}:{}", this.predictionFile.getAbsolutePath(), e.toString());
       }
     }
 
     this.firstDump = true;
+    this.firstVoteDump = true;
   }
 
   @Override
@@ -240,6 +206,25 @@ public class EvaluatorProcessor implements Processor {
     }
   }
 
+  private void addVote() {
+    List<Vote> votes = new Vector<>();
+    Collections.addAll(votes, evaluator.getPredictionVotes());
+    Vote[] finalVotes = votes.toArray(new Vote[votes.size()]);
+    learningCurve.setVote(finalVotes);
+    logger.debug("evaluator id = {}", this.id);
+    //logger.info(learningEvaluation.toString());
+
+    if (immediatePredictionStream != null) {
+      if (firstVoteDump) {
+        immediatePredictionStream.println(learningCurve.voteHeaderToString());
+        firstVoteDump = false;
+      }
+
+      immediatePredictionStream.println(learningCurve.voteEntryToString());
+      immediatePredictionStream.flush();
+    }
+  }
+
   private void concludeMeasurement() {
     logger.info("last event is received!");
     logger.info("total count: {}", this.totalCount);
@@ -254,7 +239,8 @@ public class EvaluatorProcessor implements Processor {
     if (immediateResultStream != null) {
       immediateResultStream.println("# COMPLETED");
       //
-      immediateResultStream.println("# Total evaluation time: " + totalExperimentTime + " seconds for "  + totalCount + " instances");
+      immediateResultStream
+          .println("# Total evaluation time: " + totalExperimentTime + " seconds for " + totalCount + " instances");
       immediateResultStream.flush();
     }
     // logger.info("average throughput rate: {} instances/seconds",
@@ -266,7 +252,7 @@ public class EvaluatorProcessor implements Processor {
     private final PerformanceEvaluator evaluator;
     private int samplingFrequency = 100000;
     private File dumpFile = null;
-    private File resultFile = null;
+    private File predictionFile = null;
 
     public Builder(PerformanceEvaluator evaluator) {
       this.evaluator = evaluator;
@@ -276,7 +262,7 @@ public class EvaluatorProcessor implements Processor {
       this.evaluator = oldProcessor.evaluator;
       this.samplingFrequency = oldProcessor.samplingFrequency;
       this.dumpFile = oldProcessor.dumpFile;
-      this.resultFile = oldProcessor.resultFile;
+      this.predictionFile = oldProcessor.predictionFile;
     }
 
     public Builder samplingFrequency(int samplingFrequency) {
@@ -288,9 +274,9 @@ public class EvaluatorProcessor implements Processor {
       this.dumpFile = file;
       return this;
     }
-    
-    public Builder resultFile(File file) {
-      this.resultFile = file;
+
+    public Builder predictionFile(File file) {
+      this.predictionFile = file;
       return this;
     }
 

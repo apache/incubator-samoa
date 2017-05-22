@@ -70,18 +70,18 @@ public class AlgosTest {
   public void testCVPReqVHTWithStorm() throws Exception {
 
     TestParams vhtConfig = new TestParams.Builder()
-            .inputInstances(200_000)
-            .samplingSize(20_000)
-            .evaluationInstances(200_000)
-            .classifiedInstances(200_000)
-            .classificationsCorrect(55f)
-            .kappaStat(0f)
-            .kappaTempStat(0f)
-            .cliStringTemplate(TestParams.Templates.PREQCVEVAL_VHT_RANDOMTREE)
-            .resultFilePollTimeout(30)
-            .prePollWait(15)
-            .taskClassName(LocalStormDoTask.class.getName())
-            .build();
+        .inputInstances(200_000)
+        .samplingSize(20_000)
+        .evaluationInstances(200_000)
+        .classifiedInstances(200_000)
+        .classificationsCorrect(55f)
+        .kappaStat(0f)
+        .kappaTempStat(0f)
+        .cliStringTemplate(TestParams.Templates.PREQCVEVAL_VHT_RANDOMTREE)
+        .resultFilePollTimeout(30)
+        .prePollWait(15)
+        .taskClassName(LocalStormDoTask.class.getName())
+        .build();
     TestUtils.test(vhtConfig);
 
   }

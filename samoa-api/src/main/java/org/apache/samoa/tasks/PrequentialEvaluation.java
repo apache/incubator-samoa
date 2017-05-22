@@ -170,7 +170,7 @@ public class PrequentialEvaluation implements Task, Configurable {
       evaluatorOptionValue = getDefaultPerformanceEvaluatorForLearner(classifier);
     }
     evaluator = new EvaluatorProcessor.Builder(evaluatorOptionValue)
-        .samplingFrequency(sampleFrequencyOption.getValue()).dumpFile(dumpFileOption.getFile()).resultFile(resultFileOption.getFile()).build();
+        .samplingFrequency(sampleFrequencyOption.getValue()).dumpFile(dumpFileOption.getFile()).predictionFile(resultFileOption.getFile()).build();
 
     // evaluatorPi = builder.createPi(evaluator);
     // evaluatorPi.connectInputShuffleStream(evaluatorPiInputStream);

@@ -1,5 +1,9 @@
 package org.apache.samoa.evaluation;
 
+import java.util.List;
+
+import org.apache.samoa.instances.Attribute;
+
 /*
  * #%L
  * SAMOA
@@ -21,8 +25,10 @@ package org.apache.samoa.evaluation;
  */
 
 import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.Utils;
 import org.apache.samoa.moa.AbstractMOAObject;
 import org.apache.samoa.moa.core.Measurement;
+import org.apache.samoa.moa.core.Vote;
 
 /**
  * Regression evaluator that performs basic incremental evaluation.
@@ -46,6 +52,10 @@ public class BasicRegressionPerformanceEvaluator extends AbstractMOAObject
   protected double squareTargetError;
 
   protected double averageTargetError;
+  
+  private String instanceIdentifier;
+  private Instance lastSeenInstance;
+  private double lastPredictedValue;
 
   @Override
   public void reset() {
@@ -55,11 +65,11 @@ public class BasicRegressionPerformanceEvaluator extends AbstractMOAObject
     this.sumTarget = 0.0;
     this.averageTargetError = 0.0;
     this.squareTargetError = 0.0;
-
+    
   }
 
   @Override
-  public void addResult(Instance inst, double[] prediction) {
+  public void addResult(Instance inst, double[] prediction, String instanceIdentifier) {
     double weight = inst.weight();
     double classValue = inst.classValue();
     if (weight > 0.0) {
@@ -72,6 +82,12 @@ public class BasicRegressionPerformanceEvaluator extends AbstractMOAObject
         this.averageTargetError += Math.abs(classValue - meanTarget);
         this.sumTarget += classValue;
         this.weightObserved += weight;
+        this.lastPredictedValue = prediction[0];
+        this.lastSeenInstance = inst;
+        this.instanceIdentifier = instanceIdentifier;
+      }
+      else {
+        this.lastPredictedValue = Double.NaN;
       }
     }
   }
@@ -89,6 +105,17 @@ public class BasicRegressionPerformanceEvaluator extends AbstractMOAObject
             getRelativeMeanError()),
         new Measurement("relative root mean squared error",
             getRelativeSquareError())
+    };
+  }
+  
+  @Override
+  public Vote[] getPredictionVotes() {
+    double trueValue = this.lastSeenInstance.classValue();
+    return new Vote[] {
+      new Vote("instance number",
+          this.instanceIdentifier),
+      new Vote("true value", trueValue, 10), 
+      new Vote("predicted value", this.lastPredictedValue, 10)
     };
   }
 

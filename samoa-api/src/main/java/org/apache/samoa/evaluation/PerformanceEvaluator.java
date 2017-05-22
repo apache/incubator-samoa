@@ -23,6 +23,7 @@ package org.apache.samoa.evaluation;
 import org.apache.samoa.instances.Instance;
 import org.apache.samoa.moa.MOAObject;
 import org.apache.samoa.moa.core.Measurement;
+import org.apache.samoa.moa.core.Vote;
 
 /**
  * Interface implemented by learner evaluators to monitor the results of the learning process.
@@ -47,7 +48,7 @@ public interface PerformanceEvaluator extends MOAObject {
    *          an array containing the estimated membership probabilities of the test instance in each class
    * @return an array of measurements monitored in this evaluator
    */
-  public void addResult(Instance inst, double[] classVotes);
+  public void addResult(Instance inst, double[] classVotes, String instanceIdentifier);
 
   /**
    * Gets the current measurements monitored by this evaluator.
@@ -55,4 +56,11 @@ public interface PerformanceEvaluator extends MOAObject {
    * @return an array of measurements monitored by this evaluator
    */
   public Measurement[] getPerformanceMeasurements();
+
+  /**
+   * Gets the current votes monitored by this evaluator.
+   * 
+   * @return an array of votes monitored by this evaluator
+   */
+  public Vote[] getPredictionVotes();
 }

@@ -1,5 +1,10 @@
 package org.apache.samoa.evaluation;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.samoa.instances.Attribute;
+
 /*
  * #%L
  * SAMOA
@@ -24,6 +29,7 @@ import org.apache.samoa.instances.Instance;
 import org.apache.samoa.instances.Utils;
 import org.apache.samoa.moa.AbstractMOAObject;
 import org.apache.samoa.moa.core.Measurement;
+import org.apache.samoa.moa.core.Vote;
 
 /**
  * Classification evaluator that performs basic incremental evaluation.
@@ -49,7 +55,12 @@ public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject i
 
   private double weightCorrectNoChangeClassifier;
 
+  protected double[] classVotes;
+
   private int lastSeenClass;
+  private String instanceIdentifier;
+
+  private Instance lastSeenInstance;
 
   @Override
   public void reset() {
@@ -71,7 +82,7 @@ public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject i
   }
 
   @Override
-  public void addResult(Instance inst, double[] classVotes) {
+  public void addResult(Instance inst, double[] classVotes, String instanceIdentifier) {
     double weight = inst.weight();
     int trueClass = (int) inst.classValue();
     if (weight > 0.0) {
@@ -94,6 +105,9 @@ public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject i
       this.weightCorrectNoChangeClassifier += weight;
     }
     this.lastSeenClass = trueClass;
+    this.lastSeenInstance = inst;
+    this.instanceIdentifier = instanceIdentifier;
+    this.classVotes = classVotes;
   }
 
   @Override
@@ -109,6 +123,33 @@ public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject i
             getKappaTemporalStatistic() * 100.0)
     };
 
+  }
+
+  @Override
+  public Vote[] getPredictionVotes() {
+    Attribute classAttribute = this.lastSeenInstance.dataset().classAttribute();
+    double trueValue = this.lastSeenInstance.classValue();
+    List<String> classAttributeValues = classAttribute.getAttributeValues();
+
+    int trueNominalIndex = (int) trueValue;
+    String trueNominalValue = classAttributeValues.get(trueNominalIndex);
+
+    Vote[] votes = new Vote[classAttributeValues.size() + 3];
+    votes[0] = new Vote("instance number",
+        this.instanceIdentifier);
+    votes[1] = new Vote("true class value",
+        trueNominalValue);
+    votes[2] = new Vote("predicted class value",
+        classAttributeValues.get(Utils.maxIndex(classVotes)));
+
+    for (int i = 0; i < classAttributeValues.size(); i++) {
+      if (i < classVotes.length) {
+        votes[3 + i] = new Vote("votes_" + classAttributeValues.get(i), classVotes[i], 10);
+      } else {
+        votes[3 + i] = new Vote("votes_" + classAttributeValues.get(i), 0);
+      }
+    }
+    return votes;
   }
 
   public double getTotalWeightObserved() {

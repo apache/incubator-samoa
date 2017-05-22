@@ -1,5 +1,7 @@
 package org.apache.samoa.evaluation;
 
+import org.apache.samoa.instances.Attribute;
+
 /*
  * #%L
  * SAMOA
@@ -25,6 +27,7 @@ import org.apache.samoa.instances.Instance;
 import org.apache.samoa.instances.Utils;
 import org.apache.samoa.moa.AbstractMOAObject;
 import org.apache.samoa.moa.core.Measurement;
+import org.apache.samoa.moa.core.Vote;
 
 import java.util.Collections;
 import java.util.List;
@@ -44,7 +47,10 @@ public class F1ClassificationPerformanceEvaluator extends AbstractMOAObject impl
     protected long[] falsePos;
     protected long[] trueNeg;
     protected long[] falseNeg;
-
+    private String instanceIdentifier;
+    private Instance lastSeenInstance;
+    protected double[] classVotes;
+    
     @Override
     public void reset() {
         reset(this.numClasses);
@@ -67,7 +73,7 @@ public class F1ClassificationPerformanceEvaluator extends AbstractMOAObject impl
     }
 
     @Override
-    public void addResult(Instance inst, double[] classVotes) {
+    public void addResult(Instance inst, double[] classVotes, String instanceIndex) {
         if (numClasses==-1) reset(inst.numClasses());
         int trueClass = (int) inst.classValue();
         this.support[trueClass] += 1;
@@ -94,6 +100,33 @@ public class F1ClassificationPerformanceEvaluator extends AbstractMOAObject impl
         Collections.addAll(measurements, getRecallMeasurements());
         Collections.addAll(measurements, getF1Measurements());
         return measurements.toArray(new Measurement[measurements.size()]);
+    }
+    
+    @Override
+    public Vote[] getPredictionVotes() {
+      Attribute classAttribute = this.lastSeenInstance.dataset().classAttribute();
+      double trueValue = this.lastSeenInstance.classValue();
+      List<String> classAttributeValues = classAttribute.getAttributeValues();
+
+      int trueNominalIndex = (int) trueValue;
+      String trueNominalValue = classAttributeValues.get(trueNominalIndex);
+
+      Vote[] votes = new Vote[classVotes.length + 3];
+      votes[0] = new Vote("instance number",
+          this.instanceIdentifier);
+      votes[1] = new Vote("true class value",
+          trueNominalValue);
+      votes[2] = new Vote("predicted class value",
+          classAttributeValues.get(Utils.maxIndex(classVotes)));
+
+      for (int i = 0; i < classAttributeValues.size(); i++) {
+        if (i < classVotes.length) {
+          votes[2 + i] = new Vote("votes_" + classAttributeValues.get(i), classVotes[i]);
+        } else {
+          votes[2 + i] = new Vote("votes_" + classAttributeValues.get(i), 0);
+        }
+      }
+      return votes;
     }
 
     private Measurement[] getSupportMeasurements() {
