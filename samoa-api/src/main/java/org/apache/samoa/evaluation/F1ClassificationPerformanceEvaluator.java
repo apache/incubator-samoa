@@ -102,6 +102,11 @@ public class F1ClassificationPerformanceEvaluator extends AbstractMOAObject impl
         return measurements.toArray(new Measurement[measurements.size()]);
     }
     
+    /**
+     * This method is used to retrieve predictions and votes (for classification only)
+     * 
+     * @return String This returns an array of predictions and votes objects.
+     */
     @Override
     public Vote[] getPredictionVotes() {
       Attribute classAttribute = this.lastSeenInstance.dataset().classAttribute();

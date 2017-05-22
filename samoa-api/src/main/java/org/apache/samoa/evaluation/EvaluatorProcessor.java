@@ -106,7 +106,7 @@ public class EvaluatorProcessor implements Processor {
       experimentStart = sampleStart;
     }
 
-    //
+    //adding a vote - true class value, predicted class value and for classification - votes
     if (immediatePredictionStream != null) {
       this.addVote();
     }
@@ -206,13 +206,16 @@ public class EvaluatorProcessor implements Processor {
     }
   }
 
+  /**
+   * This method is used to create one line of a text file containing predictions and votes (for classification only).
+   * In case, this is the first line a header line is also added
+   */
   private void addVote() {
     List<Vote> votes = new Vector<>();
     Collections.addAll(votes, evaluator.getPredictionVotes());
     Vote[] finalVotes = votes.toArray(new Vote[votes.size()]);
     learningCurve.setVote(finalVotes);
     logger.debug("evaluator id = {}", this.id);
-    //logger.info(learningEvaluation.toString());
 
     if (immediatePredictionStream != null) {
       if (firstVoteDump) {

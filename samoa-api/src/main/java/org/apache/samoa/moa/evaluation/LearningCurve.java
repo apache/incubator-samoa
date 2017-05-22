@@ -151,6 +151,12 @@ public class LearningCurve extends AbstractMOAObject {
     }
   }
 
+  /**
+   * This method is used to set generate header line of a text file containing predictions and votes (for classification
+   * only)
+   * 
+   * @return String This returns the text of the header of a file containing predictions and votes.
+   */
   public String voteHeaderToString() {
     StringBuilder sb = new StringBuilder();
     boolean first = true;
@@ -165,6 +171,12 @@ public class LearningCurve extends AbstractMOAObject {
     return sb.toString();
   }
 
+  /**
+   * This method is used to set generate one body line of a text file containing predictions and votes (for
+   * classification only)
+   * 
+   * @return String This returns the text of one line of a file containing predictions and votes.
+   */
   public String voteEntryToString() {
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < this.voteNames.size(); i++) {
@@ -179,5 +191,4 @@ public class LearningCurve extends AbstractMOAObject {
     }
     return sb.toString();
   }
-
 }

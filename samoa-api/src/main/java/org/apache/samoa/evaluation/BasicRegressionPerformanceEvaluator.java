@@ -52,7 +52,7 @@ public class BasicRegressionPerformanceEvaluator extends AbstractMOAObject
   protected double squareTargetError;
 
   protected double averageTargetError;
-  
+
   private String instanceIdentifier;
   private Instance lastSeenInstance;
   private double lastPredictedValue;
@@ -65,7 +65,7 @@ public class BasicRegressionPerformanceEvaluator extends AbstractMOAObject
     this.sumTarget = 0.0;
     this.averageTargetError = 0.0;
     this.squareTargetError = 0.0;
-    
+
   }
 
   @Override
@@ -74,8 +74,7 @@ public class BasicRegressionPerformanceEvaluator extends AbstractMOAObject
     double classValue = inst.classValue();
     if (weight > 0.0) {
       if (prediction.length > 0) {
-        double meanTarget = this.weightObserved != 0 ?
-            this.sumTarget / this.weightObserved : 0.0;
+        double meanTarget = this.weightObserved != 0 ? this.sumTarget / this.weightObserved : 0.0;
         this.squareError += (classValue - prediction[0]) * (classValue - prediction[0]);
         this.averageError += Math.abs(classValue - prediction[0]);
         this.squareTargetError += (classValue - meanTarget) * (classValue - meanTarget);
@@ -85,8 +84,7 @@ public class BasicRegressionPerformanceEvaluator extends AbstractMOAObject
         this.lastPredictedValue = prediction[0];
         this.lastSeenInstance = inst;
         this.instanceIdentifier = instanceIdentifier;
-      }
-      else {
+      } else {
         this.lastPredictedValue = Double.NaN;
       }
     }
@@ -107,15 +105,20 @@ public class BasicRegressionPerformanceEvaluator extends AbstractMOAObject
             getRelativeSquareError())
     };
   }
-  
+
+  /**
+   * This method is used to retrieve predictions
+   * 
+   * @return String This returns an array of predictions and votes objects.
+   */
   @Override
   public Vote[] getPredictionVotes() {
     double trueValue = this.lastSeenInstance.classValue();
     return new Vote[] {
-      new Vote("instance number",
-          this.instanceIdentifier),
-      new Vote("true value", trueValue, 10), 
-      new Vote("predicted value", this.lastPredictedValue, 10)
+        new Vote("instance number",
+            this.instanceIdentifier),
+        new Vote("true value", trueValue, 10),
+        new Vote("predicted value", this.lastPredictedValue, 10)
     };
   }
 
@@ -150,12 +153,10 @@ public class BasicRegressionPerformanceEvaluator extends AbstractMOAObject
   }
 
   private double getRelativeMeanError() {
-    return this.averageTargetError > 0 ?
-        this.averageError / this.averageTargetError : 0.0;
+    return this.averageTargetError > 0 ? this.averageError / this.averageTargetError : 0.0;
   }
 
   private double getRelativeSquareError() {
-    return Math.sqrt(this.squareTargetError > 0 ?
-        this.squareError / this.squareTargetError : 0.0);
+    return Math.sqrt(this.squareTargetError > 0 ? this.squareError / this.squareTargetError : 0.0);
   }
 }

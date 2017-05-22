@@ -26,10 +26,11 @@ import java.util.List;
 import org.apache.samoa.moa.AbstractMOAObject;
 
 /**
- * Class for storing an evaluation measurement.
+ * Class for storing votes.
  * 
- * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
- * @version $Revision: 7 $
+ * @author Maciej Grzenda (maciej.grzenda@gmail.com)
+ * @author Jerzy Jegier (jerzyjeg@wp.pl)
+ *
  */
 public class Vote extends AbstractMOAObject {
 
