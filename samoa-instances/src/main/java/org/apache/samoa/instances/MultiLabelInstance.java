@@ -36,44 +36,12 @@ package org.apache.samoa.instances;
  */
 
 /**
- * The Class DenseInstance.
+ * The Interface MultiLabelInstance.
+ *
+ * @author abifet
  */
-public class DenseInstance extends InstanceImpl {
+   
+public interface MultiLabelInstance extends Instance {
 
-    /**
-     * Instantiates a new dense instance.
-     *
-     * @param weight the weight
-     * @param res the res
-     */
-    public DenseInstance(double weight, double[] res) {
-        super(weight, res);
-    }
-
-    /**
-     * Instantiates a new dense instance.
-     *
-     * @param inst the inst
-     */
-    public DenseInstance(InstanceImpl inst) {
-        super(inst);
-    }
-
-    /**
-     * Instantiates a new dense instance.
-     *
-     * @param inst the inst
-     */
-    public DenseInstance(Instance inst) {
-        super((InstanceImpl) inst);
-    }
-
-    /**
-     * Instantiates a new dense instance.
-     *
-     * @param numberAttributes the number attributes
-     */
-    public DenseInstance(double numberAttributes) {
-        super((int) numberAttributes);
-    }
 }
+ 
