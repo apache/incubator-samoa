@@ -35,45 +35,28 @@ package org.apache.samoa.instances;
  * #L%
  */
 
-/**
- * The Class DenseInstance.
- */
-public class DenseInstance extends InstanceImpl {
+import java.io.Reader;
 
-    /**
-     * Instantiates a new dense instance.
-     *
-     * @param weight the weight
-     * @param res the res
-     */
-    public DenseInstance(double weight, double[] res) {
-        super(weight, res);
+public class MultiTargetArffLoader extends ArffLoader {
+
+    public MultiTargetArffLoader(Reader reader) {
+        super(reader);
     }
 
-    /**
-     * Instantiates a new dense instance.
-     *
-     * @param inst the inst
-     */
-    public DenseInstance(InstanceImpl inst) {
-        super(inst);
+    public MultiTargetArffLoader(Reader reader, Range range) {
+        super(reader, range);
     }
 
-    /**
-     * Instantiates a new dense instance.
-     *
-     * @param inst the inst
-     */
-    public DenseInstance(Instance inst) {
-        super((InstanceImpl) inst);
+    @Override
+    protected Instance newSparseInstance(double d, double[] res) {
+        return new SparseInstance(d, res); // TODO
     }
 
-    /**
-     * Instantiates a new dense instance.
-     *
-     * @param numberAttributes the number attributes
-     */
-    public DenseInstance(double numberAttributes) {
-        super((int) numberAttributes);
+    @Override
+    protected Instance newDenseInstance(int numAttributes) {
+        // numAttributes is this.instanceInformation.numAttributes()
+        this.range.setUpper(numAttributes);
+        return new DenseInstance(numAttributes);
     }
+
 }
