@@ -36,8 +36,8 @@ public class AlgosTest {
         .evaluationInstances(200_000)
         .classifiedInstances(200_000)
         .classificationsCorrect(55f)
-        .kappaStat(0f)
-        .kappaTempStat(0f)
+        .kappaStat(-0.1f)
+        .kappaTempStat(-0.1f)
         .cliStringTemplate(TestParams.Templates.PREQEVAL_VHT_RANDOMTREE)
         .resultFilePollTimeout(30)
         .prePollWait(15)
@@ -81,6 +81,7 @@ public class AlgosTest {
         .resultFilePollTimeout(30)
         .prePollWait(15)
         .taskClassName(LocalStormDoTask.class.getName())
+        .labelFileCreated(false)
         .build();
     TestUtils.test(vhtConfig);
 

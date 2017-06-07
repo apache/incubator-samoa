@@ -59,6 +59,7 @@ public class EvaluatorProcessor implements Processor {
   private final int samplingFrequency;
   private final File dumpFile;
   private final File predictionFile;
+  private final int labelSamplingFrequency;
   private transient PrintStream immediateResultStream = null;
   private transient PrintStream immediatePredictionStream = null;
   private transient boolean firstDump = true;
@@ -77,6 +78,7 @@ public class EvaluatorProcessor implements Processor {
     this.samplingFrequency = builder.samplingFrequency;
     this.dumpFile = builder.dumpFile;
     this.predictionFile = builder.predictionFile;
+    this.labelSamplingFrequency = builder.labelSamplingFrequency;
   }
 
   @Override
@@ -97,6 +99,12 @@ public class EvaluatorProcessor implements Processor {
       this.concludeMeasurement();
       return true;
     }
+    
+    //adding a vote - true class value, predicted class value and for classification - votes
+    if ((immediatePredictionStream != null) && (totalCount > 0) && (totalCount % labelSamplingFrequency) == 0) {
+      this.addVote();
+    }
+    
     String instanceIndex = String.valueOf(result.getInstanceIndex());
     evaluator.addResult(result.getInstance(), result.getClassVotes(), instanceIndex);
     totalCount += 1;
@@ -106,10 +114,7 @@ public class EvaluatorProcessor implements Processor {
       experimentStart = sampleStart;
     }
 
-    //adding a vote - true class value, predicted class value and for classification - votes
-    if (immediatePredictionStream != null) {
-      this.addVote();
-    }
+   
 
     return false;
   }
@@ -256,6 +261,7 @@ public class EvaluatorProcessor implements Processor {
     private int samplingFrequency = 100000;
     private File dumpFile = null;
     private File predictionFile = null;
+    private int labelSamplingFrequency = 1;
 
     public Builder(PerformanceEvaluator evaluator) {
       this.evaluator = evaluator;
@@ -266,6 +272,7 @@ public class EvaluatorProcessor implements Processor {
       this.samplingFrequency = oldProcessor.samplingFrequency;
       this.dumpFile = oldProcessor.dumpFile;
       this.predictionFile = oldProcessor.predictionFile;
+      this.labelSamplingFrequency = oldProcessor.labelSamplingFrequency;
     }
 
     public Builder samplingFrequency(int samplingFrequency) {
@@ -283,6 +290,10 @@ public class EvaluatorProcessor implements Processor {
       return this;
     }
 
+    public Builder labelSamplingFrequency(int samplingFrequency) {
+        this.labelSamplingFrequency = samplingFrequency;
+        return this;
+      }
     public EvaluatorProcessor build() {
       return new EvaluatorProcessor(this);
     }

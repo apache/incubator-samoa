@@ -145,10 +145,10 @@ public class TestUtils {
     Reader in = new FileReader(labelFile);
     Iterable<CSVRecord> records = CSVFormat.EXCEL.withSkipHeaderRecord(false)
         .withIgnoreEmptyLines(true).withDelimiter(',').withCommentMarker('#').parse(in);
-    //CSVRecord last = null;
+  
     Iterator<CSVRecord> iterator = records.iterator();
     CSVRecord header = iterator.next();
-    long instanceCount = 0;
+
 
     Assert.assertEquals("Unexpected column", org.apache.samoa.TestParams.INSTANCE_ID, header.get(0).trim());
     Assert.assertEquals("Unexpected column", org.apache.samoa.TestParams.TRUE_CLASS_VALUE, header.get(1).trim());
@@ -156,15 +156,7 @@ public class TestUtils {
     for (int i = 3; i < header.size(); i++)
       Assert.assertEquals("Unexpected column", org.apache.samoa.TestParams.VOTES, header.get(i).trim().substring(0, org.apache.samoa.TestParams.VOTES.length()));
 
-    // 2. check last line result
-    /*while (iterator.hasNext()) {
-      instanceCount++;
-      //last = iterator.next();
-    }*/
-
-    /*assertTrue(String.format("Unmet threshold expected %d got %f",
-        testParams.getEvaluationInstances(), instanceCount),
-        instanceCount <= testParams.getEvaluationInstances());*/
+  
   }
 
   private static class TestResultsTailerAdapter extends TailerListenerAdapter {

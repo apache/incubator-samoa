@@ -83,6 +83,10 @@ public class PrequentialEvaluation implements Task, Configurable {
   public IntOption sampleFrequencyOption = new IntOption("sampleFrequency", 'f',
       "How many instances between samples of the learning performance.", 100000,
       0, Integer.MAX_VALUE);
+  
+  public IntOption labelSampleFrequencyOption = new IntOption("labelSampleFrequency", 'h',
+	      "How many instances between samples of predicted labels and votes.", 1,
+	      0, Integer.MAX_VALUE);
 
   public StringOption evaluationNameOption = new StringOption("evaluationName", 'n', "Identifier of the evaluation",
       "Prequential_"
@@ -170,7 +174,7 @@ public class PrequentialEvaluation implements Task, Configurable {
       evaluatorOptionValue = getDefaultPerformanceEvaluatorForLearner(classifier);
     }
     evaluator = new EvaluatorProcessor.Builder(evaluatorOptionValue)
-        .samplingFrequency(sampleFrequencyOption.getValue()).dumpFile(dumpFileOption.getFile()).predictionFile(resultFileOption.getFile()).build();
+        .samplingFrequency(sampleFrequencyOption.getValue()).dumpFile(dumpFileOption.getFile()).predictionFile(resultFileOption.getFile()).labelSamplingFrequency(labelSampleFrequencyOption.getValue()).build();
 
     // evaluatorPi = builder.createPi(evaluator);
     // evaluatorPi.connectInputShuffleStream(evaluatorPiInputStream);
