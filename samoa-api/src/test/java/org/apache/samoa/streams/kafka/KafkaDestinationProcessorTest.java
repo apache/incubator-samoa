@@ -135,7 +135,7 @@ public class KafkaDestinationProcessorTest {
         final Logger logger = Logger.getLogger(KafkaDestinationProcessorTest.class.getName());
         Properties props = TestUtilsForKafka.getProducerProperties(BROKERHOST,BROKERPORT);
         props.setProperty("auto.offset.reset", "earliest");
-        KafkaDestinationProcessor kdp = new KafkaDestinationProcessor(props, TOPIC, new KafkaJsonMapper(Charset.defaultCharset()));
+        KafkaDestinationProcessor kdp = new KafkaDestinationProcessor(props, TOPIC, new OosTestSerializer());
         kdp.onCreate(1);
 
         final int[] i = {0};
