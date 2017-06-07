@@ -138,80 +138,32 @@ public class KafkaEntranceProcessorTest {
     }
 
     @Test
-    public void testFetchingNewDataWithJson() throws InterruptedException, ExecutionException, TimeoutException {
+    public void testFetchingNewData() throws InterruptedException, ExecutionException, TimeoutException {
 
         final Logger logger = Logger.getLogger(KafkaEntranceProcessorTest.class.getName());
-        logger.log(Level.INFO, "JSON");
-        logger.log(Level.INFO, "testFetchingNewDataWithJson");
+        logger.log(Level.INFO, "OOS");
+        logger.log(Level.INFO, "testFetchingNewData");
         Properties props = TestUtilsForKafka.getConsumerProperties(BROKERHOST, BROKERPORT);
         props.setProperty("auto.offset.reset", "earliest");
-        KafkaEntranceProcessor kep = new KafkaEntranceProcessor(props, TOPIC_JSON, TIMEOUT, new KafkaJsonMapper(Charset.defaultCharset()));
+        KafkaEntranceProcessor kep = new KafkaEntranceProcessor(props, TOPIC_JSON, TIMEOUT, new OosTestSerializer());
 
         kep.onCreate(1);
-       
+
         // prepare new thread for data producing
         Thread th = new Thread(new Runnable() {
             @Override
             public void run() {
-                KafkaProducer<String, byte[]> producer = new KafkaProducer<>(TestUtilsForKafka.getProducerProperties(BROKERHOST,BROKERPORT));
+                KafkaProducer<String, byte[]> producer = new KafkaProducer<>(TestUtilsForKafka.getProducerProperties(BROKERHOST, BROKERPORT));
 
                 Random r = new Random();
                 InstancesHeader header = TestUtilsForKafka.generateHeader(10);
-                Gson gson = new Gson();
+                OosTestSerializer serializer = new OosTestSerializer();
                 int i = 0;
                 for (i = 0; i < NUM_INSTANCES; i++) {
                     try {
                         InstanceContentEvent event = TestUtilsForKafka.getData(r, 10, header);
-                                             
-                        ProducerRecord<String, byte[]> record = new ProducerRecord(TOPIC_JSON, gson.toJson(event).getBytes());
-                        long stat = producer.send(record).get(10, TimeUnit.SECONDS).offset();
-                    } catch (InterruptedException | ExecutionException | TimeoutException ex) {
-                        Logger.getLogger(KafkaEntranceProcessorTest.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                producer.flush();
-                producer.close();
-            }
-        });
-        th.start();
 
-        int z = 0;
-        while (z < NUM_INSTANCES && kep.hasNext()) {
-            InstanceContentEvent event = (InstanceContentEvent) kep.nextEvent();            
-            z++;
-        }
-        
-        assertEquals("Number of sent and received instances", NUM_INSTANCES, z);
-
-    }
-
-    @Test
-    public void testFetchingNewDataWithAvro() throws InterruptedException, ExecutionException, TimeoutException {
-        Logger logger = Logger.getLogger(KafkaEntranceProcessorTest.class.getName());
-        logger.log(Level.INFO, "AVRO");
-        logger.log(Level.INFO, "testFetchingNewDataWithAvro");
-        Properties props = TestUtilsForKafka.getConsumerProperties(BROKERHOST, BROKERPORT);
-        props.setProperty("auto.offset.reset", "earliest");
-        KafkaEntranceProcessor kep = new KafkaEntranceProcessor(props, TOPIC_AVRO, TIMEOUT, new KafkaAvroMapper());
-        kep.onCreate(1);
-
-//         prepare new thread for data producing
-        Thread th = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                KafkaProducer<String, byte[]> producer = new KafkaProducer<>(TestUtilsForKafka.getProducerProperties(BROKERHOST,BROKERPORT));
-
-                Random r = new Random();
-                InstancesHeader header = TestUtilsForKafka.generateHeader(10);
-
-                int i = 0;
-                for (i = 0; i < NUM_INSTANCES; i++) {
-                    try {
-                        byte[] data = KafkaAvroMapper.avroSerialize(InstanceContentEvent.class, TestUtilsForKafka.getData(r, 10, header));
-                        if (data == null) {
-                            Logger.getLogger(KafkaEntranceProcessorTest.class.getName()).log(Level.INFO, "Serialize result: null ({0})", i);
-                        }
-                        ProducerRecord<String, byte[]> record = new ProducerRecord(TOPIC_AVRO, data);
+                        ProducerRecord<String, byte[]> record = new ProducerRecord(TOPIC_JSON, serializer.serialize(event));
                         long stat = producer.send(record).get(10, TimeUnit.SECONDS).offset();
                     } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                         Logger.getLogger(KafkaEntranceProcessorTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -227,9 +179,9 @@ public class KafkaEntranceProcessorTest {
         while (z < NUM_INSTANCES && kep.hasNext()) {
             InstanceContentEvent event = (InstanceContentEvent) kep.nextEvent();
             z++;
-//            logger.log(Level.INFO, "{0} {1}", new Object[]{z, event.getInstance().toString()});
         }
 
         assertEquals("Number of sent and received instances", NUM_INSTANCES, z);
+
     }
 }
