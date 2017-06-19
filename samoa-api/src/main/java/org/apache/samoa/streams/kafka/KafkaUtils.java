@@ -1,6 +1,4 @@
 /*
- * Copyright 2017 The Apache Software Foundation.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,8 +17,6 @@ package org.apache.samoa.streams.kafka;
  * #%L
  * SAMOA
  * %%
- * Copyright (C) 2014 - 2017 Apache Software Foundation
- * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -34,22 +30,16 @@ package org.apache.samoa.streams.kafka;
  * limitations under the License.
  * #L%
  */
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
+import java.util.logging.Logger;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Internal class responsible for Kafka Stream handling (both consume and

@@ -79,15 +79,14 @@ public class KafkaEntranceProcessorTest {
     private static final String ZKHOST = "127.0.0.1";
     private static final String BROKERHOST = "127.0.0.1";
     private static final String BROKERPORT = "9092";
-    private static final String TOPIC_AVRO = "samoa_test-avro";
-    private static final String TOPIC_JSON = "samoa_test-json";
+    private static final String TOPIC_OOS = "samoa_test-oos";
     private static final int NUM_INSTANCES = 11111;
 
     private static KafkaServer kafkaServer;
     private static EmbeddedZookeeper zkServer;
     private static ZkClient zkClient;
     private static String zkConnect;
-    private static int TIMEOUT = 1000;
+    private static final int TIMEOUT = 1000;
 
     public KafkaEntranceProcessorTest() {
     }
@@ -110,9 +109,8 @@ public class KafkaEntranceProcessorTest {
         Time mock = new MockTime();
         kafkaServer = TestUtils.createServer(config, mock);
 
-        // create topics
-        AdminUtils.createTopic(zkUtils, TOPIC_AVRO, 1, 1, new Properties(), RackAwareMode.Disabled$.MODULE$);
-        AdminUtils.createTopic(zkUtils, TOPIC_JSON, 1, 1, new Properties(), RackAwareMode.Disabled$.MODULE$);
+        // create topics        
+        AdminUtils.createTopic(zkUtils, TOPIC_OOS, 1, 1, new Properties(), RackAwareMode.Disabled$.MODULE$);
 
     }
 
@@ -145,7 +143,7 @@ public class KafkaEntranceProcessorTest {
         logger.log(Level.INFO, "testFetchingNewData");
         Properties props = TestUtilsForKafka.getConsumerProperties(BROKERHOST, BROKERPORT);
         props.setProperty("auto.offset.reset", "earliest");
-        KafkaEntranceProcessor kep = new KafkaEntranceProcessor(props, TOPIC_JSON, TIMEOUT, new OosTestSerializer());
+        KafkaEntranceProcessor kep = new KafkaEntranceProcessor(props, TOPIC_OOS, TIMEOUT, new OosTestSerializer());
 
         kep.onCreate(1);
 
@@ -163,7 +161,7 @@ public class KafkaEntranceProcessorTest {
                     try {
                         InstanceContentEvent event = TestUtilsForKafka.getData(r, 10, header);
 
-                        ProducerRecord<String, byte[]> record = new ProducerRecord(TOPIC_JSON, serializer.serialize(event));
+                        ProducerRecord<String, byte[]> record = new ProducerRecord(TOPIC_OOS, serializer.serialize(event));
                         long stat = producer.send(record).get(10, TimeUnit.SECONDS).offset();
                     } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                         Logger.getLogger(KafkaEntranceProcessorTest.class.getName()).log(Level.SEVERE, null, ex);
