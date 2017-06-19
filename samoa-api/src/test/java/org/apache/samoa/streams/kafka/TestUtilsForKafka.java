@@ -1,6 +1,4 @@
 /*
- * Copyright 2017 The Apache Software Foundation.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,8 +16,6 @@ package org.apache.samoa.streams.kafka;
 /*
  * #%L
  * SAMOA
- * %%
- * Copyright (C) 2014 - 2017 Apache Software Foundation
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,9 +47,6 @@ import org.apache.samoa.moa.core.FastVector;
  * @author pwawrzyniak
  */
 public class TestUtilsForKafka {
-
-//    private static final String BROKERHOST = "127.0.0.1";
-//    private static final String BROKERPORT = "9092";				
 
     protected static InstanceContentEvent getData(Random instanceRandom, int numAtts, InstancesHeader header) {
         double[] attVals = new double[numAtts + 1];

@@ -1,6 +1,4 @@
 /*
- * Copyright 2017 The Apache Software Foundation.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,8 +17,6 @@ package org.apache.samoa.streams.kafka;
  * #%L
  * SAMOA
  * %%
- * Copyright (C) 2014 - 2017 Apache Software Foundation
- * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -35,7 +31,6 @@ package org.apache.samoa.streams.kafka;
  * #L%
  */
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Iterator;
