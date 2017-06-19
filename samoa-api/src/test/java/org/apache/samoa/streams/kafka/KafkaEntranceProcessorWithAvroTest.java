@@ -1,5 +1,4 @@
 /*
- * Copyright 2017 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +17,6 @@ package org.apache.samoa.streams.kafka;
 /*
  * #%L
  * SAMOA
- * %%
- * Copyright (C) 2014 - 2017 Apache Software Foundation
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,15 +72,14 @@ public class KafkaEntranceProcessorWithAvroTest {
     private static final String ZKHOST = "127.0.0.1";
     private static final String BROKERHOST = "127.0.0.1";
     private static final String BROKERPORT = "9092";
-    private static final String TOPIC_AVRO = "samoa_test-avro";
-    private static final String TOPIC_JSON = "samoa_test-json";
+    private static final String TOPIC_AVRO = "samoa_test-avro";    
     private static final int NUM_INSTANCES = 11111;
 
     private static KafkaServer kafkaServer;
     private static EmbeddedZookeeper zkServer;
     private static ZkClient zkClient;
     private static String zkConnect;
-    private static int TIMEOUT = 1000;
+    private static final int TIMEOUT = 1000;
 
     public KafkaEntranceProcessorWithAvroTest() {
     }
@@ -107,8 +103,7 @@ public class KafkaEntranceProcessorWithAvroTest {
         kafkaServer = TestUtils.createServer(config, mock);
 
         // create topics
-        AdminUtils.createTopic(zkUtils, TOPIC_AVRO, 1, 1, new Properties(), RackAwareMode.Disabled$.MODULE$);
-        AdminUtils.createTopic(zkUtils, TOPIC_JSON, 1, 1, new Properties(), RackAwareMode.Disabled$.MODULE$);
+        AdminUtils.createTopic(zkUtils, TOPIC_AVRO, 1, 1, new Properties(), RackAwareMode.Disabled$.MODULE$);        
 
     }
 

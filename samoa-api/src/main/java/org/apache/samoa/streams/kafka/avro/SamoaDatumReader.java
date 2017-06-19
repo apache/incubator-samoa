@@ -1,18 +1,13 @@
 package org.apache.samoa.streams.kafka.avro;
 
 import java.io.IOException;
-
-import org.apache.avro.AvroRuntimeException;
 import org.apache.avro.Schema;
 import org.apache.avro.Schema.Field;
 import org.apache.avro.generic.GenericData.Array;
-import org.apache.avro.generic.IndexedRecord;
 import org.apache.avro.io.ResolvingDecoder;
 import org.apache.avro.reflect.ReflectData;
 import org.apache.avro.reflect.ReflectDatumReader;
-import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.samoa.instances.DenseInstanceData;
-import org.apache.samoa.instances.SingleClassInstanceData;
 import org.apache.samoa.instances.SparseInstanceData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
