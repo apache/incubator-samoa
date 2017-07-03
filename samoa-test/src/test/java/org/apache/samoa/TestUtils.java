@@ -50,7 +50,6 @@ public class TestUtils {
 
     final File tempFile = File.createTempFile("test", "test");
     final File labelFile = File.createTempFile("result", "result");
-    //final File labelFile = null;
     LOG.info("Starting test, output file is {}, test config is \n{}", tempFile.getAbsolutePath(), testParams.toString());  
     Executors.newSingleThreadExecutor().submit(new Callable<Void>() {
       @Override
@@ -64,7 +63,8 @@ public class TestUtils {
                     testParams.getInputInstances(),
                     testParams.getSamplingSize(),
                     testParams.getInputDelayMicroSec(),
-                    labelFile.getAbsolutePath()
+                    labelFile.getAbsolutePath(),
+                    testParams.getLabelSamplingSize()
                     ).split("[ ]"));
           } catch (Exception e) {
             LOG.error("Cannot execute test {} {}", e.getMessage(), e.getCause().getMessage());
@@ -143,19 +143,25 @@ public class TestUtils {
     LOG.info("Checking labels file " + labelFile.getAbsolutePath());
     //1. parse result file with csv parser
     Reader in = new FileReader(labelFile);
+    long lineCount = 0;
+    long expectedLineCount = testParams.getInputInstances() / testParams.getLabelSamplingSize();
     Iterable<CSVRecord> records = CSVFormat.EXCEL.withSkipHeaderRecord(false)
         .withIgnoreEmptyLines(true).withDelimiter(',').withCommentMarker('#').parse(in);
   
     Iterator<CSVRecord> iterator = records.iterator();
     CSVRecord header = iterator.next();
-
+    
+    while (iterator.hasNext()) {
+      iterator.next();
+      lineCount = lineCount + 1;
+    }
 
     Assert.assertEquals("Unexpected column", org.apache.samoa.TestParams.INSTANCE_ID, header.get(0).trim());
     Assert.assertEquals("Unexpected column", org.apache.samoa.TestParams.TRUE_CLASS_VALUE, header.get(1).trim());
     Assert.assertEquals("Unexpected column", org.apache.samoa.TestParams.PREDICTED_CLASS_VALUE, header.get(2).trim());
     for (int i = 3; i < header.size(); i++)
       Assert.assertEquals("Unexpected column", org.apache.samoa.TestParams.VOTES, header.get(i).trim().substring(0, org.apache.samoa.TestParams.VOTES.length()));
-
+    Assert.assertEquals("Wrong number of lines in prediction file", expectedLineCount, lineCount);
   
   }
 

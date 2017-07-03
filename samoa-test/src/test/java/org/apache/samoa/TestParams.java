@@ -34,24 +34,19 @@ public class TestParams {
    * </ul>
    * as well as the maximum number of instances for testing/training (-i) and the sampling size (-f)
    */
-  public static class Templates {
-
-    /*public final static String PREQEVAL_VHT_RANDOMTREE = "PrequentialEvaluation -d %s -i %d -f %d -w %d "
-        + "-l (org.apache.samoa.learners.classifiers.trees.VerticalHoeffdingTree -p 4) " +
-        "-s (org.apache.samoa.streams.generators.RandomTreeGenerator -c 2 -o 10 -u 10)";*/
-    
-    public final static String PREQEVAL_VHT_RANDOMTREE = "PrequentialEvaluation -d %s -i %d -f %d -w %d -g %s "
+  public static class Templates { 
+    public final static String PREQEVAL_VHT_RANDOMTREE = "PrequentialEvaluation -d %s -i %d -f %d -w %d -g %s -h %d "
         + "-l (org.apache.samoa.learners.classifiers.trees.VerticalHoeffdingTree -p 4) " +
         "-s (org.apache.samoa.streams.generators.RandomTreeGenerator -c 2 -o 10 -u 10)";
 
-    public final static String PREQEVAL_NAIVEBAYES_HYPERPLANE = "PrequentialEvaluation -d %s -i %d -f %d -w %d -g %s "
+    public final static String PREQEVAL_NAIVEBAYES_HYPERPLANE = "PrequentialEvaluation -d %s -i %d -f %d -w %d -g %s -h %d "
         + "-l (classifiers.SingleClassifier -l org.apache.samoa.learners.classifiers.NaiveBayes) " +
         "-s (org.apache.samoa.streams.generators.HyperplaneGenerator -c 2)";
 
     // setting the number of nominal attributes to zero significantly reduces
     // the processing time,
     // so that it's acceptable in a test case
-    public final static String PREQEVAL_BAGGING_RANDOMTREE = "PrequentialEvaluation -d %s -i %d -f %d -w %d -g %s "
+    public final static String PREQEVAL_BAGGING_RANDOMTREE = "PrequentialEvaluation -d %s -i %d -f %d -w %d -g %s -h %d "
         + "-l (org.apache.samoa.learners.classifiers.ensemble.Bagging) " +
         "-s (org.apache.samoa.streams.generators.RandomTreeGenerator -c 2 -o 0 -u 10)";
 
@@ -85,6 +80,7 @@ public class TestParams {
   private int inputDelayMicroSec;
   private String taskClassName;
   private boolean labelFileCreated;
+  private long labelSamplingSize;
 
   private TestParams(String taskClassName,
       long inputInstances,
@@ -98,7 +94,8 @@ public class TestParams {
       int pollTimeoutSeconds,
       int prePollWait,
       int inputDelayMicroSec,
-      boolean labelFileCreated) {
+      boolean labelFileCreated,
+      long labelSamplingSize) {
     this.taskClassName = taskClassName;
     this.inputInstances = inputInstances;
     this.samplingSize = samplingSize;
@@ -112,6 +109,7 @@ public class TestParams {
     this.prePollWait = prePollWait;
     this.inputDelayMicroSec = inputDelayMicroSec;
     this.labelFileCreated = labelFileCreated;
+    this.labelSamplingSize = labelSamplingSize;
   }
   
   public boolean getLabelFileCreated() {
@@ -165,6 +163,10 @@ public class TestParams {
   public int getInputDelayMicroSec() {
     return inputDelayMicroSec;
   }
+  
+  public long getLabelSamplingSize() {
+    return labelSamplingSize;
+  }
 
   @Override
   public String toString() {
@@ -182,6 +184,7 @@ public class TestParams {
         "taskClassName='" + taskClassName + '\'' + "\n" +
         "inputDelayMicroSec=" + inputDelayMicroSec + "\n" +
         "labelFileCreated=" + labelFileCreated + "\n" +
+        "labelSamplingSize=" + labelSamplingSize + "\n" +
         '}';
   }
 
@@ -199,6 +202,7 @@ public class TestParams {
     private String taskClassName;
     private int inputDelayMicroSec = 0;
     private boolean labelFileCreated = true;
+    private long labelSamplingSize = 0l;
 
     public Builder taskClassName(String taskClassName) {
       this.taskClassName = taskClassName;
@@ -264,6 +268,11 @@ public class TestParams {
       this.labelFileCreated = labelFileCreated;
       return this;
     }
+    
+    public Builder labelSamplingSize(long labelSamplingSize) {
+      this.labelSamplingSize = labelSamplingSize;
+      return this;
+    }
 
     public TestParams build() {
       return new TestParams(taskClassName,
@@ -278,7 +287,8 @@ public class TestParams {
           pollTimeoutSeconds,
           prePollWaitSeconds,
           inputDelayMicroSec,
-          labelFileCreated);
+          labelFileCreated,
+          labelSamplingSize);
     }
   }
 }

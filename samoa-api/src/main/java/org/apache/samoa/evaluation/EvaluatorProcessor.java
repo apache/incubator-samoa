@@ -95,16 +95,16 @@ public class EvaluatorProcessor implements Processor {
       this.addMeasurement();
     }
 
+    //adding a vote - true class value, predicted class value and for classification - votes
+    if ((immediatePredictionStream != null) && (totalCount > 0) && (totalCount % labelSamplingFrequency) == 0) {
+      this.addVote();
+    } 
+    
     if (result.isLastEvent()) {
       this.concludeMeasurement();
       return true;
     }
-    
-    //adding a vote - true class value, predicted class value and for classification - votes
-    if ((immediatePredictionStream != null) && (totalCount > 0) && (totalCount % labelSamplingFrequency) == 0) {
-      this.addVote();
-    }
-    
+        
     String instanceIndex = String.valueOf(result.getInstanceIndex());
     evaluator.addResult(result.getInstance(), result.getClassVotes(), instanceIndex);
     totalCount += 1;
@@ -113,8 +113,6 @@ public class EvaluatorProcessor implements Processor {
       sampleStart = System.nanoTime();
       experimentStart = sampleStart;
     }
-
-   
 
     return false;
   }
