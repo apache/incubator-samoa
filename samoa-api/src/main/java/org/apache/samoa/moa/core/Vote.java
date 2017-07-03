@@ -1,44 +1,41 @@
 package org.apache.samoa.moa.core;
 
+import java.io.Serializable;
+
 /*
- * #%L
- * SAMOA
- * %%
- * Copyright (C) 2014 - 2015 Apache Software Foundation
- * %%
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * 	        http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * #L%
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific
+ * language governing permissions and limitations under the
+ * License.  
  */
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.samoa.moa.AbstractMOAObject;
+import java.util.Locale;
 
 /**
  * Class for storing votes.
- * 
- * @author Maciej Grzenda (maciej.grzenda@gmail.com)
- * @author Jerzy Jegier (jerzyjeg@wp.pl)
  *
  */
-public class Vote extends AbstractMOAObject {
+public class Vote implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   protected String name;
   protected String value;
-  //  protected int fractionDigits;
+
+  public Vote(String name) {
+    this.name = name;
+  }
 
   public Vote(String name, String value) {
     this.name = name;
@@ -50,7 +47,8 @@ public class Vote extends AbstractMOAObject {
   }
 
   public Vote(String name, double value, int fractionDigits) {
-    this(name, Double.toString(value));
+    this(name);
+    setValue(value, fractionDigits);
   }
 
   public String getName() {
@@ -61,14 +59,13 @@ public class Vote extends AbstractMOAObject {
     return this.value;
   }
 
-  public static Vote getVoteNamed(String name,
-      Vote[] votes) {
-    for (Vote measurement : votes) {
-      if (name.equals(measurement.getName())) {
-        return measurement;
-      }
-    }
-    return null;
+  public void setValue(String value) {
+    this.value = value;
+  }
+
+  public void setValue(double value, int fractionDigits) {
+    // rely on dot as a decimal separator not to confuse CSV parsers
+    this.value = String.format(Locale.US, "%." + String.valueOf(fractionDigits) + "f", value);
   }
 
   public static void getVotesDescription(Vote[] votes,
@@ -81,7 +78,6 @@ public class Vote extends AbstractMOAObject {
     }
   }
 
-  @Override
   public void getDescription(StringBuilder sb, int indent) {
     sb.append(getName());
     sb.append(" = ");

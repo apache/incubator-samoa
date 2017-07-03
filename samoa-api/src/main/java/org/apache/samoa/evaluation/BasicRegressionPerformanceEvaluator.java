@@ -41,6 +41,10 @@ public class BasicRegressionPerformanceEvaluator extends AbstractMOAObject
 
   private static final long serialVersionUID = 1L;
 
+  // the number of decimal places placed for double values in prediction file
+  // the value of 10 is used since some predicted values can be relatively small
+  public static final int DECIMAL_PLACES = 10;
+
   protected double weightObserved;
 
   protected double squareError;
@@ -117,8 +121,8 @@ public class BasicRegressionPerformanceEvaluator extends AbstractMOAObject
     return new Vote[] {
         new Vote("instance number",
             this.instanceIdentifier),
-        new Vote("true value", trueValue, 10),
-        new Vote("predicted value", this.lastPredictedValue, 10)
+        new Vote("true value", trueValue, this.DECIMAL_PLACES),
+        new Vote("predicted value", this.lastPredictedValue, this.DECIMAL_PLACES)
     };
   }
 

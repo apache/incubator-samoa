@@ -38,10 +38,22 @@ import org.apache.samoa.moa.core.Vote;
  * @author Albert Bifet (abifet at cs dot waikato dot ac dot nz)
  * @version $Revision: 7 $
  */
-public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject implements
-    ClassificationPerformanceEvaluator {
+public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject
+    implements ClassificationPerformanceEvaluator {
 
   private static final long serialVersionUID = 1L;
+
+  // the number of decimal places placed for double values in prediction file
+  // the value of 10 is used since some votes can be relatively small
+  public static final int DECIMAL_PLACES = 10;
+
+  // the vote value to be used when a classifier made no vote for the class at
+  // all
+  public static final int NO_VOTE_FOR_CLASS = 0;
+
+  // recent vote objects i.e. predicted, true classes and votes for individual
+  // classes
+  protected Vote[] votes;
 
   protected double weightObserved;
 
@@ -65,6 +77,7 @@ public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject i
   @Override
   public void reset() {
     reset(this.numClasses);
+    votes = null;
   }
 
   public void reset(int numClasses) {
@@ -79,6 +92,7 @@ public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject i
     this.weightCorrect = 0.0;
     this.weightCorrectNoChangeClassifier = 0.0;
     this.lastSeenClass = 0;
+    votes = null;
   }
 
   @Override
@@ -112,16 +126,10 @@ public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject i
 
   @Override
   public Measurement[] getPerformanceMeasurements() {
-    return new Measurement[] {
-        new Measurement("classified instances",
-            getTotalWeightObserved()),
-        new Measurement("classifications correct (percent)",
-            getFractionCorrectlyClassified() * 100.0),
-        new Measurement("Kappa Statistic (percent)",
-            getKappaStatistic() * 100.0),
-        new Measurement("Kappa Temporal Statistic (percent)",
-            getKappaTemporalStatistic() * 100.0)
-    };
+    return new Measurement[] { new Measurement("classified instances", getTotalWeightObserved()),
+        new Measurement("classifications correct (percent)", getFractionCorrectlyClassified() * 100.0),
+        new Measurement("Kappa Statistic (percent)", getKappaStatistic() * 100.0),
+        new Measurement("Kappa Temporal Statistic (percent)", getKappaTemporalStatistic() * 100.0) };
 
   }
 
@@ -139,22 +147,33 @@ public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject i
     int trueNominalIndex = (int) trueValue;
     String trueNominalValue = classAttributeValues.get(trueNominalIndex);
 
-    Vote[] votes = new Vote[classAttributeValues.size() + 3];
-    votes[0] = new Vote("instance number",
-        this.instanceIdentifier);
-    votes[1] = new Vote("true class value",
-        trueNominalValue);
-    votes[2] = new Vote("predicted class value",
-        classAttributeValues.get(Utils.maxIndex(classVotes)));
+    // initialise votes first time they are supposed to be used
+    if (votes == null) {
+      this.votes = new Vote[classAttributeValues.size() + 3];
+      votes[0] = new Vote("instance number");
+      votes[1] = new Vote("true class value");
+      votes[2] = new Vote("predicted class value");
 
-    for (int i = 0; i < classAttributeValues.size(); i++) {
-      if (i < classVotes.length) {
-        votes[3 + i] = new Vote("votes_" + classAttributeValues.get(i), classVotes[i], 10);
-      } else {
-        votes[3 + i] = new Vote("votes_" + classAttributeValues.get(i), 0);
+      // create as many objects as the number of classes
+      for (int i = 0; i < classAttributeValues.size(); i++) {
+        votes[3 + i] = new Vote("votes_" + classAttributeValues.get(i));
       }
     }
+
+    // use/(re-use existing) vote objects
+    votes[0].setValue(this.instanceIdentifier);
+    votes[1].setValue(trueNominalValue);
+    votes[2].setValue(classAttributeValues.get(Utils.maxIndex(classVotes)));
+    for (int i = 0; i < classAttributeValues.size(); i++) {
+      if (i < classVotes.length) {
+        votes[3 + i].setValue(classVotes[i], this.DECIMAL_PLACES);
+      } else {
+        votes[3 + i].setValue(this.NO_VOTE_FOR_CLASS, 0);
+      }
+    }
+
     return votes;
+
   }
 
   public double getTotalWeightObserved() {
@@ -162,8 +181,7 @@ public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject i
   }
 
   public double getFractionCorrectlyClassified() {
-    return this.weightObserved > 0.0 ? this.weightCorrect
-        / this.weightObserved : 0.0;
+    return this.weightObserved > 0.0 ? this.weightCorrect / this.weightObserved : 0.0;
   }
 
   public double getFractionIncorrectlyClassified() {
@@ -175,8 +193,7 @@ public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject i
       double p0 = getFractionCorrectlyClassified();
       double pc = 0.0;
       for (int i = 0; i < this.numClasses; i++) {
-        pc += (this.rowKappa[i] / this.weightObserved)
-            * (this.columnKappa[i] / this.weightObserved);
+        pc += (this.rowKappa[i] / this.weightObserved) * (this.columnKappa[i] / this.weightObserved);
       }
       return (p0 - pc) / (1.0 - pc);
     } else {
@@ -197,7 +214,6 @@ public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject i
 
   @Override
   public void getDescription(StringBuilder sb, int indent) {
-    Measurement.getMeasurementsDescription(getPerformanceMeasurements(),
-        sb, indent);
+    Measurement.getMeasurementsDescription(getPerformanceMeasurements(), sb, indent);
   }
 }

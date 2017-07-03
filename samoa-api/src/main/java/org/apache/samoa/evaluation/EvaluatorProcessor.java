@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
@@ -32,8 +31,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.core.Processor;
-import org.apache.samoa.instances.Attribute;
-import org.apache.samoa.instances.Utils;
 import org.apache.samoa.learners.ResultContentEvent;
 import org.apache.samoa.moa.core.Measurement;
 import org.apache.samoa.moa.core.Vote;
@@ -41,8 +38,6 @@ import org.apache.samoa.moa.evaluation.LearningCurve;
 import org.apache.samoa.moa.evaluation.LearningEvaluation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.esotericsoftware.minlog.Log;
 
 public class EvaluatorProcessor implements Processor {
 
@@ -98,13 +93,13 @@ public class EvaluatorProcessor implements Processor {
     //adding a vote - true class value, predicted class value and for classification - votes
     if ((immediatePredictionStream != null) && (totalCount > 0) && (totalCount % labelSamplingFrequency) == 0) {
       this.addVote();
-    } 
-    
+    }
+
     if (result.isLastEvent()) {
       this.concludeMeasurement();
       return true;
     }
-        
+
     String instanceIndex = String.valueOf(result.getInstanceIndex());
     evaluator.addResult(result.getInstance(), result.getClassVotes(), instanceIndex);
     totalCount += 1;
@@ -214,9 +209,7 @@ public class EvaluatorProcessor implements Processor {
    * In case, this is the first line a header line is also added
    */
   private void addVote() {
-    List<Vote> votes = new Vector<>();
-    Collections.addAll(votes, evaluator.getPredictionVotes());
-    Vote[] finalVotes = votes.toArray(new Vote[votes.size()]);
+    Vote[] finalVotes = evaluator.getPredictionVotes();
     learningCurve.setVote(finalVotes);
     logger.debug("evaluator id = {}", this.id);
 
@@ -289,9 +282,10 @@ public class EvaluatorProcessor implements Processor {
     }
 
     public Builder labelSamplingFrequency(int samplingFrequency) {
-        this.labelSamplingFrequency = samplingFrequency;
-        return this;
-      }
+      this.labelSamplingFrequency = samplingFrequency;
+      return this;
+    }
+
     public EvaluatorProcessor build() {
       return new EvaluatorProcessor(this);
     }
