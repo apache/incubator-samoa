@@ -22,6 +22,7 @@ package org.apache.samoa;
 
 import org.apache.samoa.LocalDoTask;
 import org.junit.Test;
+import org.apache.samoa.TestParams;
 
 public class AlgosTest {
 
@@ -32,6 +33,7 @@ public class AlgosTest {
         .samplingSize(20_000)
         .evaluationInstances(200_000)
         .classifiedInstances(200_000)
+        .labelSamplingSize(10l)
         .classificationsCorrect(75f)
         .kappaStat(0f)
         .kappaTempStat(0f)
@@ -50,6 +52,7 @@ public class AlgosTest {
         .samplingSize(20_000)
         .evaluationInstances(200_000)
         .classifiedInstances(200_000)
+        .labelSamplingSize(1l)
         .classificationsCorrect(60f)
         .kappaStat(0f)
         .kappaTempStat(0f)
@@ -68,6 +71,7 @@ public class AlgosTest {
         .samplingSize(20_000)
         .evaluationInstances(200_000)
         .classifiedInstances(200_000)
+        .labelSamplingSize(10l)
         .classificationsCorrect(65f)
         .kappaStat(0f)
         .kappaTempStat(0f)
@@ -93,6 +97,7 @@ public class AlgosTest {
             .resultFilePollTimeout(10)
             .prePollWait(10)
             .taskClassName(LocalDoTask.class.getName())
+            .labelFileCreated(false)
             .build();
     TestUtils.test(vhtConfig);
   }

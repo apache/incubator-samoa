@@ -1,5 +1,9 @@
 package org.apache.samoa.evaluation;
 
+import java.util.List;
+
+import org.apache.samoa.instances.Attribute;
+
 /*
  * #%L
  * SAMOA
@@ -24,6 +28,7 @@ import org.apache.samoa.instances.Instance;
 import org.apache.samoa.instances.Utils;
 import org.apache.samoa.moa.AbstractMOAObject;
 import org.apache.samoa.moa.core.Measurement;
+import org.apache.samoa.moa.core.Vote;
 
 import com.github.javacliparser.IntOption;
 
@@ -58,6 +63,10 @@ public class WindowClassificationPerformanceEvaluator extends AbstractMOAObject 
   protected Estimator[] classAccuracy;
 
   protected int numClasses;
+
+  private String instanceIdentifier;
+  private Instance lastSeenInstance;
+  protected double[] classVotes;
 
   public class Estimator {
 
@@ -127,7 +136,7 @@ public class WindowClassificationPerformanceEvaluator extends AbstractMOAObject 
   }
 
   @Override
-  public void addResult(Instance inst, double[] classVotes) {
+  public void addResult(Instance inst, double[] classVotes, String instanceIndex) {
     double weight = inst.weight();
     int trueClass = (int) inst.classValue();
     if (weight > 0.0) {
@@ -170,6 +179,38 @@ public class WindowClassificationPerformanceEvaluator extends AbstractMOAObject 
             getKappaTemporalStatistic() * 100.0)
     };
 
+  }
+
+  /**
+   * This method is used to retrieve predictions and votes (for classification only)
+   * 
+   * @return String This returns an array of predictions and votes objects.
+   */
+  @Override
+  public Vote[] getPredictionVotes() {
+    Attribute classAttribute = this.lastSeenInstance.dataset().classAttribute();
+    double trueValue = this.lastSeenInstance.classValue();
+    List<String> classAttributeValues = classAttribute.getAttributeValues();
+
+    int trueNominalIndex = (int) trueValue;
+    String trueNominalValue = classAttributeValues.get(trueNominalIndex);
+
+    Vote[] votes = new Vote[classVotes.length + 3];
+    votes[0] = new Vote("instance number",
+        this.instanceIdentifier);
+    votes[1] = new Vote("true class value",
+        trueNominalValue);
+    votes[2] = new Vote("predicted class value",
+        classAttributeValues.get(Utils.maxIndex(classVotes)));
+
+    for (int i = 0; i < classAttributeValues.size(); i++) {
+      if (i < classVotes.length) {
+        votes[2 + i] = new Vote("votes_" + classAttributeValues.get(i), classVotes[i]);
+      } else {
+        votes[2 + i] = new Vote("votes_" + classAttributeValues.get(i), 0);
+      }
+    }
+    return votes;
   }
 
   public double getTotalWeightObserved() {

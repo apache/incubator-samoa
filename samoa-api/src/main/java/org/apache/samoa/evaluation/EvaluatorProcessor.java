@@ -33,6 +33,7 @@ import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.core.Processor;
 import org.apache.samoa.learners.ResultContentEvent;
 import org.apache.samoa.moa.core.Measurement;
+import org.apache.samoa.moa.core.Vote;
 import org.apache.samoa.moa.evaluation.LearningCurve;
 import org.apache.samoa.moa.evaluation.LearningEvaluation;
 import org.slf4j.Logger;
@@ -41,20 +42,23 @@ import org.slf4j.LoggerFactory;
 public class EvaluatorProcessor implements Processor {
 
   /**
-	 * 
-	 */
+   * 
+   */
   private static final long serialVersionUID = -2778051819116753612L;
 
-  private static final Logger logger =
-      LoggerFactory.getLogger(EvaluatorProcessor.class);
+  private static final Logger logger = LoggerFactory.getLogger(EvaluatorProcessor.class);
 
   private static final String ORDERING_MEASUREMENT_NAME = "evaluation instances";
 
   private final PerformanceEvaluator evaluator;
   private final int samplingFrequency;
   private final File dumpFile;
+  private final File predictionFile;
+  private final int labelSamplingFrequency;
   private transient PrintStream immediateResultStream = null;
+  private transient PrintStream immediatePredictionStream = null;
   private transient boolean firstDump = true;
+  private transient boolean firstVoteDump = true;
 
   private long totalCount = 0;
   private long experimentStart = 0;
@@ -68,6 +72,8 @@ public class EvaluatorProcessor implements Processor {
     this.evaluator = builder.evaluator;
     this.samplingFrequency = builder.samplingFrequency;
     this.dumpFile = builder.dumpFile;
+    this.predictionFile = builder.predictionFile;
+    this.labelSamplingFrequency = builder.labelSamplingFrequency;
   }
 
   @Override
@@ -84,12 +90,18 @@ public class EvaluatorProcessor implements Processor {
       this.addMeasurement();
     }
 
+    //adding a vote - true class value, predicted class value and for classification - votes
+    if ((immediatePredictionStream != null) && (totalCount > 0) && (totalCount % labelSamplingFrequency) == 0) {
+      this.addVote();
+    }
+
     if (result.isLastEvent()) {
       this.concludeMeasurement();
       return true;
     }
 
-    evaluator.addResult(result.getInstance(), result.getClassVotes());
+    String instanceIndex = String.valueOf(result.getInstanceIndex());
+    evaluator.addResult(result.getInstance(), result.getClassVotes(), instanceIndex);
     totalCount += 1;
 
     if (totalCount == 1) {
@@ -125,7 +137,20 @@ public class EvaluatorProcessor implements Processor {
       }
     }
 
+    if (this.predictionFile != null) {
+      try {
+        this.immediatePredictionStream = new PrintStream(new FileOutputStream(predictionFile), true);
+      } catch (FileNotFoundException e) {
+        this.immediatePredictionStream = null;
+        logger.error("File not found exception for {}:{}", this.predictionFile.getAbsolutePath(), e.toString());
+      } catch (Exception e) {
+        this.immediatePredictionStream = null;
+        logger.error("Exception when creating {}:{}", this.predictionFile.getAbsolutePath(), e.toString());
+      }
+    }
+
     this.firstDump = true;
+    this.firstVoteDump = true;
   }
 
   @Override
@@ -179,6 +204,26 @@ public class EvaluatorProcessor implements Processor {
     }
   }
 
+  /**
+   * This method is used to create one line of a text file containing predictions and votes (for classification only).
+   * In case, this is the first line a header line is also added
+   */
+  private void addVote() {
+    Vote[] finalVotes = evaluator.getPredictionVotes();
+    learningCurve.setVote(finalVotes);
+    logger.debug("evaluator id = {}", this.id);
+
+    if (immediatePredictionStream != null) {
+      if (firstVoteDump) {
+        immediatePredictionStream.println(learningCurve.voteHeaderToString());
+        firstVoteDump = false;
+      }
+
+      immediatePredictionStream.println(learningCurve.voteEntryToString());
+      immediatePredictionStream.flush();
+    }
+  }
+
   private void concludeMeasurement() {
     logger.info("last event is received!");
     logger.info("total count: {}", this.totalCount);
@@ -192,6 +237,9 @@ public class EvaluatorProcessor implements Processor {
 
     if (immediateResultStream != null) {
       immediateResultStream.println("# COMPLETED");
+      //
+      immediateResultStream
+          .println("# Total evaluation time: " + totalExperimentTime + " seconds for " + totalCount + " instances");
       immediateResultStream.flush();
     }
     // logger.info("average throughput rate: {} instances/seconds",
@@ -203,6 +251,8 @@ public class EvaluatorProcessor implements Processor {
     private final PerformanceEvaluator evaluator;
     private int samplingFrequency = 100000;
     private File dumpFile = null;
+    private File predictionFile = null;
+    private int labelSamplingFrequency = 1;
 
     public Builder(PerformanceEvaluator evaluator) {
       this.evaluator = evaluator;
@@ -212,6 +262,8 @@ public class EvaluatorProcessor implements Processor {
       this.evaluator = oldProcessor.evaluator;
       this.samplingFrequency = oldProcessor.samplingFrequency;
       this.dumpFile = oldProcessor.dumpFile;
+      this.predictionFile = oldProcessor.predictionFile;
+      this.labelSamplingFrequency = oldProcessor.labelSamplingFrequency;
     }
 
     public Builder samplingFrequency(int samplingFrequency) {
@@ -221,6 +273,16 @@ public class EvaluatorProcessor implements Processor {
 
     public Builder dumpFile(File file) {
       this.dumpFile = file;
+      return this;
+    }
+
+    public Builder predictionFile(File file) {
+      this.predictionFile = file;
+      return this;
+    }
+
+    public Builder labelSamplingFrequency(int samplingFrequency) {
+      this.labelSamplingFrequency = samplingFrequency;
       return this;
     }
 

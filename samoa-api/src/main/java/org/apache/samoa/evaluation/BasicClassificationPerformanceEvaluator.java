@@ -1,5 +1,10 @@
 package org.apache.samoa.evaluation;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.samoa.instances.Attribute;
+
 /*
  * #%L
  * SAMOA
@@ -24,6 +29,7 @@ import org.apache.samoa.instances.Instance;
 import org.apache.samoa.instances.Utils;
 import org.apache.samoa.moa.AbstractMOAObject;
 import org.apache.samoa.moa.core.Measurement;
+import org.apache.samoa.moa.core.Vote;
 
 /**
  * Classification evaluator that performs basic incremental evaluation.
@@ -32,10 +38,22 @@ import org.apache.samoa.moa.core.Measurement;
  * @author Albert Bifet (abifet at cs dot waikato dot ac dot nz)
  * @version $Revision: 7 $
  */
-public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject implements
-    ClassificationPerformanceEvaluator {
+public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject
+    implements ClassificationPerformanceEvaluator {
 
   private static final long serialVersionUID = 1L;
+
+  // the number of decimal places placed for double values in prediction file
+  // the value of 10 is used since some votes can be relatively small
+  public static final int DECIMAL_PLACES = 10;
+
+  // the vote value to be used when a classifier made no vote for the class at
+  // all
+  public static final int NO_VOTE_FOR_CLASS = 0;
+
+  // recent vote objects i.e. predicted, true classes and votes for individual
+  // classes
+  protected Vote[] votes;
 
   protected double weightObserved;
 
@@ -49,11 +67,17 @@ public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject i
 
   private double weightCorrectNoChangeClassifier;
 
+  protected double[] classVotes;
+
   private int lastSeenClass;
+  private String instanceIdentifier;
+
+  private Instance lastSeenInstance;
 
   @Override
   public void reset() {
     reset(this.numClasses);
+    votes = null;
   }
 
   public void reset(int numClasses) {
@@ -68,10 +92,11 @@ public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject i
     this.weightCorrect = 0.0;
     this.weightCorrectNoChangeClassifier = 0.0;
     this.lastSeenClass = 0;
+    votes = null;
   }
 
   @Override
-  public void addResult(Instance inst, double[] classVotes) {
+  public void addResult(Instance inst, double[] classVotes, String instanceIdentifier) {
     double weight = inst.weight();
     int trueClass = (int) inst.classValue();
     if (weight > 0.0) {
@@ -94,20 +119,60 @@ public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject i
       this.weightCorrectNoChangeClassifier += weight;
     }
     this.lastSeenClass = trueClass;
+    this.lastSeenInstance = inst;
+    this.instanceIdentifier = instanceIdentifier;
+    this.classVotes = classVotes;
   }
 
   @Override
   public Measurement[] getPerformanceMeasurements() {
-    return new Measurement[] {
-        new Measurement("classified instances",
-            getTotalWeightObserved()),
-        new Measurement("classifications correct (percent)",
-            getFractionCorrectlyClassified() * 100.0),
-        new Measurement("Kappa Statistic (percent)",
-            getKappaStatistic() * 100.0),
-        new Measurement("Kappa Temporal Statistic (percent)",
-            getKappaTemporalStatistic() * 100.0)
-    };
+    return new Measurement[] { new Measurement("classified instances", getTotalWeightObserved()),
+        new Measurement("classifications correct (percent)", getFractionCorrectlyClassified() * 100.0),
+        new Measurement("Kappa Statistic (percent)", getKappaStatistic() * 100.0),
+        new Measurement("Kappa Temporal Statistic (percent)", getKappaTemporalStatistic() * 100.0) };
+
+  }
+
+  /**
+   * This method is used to retrieve predictions and votes (for classification only)
+   * 
+   * @return String This returns an array of predictions and votes objects.
+   */
+  @Override
+  public Vote[] getPredictionVotes() {
+    Attribute classAttribute = this.lastSeenInstance.dataset().classAttribute();
+    double trueValue = this.lastSeenInstance.classValue();
+    List<String> classAttributeValues = classAttribute.getAttributeValues();
+
+    int trueNominalIndex = (int) trueValue;
+    String trueNominalValue = classAttributeValues.get(trueNominalIndex);
+
+    // initialise votes first time they are supposed to be used
+    if (votes == null) {
+      this.votes = new Vote[classAttributeValues.size() + 3];
+      votes[0] = new Vote("instance number");
+      votes[1] = new Vote("true class value");
+      votes[2] = new Vote("predicted class value");
+
+      // create as many objects as the number of classes
+      for (int i = 0; i < classAttributeValues.size(); i++) {
+        votes[3 + i] = new Vote("votes_" + classAttributeValues.get(i));
+      }
+    }
+
+    // use/(re-use existing) vote objects
+    votes[0].setValue(this.instanceIdentifier);
+    votes[1].setValue(trueNominalValue);
+    votes[2].setValue(classAttributeValues.get(Utils.maxIndex(classVotes)));
+    for (int i = 0; i < classAttributeValues.size(); i++) {
+      if (i < classVotes.length) {
+        votes[3 + i].setValue(classVotes[i], this.DECIMAL_PLACES);
+      } else {
+        votes[3 + i].setValue(this.NO_VOTE_FOR_CLASS, 0);
+      }
+    }
+
+    return votes;
 
   }
 
@@ -116,8 +181,7 @@ public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject i
   }
 
   public double getFractionCorrectlyClassified() {
-    return this.weightObserved > 0.0 ? this.weightCorrect
-        / this.weightObserved : 0.0;
+    return this.weightObserved > 0.0 ? this.weightCorrect / this.weightObserved : 0.0;
   }
 
   public double getFractionIncorrectlyClassified() {
@@ -129,8 +193,7 @@ public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject i
       double p0 = getFractionCorrectlyClassified();
       double pc = 0.0;
       for (int i = 0; i < this.numClasses; i++) {
-        pc += (this.rowKappa[i] / this.weightObserved)
-            * (this.columnKappa[i] / this.weightObserved);
+        pc += (this.rowKappa[i] / this.weightObserved) * (this.columnKappa[i] / this.weightObserved);
       }
       return (p0 - pc) / (1.0 - pc);
     } else {
@@ -151,7 +214,6 @@ public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject i
 
   @Override
   public void getDescription(StringBuilder sb, int indent) {
-    Measurement.getMeasurementsDescription(getPerformanceMeasurements(),
-        sb, indent);
+    Measurement.getMeasurementsDescription(getPerformanceMeasurements(), sb, indent);
   }
 }
