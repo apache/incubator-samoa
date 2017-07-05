@@ -106,25 +106,25 @@ limitations under the License.
             <artifactId>kafka-clients</artifactId>
             <version>0.10.2.0</version>
         </dependency>
-            <dependency>
-      <groupId>org.apache.kafka</groupId>
-      <artifactId>kafka-clients</artifactId>
-      <version>0.10.2.0</version>
-      <classifier>test</classifier>
-      <scope>test</scope>
-    </dependency>
         <dependency>
-    <groupId>org.apache.kafka</groupId>
-    <artifactId>kafka_2.11</artifactId>
-    <version>0.10.2.0</version>
-</dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>0.10.2.0</version>
+            <classifier>test</classifier>
+            <scope>test</scope>
+        </dependency>
         <dependency>
-    <groupId>org.apache.kafka</groupId>
-    <artifactId>kafka_2.11</artifactId>
-    <version>0.10.2.0</version>
-    <classifier>test</classifier>
-    <scope>test</scope>
-</dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka_2.11</artifactId>
+            <version>0.10.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka_2.11</artifactId>
+            <version>0.10.2.0</version>
+            <classifier>test</classifier>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
