@@ -138,7 +138,7 @@ public class KafkaUtilsTest {
     public void testInitializeConsumer() throws Exception {
         logger.log(Level.INFO, "initializeConsumer");
         Collection<String> topics = Arrays.asList(TOPIC_R);
-        KafkaUtils instance = new KafkaUtils(TestUtilsForKafka.getConsumerProperties(BROKERHOST,BROKERPORT), TestUtilsForKafka.getProducerProperties(BROKERHOST,BROKERPORT), CONSUMER_TIMEOUT);
+        KafkaUtils instance = new KafkaUtils(TestUtilsForKafka.getConsumerProperties(BROKERHOST, BROKERPORT), TestUtilsForKafka.getProducerProperties(BROKERHOST, BROKERPORT), CONSUMER_TIMEOUT);
         assertNotNull(instance);
 
         instance.initializeConsumer(topics);
@@ -160,7 +160,7 @@ public class KafkaUtilsTest {
     public void testGetKafkaMessages() throws Exception {
         logger.log(Level.INFO, "getKafkaMessages");
         Collection<String> topics = Arrays.asList(TOPIC_R);
-        KafkaUtils instance = new KafkaUtils(TestUtilsForKafka.getConsumerProperties(BROKERHOST,BROKERPORT), TestUtilsForKafka.getProducerProperties(BROKERHOST,BROKERPORT), CONSUMER_TIMEOUT);
+        KafkaUtils instance = new KafkaUtils(TestUtilsForKafka.getConsumerProperties(BROKERHOST, BROKERPORT), TestUtilsForKafka.getProducerProperties(BROKERHOST, BROKERPORT), CONSUMER_TIMEOUT);
         assertNotNull(instance);
 
         logger.log(Level.INFO, "Initialising consumer");
@@ -181,7 +181,7 @@ public class KafkaUtilsTest {
 
     private List<byte[]> sendAndGetMessages(int maxNum) throws InterruptedException, ExecutionException, TimeoutException {
         List<byte[]> ret;
-        try (KafkaProducer<String, byte[]> producer = new KafkaProducer<>(TestUtilsForKafka.getProducerProperties("sendM-test",BROKERHOST,BROKERPORT))) {
+        try (KafkaProducer<String, byte[]> producer = new KafkaProducer<>(TestUtilsForKafka.getProducerProperties("sendM-test", BROKERHOST, BROKERPORT))) {
             ret = new ArrayList<>();
             Random r = new Random();
             InstancesHeader header = TestUtilsForKafka.generateHeader(10);
@@ -207,12 +207,12 @@ public class KafkaUtilsTest {
         logger.log(Level.INFO, "sendKafkaMessage");
 
         logger.log(Level.INFO, "Initialising producer");
-        KafkaUtils instance = new KafkaUtils(TestUtilsForKafka.getConsumerProperties(BROKERHOST,BROKERPORT), TestUtilsForKafka.getProducerProperties("rcv-test", BROKERHOST,BROKERPORT), CONSUMER_TIMEOUT);
+        KafkaUtils instance = new KafkaUtils(TestUtilsForKafka.getConsumerProperties(BROKERHOST, BROKERPORT), TestUtilsForKafka.getProducerProperties("rcv-test", BROKERHOST, BROKERPORT), CONSUMER_TIMEOUT);
         instance.initializeProducer();
 
         logger.log(Level.INFO, "Initialising consumer");
         KafkaConsumer<String, byte[]> consumer;
-        consumer = new KafkaConsumer<>(TestUtilsForKafka.getConsumerProperties(BROKERHOST,BROKERPORT));
+        consumer = new KafkaConsumer<>(TestUtilsForKafka.getConsumerProperties(BROKERHOST, BROKERPORT));
         consumer.subscribe(Arrays.asList(TOPIC_S));
 
         logger.log(Level.INFO, "Produce data");
@@ -226,14 +226,18 @@ public class KafkaUtilsTest {
             instance.sendKafkaMessage(TOPIC_S, val);
         }
         // wait for Kafka a bit :)
-        Thread.sleep(2*CONSUMER_TIMEOUT);
+        Thread.sleep(2 * CONSUMER_TIMEOUT);
 
         logger.log(Level.INFO, "Get results from Kafka");
-        ConsumerRecords<String, byte[]> records = consumer.poll(CONSUMER_TIMEOUT);
-        Iterator<ConsumerRecord<String, byte[]>> it = records.iterator();
+        
         List<byte[]> consumed = new ArrayList<>();
-        while (it.hasNext()) {
-            consumed.add(it.next().value());
+        
+        while (consumed.size() != sent.size()) {
+            ConsumerRecords<String, byte[]> records = consumer.poll(CONSUMER_TIMEOUT);
+            Iterator<ConsumerRecord<String, byte[]>> it = records.iterator();
+            while (it.hasNext()) {
+                consumed.add(it.next().value());
+            }
         }
         consumer.close();
 

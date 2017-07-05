@@ -66,8 +66,7 @@ public class KafkaTask implements Task, Configurable {
 	Properties consumerProps;
 	int timeout;
 	private final KafkaDeserializer deserializer;
-	private final KafkaSerializer serializer;
-	private final String topic;
+	private final KafkaSerializer serializer;	
 
 	private TopologyBuilder builder;
 	private Topology kafkaTopology;
@@ -77,6 +76,9 @@ public class KafkaTask implements Task, Configurable {
 
 	public StringOption evaluationNameOption = new StringOption("evaluationName", 'n', "Identifier of the evaluation",
 			"KafkaTask" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
+        
+    private final String inTopic;
+    private final String outTopic;
 
 	/**
      * Class constructor
@@ -88,12 +90,13 @@ public class KafkaTask implements Task, Configurable {
      * @param serializer Implementation of KafkaSerializer that handles arriving data serialization
      * @param serializer Implementation of KafkaDeserializer that handles arriving data deserialization
      */
-	public KafkaTask(Properties producerProps, Properties consumerProps, String topic, int timeout, KafkaSerializer serializer, KafkaDeserializer deserializer) {
+	public KafkaTask(Properties producerProps, Properties consumerProps, String inTopic, String outTopic, int timeout, KafkaSerializer serializer, KafkaDeserializer deserializer) {
 		this.producerProps = producerProps;
 		this.consumerProps = consumerProps;
 		this.deserializer = deserializer;
 		this.serializer = serializer;
-		this.topic = topic;
+		this.inTopic = inTopic;
+                this.outTopic = outTopic;
 		this.timeout = timeout;
 	}
 
@@ -109,14 +112,14 @@ public class KafkaTask implements Task, Configurable {
 		}
 		
 		// create enterance processor
-		KafkaEntranceProcessor sourceProcessor = new KafkaEntranceProcessor(consumerProps, topic, timeout, deserializer);
+		KafkaEntranceProcessor sourceProcessor = new KafkaEntranceProcessor(consumerProps, inTopic, timeout, deserializer);
 		builder.addEntranceProcessor(sourceProcessor);
 		
 		// create stream
 		Stream stream = builder.createStream(sourceProcessor);
 		
 		// create destination processor
-		KafkaDestinationProcessor destProcessor = new KafkaDestinationProcessor(producerProps, topic, serializer);
+		KafkaDestinationProcessor destProcessor = new KafkaDestinationProcessor(producerProps, outTopic, serializer);
 		builder.addProcessor(destProcessor, kafkaParallelismOption.getValue());
 		builder.connectInputShuffleStream(stream, destProcessor);
 		
