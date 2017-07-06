@@ -31,11 +31,6 @@ import org.apache.avro.generic.GenericData.EnumSymbol;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.DatumReader;
 
-/**
- * Load Data from Avro Stream and parse to corresponding Dense & Parse Instances Abstract Class: Subclass this class for
- * different types of Avro Encodings
- *
- */
 public abstract class AvroLoader implements Loader {
 
   private static final long serialVersionUID = 1L;
@@ -133,11 +128,7 @@ public abstract class AvroLoader implements Loader {
    */
 
   private void setDenseValue(Instance instance, int numAttribute, double valueAttribute) {
-
-    if (this.instanceInformation.classIndex() == numAttribute)
-      instance.setClassValue(valueAttribute);
-    else
-      instance.setValue(numAttribute, valueAttribute);
+    instance.setValue(numAttribute, valueAttribute);
   }
 
   /**
@@ -267,16 +258,16 @@ public abstract class AvroLoader implements Loader {
 
   private boolean isNumeric(Field field) {
     if (field.schema().getType() == Schema.Type.DOUBLE
-            || field.schema().getType() == Schema.Type.FLOAT
-            || field.schema().getType() == Schema.Type.LONG
-            || field.schema().getType() == Schema.Type.INT)
+        || field.schema().getType() == Schema.Type.FLOAT
+        || field.schema().getType() == Schema.Type.LONG
+        || field.schema().getType() == Schema.Type.INT)
       return true;
     if (field.schema().getType() == Schema.Type.UNION) {
       for (Schema schema: field.schema().getTypes()) {
         if (schema.getType() == Schema.Type.DOUBLE
-                || schema.getType() == Schema.Type.FLOAT
-                || schema.getType() == Schema.Type.LONG
-                || schema.getType() == Schema.Type.INT)
+            || schema.getType() == Schema.Type.FLOAT
+            || schema.getType() == Schema.Type.LONG
+            || schema.getType() == Schema.Type.INT)
           return true;
       }
     }

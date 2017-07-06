@@ -20,22 +20,6 @@ package org.apache.samoa.instances;
  * #L%
  */
 
-import java.io.Serializable;
-
-public interface Loader extends Serializable {
-
-  /**
-   * Fetch the Meta-data from the data
-   * 
-   * @return InstanceInformation
-   */
-  public InstanceInformation getStructure();
-
-  /**
-   * Read a single instance from the Stream
-   * 
-   * @return Instance
-   */
-  public Instance readInstance();
+public interface MultiLabelInstance extends Instance {
 
 }

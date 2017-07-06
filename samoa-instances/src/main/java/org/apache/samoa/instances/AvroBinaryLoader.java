@@ -29,9 +29,6 @@ import org.apache.avro.generic.GenericRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Load Data from Binary Avro Stream and parse to corresponding Dense & Parse Instances
- */
 public class AvroBinaryLoader extends AvroLoader {
 
   private static final long serialVersionUID = 1L;

@@ -34,9 +34,6 @@ import org.apache.avro.io.DecoderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Load Data from JSON Avro Stream and parse to corresponding Dense & Parse Instances
- */
 public class AvroJsonLoader extends AvroLoader {
 
   private static final long serialVersionUID = 1L;
