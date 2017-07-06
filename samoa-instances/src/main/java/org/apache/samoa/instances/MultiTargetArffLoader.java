@@ -20,22 +20,28 @@ package org.apache.samoa.instances;
  * #L%
  */
 
-import java.io.Serializable;
+import java.io.Reader;
 
-public interface Loader extends Serializable {
+public class MultiTargetArffLoader extends ArffLoader {
 
-  /**
-   * Fetch the Meta-data from the data
-   * 
-   * @return InstanceInformation
-   */
-  public InstanceInformation getStructure();
+  public MultiTargetArffLoader(Reader reader) {
+    super(reader);
+  }
 
-  /**
-   * Read a single instance from the Stream
-   * 
-   * @return Instance
-   */
-  public Instance readInstance();
+  public MultiTargetArffLoader(Reader reader, Range range) {
+    super(reader, range);
+  }
 
+  @Override
+  protected Instance newSparseInstance(double d, double[] res) {
+    return new SparseInstance(d, res); // TODO
+  }
+
+  @Override
+  protected Instance newDenseInstance(int numAttributes) {
+    // numAttributes is this.instanceInformation.numAttributes()
+    this.range.setUpper(numAttributes);
+    return new DenseInstance(numAttributes);
+  }
+  
 }

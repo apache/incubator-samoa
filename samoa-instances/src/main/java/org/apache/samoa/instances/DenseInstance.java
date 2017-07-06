@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.apache.samoa.instances;
 
 /*
@@ -24,65 +20,42 @@ package org.apache.samoa.instances;
  * #L%
  */
 
-import java.text.SimpleDateFormat;
+public class DenseInstance extends InstanceImpl {
 
-/**
- * @author abifet
- */
-public class DenseInstance extends SingleLabelInstance {
-
-  private static final long serialVersionUID = 280360594027716737L;
-
-  public DenseInstance() {
-    // necessary for kryo serializer
-  }
-
+  /**
+   * Instantiates a new dense instance.
+   *
+   * @param weight the weight
+   * @param res the res
+   */
   public DenseInstance(double weight, double[] res) {
     super(weight, res);
   }
 
-  public DenseInstance(SingleLabelInstance inst) {
+  /**
+   * Instantiates a new dense instance.
+   *
+   * @param inst the inst
+   */
+  public DenseInstance(InstanceImpl inst) {
     super(inst);
   }
 
+  /**
+   * Instantiates a new dense instance.
+   *
+   * @param inst the inst
+   */
   public DenseInstance(Instance inst) {
-    super((SingleLabelInstance) inst);
+    super((InstanceImpl) inst);
   }
 
+  /**
+   * Instantiates a new dense instance.
+   *
+   * @param numberAttributes the number attributes
+   */
   public DenseInstance(double numberAttributes) {
     super((int) numberAttributes);
-    // super(1, new double[(int) numberAttributes-1]);
-    // Add missing values
-    // for (int i = 0; i < numberAttributes-1; i++) {
-    // //this.setValue(i, Double.NaN);
-    // }
-
-  }
-
-  @Override
-  public String toString() {
-    StringBuffer text = new StringBuffer();
-
-    //append all attributes except the class attribute.
-    for (int attIndex = 0; attIndex < this.numAttributes()-1; attIndex++) {
-      if (!this.isMissing(attIndex)) {
-        if (this.attribute(attIndex).isNominal()) {
-          int valueIndex = (int) this.value(attIndex);
-          String stringValue = this.attribute(attIndex).value(valueIndex);
-          text.append(stringValue).append(",");
-        } else if (this.attribute(attIndex).isNumeric()) {
-          text.append(this.value(attIndex)).append(",");
-        } else if (this.attribute(attIndex).isDate()) {
-          SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-          text.append(dateFormatter.format(this.value(attIndex))).append(",");
-        }
-      } else {
-        text.append("?,");
-      }
-    }
-    //append the class value at the end of the instance.
-    text.append(this.classAttribute().value((int)classValue()));
-
-    return text.toString();
   }
 }
