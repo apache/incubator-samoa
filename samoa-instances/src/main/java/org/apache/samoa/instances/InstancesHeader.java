@@ -20,12 +20,6 @@ package org.apache.samoa.instances;
  * #L%
  */
 
-/**
- * Class for storing the header or context of a data stream. It allows to know the number of attributes and classes.
- * 
- * @author Richard Kirkby (rkirkby@cs.waikato.ac.nz)
- * @version $Revision: 7 $
- */
 public class InstancesHeader extends Instances {
 
   private static final long serialVersionUID = 1L;
@@ -37,14 +31,6 @@ public class InstancesHeader extends Instances {
   public InstancesHeader() {
     super();
   }
-
-  /*
-   * @Override public boolean add(Instance i) { throw new
-   * UnsupportedOperationException(); }
-   * 
-   * @Override public boolean readInstance(Reader r) throws IOException { throw
-   * new UnsupportedOperationException(); }
-   */
 
   public static String getClassNameString(InstancesHeader context) {
     if (context == null) {
@@ -59,7 +45,7 @@ public class InstancesHeader extends Instances {
       return "<class " + (classLabelIndex + 1) + ">";
     }
     return "<class " + (classLabelIndex + 1) + ":"
-        + context.classAttribute().value(classLabelIndex) + ">";
+    + context.classAttribute().value(classLabelIndex) + ">";
   }
 
   // is impervious to class index changes - attIndex is true attribute index
@@ -72,7 +58,17 @@ public class InstancesHeader extends Instances {
     int instAttIndex = attIndex < context.classIndex() ? attIndex
         : attIndex + 1;
     return "[att " + (attIndex + 1) + ":"
-        + context.attribute(instAttIndex).name() + "]";
+    + context.attribute(instAttIndex).name() + "]";
+  }
+
+  public static String getInputAttributeNameString(InstancesHeader context,
+      int attIndex) {
+    if ((context == null) || (attIndex >= context.numInputAttributes())) {
+      return "[att " + (attIndex + 1) + "]";
+    }
+    int instAttIndex = attIndex;
+    return "[att " + (attIndex + 1) + ":"
+    + context.inputAttribute(instAttIndex).name() + "]";
   }
 
   // is impervious to class index changes - attIndex is true attribute index
@@ -107,17 +103,23 @@ public class InstancesHeader extends Instances {
     return Double.toString(value);
   }
 
-  // add autom.
-  /*
-   * public int classIndex() { throw new
-   * UnsupportedOperationException("Not yet implemented"); }
-   * 
-   * public int numAttributes() { throw new
-   * UnsupportedOperationException("Not yet implemented"); }
-   * 
-   * @Override public Attribute attribute(int nPos) { throw new
-   * UnsupportedOperationException("Not yet implemented"); }
-   * 
-   * public int numClasses() { return 0; }
-   */
+  public Attribute inputAttribute(int w) {
+    return this.instanceInformation.inputAttribute(w);
+  }
+
+  public Attribute outputAttribute(int w) {
+    return this.instanceInformation.outputAttribute(w);
+  }
+
+  public int numInputAttributes() {
+    return this.instanceInformation.numInputAttributes();
+  }
+
+  public int numOutputAttributes() {
+    return this.instanceInformation.numOutputAttributes();
+  }
+
+  public InstanceInformation getInstanceInformation() {
+    return this.instanceInformation;
+  }
 }

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.apache.samoa.instances;
 
 /*
@@ -26,30 +22,90 @@ package org.apache.samoa.instances;
 
 import java.io.Serializable;
 
-/**
- * 
- * @author abifet
- */
 public interface InstanceData extends Serializable {
 
+  /**
+   * Num attributes.
+   *
+   * @return the int
+   */
   public int numAttributes();
 
+  /**
+   * Value.
+   *
+   * @param instAttIndex the inst att index
+   * @return the double
+   */
   public double value(int instAttIndex);
 
+  /**
+   * Checks if is missing.
+   *
+   * @param instAttIndex the inst att index
+   * @return true, if is missing
+   */
   public boolean isMissing(int instAttIndex);
 
+  /**
+   * Num values.
+   *
+   * @return the int
+   */
   public int numValues();
 
+  /**
+   * Index.
+   *
+   * @param i the i
+   * @return the int
+   */
   public int index(int i);
 
+  /**
+   * Value sparse.
+   *
+   * @param i the i
+   * @return the double
+   */
   public double valueSparse(int i);
 
+  /**
+   * Checks if is missing sparse.
+   *
+   * @param p1 the p1
+   * @return true, if is missing sparse
+   */
   public boolean isMissingSparse(int p1);
 
-  // public double value(Attribute attribute);
-
+  /**
+   * To double array.
+   *
+   * @return the double[]
+   */
   public double[] toDoubleArray();
 
+  /**
+   * Sets the value.
+   *
+   * @param m_numAttributes the m_num attributes
+   * @param d the d
+   */
   public void setValue(int m_numAttributes, double d);
+
+
+  /**
+   * Deletes an attribute.
+   *
+   * @param index the indes
+   */
+  public void deleteAttributeAt(int index);
+
+  /**
+   * Produces a shallow copy of this instance data. 
+   * 
+   * @return the shallow copy
+   */
+  public InstanceData copy();
 
 }
