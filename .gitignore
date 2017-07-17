@@ -13,3 +13,4 @@ target/
 .idea/
 *.iml
 *.iws
+/samoa-api/nbproject/

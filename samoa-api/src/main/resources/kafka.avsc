@@ -1,0 +1,106 @@
+[
+{
+  "namespace": "org.apache.samoa.streams.kafka.temp",
+  "type": "record",
+  "name": "BurrTest",
+  "fields": [
+		{"name":"name", "type": "string"},
+		{"name":"atrs", "type": {"type": "array", "items": "string"}},
+		{"name":"nums", "type": {"type": "array", "items": "int"}},
+		{"name":"list", "type": {"type": "array", "items": "string"}}
+	]
+},
+{
+  "namespace": "org.apache.samoa.instances",
+  "type": "record",
+  "name": "Instance",
+  "fields": [
+	]
+},
+{
+  "namespace": "org.apache.samoa.instances",
+  "type": "record",
+  "name": "InstanceData",
+  "fields": [
+	]
+},
+{
+  "namespace": "org.apache.samoa.instances",
+  "type": "record",
+  "name": "SingleClassInstanceData",
+  "fields": [
+		{"name":"classValue", "type": "double"}
+	]
+},
+{
+  "namespace": "org.apache.samoa.instances",
+  "type": "record",
+  "name": "DenseInstanceData",
+  "fields": [
+		{"name":"attributeValues", "type": {"type": "array", "items": "double"}}
+	]
+},
+{
+  "namespace": "org.apache.samoa.instances",
+  "type": "record",
+  "name": "SparseInstanceData",
+  "fields": [
+		{"name":"attributeValues", "type": {"type": "array", "items": "double"}},
+		{"name":"indexValues", "type": {"type": "array", "items": "int"}},
+		{"name":"numberAttributes", "type": "int"}
+	]
+},
+{
+  "namespace": "org.apache.samoa.instances",
+  "type": "record",
+  "name": "SingleLabelInstance",
+  "fields": [
+		{"name": "weight", "type": "double"},
+		{"name": "instanceData", "type": ["null", "org.apache.samoa.instances.InstanceData", "org.apache.samoa.instances.DenseInstanceData", "org.apache.samoa.instances.SparseInstanceData", "org.apache.samoa.instances.SingleClassInstanceData"]},
+		{"name": "classData", "type": ["null", "org.apache.samoa.instances.InstanceData", "org.apache.samoa.instances.DenseInstanceData", "org.apache.samoa.instances.SparseInstanceData", "org.apache.samoa.instances.SingleClassInstanceData"]}
+	]
+},
+{
+  "namespace": "org.apache.samoa.instances",
+  "type": "record",
+  "name": "DenseInstance",
+  "fields": [
+		{"name": "weight", "type": "double"},
+		{"name": "instanceData", "type": ["null", "org.apache.samoa.instances.InstanceData", "org.apache.samoa.instances.DenseInstanceData", "org.apache.samoa.instances.SparseInstanceData", "org.apache.samoa.instances.SingleClassInstanceData"]},
+		{"name": "classData", "type": ["null", "org.apache.samoa.instances.InstanceData", "org.apache.samoa.instances.DenseInstanceData", "org.apache.samoa.instances.SparseInstanceData", "org.apache.samoa.instances.SingleClassInstanceData"]}
+	]
+},
+{
+  "namespace": "org.apache.samoa.core",
+  "type": "record",
+  "name": "SerializableInstance",
+  "fields": [
+		{"name": "weight", "type": "double"},
+		{"name": "instanceData", "type": ["null", "org.apache.samoa.instances.InstanceData", "org.apache.samoa.instances.DenseInstanceData", "org.apache.samoa.instances.SparseInstanceData", "org.apache.samoa.instances.SingleClassInstanceData"]},
+		{"name": "classData", "type": ["null", "org.apache.samoa.instances.InstanceData", "org.apache.samoa.instances.DenseInstanceData", "org.apache.samoa.instances.SparseInstanceData", "org.apache.samoa.instances.SingleClassInstanceData"]}
+	]
+},
+{
+  "namespace": "org.apache.samoa.learners",
+  "type": "record",
+  "name": "InstanceContent",
+  "fields": [
+		{"name": "instanceIndex", "type": "long"},
+		{"name": "classifierIndex", "type": "int"},
+		{"name": "evaluationIndex", "type": "int"},
+		{"name":"instance", "type":"org.apache.samoa.core.SerializableInstance"},
+		{"name": "isTraining", "type": "boolean"},
+		{"name": "isTesting", "type": "boolean"},
+		{"name": "isLast", "type": "boolean"}
+	]
+},
+{
+ "namespace": "org.apache.samoa.learners",
+ "type": "record",
+ "name": "InstanceContentEvent",
+ "fields": [
+     {"name": "instanceContent", "type": "org.apache.samoa.learners.InstanceContent"}
+ ]
+}
+]
+   
