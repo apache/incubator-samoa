@@ -20,8 +20,7 @@ package org.apache.samoa.learners.classifiers.rules.distributed;
  * #L%
  */
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.core.Processor;
@@ -56,7 +55,7 @@ public class AMRRuleSetProcessor implements Processor {
   private int processorId;
 
   // Rules & default rule
-  protected transient List<PassiveRule> ruleSet;
+  protected transient CopyOnWriteArrayList<PassiveRule> ruleSet;
 
   // SAMOA Stream
   private Stream statisticsStream;
@@ -251,7 +250,7 @@ public class AMRRuleSetProcessor implements Processor {
   @Override
   public void onCreate(int id) {
     this.processorId = id;
-    this.ruleSet = new LinkedList<PassiveRule>();
+    this.ruleSet = new CopyOnWriteArrayList<PassiveRule>();
 
   }
 
