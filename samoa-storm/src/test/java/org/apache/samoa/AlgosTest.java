@@ -68,7 +68,7 @@ public class AlgosTest {
 
   }
 
-  @Test(timeout = 120000)
+  @Test(timeout = 240000)
   public void testCVPReqVHTWithStorm() throws Exception {
 
     TestParams vhtConfig = new TestParams.Builder()
