@@ -52,18 +52,20 @@ public class StormSamoaUtils {
 
   static Properties getProperties() throws IOException {
     Properties props = new Properties();
-    InputStream is;
+    InputStream is = null;
 
-    File f = new File("src/main/resources/samoa-storm-cluster.properties"); // FIXME it does not exist anymore
-    is = new FileInputStream(f);
+    File f = new File("../bin/samoa-storm.properties");
 
     try {
+      is = new FileInputStream(f);
       props.load(is);
     } catch (IOException e1) {
-      System.out.println("Fail to load property file");
+      System.out.println("Fail to load samoa-storm property file");
       return null;
     } finally {
-      is.close();
+      if (is != null) {
+        is.close();
+      }
     }
 
     return props;

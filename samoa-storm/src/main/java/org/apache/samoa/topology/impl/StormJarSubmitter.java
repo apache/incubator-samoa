@@ -66,7 +66,7 @@ public class StormJarSubmitter {
     Properties props = StormSamoaUtils.getProperties();
     props.setProperty(StormJarSubmitter.UPLOADED_JAR_LOCATION_KEY, uploadedJarLocation);
 
-    File f = new File("src/main/resources/samoa-storm-cluster.properties");
+    File f = new File("../bin/samoa-storm.properties");
     f.createNewFile();
 
     OutputStream out = new FileOutputStream(f);
