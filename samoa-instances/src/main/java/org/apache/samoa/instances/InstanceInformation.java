@@ -53,7 +53,8 @@ public class InstanceInformation implements Serializable {
   /**
    * Instantiates a new instance information.
    *
-   * @param chunk the chunk
+   * @param chunk
+   *          the chunk
    */
   public InstanceInformation(InstanceInformation chunk) {
     this.relationName = chunk.relationName;
@@ -64,8 +65,10 @@ public class InstanceInformation implements Serializable {
   /**
    * Instantiates a new instance information.
    *
-   * @param st the st
-   * @param v the v
+   * @param st
+   *          the st
+   * @param input
+   *          the input
    */
   public InstanceInformation(String st, List<Attribute> input) {
     this.relationName = st;
@@ -141,29 +144,29 @@ public class InstanceInformation implements Serializable {
    * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#deleteAttributeAt(java.lang.Integer)
    */
   public void deleteAttributeAt(Integer integer) {
-    throw new UnsupportedOperationException("Not yet implemented");
+    this.attributesInformation.deleteAttributeAt(integer);
   }
 
   /* (non-Javadoc)
    * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#insertAttributeAt(com.yahoo.labs.samoa.instances.Attribute, int)
    */
   public void insertAttributeAt(Attribute attribute, int i) {
-    throw new UnsupportedOperationException("Not yet implemented");
+    this.attributesInformation.insertAttributeAt(attribute, i);
   }
 
   public void setAttributes(List<Attribute> v) {
-    if(this.attributesInformation==null)
-      this.attributesInformation= new AttributesInformation();
+    if (this.attributesInformation == null)
+      this.attributesInformation = new AttributesInformation();
     this.attributesInformation.setAttributes(v);
   }
 
   public int inputAttributeIndex(int index) {
     int ret = 0;
     if (classIndex == Integer.MAX_VALUE) {//Multi Label
-      if(index<range.getStart())//JD
-        ret= index;
-      else 
-        ret= index+range.getSelectionLength();
+      if (index < range.getStart())//JD
+        ret = index;
+      else
+        ret = index + range.getSelectionLength();
 
     } else { //Single Label
       ret = classIndex() > index ? index : index + 1;
@@ -174,7 +177,7 @@ public class InstanceInformation implements Serializable {
   public int outputAttributeIndex(int attributeIndex) {
     int ret = 0;
     if (classIndex == Integer.MAX_VALUE) {//Multi Label
-      ret=attributeIndex+range.getStart(); //JD - Range should be a "block"
+      ret = attributeIndex + range.getStart(); //JD - Range should be a "block"
     } else { //Single Label
       ret = classIndex;
     }
@@ -184,7 +187,7 @@ public class InstanceInformation implements Serializable {
   public int numInputAttributes() {
     int ret = 0;
     if (classIndex == Integer.MAX_VALUE) {//Multi Label
-      ret=this.numAttributes()-range.getSelectionLength(); //JD
+      ret = this.numAttributes() - range.getSelectionLength(); //JD
     } else { //Single Label
       ret = this.numAttributes() - 1;
     }
@@ -194,7 +197,7 @@ public class InstanceInformation implements Serializable {
   public int numOutputAttributes() {
     int ret = 0;
     if (classIndex == Integer.MAX_VALUE) {//Multi Label
-      ret=range.getSelectionLength(); //JD
+      ret = range.getSelectionLength(); //JD
     } else { //Single Label
       ret = 1;
     }
@@ -207,9 +210,9 @@ public class InstanceInformation implements Serializable {
   }
 
   public void setAttributes(List<Attribute> v, List<Integer> indexValues) {
-    if(this.attributesInformation==null)
-      this.attributesInformation= new AttributesInformation();
-    this.attributesInformation.setAttributes(v,indexValues);
+    if (this.attributesInformation == null)
+      this.attributesInformation = new AttributesInformation();
+    this.attributesInformation.setAttributes(v, indexValues);
 
   }
 

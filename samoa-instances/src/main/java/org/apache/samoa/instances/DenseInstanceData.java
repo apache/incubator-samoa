@@ -20,12 +20,13 @@ package org.apache.samoa.instances;
  * #L%
  */
 
-public class DenseInstanceData implements InstanceData{
+public class DenseInstanceData implements InstanceData {
 
   /**
    * Instantiates a new dense instance data.
    *
-   * @param array the array
+   * @param array
+   *          the array
    */
   public DenseInstanceData(double[] array) {
     this.attributeValues = array;
@@ -34,7 +35,8 @@ public class DenseInstanceData implements InstanceData{
   /**
    * Instantiates a new dense instance data.
    *
-   * @param length the length
+   * @param length
+   *          the length
    */
   public DenseInstanceData(int length) {
     this.attributeValues = new double[length];
@@ -63,21 +65,23 @@ public class DenseInstanceData implements InstanceData{
   /**
    * Value.
    *
-   * @param indexAttribute the index attribute
+   * @param indexAttribute
+   *          the index attribute
    * @return the double
    */
   @Override
   public double value(int indexAttribute) {
-	if (this.attributeValues.length <= indexAttribute)
-      return this.attributeValues[this.attributeValues.length-1];
-    
-	return this.attributeValues[indexAttribute];
+    if (this.attributeValues.length <= indexAttribute)
+      return this.attributeValues[this.attributeValues.length - 1];
+
+    return this.attributeValues[indexAttribute];
   }
 
   /**
    * Checks if is missing.
    *
-   * @param indexAttribute the index attribute
+   * @param indexAttribute
+   *          the index attribute
    * @return true, if is missing
    */
   @Override
@@ -98,7 +102,8 @@ public class DenseInstanceData implements InstanceData{
   /**
    * Index.
    *
-   * @param indexAttribute the index attribute
+   * @param indexAttribute
+   *          the index attribute
    * @return the int
    */
   @Override
@@ -109,7 +114,8 @@ public class DenseInstanceData implements InstanceData{
   /**
    * Value sparse.
    *
-   * @param indexAttribute the index attribute
+   * @param indexAttribute
+   *          the index attribute
    * @return the double
    */
   @Override
@@ -120,7 +126,8 @@ public class DenseInstanceData implements InstanceData{
   /**
    * Checks if is missing sparse.
    *
-   * @param indexAttribute the index attribute
+   * @param indexAttribute
+   *          the index attribute
    * @return true, if is missing sparse
    */
   @Override
@@ -141,8 +148,10 @@ public class DenseInstanceData implements InstanceData{
   /**
    * Sets the value.
    *
-   * @param attributeIndex the attribute index
-   * @param d the d
+   * @param attributeIndex
+   *          the attribute index
+   * @param d
+   *          the d
    */
   @Override
   public void setValue(int attributeIndex, double d) {
@@ -160,6 +169,22 @@ public class DenseInstanceData implements InstanceData{
           attributeValues.length - (index + 1));
     }
     attributeValues = newValues;
+  }
+
+  @Override
+  public void insertAttributeAt(int index) {
+    if ((index < 0) || (index > numAttributes())) {
+      throw new IllegalArgumentException("Can't insert attribute: index out "
+          + "of range");
+    }
+    double[] newValues = new double[attributeValues.length + 1];
+
+    System.arraycopy(attributeValues, 0, newValues, 0, index);
+    newValues[index] = Double.NaN; //Missing Value
+    System.arraycopy(attributeValues, index, newValues, index + 1,
+        attributeValues.length - index);
+    attributeValues = newValues;
+
   }
 
   @Override

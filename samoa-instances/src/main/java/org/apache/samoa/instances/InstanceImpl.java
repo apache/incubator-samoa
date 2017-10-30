@@ -42,7 +42,8 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Instantiates a new instance.
    *
-   * @param inst the inst
+   * @param inst
+   *          the inst
    */
   public InstanceImpl(InstanceImpl inst) {
     this.weight = inst.weight;
@@ -54,8 +55,10 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Instantiates a new instance.
    *
-   * @param weight the weight
-   * @param res the res
+   * @param weight
+   *          the weight
+   * @param res
+   *          the res
    */
   public InstanceImpl(double weight, double[] res) {
     this.weight = weight;
@@ -66,10 +69,14 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Instantiates a new instance.
    *
-   * @param weight the weight
-   * @param attributeValues the attribute values
-   * @param indexValues the index values
-   * @param numberAttributes the number attributes
+   * @param weight
+   *          the weight
+   * @param attributeValues
+   *          the attribute values
+   * @param indexValues
+   *          the index values
+   * @param numberAttributes
+   *          the number attributes
    */
   public InstanceImpl(double weight, double[] attributeValues, int[] indexValues, int numberAttributes) {
     this.weight = weight;
@@ -79,8 +86,10 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Instantiates a new instance.
    *
-   * @param weight the weight
-   * @param instanceData the instance data
+   * @param weight
+   *          the weight
+   * @param instanceData
+   *          the instance data
    */
   public InstanceImpl(double weight, InstanceData instanceData) {
     this.weight = weight;
@@ -90,7 +99,8 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Instantiates a new instance.
    *
-   * @param numAttributes the num attributes
+   * @param numAttributes
+   *          the num attributes
    */
   public InstanceImpl(int numAttributes) {
     this.instanceData = new DenseInstanceData(new double[numAttributes]); //JD
@@ -110,7 +120,8 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Sets the weight.
    *
-   * @param weight the new weight
+   * @param weight
+   *          the new weight
    */
   @Override
   public void setWeight(double weight) {
@@ -120,7 +131,8 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Attribute.
    *
-   * @param instAttIndex the inst att index
+   * @param instAttIndex
+   *          the inst att index
    * @return the attribute
    */
   @Override
@@ -128,14 +140,15 @@ public class InstanceImpl implements MultiLabelInstance {
     return this.instanceHeader.attribute(instAttIndex);
   }
 
-  public int indexOfAttribute(Attribute attribute){
+  public int indexOfAttribute(Attribute attribute) {
     return this.instanceHeader.indexOf(attribute);
   }
 
   /**
    * Delete attribute at.
    *
-   * @param i the i
+   * @param i
+   *          the i
    */
   @Override
   public void deleteAttributeAt(int i) {
@@ -145,11 +158,12 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Insert attribute at.
    *
-   * @param i the i
+   * @param i
+   *          the i
    */
   @Override
   public void insertAttributeAt(int i) {
-    throw new UnsupportedOperationException("Not yet implemented");
+    this.instanceData.insertAttributeAt(i);
   }
 
   /**
@@ -165,7 +179,8 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Value.
    *
-   * @param instAttIndex the inst att index
+   * @param instAttIndex
+   *          the inst att index
    * @return the double
    */
   @Override
@@ -176,7 +191,8 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Checks if is missing.
    *
-   * @param instAttIndex the inst att index
+   * @param instAttIndex
+   *          the inst att index
    * @return true, if is missing
    */
   @Override
@@ -197,7 +213,8 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Index.
    *
-   * @param i the i
+   * @param i
+   *          the i
    * @return the int
    */
   @Override
@@ -208,7 +225,8 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Value sparse.
    *
-   * @param i the i
+   * @param i
+   *          the i
    * @return the double
    */
   @Override
@@ -219,7 +237,8 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Checks if is missing sparse.
    *
-   * @param p the p
+   * @param p
+   *          the p
    * @return true, if is missing sparse
    */
   @Override
@@ -230,7 +249,8 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * String value.
    *
-   * @param i the i
+   * @param i
+   *          the i
    * @return the string
    */
   @Override
@@ -251,8 +271,10 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Sets the value.
    *
-   * @param numAttribute the num attribute
-   * @param d the d
+   * @param numAttribute
+   *          the num attribute
+   * @param d
+   *          the d
    */
   @Override
   public void setValue(int numAttribute, double d) {
@@ -279,11 +301,11 @@ public class InstanceImpl implements MultiLabelInstance {
     int classIndex = instanceHeader.classIndex();
     //return classIndex != Integer.MAX_VALUE ? classIndex : 0;
     // return  ? classIndex : 0;
-    if(classIndex == Integer.MAX_VALUE)
-      if(this.instanceHeader.instanceInformation.range!=null)
-        classIndex=instanceHeader.instanceInformation.range.getStart();
+    if (classIndex == Integer.MAX_VALUE)
+      if (this.instanceHeader.instanceInformation.range != null)
+        classIndex = instanceHeader.instanceInformation.range.getStart();
       else
-        classIndex=0;
+        classIndex = 0;
     return classIndex;
   }
 
@@ -320,7 +342,8 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Sets the class value.
    *
-   * @param d the new class value
+   * @param d
+   *          the new class value
    */
   @Override
   public void setClassValue(double d) {
@@ -351,7 +374,8 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Sets the dataset.
    *
-   * @param dataset the new dataset
+   * @param dataset
+   *          the new dataset
    */
   @Override
   public void setDataset(Instances dataset) {
@@ -361,9 +385,12 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Adds the sparse values.
    *
-   * @param indexValues the index values
-   * @param attributeValues the attribute values
-   * @param numberAttributes the number attributes
+   * @param indexValues
+   *          the index values
+   * @param attributeValues
+   *          the attribute values
+   * @param numberAttributes
+   *          the number attributes
    */
   @Override
   public void addSparseValues(int[] indexValues, double[] attributeValues, int numberAttributes) {
@@ -454,7 +481,8 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Value.
    *
-   * @param attribute the attribute
+   * @param attribute
+   *          the attribute
    * @return the double
    */
   @Override
