@@ -34,7 +34,8 @@ public interface InstanceData extends Serializable {
   /**
    * Value.
    *
-   * @param instAttIndex the inst att index
+   * @param instAttIndex
+   *          the inst att index
    * @return the double
    */
   public double value(int instAttIndex);
@@ -42,7 +43,8 @@ public interface InstanceData extends Serializable {
   /**
    * Checks if is missing.
    *
-   * @param instAttIndex the inst att index
+   * @param instAttIndex
+   *          the inst att index
    * @return true, if is missing
    */
   public boolean isMissing(int instAttIndex);
@@ -57,7 +59,8 @@ public interface InstanceData extends Serializable {
   /**
    * Index.
    *
-   * @param i the i
+   * @param i
+   *          the i
    * @return the int
    */
   public int index(int i);
@@ -65,7 +68,8 @@ public interface InstanceData extends Serializable {
   /**
    * Value sparse.
    *
-   * @param i the i
+   * @param i
+   *          the i
    * @return the double
    */
   public double valueSparse(int i);
@@ -73,7 +77,8 @@ public interface InstanceData extends Serializable {
   /**
    * Checks if is missing sparse.
    *
-   * @param p1 the p1
+   * @param p1
+   *          the p1
    * @return true, if is missing sparse
    */
   public boolean isMissingSparse(int p1);
@@ -88,21 +93,31 @@ public interface InstanceData extends Serializable {
   /**
    * Sets the value.
    *
-   * @param m_numAttributes the m_num attributes
-   * @param d the d
+   * @param m_numAttributes
+   *          the m_num attributes
+   * @param d
+   *          the d
    */
   public void setValue(int m_numAttributes, double d);
-
 
   /**
    * Deletes an attribute.
    *
-   * @param index the indes
+   * @param index
+   *          the indes
    */
   public void deleteAttributeAt(int index);
 
   /**
-   * Produces a shallow copy of this instance data. 
+   * Inserts an attribute.
+   *
+   * @param index
+   *          the indes
+   */
+  public void insertAttributeAt(int index);
+
+  /**
+   * Produces a shallow copy of this instance data.
    * 
    * @return the shallow copy
    */

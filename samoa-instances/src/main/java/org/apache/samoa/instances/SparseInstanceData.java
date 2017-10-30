@@ -25,9 +25,12 @@ public class SparseInstanceData implements InstanceData {
   /**
    * Instantiates a new sparse instance data.
    *
-   * @param attributeValues the attribute values
-   * @param indexValues the index values
-   * @param numberAttributes the number attributes
+   * @param attributeValues
+   *          the attribute values
+   * @param indexValues
+   *          the index values
+   * @param numberAttributes
+   *          the number attributes
    */
   public SparseInstanceData(double[] attributeValues, int[] indexValues, int numberAttributes) {
     this.attributeValues = attributeValues;
@@ -38,7 +41,8 @@ public class SparseInstanceData implements InstanceData {
   /**
    * Instantiates a new sparse instance data.
    *
-   * @param length the length
+   * @param length
+   *          the length
    */
   public SparseInstanceData(int length) {
     this.attributeValues = new double[length];
@@ -62,7 +66,8 @@ public class SparseInstanceData implements InstanceData {
   /**
    * Sets the attribute values.
    *
-   * @param attributeValues the new attribute values
+   * @param attributeValues
+   *          the new attribute values
    */
   public void setAttributeValues(double[] attributeValues) {
     this.attributeValues = attributeValues;
@@ -80,7 +85,8 @@ public class SparseInstanceData implements InstanceData {
   /**
    * Sets the index values.
    *
-   * @param indexValues the new index values
+   * @param indexValues
+   *          the new index values
    */
   public void setIndexValues(int[] indexValues) {
     this.indexValues = indexValues;
@@ -98,7 +104,8 @@ public class SparseInstanceData implements InstanceData {
   /**
    * Sets the number of attributes.
    *
-   * @param numberAttributes the new number attributes
+   * @param numberAttributes
+   *          the new number attributes
    */
   public void setNumberAttributes(int numberAttributes) {
     this.numberAttributes = numberAttributes;
@@ -127,7 +134,8 @@ public class SparseInstanceData implements InstanceData {
   /**
    * Value.
    *
-   * @param indexAttribute the index attribute
+   * @param indexAttribute
+   *          the index attribute
    * @return the double
    */
   @Override
@@ -145,7 +153,8 @@ public class SparseInstanceData implements InstanceData {
   /**
    * Checks if is missing.
    *
-   * @param indexAttribute the index attribute
+   * @param indexAttribute
+   *          the index attribute
    * @return true, if is missing
    */
   @Override
@@ -166,7 +175,8 @@ public class SparseInstanceData implements InstanceData {
   /**
    * Index.
    *
-   * @param indexAttribute the index attribute
+   * @param indexAttribute
+   *          the index attribute
    * @return the int
    */
   @Override
@@ -177,7 +187,8 @@ public class SparseInstanceData implements InstanceData {
   /**
    * Value sparse.
    *
-   * @param indexAttribute the index attribute
+   * @param indexAttribute
+   *          the index attribute
    * @return the double
    */
   @Override
@@ -188,7 +199,8 @@ public class SparseInstanceData implements InstanceData {
   /**
    * Checks if is missing sparse.
    *
-   * @param indexAttribute the index attribute
+   * @param indexAttribute
+   *          the index attribute
    * @return true, if is missing sparse
    */
   @Override
@@ -213,8 +225,10 @@ public class SparseInstanceData implements InstanceData {
   /**
    * Sets the value.
    *
-   * @param attributeIndex the attribute index
-   * @param d the d
+   * @param attributeIndex
+   *          the attribute index
+   * @param d
+   *          the d
    */
   @Override
   public void setValue(int attributeIndex, double d) {
@@ -229,8 +243,7 @@ public class SparseInstanceData implements InstanceData {
   /**
    * Locates the greatest index that is not greater than the given index.
    *
-   * @return the internal index of the attribute index. Returns -1 if no index
-   * with this property could be found
+   * @return the internal index of the attribute index. Returns -1 if no index with this property could be found
    */
   public int locateIndex(int index) {
 
@@ -262,7 +275,8 @@ public class SparseInstanceData implements InstanceData {
   /**
    * Deletes an attribute at the given position (0 to numAttributes() - 1).
    * 
-   * @param pos the attribute's position
+   * @param position
+   *          the attribute's position
    */
   @Override
   public void deleteAttributeAt(int position) {
@@ -296,9 +310,46 @@ public class SparseInstanceData implements InstanceData {
   }
 
   @Override
-  public InstanceData copy() {
-    return new SparseInstanceData(this.attributeValues,this.indexValues,this.numberAttributes);
+  public void insertAttributeAt(int position) {
+    if ((position < 0) || (position > numAttributes())) {
+      throw new IllegalArgumentException("Can't insert attribute: index out "
+          + "of range");
+    }
+    int index = locateIndex(position);
+
+    this.numberAttributes++;
+    if ((index >= 0) && (indexValues[index] == position)) {
+      int[] tempIndices = new int[indexValues.length + 1];
+      double[] tempValues = new double[attributeValues.length + 1];
+      System.arraycopy(indexValues, 0, tempIndices, 0, index);
+      System.arraycopy(attributeValues, 0, tempValues, 0, index);
+      tempIndices[index] = position;
+      tempValues[index] = Double.NaN; //Missing Value
+      for (int i = index; i < indexValues.length; i++) {
+        tempIndices[i + 1] = indexValues[i] + 1;
+        tempValues[i + 1] = attributeValues[i];
+      }
+      indexValues = tempIndices;
+      attributeValues = tempValues;
+    } else {
+      int[] tempIndices = new int[indexValues.length + 1];
+      double[] tempValues = new double[attributeValues.length + 1];
+      System.arraycopy(indexValues, 0, tempIndices, 0, index + 1);
+      System.arraycopy(attributeValues, 0, tempValues, 0, index + 1);
+      tempIndices[index + 1] = position;
+      tempValues[index + 1] = Double.NaN; //Missing Value
+      for (int i = index + 1; i < indexValues.length; i++) {
+        tempIndices[i + 1] = indexValues[i] + 1;
+        tempValues[i + 1] = attributeValues[i];
+      }
+      indexValues = tempIndices;
+      attributeValues = tempValues;
+    }
   }
 
+  @Override
+  public InstanceData copy() {
+    return new SparseInstanceData(this.attributeValues, this.indexValues, this.numberAttributes);
+  }
 
 }
