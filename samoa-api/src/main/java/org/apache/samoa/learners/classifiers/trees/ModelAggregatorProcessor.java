@@ -417,6 +417,7 @@ final class ModelAggregatorProcessor implements Processor {
 
     if (leafNode == null) {
       leafNode = newLearningNode(this.parallelismHint);
+      foundNode.setNode(leafNode);
       foundNode.getParent().setChild(foundNode.getParentBranch(), leafNode);
       activeLeafNodeCount++;
     }
