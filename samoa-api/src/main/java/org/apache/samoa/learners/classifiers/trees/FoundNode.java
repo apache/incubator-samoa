@@ -34,7 +34,7 @@ final class FoundNode implements java.io.Serializable {
 	 */
   private static final long serialVersionUID = -637695387934143293L;
 
-  private final Node node;
+  private Node node;
   private final SplitNode parent;
   private final int parentBranch;
 
@@ -52,6 +52,17 @@ final class FoundNode implements java.io.Serializable {
    */
   Node getNode() {
     return this.node;
+  }
+
+  /**
+   * Method to set the node where an instance is routed/filtered through the decision tree model for testing and
+   * training. The method is expected to be used when the original FoundNode object had null node property.
+   * This is to add a reference to a newly established node object.
+   * 
+   * @param node  the node reference to be inserted
+   */
+  void setNode(Node node) {
+    this.node = node;
   }
 
   /**
