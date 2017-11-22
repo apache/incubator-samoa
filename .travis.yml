@@ -5,7 +5,7 @@ branches:
     - gh-pages
 
 jdk:
-- oraclejdk7
+- openjdk7
 
 install:
 - echo "<settings><servers><server><id>apache.snapshots.https</id><username>${SOSS_USERNAME}</username><password>${SOSS_PASSWORD}</password></server></servers></settings>" > ${HOME}/.m2/settings.xml
