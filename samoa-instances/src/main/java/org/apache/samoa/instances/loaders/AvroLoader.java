@@ -1,4 +1,4 @@
-package org.apache.samoa.instances;
+package org.apache.samoa.instances.loaders;
 
 /*
  * #%L
@@ -26,10 +26,14 @@ import java.util.List;
 
 import org.apache.avro.Schema;
 import org.apache.avro.Schema.Field;
-import org.apache.avro.SchemaBuilder;
 import org.apache.avro.generic.GenericData.EnumSymbol;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.DatumReader;
+import org.apache.samoa.instances.DenseInstance;
+import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.InstanceInformation;
+import org.apache.samoa.instances.SparseInstance;
+import org.apache.samoa.instances.Attribute;
 
 public abstract class AvroLoader implements Loader {
 
@@ -74,7 +78,7 @@ public abstract class AvroLoader implements Loader {
     int numAttribute = 0;
 
     for (Attribute attribute : attributes) {
-      Object value = record.get(attribute.name);
+      Object value = record.get(attribute.getName());
 
       boolean isNumeric = attributes.get(numAttribute).isNumeric();
       boolean isNominal = attributes.get(numAttribute).isNominal();
@@ -88,14 +92,14 @@ public abstract class AvroLoader implements Loader {
         else if (value instanceof Integer)
           this.setDenseValue(instance, numAttribute, (int) value);
         else
-          throw new RuntimeException("Invalid data type in the Avro data for Numeric Type : " + attribute.name);
+          throw new RuntimeException("Invalid data type in the Avro data for Numeric Type : " + attribute.getName());
       }
       else if (isNominal)
       {
         double valueAttribute;
 
         if (!(value instanceof EnumSymbol))
-          throw new RuntimeException("Invalid data type in the Avro data for Nominal Type : " + attribute.name);
+          throw new RuntimeException("Invalid data type in the Avro data for Nominal Type : " + attribute.getName());
 
         EnumSymbol enumSymbolalue = (EnumSymbol) value;
 
@@ -145,7 +149,7 @@ public abstract class AvroLoader implements Loader {
 
     for (Attribute attribute : attributes) {
       numAttribute++;
-      Object value = record.get(attribute.name);
+      Object value = record.get(attribute.getName());
 
       boolean isNumeric = attributes.get(numAttribute).isNumeric();
       boolean isNominal = attributes.get(numAttribute).isNominal();
@@ -167,14 +171,14 @@ public abstract class AvroLoader implements Loader {
         else if (value instanceof Integer)
           this.setSparseValue(instance, indexValues, attributeValues, numAttribute, (int) value);
         else
-          throw new RuntimeException(AVRO_LOADER_INVALID_TYPE_ERROR + " : " + attribute.name);
+          throw new RuntimeException(AVRO_LOADER_INVALID_TYPE_ERROR + " : " + attribute.getName());
       }
       else if (isNominal)
       {
         double valueAttribute;
 
         if (!(value instanceof EnumSymbol))
-          throw new RuntimeException(AVRO_LOADER_INVALID_TYPE_ERROR + " : " + attribute.name);
+          throw new RuntimeException(AVRO_LOADER_INVALID_TYPE_ERROR + " : " + attribute.getName());
 
         EnumSymbol enumSymbolalue = (EnumSymbol) value;
 

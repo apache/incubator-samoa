@@ -1,10 +1,10 @@
-package org.apache.samoa.instances;
+package org.apache.samoa.instances.loaders;
 
 /*
  * #%L
  * SAMOA
  * %%
- * Copyright (C) 2014 - 2015 Apache Software Foundation
+ * Copyright (C) 2014 - 2017 Apache Software Foundation
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,22 +20,22 @@ package org.apache.samoa.instances;
  * #L%
  */
 
-import java.io.Serializable;
 
-public interface Loader extends Serializable {
+public class LoaderFactory {
 
-  /**
-   * Fetch the Meta-data from the data
-   * 
-   * @return InstanceInformation
-   */
-  public InstanceInformation getStructure();
-
-  /**
-   * Read a single instance from the Stream
-   * 
-   * @return Instance
-   */
-  public Instance readInstance();
-
+    public Loader createLoader(LoaderType loaderType){
+        switch (loaderType){
+            case AVRO_JSON_LOADER:
+                break;
+            case AVRO_BINARY_LOADER:
+                break;
+            case JSON_LOADER:
+                break;
+            case ARFF_LOADER:
+                break;
+            case UNKNOWN:
+                break;
+        }
+        return null;
+    }
 }

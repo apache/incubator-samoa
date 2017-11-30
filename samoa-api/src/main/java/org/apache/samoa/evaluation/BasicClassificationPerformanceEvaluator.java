@@ -1,6 +1,5 @@
 package org.apache.samoa.evaluation;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.samoa.instances.Attribute;

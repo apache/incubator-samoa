@@ -37,7 +37,6 @@ import org.apache.samoa.moa.cluster.Clustering;
 import org.apache.samoa.moa.cluster.SphereCluster;
 import org.apache.samoa.moa.core.AutoExpandVector;
 import org.apache.samoa.moa.core.DataPoint;
-import org.apache.samoa.moa.core.FastVector;
 import org.apache.samoa.moa.core.InstanceExample;
 import org.apache.samoa.moa.core.ObjectRepository;
 import org.apache.samoa.moa.tasks.TaskMonitor;

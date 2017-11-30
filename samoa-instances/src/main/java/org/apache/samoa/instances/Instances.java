@@ -1,5 +1,7 @@
 package org.apache.samoa.instances;
 
+import org.apache.samoa.instances.loaders.*;
+
 import java.io.InputStream;
 
 /*
@@ -608,7 +610,7 @@ public class Instances implements Serializable {
    * @param att, the attribute.
    */
   protected int indexOf(Attribute att) {
-    if (this.hsAttributesIndices == null || !this.hsAttributesIndices.containsKey(att.name)) {
+    if (this.hsAttributesIndices == null || !this.hsAttributesIndices.containsKey(att.getName())) {
       computeAttributesIndices();
     }
 

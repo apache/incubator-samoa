@@ -1,4 +1,4 @@
-package org.apache.samoa.instances;
+package org.apache.samoa.instances.loaders;
 
 /*
  * #%L
@@ -19,6 +19,8 @@ package org.apache.samoa.instances;
  * limitations under the License.
  * #L%
  */
+
+import org.apache.samoa.instances.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -207,7 +209,7 @@ public class ArffLoader implements Loader {
   protected void setValue(Instance instance, int numAttribute, double value, boolean isNumber) {
     double valueAttribute;
 
-    if (isNumber && this.auxAttributes.get(numAttribute).isNominal) {
+    if (isNumber && this.auxAttributes.get(numAttribute).isNominal()) {
       valueAttribute = value;//this.auxAttributes.get(numAttribute).indexOfValue(Double.toString(value));
       //System.out.println(value +"/"+valueAttribute+" ");
 
@@ -294,7 +296,7 @@ public class ArffLoader implements Loader {
 
   private void setSparseValue(Instance instance, List<Integer> indexValues, List<Double> attributeValues, int numAttribute, double value, boolean isNumber) {
     double valueAttribute;
-    if (isNumber && this.auxAttributes.get(numAttribute).isNominal) {
+    if (isNumber && this.auxAttributes.get(numAttribute).isNominal()) {
       valueAttribute = this.auxAttributes.get(numAttribute).indexOfValue(Double.toString(value));
     } else {
       valueAttribute = value;

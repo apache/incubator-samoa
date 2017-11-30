@@ -20,9 +20,7 @@ package org.apache.samoa.instances;
  * #L%
  */
 
-import org.apache.samoa.instances.ArffLoader;
-import org.apache.samoa.instances.Instance;
-import org.apache.samoa.instances.InstanceInformation;
+import org.apache.samoa.instances.loaders.ArffLoader;
 import org.junit.Before;
 import org.junit.Test;
 
