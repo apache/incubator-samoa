@@ -25,6 +25,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.apache.samoa.instances.instances.Instances;
+import org.apache.samoa.instances.loaders.ArffLoader;
+import org.apache.samoa.instances.loaders.AvroBinaryLoader;
+import org.apache.samoa.instances.loaders.LoaderFactory;
+import org.apache.samoa.instances.loaders.LoaderType;
 import org.apache.samoa.moa.core.InstanceExample;
 import org.apache.samoa.moa.core.ObjectRepository;
 import org.apache.samoa.moa.tasks.TaskMonitor;
@@ -83,7 +87,13 @@ public class ArffFileStream extends FileStream {
       return false;
 
     this.fileReader = new BufferedReader(new InputStreamReader(this.inputStream));
-    this.instances = new Instances(this.fileReader, 1, -1);
+
+    LoaderFactory loaderFactory = new LoaderFactory();
+    ArffLoader arffLoader = (ArffLoader) loaderFactory.createLoader(LoaderType.ARFF_LOADER,  classIndexOption.getValue());
+    arffLoader.setupStreamTokenizer(this.fileReader, null);
+    this.instances = new Instances(arffLoader);
+
+    //this.instances = new Instances(this.fileReader, 1, -1);
     if (this.classIndexOption.getValue() < 0) {
       this.instances.setClassIndex(this.instances.numAttributes() - 1);
     } else if (this.classIndexOption.getValue() > 0) {

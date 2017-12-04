@@ -48,6 +48,10 @@ public class AvroJsonLoader extends AvroLoader {
     initializeSchema(inputStream);
   }
 
+  public AvroJsonLoader( int classAttribute) {
+    super(classAttribute);
+  }
+
   /* (non-Javadoc)
    * @see org.apache.samoa.instances.loaders.AvroLoader#initializeSchema(java.io.InputStream)
    */

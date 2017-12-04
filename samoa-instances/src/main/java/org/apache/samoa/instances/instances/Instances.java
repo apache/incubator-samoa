@@ -89,15 +89,26 @@ public class Instances implements Serializable {
   /**
    * Instantiates a new instances.
    *
+   * @param loader proper loader object.
+   */
+  public Instances(Loader loader) {
+    this.loader = loader;
+    this.instanceInformation = this.loader.getStructure();
+    this.instances = new ArrayList<>();
+  }
+//@TODO CG:  CLEAN UP
+  /**
+   * Instantiates a new instances.
+   *
    * @param reader the reader
    * @param size the size
    * @param classAttribute the class attribute
    */
-  public Instances(Reader reader, int size, int classAttribute) {
-    this.loader = new ArffLoader(reader, 0, classAttribute);
-    this.instanceInformation = loader.getStructure();
-    this.instances = new ArrayList<Instance>();
-  }
+//  public Instances(Reader reader, int size, int classAttribute) {
+//    this.loader = new ArffLoader(reader, 0, classAttribute);
+//    this.instanceInformation = loader.getStructure();
+//    this.instances = new ArrayList<>();
+//  }
 
   /**
    * Instantiates a new instances.
@@ -105,23 +116,23 @@ public class Instances implements Serializable {
    * @param reader the reader
    * @param range
    */
-  public Instances(Reader reader, Range range) {
-    this.loader = new ArffLoader(reader, 0, classAttribute);//new MultiTargetArffLoader(reader, range);
-    this.instanceInformation = loader.getStructure();
-    this.instances = new ArrayList<Instance>();
-  }
+//  public Instances(Reader reader, Range range) {
+//    this.loader = new ArffLoader(reader, 0, classAttribute);//new MultiTargetArffLoader(reader, range);
+//    this.instanceInformation = loader.getStructure();
+//    this.instances = new ArrayList<>();
+//  }
 
-  public Instances(InputStream inputStream, int classAttribute, String encodingFormat) {
-    this.classAttribute = classAttribute;
-
-    if (encodingFormat.equalsIgnoreCase(AVRO_ENCODING_FORMAT.BINARY.toString()))
-      loader = new AvroBinaryLoader(inputStream, classAttribute);
-    else
-      loader = new AvroJsonLoader(inputStream, classAttribute);
-
-    this.instanceInformation = loader.getStructure();
-    this.instances = new ArrayList<>();
-  }
+//  public Instances(InputStream inputStream, int classAttribute, String encodingFormat) {
+//    this.classAttribute = classAttribute;
+//
+//    if (encodingFormat.equalsIgnoreCase(AVRO_ENCODING_FORMAT.BINARY.toString()))
+//      loader = new AvroBinaryLoader(inputStream, classAttribute);
+//    else
+//      loader = new AvroJsonLoader(inputStream, classAttribute);
+//
+//    this.instanceInformation = loader.getStructure();
+//    this.instances = new ArrayList<>();
+//  }
 
   /**
    * Instantiates a new instances.

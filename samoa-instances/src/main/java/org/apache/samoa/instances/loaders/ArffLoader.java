@@ -64,6 +64,20 @@ public class ArffLoader implements Loader {
     }
   }
 
+  /**
+   * Instantiates a new arff loader.
+   *
+   * @param classAttribute the class attribute
+   */
+  public ArffLoader(int classAttribute) {
+    if (classAttribute < 0) {
+      this.instanceInformation.setClassIndex(this.instanceInformation.numAttributes() - 1);
+      //System.out.print(this.instanceInformation.classIndex());
+    } else if (classAttribute > 0) {
+      this.instanceInformation.setClassIndex(classAttribute - 1);
+    }
+  }
+
   protected Range range;
 
   /**
@@ -82,28 +96,52 @@ public class ArffLoader implements Loader {
    * @param range
    */
   public ArffLoader(Reader reader, Range range) {
-    this.range = range;
-    BufferedReader br = new BufferedReader(reader);
+      this.range = range;
+      BufferedReader br = new BufferedReader(reader);
 
-    //Init streamTokenizer
-    streamTokenizer = new StreamTokenizer(br);
-    streamTokenizer.resetSyntax();
-    streamTokenizer.whitespaceChars(0, ' ');
-    streamTokenizer.wordChars(' ' + 1, '\u00FF');
-    streamTokenizer.whitespaceChars(',', ',');
-    streamTokenizer.commentChar('%');
-    streamTokenizer.quoteChar('"');
-    streamTokenizer.quoteChar('\'');
-    streamTokenizer.ordinaryChar('{');
-    streamTokenizer.ordinaryChar('}');
-    streamTokenizer.eolIsSignificant(true);
+      //Init streamTokenizer
+      streamTokenizer = new StreamTokenizer(br);
+      streamTokenizer.resetSyntax();
+      streamTokenizer.whitespaceChars(0, ' ');
+      streamTokenizer.wordChars(' ' + 1, '\u00FF');
+      streamTokenizer.whitespaceChars(',', ',');
+      streamTokenizer.commentChar('%');
+      streamTokenizer.quoteChar('"');
+      streamTokenizer.quoteChar('\'');
+      streamTokenizer.ordinaryChar('{');
+      streamTokenizer.ordinaryChar('}');
+      streamTokenizer.eolIsSignificant(true);
 
-    this.instanceInformation = this.getHeader();
+      this.instanceInformation = this.getHeader();
 
-    if (range != null) { //is MultiLabel
-      this.instanceInformation.setRangeOutputIndices(range);
-    }
+      if (range != null) { //is MultiLabel
+        this.instanceInformation.setRangeOutputIndices(range);
+      }
 
+  }
+
+  public void setupStreamTokenizer(Reader reader, Range range){
+      this.range = range;
+      BufferedReader br = new BufferedReader(reader);
+
+      //Init streamTokenizer
+      streamTokenizer = new StreamTokenizer(br);
+      streamTokenizer.resetSyntax();
+      streamTokenizer.whitespaceChars(0, ' ');
+      streamTokenizer.wordChars(' ' + 1, '\u00FF');
+      streamTokenizer.whitespaceChars(',', ',');
+      streamTokenizer.commentChar('%');
+      streamTokenizer.quoteChar('"');
+      streamTokenizer.quoteChar('\'');
+      streamTokenizer.ordinaryChar('{');
+      streamTokenizer.ordinaryChar('}');
+      streamTokenizer.eolIsSignificant(true);
+
+      this.instanceInformation = this.getHeader();
+
+      if (range != null) { //is MultiLabel
+        this.instanceInformation.setRangeOutputIndices(range);
+      }
   }
 
   /**

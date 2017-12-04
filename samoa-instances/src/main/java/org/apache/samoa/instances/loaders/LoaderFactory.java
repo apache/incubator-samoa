@@ -21,18 +21,20 @@ package org.apache.samoa.instances.loaders;
  */
 
 
+
+
 public class LoaderFactory {
 
-    public Loader createLoader(LoaderType loaderType){
+    public Loader createLoader(LoaderType loaderType, int classAttribute){
         switch (loaderType){
             case AVRO_JSON_LOADER:
-                break;
+                return new AvroJsonLoader(classAttribute);
             case AVRO_BINARY_LOADER:
-                break;
+                return new AvroBinaryLoader(classAttribute);
             case JSON_LOADER:
                 break;
             case ARFF_LOADER:
-                break;
+                return  new ArffLoader(classAttribute);
             case UNKNOWN:
                 break;
         }
