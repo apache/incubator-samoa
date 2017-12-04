@@ -29,10 +29,10 @@ import org.apache.avro.Schema.Field;
 import org.apache.avro.generic.GenericData.EnumSymbol;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.DatumReader;
-import org.apache.samoa.instances.DenseInstance;
-import org.apache.samoa.instances.Instance;
-import org.apache.samoa.instances.InstanceInformation;
-import org.apache.samoa.instances.SparseInstance;
+import org.apache.samoa.instances.instances.DenseInstance;
+import org.apache.samoa.instances.instances.Instance;
+import org.apache.samoa.instances.instances.InstanceInformation;
+import org.apache.samoa.instances.instances.SparseInstance;
 import org.apache.samoa.instances.Attribute;
 
 public abstract class AvroLoader implements Loader {

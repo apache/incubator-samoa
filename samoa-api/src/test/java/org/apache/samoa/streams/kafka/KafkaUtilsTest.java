@@ -60,7 +60,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.utils.Time;
-import org.apache.samoa.instances.InstancesHeader;
+import org.apache.samoa.instances.instances.InstancesHeader;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;

@@ -1,4 +1,4 @@
-package org.apache.samoa.instances;
+package org.apache.samoa.instances.instances;
 
 /*
  * #%L
@@ -20,7 +20,7 @@ package org.apache.samoa.instances;
  * #L%
  */
 
-public class DenseInstanceData implements InstanceData{
+public class DenseInstanceData implements InstanceData {
 
   /**
    * Instantiates a new dense instance data.

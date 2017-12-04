@@ -20,7 +20,7 @@ package org.apache.samoa.moa.classifiers.rules.core;
  * #L%
  */
 
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 
 /**
  * Interface for a predicate (a feature) in rules.

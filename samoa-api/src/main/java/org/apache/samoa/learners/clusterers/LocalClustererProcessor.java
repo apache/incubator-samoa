@@ -24,10 +24,9 @@ package org.apache.samoa.learners.clusterers;
  */
 import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.core.Processor;
-import org.apache.samoa.evaluation.ClusteringEvaluationContentEvent;
 import org.apache.samoa.evaluation.ClusteringResultContentEvent;
-import org.apache.samoa.instances.DenseInstance;
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.DenseInstance;
+import org.apache.samoa.instances.instances.Instance;
 import org.apache.samoa.moa.cluster.Clustering;
 import org.apache.samoa.moa.core.DataPoint;
 import org.apache.samoa.topology.Stream;

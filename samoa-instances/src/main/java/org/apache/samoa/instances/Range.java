@@ -83,7 +83,7 @@ public class Range implements Serializable {
     return index;
   }
 
-  boolean isInRange(int value) {
+  public boolean isInRange(int value) {
     boolean ret = false;
     if (value >= start && value <= end) {
       ret = true;
@@ -91,7 +91,7 @@ public class Range implements Serializable {
     return ret;
   }
 
-  int getSelectionLength() {
+  public int getSelectionLength() {
     return end - start + 1;
   }
 

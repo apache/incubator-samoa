@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.apache.samoa.core.Processor;
-import org.apache.samoa.instances.Instances;
+import org.apache.samoa.instances.instances.Instances;
 import org.apache.samoa.topology.Stream;
 import org.apache.samoa.topology.TopologyBuilder;
 

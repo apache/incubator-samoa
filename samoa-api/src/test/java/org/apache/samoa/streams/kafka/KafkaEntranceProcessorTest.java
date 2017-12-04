@@ -34,12 +34,8 @@ package org.apache.samoa.streams.kafka;
  * limitations under the License.
  * #L%
  */
-import com.google.gson.Gson;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
@@ -67,7 +63,7 @@ import kafka.zk.EmbeddedZookeeper;
 import org.I0Itec.zkclient.ZkClient;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.samoa.instances.InstancesHeader;
+import org.apache.samoa.instances.instances.InstancesHeader;
 
 /**
  *

@@ -20,7 +20,7 @@ package org.apache.samoa.learners.classifiers.rules.common;
  * #L%
  */
 
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 import org.apache.samoa.moa.core.DoubleVector;
 
 /**

@@ -20,7 +20,7 @@ package org.apache.samoa.streams;
  * #L%
  */
 
-import org.apache.samoa.instances.InstancesHeader;
+import org.apache.samoa.instances.instances.InstancesHeader;
 import org.apache.samoa.moa.MOAObject;
 import org.apache.samoa.moa.core.Example;
 

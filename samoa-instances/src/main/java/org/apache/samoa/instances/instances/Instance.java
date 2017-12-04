@@ -1,4 +1,4 @@
-package org.apache.samoa.instances;
+package org.apache.samoa.instances.instances;
 
 /*
  * #%L
@@ -19,6 +19,8 @@ package org.apache.samoa.instances;
  * limitations under the License.
  * #L%
  */
+
+import org.apache.samoa.instances.Attribute;
 
 import java.io.Serializable;
 

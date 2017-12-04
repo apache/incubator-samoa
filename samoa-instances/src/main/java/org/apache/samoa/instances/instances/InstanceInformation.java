@@ -1,4 +1,4 @@
-package org.apache.samoa.instances;
+package org.apache.samoa.instances.instances;
 
 /*
  * #%L
@@ -19,6 +19,10 @@ package org.apache.samoa.instances;
  * limitations under the License.
  * #L%
  */
+
+import org.apache.samoa.instances.Attribute;
+import org.apache.samoa.instances.AttributesInformation;
+import org.apache.samoa.instances.Range;
 
 import java.io.Serializable;
 import java.util.List;
@@ -120,7 +124,7 @@ public class InstanceInformation implements Serializable {
    * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#numAttributes()
    */
   public int numAttributes() {
-    return this.attributesInformation.numberAttributes;
+    return this.attributesInformation.getNumberAttributes();
   }
 
   /* (non-Javadoc)
@@ -163,7 +167,7 @@ public class InstanceInformation implements Serializable {
       if(index < range.getStart())//JD
         ret = index;
       else 
-        ret = index+range.getSelectionLength();
+        ret = index + range.getSelectionLength();
 
     } else { //Single Label
       ret = classIndex() > index ? index : index + 1;

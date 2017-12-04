@@ -20,8 +20,8 @@ package org.apache.samoa.instances.loaders;
  * #L%
  */
 
-import org.apache.samoa.instances.Instance;
-import org.apache.samoa.instances.InstanceInformation;
+import org.apache.samoa.instances.instances.Instance;
+import org.apache.samoa.instances.instances.InstanceInformation;
 
 import java.io.Serializable;
 

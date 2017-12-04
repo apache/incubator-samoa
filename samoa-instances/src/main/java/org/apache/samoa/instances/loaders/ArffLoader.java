@@ -21,6 +21,7 @@ package org.apache.samoa.instances.loaders;
  */
 
 import org.apache.samoa.instances.*;
+import org.apache.samoa.instances.instances.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -20,7 +20,6 @@ package org.apache.samoa.evaluation;
  * #L%
  */
 import org.apache.samoa.core.*;
-import org.apache.samoa.instances.Instance;
 import org.apache.samoa.moa.cluster.Clustering;
 import org.apache.samoa.moa.core.DataPoint;
 

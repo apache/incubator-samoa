@@ -1,5 +1,8 @@
-package org.apache.samoa.instances;
+package org.apache.samoa.instances.instances;
 
+import org.apache.samoa.instances.Attribute;
+import org.apache.samoa.instances.Range;
+import org.apache.samoa.instances.Utils;
 import org.apache.samoa.instances.loaders.*;
 
 import java.io.InputStream;

@@ -25,7 +25,7 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 
 import org.apache.samoa.core.Processor;
-import org.apache.samoa.instances.Instances;
+import org.apache.samoa.instances.instances.Instances;
 import org.apache.samoa.learners.RegressionLearner;
 import org.apache.samoa.learners.classifiers.rules.distributed.AMRDefaultRuleProcessor;
 import org.apache.samoa.learners.classifiers.rules.distributed.AMRLearnerProcessor;

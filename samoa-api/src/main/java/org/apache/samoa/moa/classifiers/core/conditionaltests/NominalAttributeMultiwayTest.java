@@ -20,8 +20,8 @@ package org.apache.samoa.moa.classifiers.core.conditionaltests;
  * #L%
  */
 
-import org.apache.samoa.instances.Instance;
-import org.apache.samoa.instances.InstancesHeader;
+import org.apache.samoa.instances.instances.Instance;
+import org.apache.samoa.instances.instances.InstancesHeader;
 
 /**
  * Nominal multi way conditional test for instances to use to split nodes in Hoeffding trees.

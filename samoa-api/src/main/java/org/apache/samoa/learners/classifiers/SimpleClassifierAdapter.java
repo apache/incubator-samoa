@@ -22,9 +22,9 @@ package org.apache.samoa.learners.classifiers;
 /**
  * License
  */
-import org.apache.samoa.instances.Instance;
-import org.apache.samoa.instances.Instances;
-import org.apache.samoa.instances.InstancesHeader;
+import org.apache.samoa.instances.instances.Instance;
+import org.apache.samoa.instances.instances.Instances;
+import org.apache.samoa.instances.instances.InstancesHeader;
 import org.apache.samoa.moa.classifiers.functions.MajorityClass;
 
 import com.github.javacliparser.ClassOption;

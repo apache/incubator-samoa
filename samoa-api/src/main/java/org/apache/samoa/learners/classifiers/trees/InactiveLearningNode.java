@@ -20,7 +20,7 @@ package org.apache.samoa.learners.classifiers.trees;
  * #L%
  */
 
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 
 /**
  * Class that represents inactive learning node. Inactive learning node is a node which only keeps track of the observed

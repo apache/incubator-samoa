@@ -21,7 +21,7 @@ package org.apache.samoa.learners.classifiers.rules.distributed;
  */
 
 import org.apache.samoa.core.ContentEvent;
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 
 /**
  * Forwarded instances from Model Agrregator to Learners/Default Rule Learner.

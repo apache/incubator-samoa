@@ -20,11 +20,10 @@ package org.apache.samoa.instances.loaders;
  * #L%
  */
 
-import org.apache.samoa.instances.DenseInstance;
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.DenseInstance;
+import org.apache.samoa.instances.instances.Instance;
 import org.apache.samoa.instances.Range;
-import org.apache.samoa.instances.SparseInstance;
-import org.apache.samoa.instances.loaders.ArffLoader;
+import org.apache.samoa.instances.instances.SparseInstance;
 
 import java.io.Reader;
 

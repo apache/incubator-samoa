@@ -26,7 +26,7 @@ import java.io.InputStream;
 import org.apache.avro.file.DataFileStream;
 import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.generic.GenericRecord;
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

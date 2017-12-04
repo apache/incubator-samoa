@@ -22,7 +22,7 @@ package org.apache.samoa.moa.core;
 
 import java.io.Serializable;
 
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 
 public class InstanceExample implements Example<Instance>, Serializable {
 

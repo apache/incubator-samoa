@@ -22,7 +22,7 @@ package org.apache.samoa.learners.classifiers.rules;
 import java.util.Set;
 
 import org.apache.samoa.core.Processor;
-import org.apache.samoa.instances.Instances;
+import org.apache.samoa.instances.instances.Instances;
 import org.apache.samoa.learners.RegressionLearner;
 import org.apache.samoa.learners.classifiers.rules.distributed.AMRulesAggregatorProcessor;
 import org.apache.samoa.learners.classifiers.rules.distributed.AMRulesStatisticsProcessor;

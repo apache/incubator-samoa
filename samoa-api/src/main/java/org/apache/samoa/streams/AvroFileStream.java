@@ -21,9 +21,8 @@ package org.apache.samoa.streams;
  */
 
 import java.io.IOException;
-import java.io.InputStream;
 
-import org.apache.samoa.instances.Instances;
+import org.apache.samoa.instances.instances.Instances;
 import org.apache.samoa.moa.core.InstanceExample;
 import org.apache.samoa.moa.core.ObjectRepository;
 import org.apache.samoa.moa.tasks.TaskMonitor;
@@ -31,7 +30,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.javacliparser.FileOption;
-import com.github.javacliparser.IntOption;
 import com.github.javacliparser.StringOption;
 
 /**

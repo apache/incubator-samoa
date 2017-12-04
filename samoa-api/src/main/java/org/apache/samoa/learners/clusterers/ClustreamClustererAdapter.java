@@ -22,9 +22,9 @@ package org.apache.samoa.learners.clusterers;
 /**
  * License
  */
-import org.apache.samoa.instances.Instance;
-import org.apache.samoa.instances.Instances;
-import org.apache.samoa.instances.InstancesHeader;
+import org.apache.samoa.instances.instances.Instance;
+import org.apache.samoa.instances.instances.Instances;
+import org.apache.samoa.instances.instances.InstancesHeader;
 import org.apache.samoa.moa.cluster.Clustering;
 import org.apache.samoa.moa.clusterers.clustream.Clustream;
 
@@ -82,10 +82,7 @@ public class ClustreamClustererAdapter implements LocalClustererAdapter, Configu
   /**
    * Instantiates a new learner.
    * 
-   * @param learner
-   *          the learner
-   * @param dataset
-   *          the dataset
+   *
    */
   public ClustreamClustererAdapter() {
     this.learner = ((org.apache.samoa.moa.clusterers.Clusterer) this.learnerOption.getValue()).copy();

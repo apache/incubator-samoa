@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Random;
 
 import org.apache.samoa.core.ContentEvent;
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 import org.apache.samoa.learners.InstanceContentEvent;
 import org.apache.samoa.learners.ResultContentEvent;
 import org.apache.samoa.moa.core.DoubleVector;

@@ -20,8 +20,8 @@ package org.apache.samoa.moa.clusterers;
  * #L%
  */
 
-import org.apache.samoa.instances.Instance;
-import org.apache.samoa.instances.InstancesHeader;
+import org.apache.samoa.instances.instances.Instance;
+import org.apache.samoa.instances.instances.InstancesHeader;
 import org.apache.samoa.moa.MOAObject;
 import org.apache.samoa.moa.cluster.Clustering;
 import org.apache.samoa.moa.core.Measurement;

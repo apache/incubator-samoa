@@ -46,7 +46,7 @@ package org.apache.samoa.learners.classifiers.rules.common;
  * 
  *  */
 
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 import org.apache.samoa.moa.classifiers.AbstractClassifier;
 import org.apache.samoa.moa.classifiers.Regressor;
 import org.apache.samoa.moa.core.Measurement;

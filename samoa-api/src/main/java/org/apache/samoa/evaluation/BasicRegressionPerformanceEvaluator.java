@@ -20,7 +20,7 @@ package org.apache.samoa.evaluation;
  * #L%
  */
 
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
         import org.apache.samoa.moa.AbstractMOAObject;
 import org.apache.samoa.moa.core.Measurement;
 import org.apache.samoa.moa.core.Vote;
