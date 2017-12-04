@@ -32,13 +32,13 @@ public interface Loader extends Serializable {
    * 
    * @return InstanceInformation
    */
-  public InstanceInformation getStructure();
+  InstanceInformation getStructure();
 
   /**
    * Read a single instance from the Stream
    * 
    * @return Instance
    */
-  public Instance readInstance();
+  Instance readInstance();
 
 }
