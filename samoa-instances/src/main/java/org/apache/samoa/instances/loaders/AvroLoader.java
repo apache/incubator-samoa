@@ -198,8 +198,8 @@ public abstract class AvroLoader implements Loader {
     double[] arrayAttributeValues = new double[attributeValues.size()];
 
     for (int i = 0; i < arrayIndexValues.length; i++) {
-      arrayIndexValues[i] = indexValues.get(i).intValue();
-      arrayAttributeValues[i] = attributeValues.get(i).doubleValue();
+      arrayIndexValues[i] = indexValues.get(i);
+      arrayAttributeValues[i] = attributeValues.get(i);
     }
 
     instance.addSparseValues(arrayIndexValues, arrayAttributeValues, this.instanceInformation.numAttributes());

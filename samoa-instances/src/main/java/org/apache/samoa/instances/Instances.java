@@ -443,14 +443,7 @@ public class Instances implements Serializable {
     if (loader == null) {
       loader = new ArffLoader(fileReader, 0, this.classAttribute);
     }
-    Instance inst = loader.readInstance();
-    if (inst != null) {
-      inst.setDataset(this);
-      add(inst);
-      return true;
-    } else {
-      return false;
-    }
+    return readInstance();
   }
 
   public boolean readInstance() {

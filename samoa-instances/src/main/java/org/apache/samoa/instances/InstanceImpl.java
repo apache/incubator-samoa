@@ -281,9 +281,9 @@ public class InstanceImpl implements MultiLabelInstance {
     // return  ? classIndex : 0;
     if(classIndex == Integer.MAX_VALUE)
       if(this.instanceHeader.instanceInformation.range != null)
-        classIndex=instanceHeader.instanceInformation.range.getStart();
+        classIndex = instanceHeader.instanceInformation.range.getStart();
       else
-        classIndex=0;
+        classIndex = 0;
     return classIndex;
   }
 
@@ -334,8 +334,7 @@ public class InstanceImpl implements MultiLabelInstance {
    */
   @Override
   public Instance copy() {
-    InstanceImpl inst = new InstanceImpl(this);
-    return inst;
+    return new InstanceImpl(this);
   }
 
   /**

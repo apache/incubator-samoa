@@ -115,7 +115,7 @@ public class AttributesInformation implements Serializable {
     int max = this.indexValues.size() - 1;
 
     if (max == -1) {
-      return -1;
+      return - 1;
     }
 
     // Binary search

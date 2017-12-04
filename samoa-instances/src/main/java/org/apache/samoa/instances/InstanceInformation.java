@@ -153,7 +153,7 @@ public class InstanceInformation implements Serializable {
 
   public void setAttributes(List<Attribute> v) {
     if(this.attributesInformation == null)
-      this.attributesInformation= new AttributesInformation();
+      this.attributesInformation = new AttributesInformation();
     this.attributesInformation.setAttributes(v);
   }
 
@@ -174,7 +174,7 @@ public class InstanceInformation implements Serializable {
   public int outputAttributeIndex(int attributeIndex) {
     int ret = 0;
     if (classIndex == Integer.MAX_VALUE) {//Multi Label
-      ret = attributeIndex+range.getStart(); //JD - Range should be a "block"
+      ret = attributeIndex + range.getStart(); //JD - Range should be a "block"
     } else { //Single Label
       ret = classIndex;
     }
@@ -184,7 +184,7 @@ public class InstanceInformation implements Serializable {
   public int numInputAttributes() {
     int ret = 0;
     if (classIndex == Integer.MAX_VALUE) {//Multi Label
-      ret = this.numAttributes()-range.getSelectionLength(); //JD
+      ret = this.numAttributes() - range.getSelectionLength(); //JD
     } else { //Single Label
       ret = this.numAttributes() - 1;
     }

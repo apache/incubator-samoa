@@ -185,8 +185,8 @@ public class ArffLoader implements Loader {
             double value;
             if ("?".equals(streamTokenizer.sval)) {
               value = Double.NaN; //Utils.missingValue();
-            } else if (isNumeric == true) {
-              value = Double.valueOf(streamTokenizer.sval).doubleValue();
+            } else if (isNumeric) {
+              value = Double.valueOf(streamTokenizer.sval);
             } else {
               value = this.auxAttributes.get(numAttribute).indexOfValue(streamTokenizer.sval);
             }
@@ -267,7 +267,7 @@ public class ArffLoader implements Loader {
               || streamTokenizer.ttype == 34 || streamTokenizer.ttype == 39)) {
             //System.out.print(streamTokenizer.sval + "-");
             if (this.auxAttributes.get(numAttribute).isNumeric()) {
-              this.setSparseValue(instance, indexValues, attributeValues, numAttribute, Double.valueOf(streamTokenizer.sval).doubleValue(), true);
+              this.setSparseValue(instance, indexValues, attributeValues, numAttribute, Double.valueOf(streamTokenizer.sval), true);
             } else {
               this.setSparseValue(instance, indexValues, attributeValues, numAttribute, this.auxAttributes.get(numAttribute).indexOfValue(streamTokenizer.sval), false);
             }
@@ -286,8 +286,8 @@ public class ArffLoader implements Loader {
     int[] arrayIndexValues = new int[attributeValues.size()];
     double[] arrayAttributeValues = new double[attributeValues.size()];
     for (int i = 0; i < arrayIndexValues.length; i++) {
-      arrayIndexValues[i] = indexValues.get(i).intValue();
-      arrayAttributeValues[i] = attributeValues.get(i).doubleValue();
+      arrayIndexValues[i] = indexValues.get(i);
+      arrayAttributeValues[i] = attributeValues.get(i);
     }
     instance.addSparseValues(arrayIndexValues, arrayAttributeValues, this.instanceInformation.numAttributes());
     return instance;
@@ -344,7 +344,7 @@ public class ArffLoader implements Loader {
               || streamTokenizer.ttype == 34)) {
             //System.out.print(streamTokenizer.sval + "/"+this.auxAttributes.get(numAttribute).indexOfValue(streamTokenizer.sval)+" ");
             if (this.auxAttributes.get(numAttribute).isNumeric()) {
-              instance.setValue(numAttribute, Double.valueOf(streamTokenizer.sval).doubleValue());//this.setValue(instance, numAttribute, Double.valueOf(streamTokenizer.sval).doubleValue(), true);
+              instance.setValue(numAttribute, Double.valueOf(streamTokenizer.sval));//this.setValue(instance, numAttribute, Double.valueOf(streamTokenizer.sval).doubleValue(), true);
             } else {
               instance.setValue(numAttribute, this.auxAttributes.get(numAttribute).indexOfValue(streamTokenizer.sval));//this.setValue(instance, numAttribute, this.auxAttributes.get(numAttribute).indexOfValue(streamTokenizer.sval), false);
               //numAttribute++;
@@ -384,7 +384,7 @@ public class ArffLoader implements Loader {
       while (streamTokenizer.ttype != StreamTokenizer.TT_EOF) {
         //For each line
         //if (streamTokenizer.ttype == '@') {
-        if (streamTokenizer.ttype == StreamTokenizer.TT_WORD && streamTokenizer.sval.startsWith("@") == true) {
+        if (streamTokenizer.ttype == StreamTokenizer.TT_WORD && streamTokenizer.sval.startsWith("@")) {
           //streamTokenizer.nextToken();
           String token = streamTokenizer.sval.toUpperCase();
           if (token.startsWith("@RELATION")) {
@@ -472,21 +472,18 @@ public class ArffLoader implements Loader {
   }
 
   protected Instance newSparseInstance(double d, double[] res) {
-    Instance inst = new SparseInstance(d, res); //is it dense?
     //inst.setInstanceInformation(this.instanceInformation);
-    return inst;
+    return new SparseInstance(d, res);
   }
 
   protected Instance newSparseInstance(double d) {
-    Instance inst = new SparseInstance(d);
     //inst.setInstanceInformation(this.instanceInformation);
-    return inst;
+    return new SparseInstance(d);
   }
 
   protected Instance newDenseInstance(int numberAttributes) {
-    Instance inst = new DenseInstance(numberAttributes);
     //inst.setInstanceInformation(this.instanceInformation);
-    return inst;
+    return new DenseInstance(numberAttributes);
   }
 
   private void setClassValue(Instance instance, double valueAttribute) {

@@ -87,7 +87,7 @@ public class AvroJsonLoader extends AvroLoader {
 
     try {
       while ((line = ((BufferedReader) reader).readLine()) != null) {
-        if (line == null || line.trim().length() <= 0)
+        if (line.trim().length() <= 0)
           continue;
 
         decoder = DecoderFactory.get().jsonDecoder(schema, line);

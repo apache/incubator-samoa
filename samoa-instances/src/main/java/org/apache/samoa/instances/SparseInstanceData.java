@@ -262,7 +262,7 @@ public class SparseInstanceData implements InstanceData {
   /**
    * Deletes an attribute at the given position (0 to numAttributes() - 1).
    * 
-   * @param pos the attribute's position
+   * @param position the attribute's position
    */
   @Override
   public void deleteAttributeAt(int position) {

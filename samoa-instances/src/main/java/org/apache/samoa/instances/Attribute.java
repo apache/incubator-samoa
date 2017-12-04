@@ -259,7 +259,7 @@ public class Attribute implements Serializable {
     if (val == null) {
       return -1;
     } else {
-      return val.intValue();
+      return val;
     }
   }
 
