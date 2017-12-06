@@ -38,11 +38,6 @@ public class AvroBinaryLoader extends AvroLoader {
   /** Avro Binary reader for an input stream **/
   protected DataFileStream<GenericRecord> dataFileStream = null;
 
-  public AvroBinaryLoader(InputStream inputStream, int classAttribute) {
-    super(classAttribute);
-    initializeSchema(inputStream);
-  }
-
   public AvroBinaryLoader(int classAttribute) {
     super(classAttribute);
   }

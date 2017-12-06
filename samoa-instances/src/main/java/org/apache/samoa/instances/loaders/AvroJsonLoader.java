@@ -43,10 +43,6 @@ public class AvroJsonLoader extends AvroLoader {
   /** The Character reader for JSON read */
   protected Reader reader = null;
 
-  public AvroJsonLoader(InputStream inputStream, int classAttribute) {
-    super(classAttribute);
-    initializeSchema(inputStream);
-  }
 
   public AvroJsonLoader( int classAttribute) {
     super(classAttribute);

@@ -180,6 +180,7 @@ public class ArffLoader implements Loader {
    *
    * @return the instance
    */
+  //@TODO CG: useless method used only in tests
   public Instance readInstance(Reader reader) {
     while (streamTokenizer.ttype == StreamTokenizer.TT_EOL) {
       try {

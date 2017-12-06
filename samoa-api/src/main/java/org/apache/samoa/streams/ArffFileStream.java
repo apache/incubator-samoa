@@ -106,7 +106,7 @@ public class ArffFileStream extends FileStream {
   @Override
   protected boolean readNextInstanceFromFile() {
     try {
-      if (this.instances.readInstance(this.fileReader)) {
+      if (this.instances.readInstance()) {
         this.lastInstanceRead = new InstanceExample(this.instances.instance(0));
         this.instances.delete(); // keep instances clean
         return true;

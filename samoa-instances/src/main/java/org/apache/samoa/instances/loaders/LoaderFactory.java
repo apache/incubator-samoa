@@ -31,8 +31,6 @@ public class LoaderFactory {
                 return new AvroJsonLoader(classAttribute);
             case AVRO_BINARY_LOADER:
                 return new AvroBinaryLoader(classAttribute);
-            case JSON_LOADER:
-                break;
             case ARFF_LOADER:
                 return  new ArffLoader(classAttribute);
             case UNKNOWN:
