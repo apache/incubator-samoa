@@ -107,16 +107,15 @@ public class AvroFileStream extends FileStream {
       return false;
 
     LoaderFactory loaderFactory = new LoaderFactory();
+    AvroLoader avroLoader;
     if( encodingFormatOption.getValue().equals(AVRO_ENCODING_FORMAT.BINARY.toString())){
-        AvroBinaryLoader avroBinaryLoader = (AvroBinaryLoader) loaderFactory.createLoader(LoaderType.AVRO_BINARY_LOADER, classIndexOption.getValue());
-        avroBinaryLoader.initializeSchema(inputStream);
-        this.instances = new Instances(avroBinaryLoader);
+        avroLoader = (AvroLoader) loaderFactory.createLoader(LoaderType.AVRO_BINARY_LOADER, classIndexOption.getValue());
     }else{
-        AvroJsonLoader avroJsonLoader = (AvroJsonLoader) loaderFactory.createLoader(LoaderType.AVRO_JSON_LOADER, classIndexOption.getValue());
-        avroJsonLoader.initializeSchema(inputStream);
-        this.instances = new Instances(avroJsonLoader);
+        avroLoader = (AvroLoader) loaderFactory.createLoader(LoaderType.AVRO_JSON_LOADER, classIndexOption.getValue());
     }
-    //this.instances = new Instances(this.inputStream, classIndexOption.getValue(), encodingFormatOption.getValue());
+    avroLoader.initializeSchema(inputStream);
+    this.instances = new Instances(avroLoader);
+
 
     if (this.classIndexOption.getValue() < 0) {
       this.instances.setClassIndex(this.instances.numAttributes() - 1);

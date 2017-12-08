@@ -96,28 +96,7 @@ public class ArffLoader implements Loader {
    * @param range
    */
   public ArffLoader(Reader reader, Range range) {
-      this.range = range;
-      BufferedReader br = new BufferedReader(reader);
-
-      //Init streamTokenizer
-      streamTokenizer = new StreamTokenizer(br);
-      streamTokenizer.resetSyntax();
-      streamTokenizer.whitespaceChars(0, ' ');
-      streamTokenizer.wordChars(' ' + 1, '\u00FF');
-      streamTokenizer.whitespaceChars(',', ',');
-      streamTokenizer.commentChar('%');
-      streamTokenizer.quoteChar('"');
-      streamTokenizer.quoteChar('\'');
-      streamTokenizer.ordinaryChar('{');
-      streamTokenizer.ordinaryChar('}');
-      streamTokenizer.eolIsSignificant(true);
-
-      this.instanceInformation = this.getHeader();
-
-      if (range != null) { //is MultiLabel
-        this.instanceInformation.setRangeOutputIndices(range);
-      }
-
+     setupStreamTokenizer(reader, range);
   }
 
   public void setupStreamTokenizer(Reader reader, Range range){
