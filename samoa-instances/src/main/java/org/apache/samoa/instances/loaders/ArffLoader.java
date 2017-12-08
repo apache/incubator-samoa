@@ -176,29 +176,6 @@ public class ArffLoader implements Loader {
   }
 
   /**
-   * Reads instance. It detects if it is dense or sparse.
-   *
-   * @return the instance
-   */
-  //@TODO CG: useless method used only in tests
-  public Instance readInstance(Reader reader) {
-    while (streamTokenizer.ttype == StreamTokenizer.TT_EOL) {
-      try {
-        streamTokenizer.nextToken();
-      } catch (IOException ex) {
-        Logger.getLogger(ArffLoader.class.getName()).log(Level.SEVERE, null, ex);
-      }
-    }
-    if (streamTokenizer.ttype == '{') {
-      return readInstanceSparse();
-      // return readDenseInstanceSparse();
-    } else {
-      return readInstanceDense();
-    }
-
-  }
-
-  /**
    * Reads a dense instance from the file.
    *
    * @return the instance

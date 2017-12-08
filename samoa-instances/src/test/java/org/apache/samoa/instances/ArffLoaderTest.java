@@ -96,7 +96,7 @@ public class ArffLoaderTest {
 
   @Test
   public void testReadInstance() {
-    Instance instance = loader.readInstance(reader);
+    Instance instance = loader.readInstance();
     assertEquals(1065.731934, instance.value(0), 0);
     assertEquals(0, instance.value(1), 0);
     assertEquals(0, instance.value(2), 0);
