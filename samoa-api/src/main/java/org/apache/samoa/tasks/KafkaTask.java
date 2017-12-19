@@ -33,10 +33,6 @@ package org.apache.samoa.tasks;
 import com.github.javacliparser.ClassOption;
 import java.util.Properties;
 
-import org.apache.samoa.streams.kafka.KafkaDeserializer;
-import org.apache.samoa.streams.kafka.KafkaDestinationProcessor;
-import org.apache.samoa.streams.kafka.KafkaEntranceProcessor;
-import org.apache.samoa.streams.kafka.KafkaSerializer;
 import org.apache.samoa.topology.ComponentFactory;
 import org.apache.samoa.topology.Stream;
 import org.apache.samoa.topology.Topology;
@@ -49,6 +45,10 @@ import com.github.javacliparser.IntOption;
 import com.github.javacliparser.StringOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import org.apache.samoa.streams.kafka.KafkaDeserializer;
+import org.apache.samoa.streams.kafka.KafkaDestinationProcessor;
+import org.apache.samoa.streams.kafka.KafkaEntranceProcessor;
+import org.apache.samoa.streams.kafka.KafkaSerializer;
 
 /**
  * Kafka task
