@@ -32,11 +32,12 @@ package org.apache.samoa.streams.kafka;
  */
 
 
+import org.apache.samoa.core.ContentEvent;
+import org.apache.samoa.core.Processor;
+
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.samoa.core.ContentEvent;
-import org.apache.samoa.core.Processor;
 
 /**
  * Destination processor that writes data to Apache Kafka

@@ -34,15 +34,16 @@ package org.apache.samoa.streams.kafka;
  */
 
 
+import org.apache.samoa.core.ContentEvent;
+import org.apache.samoa.core.EntranceProcessor;
+import org.apache.samoa.core.Processor;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.samoa.core.ContentEvent;
-import org.apache.samoa.core.EntranceProcessor;
-import org.apache.samoa.core.Processor;
 
 /**
  * Entrance processor that reads incoming messages from <a href="https://kafka.apache.org/">Apache Kafka</a>

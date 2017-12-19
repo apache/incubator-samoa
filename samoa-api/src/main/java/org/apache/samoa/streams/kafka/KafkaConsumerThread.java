@@ -32,16 +32,13 @@ package org.apache.samoa.streams.kafka;
  */
 
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *

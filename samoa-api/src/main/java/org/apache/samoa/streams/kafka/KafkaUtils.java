@@ -30,6 +30,10 @@ package org.apache.samoa.streams.kafka;
  * limitations under the License.
  * #L%
  */
+
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
@@ -38,8 +42,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
 
 /**
  * Internal class responsible for Kafka Stream handling (both consume and
