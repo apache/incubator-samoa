@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.samoa.streams.kafka;
+package org.apache.samoa.instances.kafka;
 
 /*
  * #%L
@@ -32,25 +32,25 @@ package org.apache.samoa.streams.kafka;
  * #L%
  */
 
+
 import com.google.gson.*;
+import org.apache.samoa.instances.instances.DenseInstance;
 import org.apache.samoa.instances.instances.DenseInstanceData;
+import org.apache.samoa.instances.instances.Instance;
 import org.apache.samoa.instances.instances.InstanceData;
-import org.apache.samoa.learners.InstanceContentEvent;
 
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 
-//import org.apache.samoa.instances.SingleClassInstanceData;
-
 /**
- * Sample class for serializing and deserializing {@link InstanceContentEvent}
+ * Sample class for serializing and deserializing {@link Instance}
  * from/to JSON format
  *
  * @author pwawrzyniak
  * @version 0.5.0-incubating-SNAPSHOT
  * @since 0.5.0-incubating
  */
-public class KafkaJsonMapper implements KafkaDeserializer<InstanceContentEvent>, KafkaSerializer<InstanceContentEvent> {
+public class KafkaJsonMapper implements KafkaDeserializer<Instance>, KafkaSerializer<Instance> {
 
     private final transient Gson gson;
     private final Charset charset;
@@ -61,28 +61,31 @@ public class KafkaJsonMapper implements KafkaDeserializer<InstanceContentEvent>,
      * @param charset Charset to be used for bytes parsing
      */
     public KafkaJsonMapper(Charset charset) {
-        this.gson = new GsonBuilder().registerTypeAdapter(InstanceData.class, new InstanceDataCustomDeserializer())
+        this.gson = new GsonBuilder().registerTypeAdapter(InstanceData.class, new InstanceDataCustomDeserializer()).registerTypeAdapter(Instance.class,new InstanceDataCreator())
                 .create();
         this.charset = charset;
     }
 
     @Override
-    public InstanceContentEvent deserialize(byte[] message) {
-        return gson.fromJson(new String(message, this.charset), InstanceContentEvent.class);
+    public Instance deserialize(byte[] message) {
+        return gson.fromJson(new String(message, this.charset), Instance.class);
     }
 
     @Override
-    public byte[] serialize(InstanceContentEvent message) {
+    public byte[] serialize(Instance message) {
         return gson.toJson(message).getBytes(this.charset);
     }
 
+
+
     //Unused
-    public class InstanceDataCreator implements InstanceCreator<InstanceData> {
+    public class InstanceDataCreator implements InstanceCreator<Instance> {
         @Override
-        public InstanceData createInstance(Type type) {
-            return new DenseInstanceData();
+        public Instance createInstance(Type type) {
+            return new DenseInstance(0);
         }
     }
+
 
     public class InstanceDataCustomDeserializer implements JsonDeserializer<InstanceData> {
 
@@ -110,7 +113,6 @@ public class KafkaJsonMapper implements KafkaDeserializer<InstanceContentEvent>,
                 return slid;
             }
         }
-
     }
 
 }

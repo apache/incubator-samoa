@@ -39,19 +39,23 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.apache.samoa.instances.instances.Instance;
+import org.apache.samoa.instances.kafka.KafkaDeserializer;
+import org.apache.samoa.instances.kafka.KafkaSerializer;
 import org.apache.samoa.learners.InstanceContentEvent;
 
 /**
  *
  * @author Piotr Wawrzyniak
  */
-public class OosTestSerializer implements KafkaDeserializer<InstanceContentEvent>, KafkaSerializer<InstanceContentEvent> {
+public class OosTestSerializer implements KafkaDeserializer<Instance>, KafkaSerializer<Instance> {
 
     @Override
-    public InstanceContentEvent deserialize(byte[] message) {
+    public Instance deserialize(byte[] message) {
         try {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(message));
-            InstanceContentEvent ice = (InstanceContentEvent)ois.readObject();
+            Instance ice = (Instance)ois.readObject();
             return ice;
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(OosTestSerializer.class.getName()).log(Level.SEVERE, null, ex);
@@ -60,7 +64,7 @@ public class OosTestSerializer implements KafkaDeserializer<InstanceContentEvent
     }
 
     @Override
-    public byte[] serialize(InstanceContentEvent message) {
+    public byte[] serialize(Instance message) {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(baos);

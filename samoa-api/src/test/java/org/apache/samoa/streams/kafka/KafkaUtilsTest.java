@@ -229,9 +229,9 @@ public class KafkaUtilsTest {
         Thread.sleep(2 * CONSUMER_TIMEOUT);
 
         logger.log(Level.INFO, "Get results from Kafka");
-        
+
         List<byte[]> consumed = new ArrayList<>();
-        
+
         while (consumed.size() != sent.size()) {
             ConsumerRecords<String, byte[]> records = consumer.poll(CONSUMER_TIMEOUT);
             Iterator<ConsumerRecord<String, byte[]>> it = records.iterator();

@@ -57,10 +57,6 @@ public class Instances implements Serializable {
    */
   protected List<Instance> instances;
 
-  protected static enum AVRO_ENCODING_FORMAT {
-    JSON, BINARY
-  }
-
   protected int classAttribute;
 
   /**
@@ -445,20 +441,6 @@ public class Instances implements Serializable {
     throw new UnsupportedOperationException("Not yet implemented"); //CobWeb
   }
 
-  /**
-   * Read instance.
-   *
-   * @param fileReader the file reader
-   * @return true, if successful
-   */
-  public boolean readInstance(Reader fileReader) {
-
-    //ArffReader arff = new ArffReader(reader, this, m_Lines, 1);
-    if (loader == null) {
-      loader = new ArffLoader(fileReader, 0, this.classAttribute);
-    }
-    return readInstance();
-  }
 
   public boolean readInstance() {
 

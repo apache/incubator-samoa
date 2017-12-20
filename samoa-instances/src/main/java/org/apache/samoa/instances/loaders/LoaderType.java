@@ -26,6 +26,7 @@ public enum LoaderType {
     AVRO_JSON_LOADER("AVRO_JSON_LOADER"),
     JSON_LOADER("JSON_LOADER"),
     ARFF_LOADER("ARFF_LOADER"),
+    KAFKA_LOADER("KAFKA_LOADER"),
     UNKNOWN("UNKNOWN");
 
     private String loaderName;

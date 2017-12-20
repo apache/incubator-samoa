@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.samoa.streams.kafka;
+package org.apache.samoa.instances.kafka;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -27,7 +27,7 @@ import org.apache.avro.reflect.ReflectData;
 import org.apache.avro.reflect.ReflectDatumWriter;
 import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecord;
-import org.apache.samoa.learners.InstanceContentEvent;
+import org.apache.samoa.instances.instances.Instance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,25 +50,25 @@ import org.slf4j.LoggerFactory;
  */
 
 /**
- * Sample class for serializing and deserializing {@link InstanceContentEvent}
+ * Sample class for serializing and deserializing {@link Instance}
  * from/to Avro format
  *
  * @author Jakub Jankowski
  * @version 0.5.0-incubating-SNAPSHOT
  * @since 0.5.0-incubating
  */
-public class KafkaAvroMapper implements KafkaDeserializer<InstanceContentEvent>, KafkaSerializer<InstanceContentEvent> {
+public class KafkaAvroMapper implements KafkaDeserializer<Instance>, KafkaSerializer<Instance> {
 
     private static Logger logger = LoggerFactory.getLogger(KafkaAvroMapper.class);
 
     @Override
-    public byte[] serialize(InstanceContentEvent message) {
-        return avroSerialize(InstanceContentEvent.class, message);
+    public byte[] serialize(Instance message) {
+        return avroSerialize(Instance.class, message);
     }
 
     @Override
-    public InstanceContentEvent deserialize(byte[] message) {
-        return avroDeserialize(message, InstanceContentEvent.class);
+    public Instance deserialize(byte[] message) {
+        return avroDeserialize(message, Instance.class);
     }
 
 
@@ -106,8 +106,8 @@ public class KafkaAvroMapper implements KafkaDeserializer<InstanceContentEvent>,
 
     /**
      * Avro deserialization based on specified schema
-     * @param cls
-     * @param v
+     * @param avroBytes
+     * @param clazz
      * @return
      */
     public static <V> V avroDeserialize(byte[] avroBytes, Class<V> clazz) {

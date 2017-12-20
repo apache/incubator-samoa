@@ -37,6 +37,9 @@ package org.apache.samoa.streams.kafka;
 import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.core.EntranceProcessor;
 import org.apache.samoa.core.Processor;
+import org.apache.samoa.instances.instances.Instance;
+import org.apache.samoa.instances.kafka.KafkaDeserializer;
+import org.apache.samoa.learners.InstanceContentEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -103,8 +106,11 @@ public class KafkaEntranceProcessor implements EntranceProcessor {
 
     @Override
     public ContentEvent nextEvent() {
-        // assume this will never be called when buffer is empty!        
-        return this.deserializer.deserialize(buffer.remove(0));
+        // assume this will never be called when buffer is empty!
+        Instance instance = this.deserializer.deserialize(buffer.remove(0));
+        // temporary solution for serialization merge
+        InstanceContentEvent instanceContentEvent = new InstanceContentEvent(-1, instance, true, true);
+        return instanceContentEvent;
     }
 
     @Override
@@ -123,5 +129,5 @@ public class KafkaEntranceProcessor implements EntranceProcessor {
         kafkaUtils.closeConsumer();
         super.finalize();
     }
-    
+
 }

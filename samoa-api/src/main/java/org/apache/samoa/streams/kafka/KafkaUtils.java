@@ -33,6 +33,7 @@ package org.apache.samoa.streams.kafka;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.samoa.instances.kafka.KafkaConsumerThread;
 
 import java.util.Collection;
 import java.util.List;
@@ -50,7 +51,7 @@ import java.util.logging.Logger;
  * @author pwawrzyniak
  * @version 0.5.0-incubating-SNAPSHOT
  * @since 0.5.0-incubating
- */
+// */
 class KafkaUtils {
 
     private transient KafkaConsumerThread kafkaConsumerThread;
@@ -61,9 +62,9 @@ class KafkaUtils {
     private final Properties consumerProperties;
     private final Properties producerProperties;
 
-    // Timeout for Kafka Consumer    
+    // Timeout for Kafka Consumer
     private long consumerTimeout;
-        
+
 
     /**
      * Class constructor
@@ -94,9 +95,9 @@ class KafkaUtils {
      *
      * @param topics List of Kafka topics that consumer should subscribe to
      */
-    public void initializeConsumer(Collection<String> topics) {        
+    public void initializeConsumer(Collection<String> topics) {
         kafkaConsumerThread = new KafkaConsumerThread(consumerProperties, topics, consumerTimeout);
-        kafkaConsumerThread.start();        
+        kafkaConsumerThread.start();
     }
 
     public void closeConsumer() {
@@ -115,7 +116,7 @@ class KafkaUtils {
             producer.close(1, TimeUnit.MINUTES);
         }
     }
-    
+
     /**
      * Method for reading new messages from Kafka topics
      *
@@ -137,7 +138,7 @@ class KafkaUtils {
             } catch(InterruptedException | ExecutionException | TimeoutException e){
                 Logger.getLogger(KafkaUtils.class.getName()).log(Level.SEVERE, null, e);
             }
-            
+
         }
         return -1;
     }

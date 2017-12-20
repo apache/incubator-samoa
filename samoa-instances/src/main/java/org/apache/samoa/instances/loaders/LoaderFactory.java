@@ -33,6 +33,8 @@ public class LoaderFactory {
                 return new AvroBinaryLoader(classAttribute);
             case ARFF_LOADER:
                 return  new ArffLoader(classAttribute);
+            case KAFKA_LOADER:
+                return new KafkaLoader();
             case UNKNOWN:
                 break;
         }
