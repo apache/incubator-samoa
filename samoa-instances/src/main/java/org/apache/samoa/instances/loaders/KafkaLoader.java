@@ -47,7 +47,7 @@ public class KafkaLoader implements Loader {
     }
 
     public void runKafkaConsumerThread(){
-        kafkaConsumerThread.run();
+        kafkaConsumerThread.start();
     }
 
     @Override
