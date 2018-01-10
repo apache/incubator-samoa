@@ -7,6 +7,9 @@ branches:
 jdk:
 - openjdk7
 
+before_install:
+ - unset _JAVA_OPTIONS 
+
 install:
 - echo "<settings><servers><server><id>apache.snapshots.https</id><username>${SOSS_USERNAME}</username><password>${SOSS_PASSWORD}</password></server></servers></settings>" > ${HOME}/.m2/settings.xml
 #- cat ${HOME}/.m2/settings.xml
@@ -20,7 +23,6 @@ notifications:
 
 env:
   global:
-  - _JAVA_OPTIONS=''
   - secure: "ZSWivIr1Km+EpH7rM4e+GGcDyEdlvkmUhF6nN5z1slDVlN3uL02VQuc8Kh7+5w/vaPVPzCdCLj0cGrW0EoXy+hSntOY52WRAkyFgvLRHX4hjmCfzR7Rdm6wxeyvfBdCDaVwwMYdK6ox5zsRQM1g6Zts2e/KrQt4gz5icWuil9Y0="
   - secure: "hJ1W2jOaypXQzsXHXTpFrRW9sTaciXLomvJnzr4Kr66rqwdZqC8Gi77FEx4P3/5kSv0cmQdbPtuCHzfVTZ5eWRqOGENDapQIRheJUYGvrUGBtdT1/tcKAnMKUvVBeyela/sXEPg9/TtHX+52YuasHKMVGTSun9JYIkcJKas8UAE="
 
