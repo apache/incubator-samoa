@@ -22,7 +22,7 @@ package org.apache.samoa.learners;
 
 import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.core.SerializableInstance;
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 
 /**
  * License

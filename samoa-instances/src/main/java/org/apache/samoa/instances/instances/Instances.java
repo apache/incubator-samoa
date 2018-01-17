@@ -1,4 +1,9 @@
-package org.apache.samoa.instances;
+package org.apache.samoa.instances.instances;
+
+import org.apache.samoa.instances.Attribute;
+import org.apache.samoa.instances.Range;
+import org.apache.samoa.instances.Utils;
+import org.apache.samoa.instances.loaders.*;
 
 import java.io.InputStream;
 
@@ -52,10 +57,6 @@ public class Instances implements Serializable {
    */
   protected List<Instance> instances;
 
-  protected static enum AVRO_ENCODING_FORMAT {
-    JSON, BINARY
-  }
-
   protected int classAttribute;
 
   /**
@@ -84,15 +85,26 @@ public class Instances implements Serializable {
   /**
    * Instantiates a new instances.
    *
+   * @param loader proper loader object.
+   */
+  public Instances(Loader loader) {
+    this.loader = loader;
+    this.instanceInformation = this.loader.getStructure();
+    this.instances = new ArrayList<>();
+  }
+//@TODO CG:  CLEAN UP
+  /**
+   * Instantiates a new instances.
+   *
    * @param reader the reader
    * @param size the size
    * @param classAttribute the class attribute
    */
-  public Instances(Reader reader, int size, int classAttribute) {
-    this.loader = new ArffLoader(reader, 0, classAttribute);
-    this.instanceInformation = loader.getStructure();
-    this.instances = new ArrayList<Instance>();
-  }
+//  public Instances(Reader reader, int size, int classAttribute) {
+//    this.loader = new ArffLoader(reader, 0, classAttribute);
+//    this.instanceInformation = loader.getStructure();
+//    this.instances = new ArrayList<>();
+//  }
 
   /**
    * Instantiates a new instances.
@@ -100,23 +112,23 @@ public class Instances implements Serializable {
    * @param reader the reader
    * @param range
    */
-  public Instances(Reader reader, Range range) {
-    this.loader = new ArffLoader(reader, 0, classAttribute);//new MultiTargetArffLoader(reader, range);
-    this.instanceInformation = loader.getStructure();
-    this.instances = new ArrayList<Instance>();
-  }
+//  public Instances(Reader reader, Range range) {
+//    this.loader = new ArffLoader(reader, 0, classAttribute);//new MultiTargetArffLoader(reader, range);
+//    this.instanceInformation = loader.getStructure();
+//    this.instances = new ArrayList<>();
+//  }
 
-  public Instances(InputStream inputStream, int classAttribute, String encodingFormat) {
-    this.classAttribute = classAttribute;
-
-    if (encodingFormat.equalsIgnoreCase(AVRO_ENCODING_FORMAT.BINARY.toString()))
-      loader = new AvroBinaryLoader(inputStream, classAttribute);
-    else
-      loader = new AvroJsonLoader(inputStream, classAttribute);
-
-    this.instanceInformation = loader.getStructure();
-    this.instances = new ArrayList<>();
-  }
+//  public Instances(InputStream inputStream, int classAttribute, String encodingFormat) {
+//    this.classAttribute = classAttribute;
+//
+//    if (encodingFormat.equalsIgnoreCase(AVRO_ENCODING_FORMAT.BINARY.toString()))
+//      loader = new AvroBinaryLoader(inputStream, classAttribute);
+//    else
+//      loader = new AvroJsonLoader(inputStream, classAttribute);
+//
+//    this.instanceInformation = loader.getStructure();
+//    this.instances = new ArrayList<>();
+//  }
 
   /**
    * Instantiates a new instances.
@@ -429,27 +441,6 @@ public class Instances implements Serializable {
     throw new UnsupportedOperationException("Not yet implemented"); //CobWeb
   }
 
-  /**
-   * Read instance.
-   *
-   * @param fileReader the file reader
-   * @return true, if successful
-   */
-  public boolean readInstance(Reader fileReader) {
-
-    //ArffReader arff = new ArffReader(reader, this, m_Lines, 1);
-    if (loader == null) {
-      loader = new ArffLoader(fileReader, 0, this.classAttribute);
-    }
-    Instance inst = loader.readInstance();
-    if (inst != null) {
-      inst.setDataset(this);
-      add(inst);
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   public boolean readInstance() {
 
@@ -608,7 +599,7 @@ public class Instances implements Serializable {
    * @param att, the attribute.
    */
   protected int indexOf(Attribute att) {
-    if (this.hsAttributesIndices == null || !this.hsAttributesIndices.containsKey(att.name)) {
+    if (this.hsAttributesIndices == null || !this.hsAttributesIndices.containsKey(att.getName())) {
       computeAttributesIndices();
     }
 

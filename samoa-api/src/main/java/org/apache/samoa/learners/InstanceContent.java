@@ -27,7 +27,7 @@ package org.apache.samoa.learners;
 import net.jcip.annotations.Immutable;
 
 import org.apache.samoa.core.SerializableInstance;
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 
 import java.io.Serializable;
 

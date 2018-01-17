@@ -25,8 +25,8 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 import org.apache.samoa.instances.Attribute;
-import org.apache.samoa.instances.DenseInstance;
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.DenseInstance;
+import org.apache.samoa.instances.instances.Instance;
 
 public class DataPoint extends DenseInstance {
 

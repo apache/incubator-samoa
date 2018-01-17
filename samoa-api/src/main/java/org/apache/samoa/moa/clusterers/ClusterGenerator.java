@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 import org.apache.samoa.moa.cluster.Clustering;
 import org.apache.samoa.moa.cluster.SphereCluster;
 import org.apache.samoa.moa.core.DataPoint;

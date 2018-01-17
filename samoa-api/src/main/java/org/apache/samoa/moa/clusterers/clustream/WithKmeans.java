@@ -26,8 +26,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.samoa.instances.DenseInstance;
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.DenseInstance;
+import org.apache.samoa.instances.instances.Instance;
 import org.apache.samoa.moa.cluster.CFCluster;
 import org.apache.samoa.moa.cluster.Cluster;
 import org.apache.samoa.moa.cluster.Clustering;
@@ -217,7 +217,8 @@ public class WithKmeans extends AbstractClusterer {
    * k-means of (micro)clusters, with ground-truth-aided initialization. (to produce best results)
    * 
    * @param k
-   * @param data
+   * @param clustering
+   * @param gtClustering
    * @return (macro)clustering - CFClusters
    */
   public static Clustering kMeans_gta(int k, Clustering clustering, Clustering gtClustering) {
@@ -256,7 +257,7 @@ public class WithKmeans extends AbstractClusterer {
    * k-means of (micro)clusters, with randomized initialization.
    * 
    * @param k
-   * @param data
+   * @param clustering
    * @return (macro)clustering - CFClusters
    */
   public static Clustering kMeans_rand(int k, Clustering clustering) {

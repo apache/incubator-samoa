@@ -20,7 +20,7 @@ package org.apache.samoa.learners.clusterers;
  * #L%
  */
 import org.apache.samoa.core.ContentEvent;
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 
 import net.jcip.annotations.Immutable;
 

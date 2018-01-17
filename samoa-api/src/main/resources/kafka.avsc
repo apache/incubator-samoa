@@ -56,8 +56,8 @@
   "name": "SingleLabelInstance",
   "fields": [
 		{"name": "weight", "type": "double"},
-		{"name": "instanceData", "type": ["null", "org.apache.samoa.instances.InstanceData", "org.apache.samoa.instances.DenseInstanceData", "org.apache.samoa.instances.SparseInstanceData", "org.apache.samoa.instances.SingleClassInstanceData"]},
-		{"name": "classData", "type": ["null", "org.apache.samoa.instances.InstanceData", "org.apache.samoa.instances.DenseInstanceData", "org.apache.samoa.instances.SparseInstanceData", "org.apache.samoa.instances.SingleClassInstanceData"]}
+		{"name": "instanceData", "type": ["null", "org.apache.samoa.instances.instances.InstanceData", "org.apache.samoa.instances.instances.DenseInstanceData", "org.apache.samoa.instances.instances.SparseInstanceData", "org.apache.samoa.instances.SingleClassInstanceData"]},
+		{"name": "classData", "type": ["null", "org.apache.samoa.instances.instances.InstanceData", "org.apache.samoa.instances.instances.DenseInstanceData", "org.apache.samoa.instances.instances.SparseInstanceData", "org.apache.samoa.instances.SingleClassInstanceData"]}
 	]
 },
 {
@@ -66,8 +66,8 @@
   "name": "DenseInstance",
   "fields": [
 		{"name": "weight", "type": "double"},
-		{"name": "instanceData", "type": ["null", "org.apache.samoa.instances.InstanceData", "org.apache.samoa.instances.DenseInstanceData", "org.apache.samoa.instances.SparseInstanceData", "org.apache.samoa.instances.SingleClassInstanceData"]},
-		{"name": "classData", "type": ["null", "org.apache.samoa.instances.InstanceData", "org.apache.samoa.instances.DenseInstanceData", "org.apache.samoa.instances.SparseInstanceData", "org.apache.samoa.instances.SingleClassInstanceData"]}
+		{"name": "instanceData", "type": ["null", "org.apache.samoa.instances.instances.InstanceData", "org.apache.samoa.instances.instances.DenseInstanceData", "org.apache.samoa.instances.instances.SparseInstanceData", "org.apache.samoa.instances.SingleClassInstanceData"]},
+		{"name": "classData", "type": ["null", "org.apache.samoa.instances.instances.InstanceData", "org.apache.samoa.instances.instances.DenseInstanceData", "org.apache.samoa.instances.instances.SparseInstanceData", "org.apache.samoa.instances.SingleClassInstanceData"]}
 	]
 },
 {
@@ -76,8 +76,8 @@
   "name": "SerializableInstance",
   "fields": [
 		{"name": "weight", "type": "double"},
-		{"name": "instanceData", "type": ["null", "org.apache.samoa.instances.InstanceData", "org.apache.samoa.instances.DenseInstanceData", "org.apache.samoa.instances.SparseInstanceData", "org.apache.samoa.instances.SingleClassInstanceData"]},
-		{"name": "classData", "type": ["null", "org.apache.samoa.instances.InstanceData", "org.apache.samoa.instances.DenseInstanceData", "org.apache.samoa.instances.SparseInstanceData", "org.apache.samoa.instances.SingleClassInstanceData"]}
+		{"name": "instanceData", "type": ["null", "org.apache.samoa.instances.instances.InstanceData", "org.apache.samoa.instances.instances.DenseInstanceData", "org.apache.samoa.instances.instances.SparseInstanceData", "org.apache.samoa.instances.SingleClassInstanceData"]},
+		{"name": "classData", "type": ["null", "org.apache.samoa.instances.instances.InstanceData", "org.apache.samoa.instances.instances.DenseInstanceData", "org.apache.samoa.instances.instances.SparseInstanceData", "org.apache.samoa.instances.SingleClassInstanceData"]}
 	]
 },
 {

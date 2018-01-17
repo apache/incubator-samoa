@@ -31,6 +31,8 @@ public class AttributesInformation implements Serializable {
    */
   protected List<Attribute> attributes;
   protected List<Integer> indexValues;
+
+
   /**
    * The number of attributes.
    */
@@ -115,7 +117,7 @@ public class AttributesInformation implements Serializable {
     int max = this.indexValues.size() - 1;
 
     if (max == -1) {
-      return -1;
+      return - 1;
     }
 
     // Binary search
@@ -148,5 +150,10 @@ public class AttributesInformation implements Serializable {
     this.numberAttributes=v.size();	
     this.indexValues=indexValues;
   }
+
+  public int getNumberAttributes() {
+    return numberAttributes;
+  }
+
 
 }

@@ -20,7 +20,7 @@ package org.apache.samoa.moa.classifiers.functions;
  * #L%
  */
 
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 import org.apache.samoa.moa.classifiers.AbstractClassifier;
 import org.apache.samoa.moa.core.DoubleVector;
 import org.apache.samoa.moa.core.Measurement;

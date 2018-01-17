@@ -21,11 +21,14 @@ package org.apache.samoa.streams;
  */
 
 import com.github.javacliparser.IntOption;
-import org.apache.samoa.instances.*;
+import org.apache.samoa.instances.Attribute;
+import org.apache.samoa.instances.instances.Instance;
+import org.apache.samoa.instances.instances.Instances;
+import org.apache.samoa.instances.instances.InstancesHeader;
+import org.apache.samoa.instances.instances.SparseInstance;
 import org.apache.samoa.moa.core.InstanceExample;
 import org.apache.samoa.moa.core.ObjectRepository;
 import org.apache.samoa.moa.options.AbstractOptionHandler;
-import org.apache.samoa.streams.InstanceStream;
 import org.apache.samoa.moa.tasks.TaskMonitor;
 
 import java.util.ArrayList;

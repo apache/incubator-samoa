@@ -20,9 +20,9 @@ package org.apache.samoa.instances;
  * #L%
  */
 
-import org.apache.samoa.instances.ArffLoader;
-import org.apache.samoa.instances.Instance;
-import org.apache.samoa.instances.InstanceInformation;
+import org.apache.samoa.instances.instances.Instance;
+import org.apache.samoa.instances.instances.InstanceInformation;
+import org.apache.samoa.instances.loaders.ArffLoader;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -96,7 +96,7 @@ public class ArffLoaderTest {
 
   @Test
   public void testReadInstance() {
-    Instance instance = loader.readInstance(reader);
+    Instance instance = loader.readInstance();
     assertEquals(1065.731934, instance.value(0), 0);
     assertEquals(0, instance.value(1), 0);
     assertEquals(0, instance.value(2), 0);

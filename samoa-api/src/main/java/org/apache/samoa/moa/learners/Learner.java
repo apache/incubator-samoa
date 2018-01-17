@@ -20,7 +20,7 @@ package org.apache.samoa.moa.learners;
  * #L%
  */
 
-import org.apache.samoa.instances.InstancesHeader;
+import org.apache.samoa.instances.instances.InstancesHeader;
 import org.apache.samoa.moa.MOAObject;
 import org.apache.samoa.moa.core.Example;
 import org.apache.samoa.moa.core.Measurement;
@@ -74,7 +74,7 @@ public interface Learner<E extends Example> extends MOAObject, OptionHandler {
   /**
    * Trains this learner incrementally using the given example.
    * 
-   * @param inst
+   * @param example
    *          the instance to be used for training
    */
   public void trainOnInstance(E example);
@@ -83,7 +83,7 @@ public interface Learner<E extends Example> extends MOAObject, OptionHandler {
    * Predicts the class memberships for a given instance. If an instance is unclassified, the returned array elements
    * must be all zero.
    * 
-   * @param inst
+   * @param example
    *          the instance to be classified
    * @return an array containing the estimated membership probabilities of the test instance in each class
    */

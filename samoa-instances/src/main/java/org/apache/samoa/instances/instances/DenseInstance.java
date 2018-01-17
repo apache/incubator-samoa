@@ -1,4 +1,4 @@
-package org.apache.samoa.instances;
+package org.apache.samoa.instances.instances;
 
 /*
  * #%L
@@ -20,46 +20,42 @@ package org.apache.samoa.instances;
  * #L%
  */
 
-public class SparseInstance extends InstanceImpl {
+public class DenseInstance extends InstanceImpl {
 
   /**
-   * Instantiates a new sparse instance.
+   * Instantiates a new dense instance.
    *
-   * @param d the d
+   * @param weight the weight
    * @param res the res
    */
-  public SparseInstance(double d, double[] res) {
-    super(d, res);
+  public DenseInstance(double weight, double[] res) {
+    super(weight, res);
   }
 
   /**
-   * Instantiates a new sparse instance.
+   * Instantiates a new dense instance.
    *
    * @param inst the inst
    */
-  public SparseInstance(InstanceImpl inst) {
+  public DenseInstance(InstanceImpl inst) {
     super(inst);
   }
 
   /**
-   * Instantiates a new sparse instance.
+   * Instantiates a new dense instance.
    *
-   * @param numberAttributes the number attributes
+   * @param inst the inst
    */
-  public SparseInstance(double numberAttributes) {
-    super(1, null, null, (int) numberAttributes);
+  public DenseInstance(Instance inst) {
+    super((InstanceImpl) inst);
   }
 
   /**
-   * Instantiates a new sparse instance.
+   * Instantiates a new dense instance.
    *
-   * @param weight the weight
-   * @param attributeValues the attribute values
-   * @param indexValues the index values
    * @param numberAttributes the number attributes
    */
-  public SparseInstance(double weight, double[] attributeValues, int[] indexValues, int numberAttributes) {
-    super(weight, attributeValues, indexValues, numberAttributes);
+  public DenseInstance(double numberAttributes) {
+    super((int) numberAttributes);
   }
-
 }

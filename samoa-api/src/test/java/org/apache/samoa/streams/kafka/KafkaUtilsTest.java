@@ -60,7 +60,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.utils.Time;
-import org.apache.samoa.instances.InstancesHeader;
+import org.apache.samoa.instances.instances.InstancesHeader;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -229,9 +229,9 @@ public class KafkaUtilsTest {
         Thread.sleep(2 * CONSUMER_TIMEOUT);
 
         logger.log(Level.INFO, "Get results from Kafka");
-        
+
         List<byte[]> consumed = new ArrayList<>();
-        
+
         while (consumed.size() != sent.size()) {
             ConsumerRecords<String, byte[]> records = consumer.poll(CONSUMER_TIMEOUT);
             Iterator<ConsumerRecord<String, byte[]>> it = records.iterator();

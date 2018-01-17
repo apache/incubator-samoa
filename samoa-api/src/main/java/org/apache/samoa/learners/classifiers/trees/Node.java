@@ -21,7 +21,7 @@ package org.apache.samoa.learners.classifiers.trees;
  */
 
 import org.apache.samoa.core.DoubleVector;
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 
 /**
  * Abstract class that represents a node in the tree model.

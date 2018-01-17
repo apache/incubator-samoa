@@ -23,7 +23,7 @@ package org.apache.samoa.learners.classifiers.trees;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 import org.apache.samoa.moa.classifiers.core.AttributeSplitSuggestion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

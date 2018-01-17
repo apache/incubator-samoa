@@ -31,6 +31,7 @@ package org.apache.samoa.streams.kafka;
  * #L%
  */
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -54,7 +55,8 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.utils.Time;
-import org.apache.samoa.instances.InstancesHeader;
+import org.apache.samoa.instances.instances.InstancesHeader;
+import org.apache.samoa.instances.kafka.KafkaJsonMapper;
 import org.apache.samoa.learners.InstanceContentEvent;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -108,7 +110,7 @@ public class KafkaDestinationProcessorTest {
     }
 
     @AfterClass
-    public static void tearDownClass() {        
+    public static void tearDownClass() {
         kafkaServer.shutdown();
         zkClient.close();
         zkServer.shutdown();
@@ -130,7 +132,7 @@ public class KafkaDestinationProcessorTest {
         final Logger logger = Logger.getLogger(KafkaDestinationProcessorTest.class.getName());
         Properties props = TestUtilsForKafka.getProducerProperties(BROKERHOST,BROKERPORT);
         props.setProperty("auto.offset.reset", "earliest");
-        KafkaDestinationProcessor kdp = new KafkaDestinationProcessor(props, TOPIC, new OosTestSerializer());
+        KafkaDestinationProcessor kdp = new KafkaDestinationProcessor(props, TOPIC, new KafkaJsonMapper(Charset.forName("UTF-8")));
         kdp.onCreate(1);
 
         final int[] i = {0};

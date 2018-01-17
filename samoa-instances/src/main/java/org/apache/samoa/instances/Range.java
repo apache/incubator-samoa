@@ -64,7 +64,7 @@ public class Range implements Serializable {
    * Translates a single string selection into it's internal 0-based
    * equivalent.
    *
-   * @param single the string representing the selection (eg: 1 first last)
+   * @param singleSelection the string representing the selection (eg: 1 first last)
    * @return the number corresponding to the selected value
    */
   protected /*@pure@*/ int rangeSingle(/*@non_null@*/String singleSelection) {
@@ -83,7 +83,7 @@ public class Range implements Serializable {
     return index;
   }
 
-  boolean isInRange(int value) {
+  public boolean isInRange(int value) {
     boolean ret = false;
     if (value >= start && value <= end) {
       ret = true;
@@ -91,7 +91,7 @@ public class Range implements Serializable {
     return ret;
   }
 
-  int getSelectionLength() {
+  public int getSelectionLength() {
     return end - start + 1;
   }
 

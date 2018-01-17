@@ -26,8 +26,8 @@ package org.apache.samoa.streams;
 
 import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.core.Processor;
-import org.apache.samoa.instances.Instance;
-import org.apache.samoa.instances.Instances;
+import org.apache.samoa.instances.instances.Instance;
+import org.apache.samoa.instances.instances.Instances;
 import org.apache.samoa.learners.InstanceContentEvent;
 import org.apache.samoa.topology.Stream;
 import org.slf4j.Logger;

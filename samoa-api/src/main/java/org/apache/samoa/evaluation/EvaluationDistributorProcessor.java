@@ -27,7 +27,7 @@ package org.apache.samoa.evaluation;
 import com.google.common.base.Preconditions;
 import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.core.Processor;
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 import org.apache.samoa.learners.InstanceContentEvent;
 import org.apache.samoa.moa.core.MiscUtils;
 import org.apache.samoa.topology.Stream;

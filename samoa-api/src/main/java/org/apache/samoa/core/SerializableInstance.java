@@ -20,8 +20,8 @@ package org.apache.samoa.core;
  * #L%
  */
 
-import org.apache.samoa.instances.DenseInstance;
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.DenseInstance;
+import org.apache.samoa.instances.instances.Instance;
 
 /**
  * License

@@ -24,13 +24,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.apache.samoa.instances.Instances;
+import org.apache.samoa.instances.instances.Instances;
+import org.apache.samoa.instances.loaders.ArffLoader;
+import org.apache.samoa.instances.loaders.AvroBinaryLoader;
+import org.apache.samoa.instances.loaders.LoaderFactory;
+import org.apache.samoa.instances.loaders.LoaderType;
 import org.apache.samoa.moa.core.InstanceExample;
 import org.apache.samoa.moa.core.ObjectRepository;
 import org.apache.samoa.moa.tasks.TaskMonitor;
 
 import com.github.javacliparser.FileOption;
-import com.github.javacliparser.IntOption;
 
 /**
  * InstanceStream for ARFF file
@@ -84,7 +87,13 @@ public class ArffFileStream extends FileStream {
       return false;
 
     this.fileReader = new BufferedReader(new InputStreamReader(this.inputStream));
-    this.instances = new Instances(this.fileReader, 1, -1);
+
+    LoaderFactory loaderFactory = new LoaderFactory();
+    ArffLoader arffLoader = (ArffLoader) loaderFactory.createLoader(LoaderType.ARFF_LOADER,  classIndexOption.getValue());
+    arffLoader.setupStreamTokenizer(this.fileReader, null);
+    this.instances = new Instances(arffLoader);
+
+    //this.instances = new Instances(this.fileReader, 1, -1);
     if (this.classIndexOption.getValue() < 0) {
       this.instances.setClassIndex(this.instances.numAttributes() - 1);
     } else if (this.classIndexOption.getValue() > 0) {
@@ -97,7 +106,7 @@ public class ArffFileStream extends FileStream {
   @Override
   protected boolean readNextInstanceFromFile() {
     try {
-      if (this.instances.readInstance(this.fileReader)) {
+      if (this.instances.readInstance()) {
         this.lastInstanceRead = new InstanceExample(this.instances.instance(0));
         this.instances.delete(); // keep instances clean
         return true;

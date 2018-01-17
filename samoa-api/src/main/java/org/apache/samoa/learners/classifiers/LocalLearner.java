@@ -21,10 +21,9 @@ package org.apache.samoa.learners.classifiers;
  */
 
 import java.io.Serializable;
-import java.util.Map;
 
-import org.apache.samoa.instances.Instance;
-import org.apache.samoa.instances.Instances;
+import org.apache.samoa.instances.instances.Instance;
+import org.apache.samoa.instances.instances.Instances;
 
 /**
  * Learner interface for non-distributed learners.

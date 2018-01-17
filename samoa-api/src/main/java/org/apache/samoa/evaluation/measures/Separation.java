@@ -22,8 +22,8 @@ package org.apache.samoa.evaluation.measures;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.samoa.instances.DenseInstance;
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.DenseInstance;
+import org.apache.samoa.instances.instances.Instance;
 import org.apache.samoa.moa.cluster.Cluster;
 import org.apache.samoa.moa.cluster.Clustering;
 import org.apache.samoa.moa.cluster.SphereCluster;

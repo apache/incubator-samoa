@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.samoa.instances.Attribute;
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 import org.apache.samoa.moa.AbstractMOAObject;
 import org.apache.samoa.moa.core.AutoExpandVector;
 import org.apache.samoa.moa.core.DataPoint;

@@ -1,9 +1,5 @@
 package org.apache.samoa.evaluation;
 
-import java.util.List;
-
-import org.apache.samoa.instances.Attribute;
-
 /*
  * #%L
  * SAMOA
@@ -24,9 +20,8 @@ import org.apache.samoa.instances.Attribute;
  * #L%
  */
 
-import org.apache.samoa.instances.Instance;
-import org.apache.samoa.instances.Utils;
-import org.apache.samoa.moa.AbstractMOAObject;
+import org.apache.samoa.instances.instances.Instance;
+        import org.apache.samoa.moa.AbstractMOAObject;
 import org.apache.samoa.moa.core.Measurement;
 import org.apache.samoa.moa.core.Vote;
 

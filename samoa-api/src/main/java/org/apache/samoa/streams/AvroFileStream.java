@@ -21,9 +21,11 @@ package org.apache.samoa.streams;
  */
 
 import java.io.IOException;
-import java.io.InputStream;
 
-import org.apache.samoa.instances.Instances;
+import org.apache.samoa.instances.loaders.*;
+import org.apache.samoa.instances.instances.Instances;
+import org.apache.samoa.instances.loaders.LoaderFactory;
+import org.apache.samoa.instances.loaders.LoaderType;
 import org.apache.samoa.moa.core.InstanceExample;
 import org.apache.samoa.moa.core.ObjectRepository;
 import org.apache.samoa.moa.tasks.TaskMonitor;
@@ -31,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.javacliparser.FileOption;
-import com.github.javacliparser.IntOption;
 import com.github.javacliparser.StringOption;
 
 /**
@@ -52,6 +53,10 @@ public class AvroFileStream extends FileStream {
 
   /** Represents the last read Instance **/
   protected InstanceExample lastInstanceRead;
+
+  protected static enum AVRO_ENCODING_FORMAT {
+    JSON, BINARY
+  }
 
   /** Represents the binary input stream of avro data **/
   //protected transient InputStream inputStream = null;
@@ -101,7 +106,16 @@ public class AvroFileStream extends FileStream {
     if (inputStream == null)
       return false;
 
-    this.instances = new Instances(this.inputStream, classIndexOption.getValue(), encodingFormatOption.getValue());
+    LoaderFactory loaderFactory = new LoaderFactory();
+    AvroLoader avroLoader;
+    if( encodingFormatOption.getValue().equals(AVRO_ENCODING_FORMAT.BINARY.toString())){
+        avroLoader = (AvroLoader) loaderFactory.createLoader(LoaderType.AVRO_BINARY_LOADER, classIndexOption.getValue());
+    }else{
+        avroLoader = (AvroLoader) loaderFactory.createLoader(LoaderType.AVRO_JSON_LOADER, classIndexOption.getValue());
+    }
+    avroLoader.initializeSchema(inputStream);
+    this.instances = new Instances(avroLoader);
+
 
     if (this.classIndexOption.getValue() < 0) {
       this.instances.setClassIndex(this.instances.numAttributes() - 1);

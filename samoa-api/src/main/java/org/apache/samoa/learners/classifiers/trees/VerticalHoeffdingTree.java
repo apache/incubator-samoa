@@ -23,7 +23,7 @@ package org.apache.samoa.learners.classifiers.trees;
 import java.util.Set;
 
 import org.apache.samoa.core.Processor;
-import org.apache.samoa.instances.Instances;
+import org.apache.samoa.instances.instances.Instances;
 import org.apache.samoa.learners.AdaptiveLearner;
 import org.apache.samoa.learners.ClassificationLearner;
 import org.apache.samoa.moa.classifiers.core.attributeclassobservers.AttributeClassObserver;

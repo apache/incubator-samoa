@@ -20,7 +20,7 @@ package org.apache.samoa.moa.classifiers;
  * #L%
  */
 
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 import org.apache.samoa.moa.core.Example;
 import org.apache.samoa.moa.learners.Learner;
 

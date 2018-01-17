@@ -1,4 +1,4 @@
-package org.apache.samoa.instances;
+package org.apache.samoa.instances.loaders;
 
 /*
  * #%L
@@ -19,6 +19,9 @@ package org.apache.samoa.instances;
  * limitations under the License.
  * #L%
  */
+
+import org.apache.samoa.instances.*;
+import org.apache.samoa.instances.instances.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -61,6 +64,20 @@ public class ArffLoader implements Loader {
     }
   }
 
+  /**
+   * Instantiates a new arff loader.
+   *
+   * @param classAttribute the class attribute
+   */
+  public ArffLoader(int classAttribute) {
+    if (classAttribute < 0) {
+      this.instanceInformation.setClassIndex(this.instanceInformation.numAttributes() - 1);
+      //System.out.print(this.instanceInformation.classIndex());
+    } else if (classAttribute > 0) {
+      this.instanceInformation.setClassIndex(classAttribute - 1);
+    }
+  }
+
   protected Range range;
 
   /**
@@ -79,28 +96,31 @@ public class ArffLoader implements Loader {
    * @param range
    */
   public ArffLoader(Reader reader, Range range) {
-    this.range = range;
-    BufferedReader br = new BufferedReader(reader);
+     setupStreamTokenizer(reader, range);
+  }
 
-    //Init streamTokenizer
-    streamTokenizer = new StreamTokenizer(br);
-    streamTokenizer.resetSyntax();
-    streamTokenizer.whitespaceChars(0, ' ');
-    streamTokenizer.wordChars(' ' + 1, '\u00FF');
-    streamTokenizer.whitespaceChars(',', ',');
-    streamTokenizer.commentChar('%');
-    streamTokenizer.quoteChar('"');
-    streamTokenizer.quoteChar('\'');
-    streamTokenizer.ordinaryChar('{');
-    streamTokenizer.ordinaryChar('}');
-    streamTokenizer.eolIsSignificant(true);
+  public void setupStreamTokenizer(Reader reader, Range range){
+      this.range = range;
+      BufferedReader br = new BufferedReader(reader);
 
-    this.instanceInformation = this.getHeader();
+      //Init streamTokenizer
+      streamTokenizer = new StreamTokenizer(br);
+      streamTokenizer.resetSyntax();
+      streamTokenizer.whitespaceChars(0, ' ');
+      streamTokenizer.wordChars(' ' + 1, '\u00FF');
+      streamTokenizer.whitespaceChars(',', ',');
+      streamTokenizer.commentChar('%');
+      streamTokenizer.quoteChar('"');
+      streamTokenizer.quoteChar('\'');
+      streamTokenizer.ordinaryChar('{');
+      streamTokenizer.ordinaryChar('}');
+      streamTokenizer.eolIsSignificant(true);
 
-    if (range != null) { //is MultiLabel
-      this.instanceInformation.setRangeOutputIndices(range);
-    }
+      this.instanceInformation = this.getHeader();
 
+      if (range != null) { //is MultiLabel
+        this.instanceInformation.setRangeOutputIndices(range);
+      }
   }
 
   /**
@@ -118,28 +138,6 @@ public class ArffLoader implements Loader {
    * @return the instance
    */
   public Instance readInstance() {
-    while (streamTokenizer.ttype == StreamTokenizer.TT_EOL) {
-      try {
-        streamTokenizer.nextToken();
-      } catch (IOException ex) {
-        Logger.getLogger(ArffLoader.class.getName()).log(Level.SEVERE, null, ex);
-      }
-    }
-    if (streamTokenizer.ttype == '{') {
-      return readInstanceSparse();
-      // return readDenseInstanceSparse();
-    } else {
-      return readInstanceDense();
-    }
-
-  }
-
-  /**
-   * Reads instance. It detects if it is dense or sparse.
-   *
-   * @return the instance
-   */
-  public Instance readInstance(Reader reader) {
     while (streamTokenizer.ttype == StreamTokenizer.TT_EOL) {
       try {
         streamTokenizer.nextToken();
@@ -183,8 +181,8 @@ public class ArffLoader implements Loader {
             double value;
             if ("?".equals(streamTokenizer.sval)) {
               value = Double.NaN; //Utils.missingValue();
-            } else if (isNumeric == true) {
-              value = Double.valueOf(streamTokenizer.sval).doubleValue();
+            } else if (isNumeric) {
+              value = Double.valueOf(streamTokenizer.sval);
             } else {
               value = this.auxAttributes.get(numAttribute).indexOfValue(streamTokenizer.sval);
             }
@@ -207,7 +205,7 @@ public class ArffLoader implements Loader {
   protected void setValue(Instance instance, int numAttribute, double value, boolean isNumber) {
     double valueAttribute;
 
-    if (isNumber && this.auxAttributes.get(numAttribute).isNominal) {
+    if (isNumber && this.auxAttributes.get(numAttribute).isNominal()) {
       valueAttribute = value;//this.auxAttributes.get(numAttribute).indexOfValue(Double.toString(value));
       //System.out.println(value +"/"+valueAttribute+" ");
 
@@ -265,7 +263,7 @@ public class ArffLoader implements Loader {
               || streamTokenizer.ttype == 34 || streamTokenizer.ttype == 39)) {
             //System.out.print(streamTokenizer.sval + "-");
             if (this.auxAttributes.get(numAttribute).isNumeric()) {
-              this.setSparseValue(instance, indexValues, attributeValues, numAttribute, Double.valueOf(streamTokenizer.sval).doubleValue(), true);
+              this.setSparseValue(instance, indexValues, attributeValues, numAttribute, Double.valueOf(streamTokenizer.sval), true);
             } else {
               this.setSparseValue(instance, indexValues, attributeValues, numAttribute, this.auxAttributes.get(numAttribute).indexOfValue(streamTokenizer.sval), false);
             }
@@ -284,8 +282,8 @@ public class ArffLoader implements Loader {
     int[] arrayIndexValues = new int[attributeValues.size()];
     double[] arrayAttributeValues = new double[attributeValues.size()];
     for (int i = 0; i < arrayIndexValues.length; i++) {
-      arrayIndexValues[i] = indexValues.get(i).intValue();
-      arrayAttributeValues[i] = attributeValues.get(i).doubleValue();
+      arrayIndexValues[i] = indexValues.get(i);
+      arrayAttributeValues[i] = attributeValues.get(i);
     }
     instance.addSparseValues(arrayIndexValues, arrayAttributeValues, this.instanceInformation.numAttributes());
     return instance;
@@ -294,7 +292,7 @@ public class ArffLoader implements Loader {
 
   private void setSparseValue(Instance instance, List<Integer> indexValues, List<Double> attributeValues, int numAttribute, double value, boolean isNumber) {
     double valueAttribute;
-    if (isNumber && this.auxAttributes.get(numAttribute).isNominal) {
+    if (isNumber && this.auxAttributes.get(numAttribute).isNominal()) {
       valueAttribute = this.auxAttributes.get(numAttribute).indexOfValue(Double.toString(value));
     } else {
       valueAttribute = value;
@@ -342,7 +340,7 @@ public class ArffLoader implements Loader {
               || streamTokenizer.ttype == 34)) {
             //System.out.print(streamTokenizer.sval + "/"+this.auxAttributes.get(numAttribute).indexOfValue(streamTokenizer.sval)+" ");
             if (this.auxAttributes.get(numAttribute).isNumeric()) {
-              instance.setValue(numAttribute, Double.valueOf(streamTokenizer.sval).doubleValue());//this.setValue(instance, numAttribute, Double.valueOf(streamTokenizer.sval).doubleValue(), true);
+              instance.setValue(numAttribute, Double.valueOf(streamTokenizer.sval));//this.setValue(instance, numAttribute, Double.valueOf(streamTokenizer.sval).doubleValue(), true);
             } else {
               instance.setValue(numAttribute, this.auxAttributes.get(numAttribute).indexOfValue(streamTokenizer.sval));//this.setValue(instance, numAttribute, this.auxAttributes.get(numAttribute).indexOfValue(streamTokenizer.sval), false);
               //numAttribute++;
@@ -382,7 +380,7 @@ public class ArffLoader implements Loader {
       while (streamTokenizer.ttype != StreamTokenizer.TT_EOF) {
         //For each line
         //if (streamTokenizer.ttype == '@') {
-        if (streamTokenizer.ttype == StreamTokenizer.TT_WORD && streamTokenizer.sval.startsWith("@") == true) {
+        if (streamTokenizer.ttype == StreamTokenizer.TT_WORD && streamTokenizer.sval.startsWith("@")) {
           //streamTokenizer.nextToken();
           String token = streamTokenizer.sval.toUpperCase();
           if (token.startsWith("@RELATION")) {
@@ -470,21 +468,18 @@ public class ArffLoader implements Loader {
   }
 
   protected Instance newSparseInstance(double d, double[] res) {
-    Instance inst = new SparseInstance(d, res); //is it dense?
     //inst.setInstanceInformation(this.instanceInformation);
-    return inst;
+    return new SparseInstance(d, res);
   }
 
   protected Instance newSparseInstance(double d) {
-    Instance inst = new SparseInstance(d);
     //inst.setInstanceInformation(this.instanceInformation);
-    return inst;
+    return new SparseInstance(d);
   }
 
   protected Instance newDenseInstance(int numberAttributes) {
-    Instance inst = new DenseInstance(numberAttributes);
     //inst.setInstanceInformation(this.instanceInformation);
-    return inst;
+    return new DenseInstance(numberAttributes);
   }
 
   private void setClassValue(Instance instance, double valueAttribute) {

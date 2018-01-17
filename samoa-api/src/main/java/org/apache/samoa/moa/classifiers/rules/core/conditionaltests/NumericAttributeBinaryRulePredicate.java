@@ -39,8 +39,8 @@
  */
 package org.apache.samoa.moa.classifiers.rules.core.conditionaltests;
 
-import org.apache.samoa.instances.Instance;
-import org.apache.samoa.instances.InstancesHeader;
+import org.apache.samoa.instances.instances.Instance;
+import org.apache.samoa.instances.instances.InstancesHeader;
 import org.apache.samoa.moa.classifiers.core.conditionaltests.InstanceConditionalBinaryTest;
 import org.apache.samoa.moa.classifiers.rules.core.Predicate;
 

@@ -26,8 +26,8 @@ import java.util.List;
 
 import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.core.Processor;
-import org.apache.samoa.instances.Instance;
-import org.apache.samoa.instances.Instances;
+import org.apache.samoa.instances.instances.Instance;
+import org.apache.samoa.instances.instances.Instances;
 import org.apache.samoa.learners.classifiers.rules.common.ActiveRule;
 import org.apache.samoa.learners.classifiers.rules.common.LearningRule;
 import org.apache.samoa.learners.classifiers.rules.common.RuleActiveRegressionNode;

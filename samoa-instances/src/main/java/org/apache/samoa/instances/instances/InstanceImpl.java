@@ -1,4 +1,4 @@
-package org.apache.samoa.instances;
+package org.apache.samoa.instances.instances;
 
 /*
  * #%L
@@ -19,6 +19,8 @@ package org.apache.samoa.instances;
  * limitations under the License.
  * #L%
  */
+
+import org.apache.samoa.instances.*;
 
 import java.text.SimpleDateFormat;
 
@@ -280,10 +282,10 @@ public class InstanceImpl implements MultiLabelInstance {
     //return classIndex != Integer.MAX_VALUE ? classIndex : 0;
     // return  ? classIndex : 0;
     if(classIndex == Integer.MAX_VALUE)
-      if(this.instanceHeader.instanceInformation.range!=null)
-        classIndex=instanceHeader.instanceInformation.range.getStart();
+      if(this.instanceHeader.instanceInformation.range != null)
+        classIndex = instanceHeader.instanceInformation.range.getStart();
       else
-        classIndex=0;
+        classIndex = 0;
     return classIndex;
   }
 
@@ -334,8 +336,7 @@ public class InstanceImpl implements MultiLabelInstance {
    */
   @Override
   public Instance copy() {
-    InstanceImpl inst = new InstanceImpl(this);
-    return inst;
+    return new InstanceImpl(this);
   }
 
   /**

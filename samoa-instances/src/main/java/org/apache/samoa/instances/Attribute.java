@@ -20,6 +20,8 @@ package org.apache.samoa.instances;
  * #L%
  */
 
+import org.apache.samoa.instances.Utils;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -72,6 +74,7 @@ public class Attribute implements Serializable {
    * Date format specification for date attributes 
    */
   protected SimpleDateFormat m_DateFormat;
+
 
   /**
    * The name.
@@ -205,7 +208,7 @@ public class Attribute implements Serializable {
    * @param value the value
    * @return the string
    */
-  String formatDate(double value) {
+  public String formatDate(double value) {
     return this.m_DateFormat.format(new Date((long) value));
   }
 
@@ -214,9 +217,19 @@ public class Attribute implements Serializable {
    *
    * @return true, if is date
    */
-  boolean isDate() {
+  public boolean isDate() {
     return isDate;
   }
+
+  /**
+   * Get name.
+   *
+   * @return name
+   */
+  public String getName() {
+    return name;
+  }
+
 
   /**
    * The values string attribute.
@@ -231,7 +244,7 @@ public class Attribute implements Serializable {
    */
   public final int indexOfValue(String value) {
 
-    if (isNominal() == false) {
+    if (!isNominal()) {
       return -1;
     }
     if (this.valuesStringAttribute == null) {
@@ -246,7 +259,7 @@ public class Attribute implements Serializable {
     if (val == null) {
       return -1;
     } else {
-      return val.intValue();
+      return val;
     }
   }
 

@@ -32,11 +32,14 @@ package org.apache.samoa.streams.kafka;
  */
 
 
+import org.apache.samoa.core.ContentEvent;
+import org.apache.samoa.core.Processor;
+import org.apache.samoa.instances.kafka.KafkaSerializer;
+import org.apache.samoa.learners.InstanceContentEvent;
+
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.samoa.core.ContentEvent;
-import org.apache.samoa.core.Processor;
 
 /**
  * Destination processor that writes data to Apache Kafka
@@ -68,7 +71,7 @@ public class KafkaDestinationProcessor implements Processor {
         this.topic = topic;
         this.serializer = serializer;
     }
-    
+
     private KafkaDestinationProcessor(KafkaUtils kafkaUtils, String topic, KafkaSerializer serializer){
         this.kafkaUtils = kafkaUtils;
         this.topic = topic;
@@ -78,12 +81,15 @@ public class KafkaDestinationProcessor implements Processor {
     @Override
     public boolean process(ContentEvent event) {
         try {
-            kafkaUtils.sendKafkaMessage(topic, serializer.serialize(event));
+            //temporary solution
+            if(event instanceof InstanceContentEvent) {
+                kafkaUtils.sendKafkaMessage(topic, serializer.serialize(((InstanceContentEvent) event).getInstance()));
+                return true;
+            }
         } catch (Exception ex) {
             Logger.getLogger(KafkaEntranceProcessor.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
         }
-        return true;
+        return false;
     }
 
     @Override

@@ -25,10 +25,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.apache.samoa.instances.Attribute;
-import org.apache.samoa.instances.DenseInstance;
-import org.apache.samoa.instances.Instance;
-import org.apache.samoa.instances.Instances;
-import org.apache.samoa.instances.InstancesHeader;
+import org.apache.samoa.instances.instances.DenseInstance;
+import org.apache.samoa.instances.instances.Instance;
+import org.apache.samoa.instances.instances.Instances;
+import org.apache.samoa.instances.instances.InstancesHeader;
 import org.apache.samoa.moa.core.FastVector;
 import org.apache.samoa.moa.core.InstanceExample;
 import org.apache.samoa.moa.core.ObjectRepository;

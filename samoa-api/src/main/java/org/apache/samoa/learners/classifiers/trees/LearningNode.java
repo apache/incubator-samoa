@@ -20,7 +20,7 @@ package org.apache.samoa.learners.classifiers.trees;
  * #L%
  */
 
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 
 /**
  * Abstract class that represents a learning node

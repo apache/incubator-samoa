@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 import org.apache.samoa.moa.classifiers.core.AttributeSplitSuggestion;
 import org.apache.samoa.moa.classifiers.core.attributeclassobservers.AttributeClassObserver;
 import org.apache.samoa.moa.classifiers.core.attributeclassobservers.FIMTDDNumericAttributeClassObserver;

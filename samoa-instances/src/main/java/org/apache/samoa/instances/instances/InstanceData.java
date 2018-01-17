@@ -1,4 +1,4 @@
-package org.apache.samoa.instances;
+package org.apache.samoa.instances.instances;
 
 /*
  * #%L
@@ -29,7 +29,7 @@ public interface InstanceData extends Serializable {
    *
    * @return the int
    */
-  public int numAttributes();
+  int numAttributes();
 
   /**
    * Value.
@@ -37,7 +37,7 @@ public interface InstanceData extends Serializable {
    * @param instAttIndex the inst att index
    * @return the double
    */
-  public double value(int instAttIndex);
+  double value(int instAttIndex);
 
   /**
    * Checks if is missing.
@@ -45,14 +45,14 @@ public interface InstanceData extends Serializable {
    * @param instAttIndex the inst att index
    * @return true, if is missing
    */
-  public boolean isMissing(int instAttIndex);
+  boolean isMissing(int instAttIndex);
 
   /**
    * Num values.
    *
    * @return the int
    */
-  public int numValues();
+  int numValues();
 
   /**
    * Index.
@@ -60,7 +60,7 @@ public interface InstanceData extends Serializable {
    * @param i the i
    * @return the int
    */
-  public int index(int i);
+  int index(int i);
 
   /**
    * Value sparse.
@@ -68,7 +68,7 @@ public interface InstanceData extends Serializable {
    * @param i the i
    * @return the double
    */
-  public double valueSparse(int i);
+  double valueSparse(int i);
 
   /**
    * Checks if is missing sparse.
@@ -76,14 +76,14 @@ public interface InstanceData extends Serializable {
    * @param p1 the p1
    * @return true, if is missing sparse
    */
-  public boolean isMissingSparse(int p1);
+  boolean isMissingSparse(int p1);
 
   /**
    * To double array.
    *
    * @return the double[]
    */
-  public double[] toDoubleArray();
+  double[] toDoubleArray();
 
   /**
    * Sets the value.
@@ -91,7 +91,7 @@ public interface InstanceData extends Serializable {
    * @param m_numAttributes the m_num attributes
    * @param d the d
    */
-  public void setValue(int m_numAttributes, double d);
+  void setValue(int m_numAttributes, double d);
 
 
   /**
@@ -99,13 +99,13 @@ public interface InstanceData extends Serializable {
    *
    * @param index the indes
    */
-  public void deleteAttributeAt(int index);
+  void deleteAttributeAt(int index);
 
   /**
    * Produces a shallow copy of this instance data. 
    * 
    * @return the shallow copy
    */
-  public InstanceData copy();
+  InstanceData copy();
 
 }

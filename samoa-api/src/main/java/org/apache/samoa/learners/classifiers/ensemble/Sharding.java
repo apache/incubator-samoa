@@ -23,7 +23,7 @@ package org.apache.samoa.learners.classifiers.ensemble;
 import java.util.Set;
 
 import org.apache.samoa.core.Processor;
-import org.apache.samoa.instances.Instances;
+import org.apache.samoa.instances.instances.Instances;
 import org.apache.samoa.learners.Learner;
 import org.apache.samoa.learners.classifiers.trees.VerticalHoeffdingTree;
 import org.apache.samoa.topology.Stream;

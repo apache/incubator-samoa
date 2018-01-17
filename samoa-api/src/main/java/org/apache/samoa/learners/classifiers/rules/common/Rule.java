@@ -23,7 +23,7 @@ package org.apache.samoa.learners.classifiers.rules.common;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 import org.apache.samoa.moa.AbstractMOAObject;
 import org.apache.samoa.moa.classifiers.rules.core.conditionaltests.NumericAttributeBinaryRulePredicate;
 

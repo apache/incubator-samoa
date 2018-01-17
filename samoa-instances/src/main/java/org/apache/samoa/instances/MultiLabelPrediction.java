@@ -32,7 +32,7 @@ public class MultiLabelPrediction implements Prediction, Serializable {
 
   public MultiLabelPrediction(int numOutputAttributes) {
     prediction = new ArrayList< ArrayList<Double> >();
-    for (int i=0; i<numOutputAttributes;i++)
+    for (int i = 0; i < numOutputAttributes; i++)
       prediction.add(new ArrayList<Double>());
   }
 
@@ -57,7 +57,7 @@ public class MultiLabelPrediction implements Prediction, Serializable {
     if (prediction.size() > outputAttributeIndex) {
       ArrayList<Double> aux = prediction.get(outputAttributeIndex);
       ret = new double[s];
-      for (int i =0;i < s;i++) {
+      for (int i = 0; i < s; i++) {
         ret[i] = aux.get(i).doubleValue();
       }
     }
@@ -82,10 +82,10 @@ public class MultiLabelPrediction implements Prediction, Serializable {
 
   @Override
   public void setVotes(int outputAttributeIndex, double[] votes) {
-    for(int i=0; i<votes.length; i++) {
+    for(int i = 0; i < votes.length; i++) {
       if (i >= prediction.get(outputAttributeIndex).size()) {
         prediction.get(outputAttributeIndex).ensureCapacity(i+1);
-        while (prediction.get(outputAttributeIndex).size() < i+1) {
+        while (prediction.get(outputAttributeIndex).size() < i + 1) {
           prediction.get(outputAttributeIndex).add(0.0);
         }
       }
@@ -102,8 +102,8 @@ public class MultiLabelPrediction implements Prediction, Serializable {
   @Override
   public void setVote(int outputAttributeIndex, int classIndex, double vote) {
     if (outputAttributeIndex >= prediction.get(outputAttributeIndex).size()) {
-      prediction.get(outputAttributeIndex).ensureCapacity(classIndex+1);
-      while (prediction.get(outputAttributeIndex).size() < classIndex+1) {
+      prediction.get(outputAttributeIndex).ensureCapacity(classIndex + 1);
+      while (prediction.get(outputAttributeIndex).size() < classIndex + 1) {
         prediction.get(outputAttributeIndex).add(0.0);
       }
     }
@@ -113,12 +113,12 @@ public class MultiLabelPrediction implements Prediction, Serializable {
 
   @Override
   public String toString(){
-    StringBuffer sb= new StringBuffer();
-    for (int i=0; i<prediction.size(); i++){
+    StringBuffer sb = new StringBuffer();
+    for (int i = 0; i < prediction.size(); i++){
       sb.append("Out " + i + ": ");
-      for (int c=0; c<prediction.get(i).size(); c++)
+      for (int c = 0; c < prediction.get(i).size(); c++)
       {
-        sb.append(((int)(prediction.get(i).get(c)*1000)/1000.0)+ " ");
+        sb.append(((int)(prediction.get(i).get(c) * 1000) / 1000.0) + " ");
       }
     }
     return sb.toString();
@@ -126,9 +126,7 @@ public class MultiLabelPrediction implements Prediction, Serializable {
 
   @Override
   public boolean hasVotesForAttribute(int outputAttributeIndex) {
-    if(prediction.size()<(outputAttributeIndex+1))
-      return false;
-    return (prediction.get(outputAttributeIndex).size()==0) ? false : true;
+    return prediction.size() >= (outputAttributeIndex + 1) && prediction.get(outputAttributeIndex).size() != 0;
   }
 
   @Override

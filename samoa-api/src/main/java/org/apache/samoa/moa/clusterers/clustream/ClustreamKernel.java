@@ -21,7 +21,7 @@ package org.apache.samoa.moa.clusterers.clustream;
  */
 import java.util.List;
 
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 import org.apache.samoa.moa.cluster.CFCluster;
 
 public class ClustreamKernel extends CFCluster {

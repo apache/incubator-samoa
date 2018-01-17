@@ -22,8 +22,8 @@ package org.apache.samoa.learners.clusterers;
 
 import java.io.Serializable;
 
-import org.apache.samoa.instances.Instance;
-import org.apache.samoa.instances.Instances;
+import org.apache.samoa.instances.instances.Instance;
+import org.apache.samoa.instances.instances.Instances;
 import org.apache.samoa.moa.cluster.Clustering;
 
 /**

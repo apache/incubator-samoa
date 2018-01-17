@@ -50,7 +50,7 @@ public class Utils {
 
     // Enclose the string in 's if the string contains a recently added
     // backquote or contains one of the following characters.
-    if ((quote == true) || (string.indexOf('{') != -1) || (string.indexOf('}') != -1) || (string.indexOf(',') != -1)
+    if ((quote) || (string.indexOf('{') != -1) || (string.indexOf('}') != -1) || (string.indexOf(',') != -1)
         || (string.equals("?"))
         || (string.indexOf(' ') != -1) || (string.equals(""))) {
       string = ("'".concat(string)).concat("'");

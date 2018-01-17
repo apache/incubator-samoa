@@ -23,8 +23,8 @@ package org.apache.samoa.learners.classifiers;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.samoa.instances.Instance;
-import org.apache.samoa.instances.Instances;
+import org.apache.samoa.instances.instances.Instance;
+import org.apache.samoa.instances.instances.Instances;
 import org.apache.samoa.moa.classifiers.core.attributeclassobservers.GaussianNumericAttributeClassObserver;
 import org.apache.samoa.moa.core.GaussianEstimator;
 import org.slf4j.Logger;

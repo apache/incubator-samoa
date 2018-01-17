@@ -1,4 +1,4 @@
-package org.apache.samoa.instances;
+package org.apache.samoa.instances.loaders;
 
 /*
  * #%L
@@ -20,6 +20,9 @@ package org.apache.samoa.instances;
  * #L%
  */
 
+import org.apache.samoa.instances.instances.Instance;
+import org.apache.samoa.instances.instances.InstanceInformation;
+
 import java.io.Serializable;
 
 public interface Loader extends Serializable {
@@ -29,13 +32,13 @@ public interface Loader extends Serializable {
    * 
    * @return InstanceInformation
    */
-  public InstanceInformation getStructure();
+  InstanceInformation getStructure();
 
   /**
    * Read a single instance from the Stream
    * 
    * @return Instance
    */
-  public Instance readInstance();
+  Instance readInstance();
 
 }

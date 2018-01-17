@@ -20,7 +20,7 @@ package org.apache.samoa.learners.classifiers.trees;
  * #L%
  */
 
-import org.apache.samoa.instances.Instance;
+import org.apache.samoa.instances.instances.Instance;
 import org.apache.samoa.moa.classifiers.core.conditionaltests.InstanceConditionalTest;
 import org.apache.samoa.moa.core.AutoExpandVector;
 

@@ -1,4 +1,4 @@
-package org.apache.samoa.instances;
+package org.apache.samoa.instances.loaders;
 
 /*
  * #%L
@@ -20,39 +20,46 @@ package org.apache.samoa.instances;
  * #L%
  */
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
-import org.apache.avro.file.DataFileStream;
+import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.io.Decoder;
+import org.apache.avro.io.DecoderFactory;
+import org.apache.samoa.instances.instances.Instance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AvroBinaryLoader extends AvroLoader {
+public class AvroJsonLoader extends AvroLoader {
 
   private static final long serialVersionUID = 1L;
-  private static final Logger logger = LoggerFactory.getLogger(AvroBinaryLoader.class);
+  private static final Logger logger = LoggerFactory.getLogger(AvroJsonLoader.class);
 
-  /** Avro Binary reader for an input stream **/
-  protected DataFileStream<GenericRecord> dataFileStream = null;
+  /** The Character reader for JSON read */
+  protected Reader reader = null;
 
-  public AvroBinaryLoader(InputStream inputStream, int classAttribute) {
+
+  public AvroJsonLoader( int classAttribute) {
     super(classAttribute);
-    initializeSchema(inputStream);
   }
 
   /* (non-Javadoc)
-   * @see org.apache.samoa.instances.AvroLoader#initializeSchema(java.io.InputStream)
+   * @see org.apache.samoa.instances.loaders.AvroLoader#initializeSchema(java.io.InputStream)
    */
   @Override
   public void initializeSchema(InputStream inputStream)
   {
+    String schemaString = null;
     try {
-      this.datumReader = new GenericDatumReader<GenericRecord>();
-      this.dataFileStream = new DataFileStream<GenericRecord>(inputStream, datumReader);
-      this.schema = dataFileStream.getSchema();
-
+      this.reader = new BufferedReader(new InputStreamReader(inputStream));
+      schemaString = ((BufferedReader) this.reader).readLine();
+      this.schema = new Schema.Parser().parse(schemaString);
+      this.datumReader = new GenericDatumReader<GenericRecord>(schema);
       this.instanceInformation = getHeader();
       this.isSparseData = isSparseData();
 
@@ -69,18 +76,25 @@ public class AvroBinaryLoader extends AvroLoader {
   }
 
   /* (non-Javadoc)
-   * @see org.apache.samoa.instances.AvroLoader#readInstance()
+   * @see org.apache.samoa.instances.loaders.AvroLoader#readInstance()
    */
   @Override
   public Instance readInstance() {
 
+    String line = null;
+    Decoder decoder = null;
     GenericRecord record = null;
 
     try {
-      if (dataFileStream.hasNext()) {
-        record = (GenericRecord) dataFileStream.next();
+      while ((line = ((BufferedReader) reader).readLine()) != null) {
+        if (line.trim().length() <= 0)
+          continue;
+
+        decoder = DecoderFactory.get().jsonDecoder(schema, line);
+        record = datumReader.read(null, decoder);
+        break;
       }
-    } catch (Exception ioException) {
+    } catch (IOException ioException) {
       logger.error(AVRO_LOADER_INSTANCE_READ_ERROR + " : {}", ioException);
       throw new RuntimeException(AVRO_LOADER_INSTANCE_READ_ERROR + " : " + ioException);
     }
@@ -102,9 +116,9 @@ public class AvroBinaryLoader extends AvroLoader {
    */
   private void closeReader()
   {
-    if (dataFileStream != null)
+    if (reader != null)
       try {
-        dataFileStream.close();
+        reader.close();
       } catch (IOException ioException) {
         logger.error(AVRO_LOADER_INSTANCE_READ_ERROR + " : {}", ioException);
         throw new RuntimeException(AVRO_LOADER_INSTANCE_READ_ERROR + " : " + ioException);
