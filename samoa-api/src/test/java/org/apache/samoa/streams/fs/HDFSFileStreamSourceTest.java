@@ -75,9 +75,7 @@ public class HDFSFileStreamSourceTest {
 
   @After
   public void tearDown() throws Exception {
-    System.gc();
     hdfsCluster.shutdown();
-    System.gc();
   }
 
   /*
@@ -96,7 +94,6 @@ public class HDFSFileStreamSourceTest {
     String fn = streamSource.getFilePathAt(0);
     assertTrue("Incorrect file in filePaths.",
         fn.equals(BASE_DIR + "/1.txt") || fn.equals(hdfsURI + BASE_DIR + "1.txt"));
-    System.gc();
   }
 
   @Test
@@ -112,7 +109,6 @@ public class HDFSFileStreamSourceTest {
     String fn = streamSource.getFilePathAt(0);
     assertTrue("Incorrect file in filePaths.",
         fn.equals(BASE_DIR + "/1.txt") || fn.equals(hdfsURI + BASE_DIR + "1.txt"));
-    System.gc();
   }
 
   @Test
@@ -136,7 +132,6 @@ public class HDFSFileStreamSourceTest {
       String fn = streamSource.getFilePathAt(i);
       assertTrue("Incorrect file in filePaths:" + fn, filenames.contains(fn));
     }
-    System.gc();
   }
 
   @Test
@@ -159,7 +154,6 @@ public class HDFSFileStreamSourceTest {
       String fn = streamSource.getFilePathAt(i);
       assertTrue("Incorrect file in filePaths:" + fn, filenames.contains(fn));
     }
-    System.gc();
   }
 
   /*
@@ -201,7 +195,6 @@ public class HDFSFileStreamSourceTest {
 
     // assert that another call to getNextInputStream will return null
     assertNull("Call getNextInputStream after the last file did not return null.", streamSource.getNextInputStream());
-    System.gc();
   }
 
   /*
@@ -226,7 +219,6 @@ public class HDFSFileStreamSourceTest {
    * reset tests
    */
   public void testReset() {
-    System.gc();
     // write input files & noise files
     writeSimpleFiles(BASE_DIR, "txt", NUM_FILES_IN_DIR);
 
@@ -309,3 +301,4 @@ public class HDFSFileStreamSourceTest {
   }
 
 }
+
