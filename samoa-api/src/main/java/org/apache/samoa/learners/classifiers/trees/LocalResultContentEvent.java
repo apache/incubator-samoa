@@ -30,7 +30,7 @@ import org.apache.samoa.moa.classifiers.core.AttributeSplitSuggestion;
  * @author Arinto Murdopo
  * 
  */
-final class LocalResultContentEvent implements ContentEvent {
+public final class LocalResultContentEvent implements ContentEvent {
 
   private static final long serialVersionUID = -4206620993777418571L;
 

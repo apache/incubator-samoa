@@ -29,7 +29,7 @@ import org.apache.samoa.instances.Instance;
  * @author Arinto Murdopo
  * 
  */
-final class InactiveLearningNode extends LearningNode {
+public final class InactiveLearningNode extends LearningNode {
 
   /**
 	 * 

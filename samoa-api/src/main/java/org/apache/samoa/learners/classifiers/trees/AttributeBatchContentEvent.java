@@ -31,7 +31,7 @@ import org.apache.samoa.core.ContentEvent;
  * @author Arinto Murdopo
  * 
  */
-final class AttributeBatchContentEvent implements ContentEvent {
+public final class AttributeBatchContentEvent implements ContentEvent {
 
   private static final long serialVersionUID = 6652815649846676832L;
 
@@ -49,7 +49,7 @@ final class AttributeBatchContentEvent implements ContentEvent {
     isNominal = true;
   }
 
-  private AttributeBatchContentEvent(Builder builder) {
+  public AttributeBatchContentEvent(Builder builder) {
     this.learningNodeId = builder.learningNodeId;
     this.obsIndex = builder.obsIndex;
     this.contentEventList = new LinkedList<>();
@@ -96,7 +96,7 @@ final class AttributeBatchContentEvent implements ContentEvent {
     return this.isNominal;
   }
 
-  static final class Builder {
+  public static final class Builder {
 
     // required parameters
     private final long learningNodeId;

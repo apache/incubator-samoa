@@ -27,7 +27,7 @@ package org.apache.samoa.learners.classifiers.trees;
  * @author Arinto Murdopo
  * 
  */
-final class FoundNode implements java.io.Serializable {
+public final class FoundNode implements java.io.Serializable {
 
   /**
 	 * 

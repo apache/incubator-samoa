@@ -47,7 +47,7 @@ import com.google.common.collect.Table;
  * @author Arinto Murdopo
  * 
  */
-final class LocalStatisticsProcessor implements Processor {
+public final class LocalStatisticsProcessor implements Processor {
 
   /**
 	 * 
