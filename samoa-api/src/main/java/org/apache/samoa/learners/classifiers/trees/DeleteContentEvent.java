@@ -27,7 +27,7 @@ package org.apache.samoa.learners.classifiers.trees;
  * @author Arinto Murdopo
  * 
  */
-final class DeleteContentEvent extends ControlContentEvent {
+public final class DeleteContentEvent extends ControlContentEvent {
 
   private static final long serialVersionUID = -2105250722560863633L;
 

@@ -28,7 +28,7 @@ import org.apache.samoa.instances.Instance;
  * @author Arinto Murdopo
  * 
  */
-abstract class LearningNode extends Node {
+public abstract class LearningNode extends Node {
 
   private static final long serialVersionUID = 7157319356146764960L;
 

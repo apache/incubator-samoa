@@ -28,7 +28,7 @@ import org.apache.samoa.core.ContentEvent;
  * @author Arinto Murdopo
  * 
  */
-abstract class ControlContentEvent implements ContentEvent {
+public abstract class ControlContentEvent implements ContentEvent {
 
   /**
 	 * 

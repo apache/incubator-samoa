@@ -41,7 +41,7 @@ import java.util.List;
  * @author Arinto Murdopo
  * 
  */
-final class FilterProcessor implements Processor {
+public final class FilterProcessor implements Processor {
 
   private static final long serialVersionUID = -1685875718300564885L;
   private static final Logger logger = LoggerFactory.getLogger(FilterProcessor.class);
