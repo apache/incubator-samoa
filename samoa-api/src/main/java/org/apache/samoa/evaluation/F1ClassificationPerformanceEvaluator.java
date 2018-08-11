@@ -73,7 +73,8 @@ public class F1ClassificationPerformanceEvaluator extends AbstractMOAObject impl
     }
 
     @Override
-    public void addResult(Instance inst, double[] classVotes, String instanceIndex) {
+    public void addResult(Instance inst, double[] classVotes, String instanceIndex,
+            long delay) {
         if (numClasses==-1) reset(inst.numClasses());
         int trueClass = (int) inst.classValue();
         this.support[trueClass] += 1;

@@ -80,7 +80,7 @@ public class EvaluatorProcessor implements Processor {
   public boolean process(ContentEvent event) {
 
     ResultContentEvent result = (ResultContentEvent) event;
-
+    
     if ((totalCount > 0) && (totalCount % samplingFrequency) == 0) {
       long sampleEnd = System.nanoTime();
       long sampleDuration = TimeUnit.SECONDS.convert(sampleEnd - sampleStart, TimeUnit.NANOSECONDS);
@@ -94,14 +94,15 @@ public class EvaluatorProcessor implements Processor {
     if ((immediatePredictionStream != null) && (totalCount > 0) && (totalCount % labelSamplingFrequency) == 0) {
       this.addVote();
     }
-
+    
     if (result.isLastEvent()) {
       this.concludeMeasurement();
       return true;
     }
-
+    
     String instanceIndex = String.valueOf(result.getInstanceIndex());
-    evaluator.addResult(result.getInstance(), result.getClassVotes(), instanceIndex);
+    evaluator.addResult(result.getInstance(), result.getClassVotes(), instanceIndex,
+            System.currentTimeMillis() - result.getArrivalTimestamp());
     totalCount += 1;
 
     if (totalCount == 1) {

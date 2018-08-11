@@ -154,7 +154,7 @@ final public class LocalLearnerProcessor implements Processor {
     if (inEvent.getInstanceIndex() < 0) {
       // end learning
       ResultContentEvent outContentEvent = new ResultContentEvent(-1, instance, 0,
-          new double[0], inEvent.isLastEvent());
+          new double[0], inEvent.isLastEvent(), inEvent.getArrivalTimestamp());
       outContentEvent.setClassifierIndex(this.modelId);
       outContentEvent.setEvaluationIndex(inEvent.getEvaluationIndex());
       outputStream.put(outContentEvent);
@@ -164,7 +164,7 @@ final public class LocalLearnerProcessor implements Processor {
     if (inEvent.isTesting()) {
       double[] dist = model.getVotesForInstance(instance);
       ResultContentEvent outContentEvent = new ResultContentEvent(inEvent.getInstanceIndex(),
-          instance, inEvent.getClassId(), dist, inEvent.isLastEvent());
+          instance, inEvent.getClassId(), dist, inEvent.isLastEvent(), inEvent.getArrivalTimestamp());
       outContentEvent.setClassifierIndex(this.modelId);
       outContentEvent.setEvaluationIndex(inEvent.getEvaluationIndex());
       logger.trace(inEvent.getInstanceIndex() + " {} {}", modelId, dist);

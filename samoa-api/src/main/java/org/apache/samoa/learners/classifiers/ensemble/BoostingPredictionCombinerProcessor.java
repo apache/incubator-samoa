@@ -73,7 +73,7 @@ public class BoostingPredictionCombinerProcessor extends PredictionCombinerProce
       }
       ResultContentEvent outContentEvent = new ResultContentEvent(inEvent.getInstanceIndex(),
           inEvent.getInstance(), inEvent.getClassId(),
-          combinedVote.getArrayCopy(), inEvent.isLastEvent());
+          combinedVote.getArrayCopy(), inEvent.isLastEvent(), inEvent.getArrivalTimestamp());
       outContentEvent.setEvaluationIndex(inEvent.getEvaluationIndex());
       outputStream.put(outContentEvent);
       clearStatisticsInstance(instanceIndex);

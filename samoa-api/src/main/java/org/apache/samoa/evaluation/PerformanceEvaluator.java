@@ -48,7 +48,8 @@ public interface PerformanceEvaluator extends MOAObject {
    *          an array containing the estimated membership probabilities of the test instance in each class
    * @return an array of measurements monitored in this evaluator
    */
-  public void addResult(Instance inst, double[] classVotes, String instanceIdentifier);
+  public void addResult(Instance inst, double[] classVotes, String instanceIdentifier,
+          long delay);
 
   /**
    * Gets the current measurements monitored by this evaluator.

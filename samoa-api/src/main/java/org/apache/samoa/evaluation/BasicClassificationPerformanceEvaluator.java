@@ -96,7 +96,8 @@ public class BasicClassificationPerformanceEvaluator extends AbstractMOAObject
   }
 
   @Override
-  public void addResult(Instance inst, double[] classVotes, String instanceIdentifier) {
+  public void addResult(Instance inst, double[] classVotes, String instanceIdentifier,
+          long delay) {
     double weight = inst.weight();
     int trueClass = (int) inst.classValue();
     if (weight > 0.0) {

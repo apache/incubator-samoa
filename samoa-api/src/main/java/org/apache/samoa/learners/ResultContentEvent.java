@@ -46,6 +46,7 @@ final public class ResultContentEvent implements ContentEvent {
   private double[] classVotes;
 
   private final boolean isLast;
+  private long arrivalTimestamp;
 
   public ResultContentEvent() {
     this.isLast = false;
@@ -68,7 +69,7 @@ final public class ResultContentEvent implements ContentEvent {
    *          the class votes
    */
   public ResultContentEvent(long instanceIndex, Instance instance, int classId,
-      double[] classVotes, boolean isLast) {
+      double[] classVotes, boolean isLast, long arrivalTimestamp) {
     if (instance != null) {
       this.instance = new SerializableInstance(instance);
     }
@@ -76,6 +77,7 @@ final public class ResultContentEvent implements ContentEvent {
     this.classId = classId;
     this.classVotes = classVotes;
     this.isLast = isLast;
+    this.arrivalTimestamp = arrivalTimestamp;
   }
 
   /**
@@ -208,6 +210,10 @@ final public class ResultContentEvent implements ContentEvent {
   @Override
   public boolean isLastEvent() {
     return isLast;
+  }
+  
+  public long getArrivalTimestamp() {
+      return arrivalTimestamp;
   }
 
 }

@@ -41,9 +41,10 @@ final public class InstanceContentEvent implements ContentEvent {
 	 */
   private static final long serialVersionUID = -8620668863064613845L;
   private InstanceContent instanceContent;
+  private long arrivalTimestamp;
 
   public InstanceContentEvent() {
-
+      
   }
 
   /**
@@ -58,7 +59,9 @@ final public class InstanceContentEvent implements ContentEvent {
    */
   public InstanceContentEvent(long index, Instance instance,
       boolean isTraining, boolean isTesting) {
-    this.instanceContent = new InstanceContent(index, instance, isTraining, isTesting);
+    this.instanceContent = new InstanceContent(index, instance, 
+            isTraining, isTesting);
+    arrivalTimestamp = System.currentTimeMillis();
   }
 
   /**
@@ -194,6 +197,10 @@ final public class InstanceContentEvent implements ContentEvent {
 
   public void setLast(boolean isLast) {
     this.instanceContent.setLast(isLast);
+  }  
+  
+  public long getArrivalTimestamp() {
+      return arrivalTimestamp;
   }
   /**
    * Gets the Instance Content.

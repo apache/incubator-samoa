@@ -111,7 +111,8 @@ public class PredictionCombinerProcessor implements Processor {
         combinedVote = new DoubleVector(new double[inEvent.getInstance().numClasses()]);
       }
       ResultContentEvent outContentEvent = new ResultContentEvent(inEvent.getInstanceIndex(), inEvent.getInstance(),
-          inEvent.getClassId(), combinedVote.getArrayCopy(), inEvent.isLastEvent());
+          inEvent.getClassId(), combinedVote.getArrayCopy(), inEvent.isLastEvent(),
+          inEvent.getArrivalTimestamp());
       outContentEvent.setEvaluationIndex(inEvent.getEvaluationIndex());
       outputStream.put(outContentEvent);
       clearStatisticsInstance(instanceIndex);

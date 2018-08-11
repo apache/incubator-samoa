@@ -48,67 +48,25 @@ public class WindowClassificationPerformanceEvaluator extends AbstractMOAObject 
 
   protected double TotalweightObserved = 0;
 
-  protected Estimator weightObserved;
+  protected WindowEstimator weightObserved;
 
-  protected Estimator weightCorrect;
+  protected WindowEstimator weightCorrect;
 
-  protected Estimator weightCorrectNoChangeClassifier;
+  protected WindowEstimator weightCorrectNoChangeClassifier;
 
   protected double lastSeenClass;
 
-  protected Estimator[] columnKappa;
+  protected WindowEstimator[] columnKappa;
 
-  protected Estimator[] rowKappa;
+  protected WindowEstimator[] rowKappa;
 
-  protected Estimator[] classAccuracy;
+  protected WindowEstimator[] classAccuracy;
 
   protected int numClasses;
 
   private String instanceIdentifier;
   private Instance lastSeenInstance;
   protected double[] classVotes;
-
-  public class Estimator {
-
-    protected double[] window;
-
-    protected int posWindow;
-
-    protected int lenWindow;
-
-    protected int SizeWindow;
-
-    protected double sum;
-
-    public Estimator(int sizeWindow) {
-      window = new double[sizeWindow];
-      SizeWindow = sizeWindow;
-      posWindow = 0;
-      lenWindow = 0;
-    }
-
-    public void add(double value) {
-      sum -= window[posWindow];
-      sum += value;
-      window[posWindow] = value;
-      posWindow++;
-      if (posWindow == SizeWindow) {
-        posWindow = 0;
-      }
-      if (lenWindow < SizeWindow) {
-        lenWindow++;
-      }
-    }
-
-    public double total() {
-      return sum;
-    }
-
-    public double length() {
-      return lenWindow;
-    }
-
-  }
 
   /*
    * public void setWindowWidth(int w) { this.width = w; reset(); }
@@ -120,23 +78,24 @@ public class WindowClassificationPerformanceEvaluator extends AbstractMOAObject 
 
   public void reset(int numClasses) {
     this.numClasses = numClasses;
-    this.rowKappa = new Estimator[numClasses];
-    this.columnKappa = new Estimator[numClasses];
-    this.classAccuracy = new Estimator[numClasses];
+    this.rowKappa = new WindowEstimator[numClasses];
+    this.columnKappa = new WindowEstimator[numClasses];
+    this.classAccuracy = new WindowEstimator[numClasses];
     for (int i = 0; i < this.numClasses; i++) {
-      this.rowKappa[i] = new Estimator(this.widthOption.getValue());
-      this.columnKappa[i] = new Estimator(this.widthOption.getValue());
-      this.classAccuracy[i] = new Estimator(this.widthOption.getValue());
+      this.rowKappa[i] = new WindowEstimator(this.widthOption.getValue());
+      this.columnKappa[i] = new WindowEstimator(this.widthOption.getValue());
+      this.classAccuracy[i] = new WindowEstimator(this.widthOption.getValue());
     }
-    this.weightCorrect = new Estimator(this.widthOption.getValue());
-    this.weightCorrectNoChangeClassifier = new Estimator(this.widthOption.getValue());
-    this.weightObserved = new Estimator(this.widthOption.getValue());
+    this.weightCorrect = new WindowEstimator(this.widthOption.getValue());
+    this.weightCorrectNoChangeClassifier = new WindowEstimator(this.widthOption.getValue());
+    this.weightObserved = new WindowEstimator(this.widthOption.getValue());
     this.TotalweightObserved = 0;
     this.lastSeenClass = 0;
   }
 
   @Override
-  public void addResult(Instance inst, double[] classVotes, String instanceIndex) {
+  public void addResult(Instance inst, double[] classVotes, String instanceIndex,
+          long delay) {
     double weight = inst.weight();
     int trueClass = (int) inst.classValue();
     if (weight > 0.0) {
