@@ -90,7 +90,7 @@ public class EvaluatorCVProcessor implements Processor {
     addStatisticsForInstanceReceived(instanceIndex, result.getEvaluationIndex(), 1);
 
     evaluators[result.getEvaluationIndex()].addResult(result.getInstance(), result.getClassVotes(),
-        String.valueOf(instanceIndex));
+        String.valueOf(instanceIndex), result.getArrivalTimestamp());
 
     if (hasAllVotesArrivedInstance(instanceIndex)) {
       totalCount += 1;

@@ -222,7 +222,7 @@ public class AMRulesAggregatorProcessor implements Processor {
    */
   private ResultContentEvent newResultContentEvent(double[] prediction, InstanceContentEvent inEvent) {
     ResultContentEvent rce = new ResultContentEvent(inEvent.getInstanceIndex(), inEvent.getInstance(),
-        inEvent.getClassId(), prediction, inEvent.isLastEvent());
+        inEvent.getClassId(), prediction, inEvent.isLastEvent(), inEvent.getArrivalTimestamp());
     rce.setClassifierIndex(this.processorId);
     rce.setEvaluationIndex(inEvent.getEvaluationIndex());
     return rce;

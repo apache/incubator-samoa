@@ -253,7 +253,7 @@ final class ModelAggregatorProcessor implements Processor {
    */
   private ResultContentEvent newResultContentEvent(double[] prediction, InstanceContent inEvent) {
     ResultContentEvent rce = new ResultContentEvent(inEvent.getInstanceIndex(), inEvent.getInstance(),
-        inEvent.getClassId(), prediction, inEvent.isLastEvent());
+        inEvent.getClassId(), prediction, inEvent.isLastEvent(), 0);
     rce.setClassifierIndex(this.processorId);
     rce.setEvaluationIndex(inEvent.getEvaluationIndex());
     return rce;
