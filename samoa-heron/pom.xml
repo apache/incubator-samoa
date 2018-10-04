@@ -3,7 +3,7 @@
   #%L
   SAMOA
   %%
-  Copyright (C) 2014 - 2015 Apache Software Foundation
+  Copyright (C) 2018 Apache Software Foundation
   %%
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -36,9 +36,16 @@
   </parent>
 
   <repositories>
-    <repository> <!-- repository for Storm -->
-      <id>clojars</id>
-      <url>http://clojars.org/repo/</url>
+    <repository>
+      <id>mvnrepository</id>
+      <name>Mvn repository</name>
+      <url>https://mvnrepository.com/artifact/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
     </repository>
   </repositories>
 
@@ -58,15 +65,15 @@
     </dependency>
 
     <dependency>
-      <groupId>org.apache.storm</groupId>
-      <artifactId>storm-core</artifactId>
-      <version>${storm.version}</version>
+      <groupId>com.twitter.heron</groupId>
+      <artifactId>heron-storm</artifactId>
+      <version>${heron.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.zookeeper</groupId>
       <artifactId>zookeeper</artifactId>
-      <version>${zookeeper.storm.version}</version>
+      <version>${zookeeper.heron.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -84,7 +91,7 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <version>${maven-assembly-plugin.version}</version>
         <configuration>
-          <finalName>SAMOA-Storm-${project.version}</finalName>
+          <finalName>SAMOA-heron-${project.version}</finalName>
           <appendAssemblyId>false</appendAssemblyId>
           <attach>false</attach>
           <outputDirectory>../target</outputDirectory>
@@ -125,7 +132,7 @@
       <testResource>
 	<directory>${project.basedir}/../bin</directory>
 	<includes>
-	<include>*storm.properties</include>
+	<include>*heron.properties</include>
 	</includes>
       </testResource>
    </testResources>
