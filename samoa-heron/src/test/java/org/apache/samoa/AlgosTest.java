@@ -1,4 +1,4 @@
-package org.apache.samoa;
+package org.apache.samoa.heron;
 
 /*
  * #%L
@@ -20,56 +20,59 @@ package org.apache.samoa;
  * #L%
  */
 
-import org.apache.samoa.LocalStormDoTask;
+import org.apache.samoa.heron.LocalHeronDoTask;
 import org.apache.samoa.TestParams;
 import org.apache.samoa.TestUtils;
 import org.junit.Test;
+import org.junit.Ignore;
 
 public class AlgosTest {
 
   @Test(timeout = 60000)
-  public void testVHTWithStorm() throws Exception {
+  public void testVHTWithHeron() throws Exception {
 
     TestParams vhtConfig = new TestParams.Builder()
         .inputInstances(200_000)
         .samplingSize(20_000)
         .evaluationInstances(200_000)
         .classifiedInstances(200_000)
-        .labelSamplingSize(10l)
+        //.labelSamplingSize(10l)
         .classificationsCorrect(55f)
         .kappaStat(-0.1f)
         .kappaTempStat(-0.1f)
         .cliStringTemplate(TestParams.Templates.PREQEVAL_VHT_RANDOMTREE)
         .resultFilePollTimeout(30)
         .prePollWait(15)
-        .taskClassName(LocalStormDoTask.class.getName())
+        .taskClassName(LocalHeronDoTask.class.getName())
         .build();
     TestUtils.test(vhtConfig);
 
   }
 
   @Test(timeout = 120000)
-  public void testBaggingWithStorm() throws Exception {
+  @Ignore
+  public void testBaggingWithHeron() throws Exception {
     TestParams baggingConfig = new TestParams.Builder()
         .inputInstances(200_000)
         .samplingSize(20_000)
         .evaluationInstances(180_000)
         .classifiedInstances(190_000)
-        .labelSamplingSize(10l)
+        //.labelSamplingSize(10l)
         .classificationsCorrect(60f)
         .kappaStat(0f)
         .kappaTempStat(0f)
         .cliStringTemplate(TestParams.Templates.PREQEVAL_BAGGING_RANDOMTREE)
         .resultFilePollTimeout(40)
         .prePollWait(20)
-        .taskClassName(LocalStormDoTask.class.getName())
+        .taskClassName(LocalHeronDoTask.class.getName())
         .build();
     TestUtils.test(baggingConfig);
 
   }
 
   @Test(timeout = 240000)
-  public void testCVPReqVHTWithStorm() throws Exception {
+  @Ignore
+  public void testCVPReqVHTWithHeron() throws Exception {
 
     TestParams vhtConfig = new TestParams.Builder()
         .inputInstances(200_000)
@@ -82,8 +85,8 @@ public class AlgosTest {
         .cliStringTemplate(TestParams.Templates.PREQCVEVAL_VHT_RANDOMTREE)
         .resultFilePollTimeout(30)
         .prePollWait(15)
-        .taskClassName(LocalStormDoTask.class.getName())
-        .labelFileCreated(false)
+        .taskClassName(LocalHeronDoTask.class.getName())
+        //.labelFileCreated(false)
         .build();
     TestUtils.test(vhtConfig);
 

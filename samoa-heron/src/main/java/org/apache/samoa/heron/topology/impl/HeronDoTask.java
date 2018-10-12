@@ -1,4 +1,4 @@
-package org.apache.samoa.topology.impl;
+package org.apache.samoa.heron.topology.impl;
 
 /*
  * #%L
@@ -36,8 +36,8 @@ import backtype.storm.utils.Utils;
  * @author Arinto Murdopo
  * 
  */
-public class StormDoTask {
-  private static final Logger logger = LoggerFactory.getLogger(StormDoTask.class);
+public class HeronDoTask {
+  private static final Logger logger = LoggerFactory.getLogger(HeronDoTask.class);
   private static String localFlag = "local";
   private static String clusterFlag = "cluster";
 
@@ -52,13 +52,13 @@ public class StormDoTask {
     List<String> tmpArgs = new ArrayList<String>(Arrays.asList(args));
 
     boolean isLocal = isLocal(tmpArgs);
-    int numWorker = StormSamoaUtils.numWorkers(tmpArgs);
+    int numWorker = HeronSamoaUtils.numWorkers(tmpArgs);
 
     args = tmpArgs.toArray(new String[0]);
 
     // convert the arguments into Storm topology
-    StormTopology stormTopo = StormSamoaUtils.argsToTopology(args);
-    String topologyName = stormTopo.getTopologyName();
+    HeronTopology heronTopo = HeronSamoaUtils.argsToTopology(args);
+    String topologyName = heronTopo.getTopologyName();
 
     Config conf = new Config();
     conf.putAll(Utils.readStormConfig());
@@ -69,7 +69,7 @@ public class StormDoTask {
       conf.setMaxTaskParallelism(numWorker);
 
       backtype.storm.LocalCluster cluster = new backtype.storm.LocalCluster();
-      cluster.submitTopology(topologyName, conf, stormTopo.getStormBuilder().createTopology());
+      cluster.submitTopology(topologyName, conf, heronTopo.getHeronBuilder().createTopology());
 
       backtype.storm.utils.Utils.sleep(600 * 1000);
 
@@ -81,7 +81,7 @@ public class StormDoTask {
       conf.setNumWorkers(numWorker);
       try {
         backtype.storm.StormSubmitter.submitTopology(topologyName, conf,
-            stormTopo.getStormBuilder().createTopology());
+            heronTopo.getHeronBuilder().createTopology());
       } catch (backtype.storm.generated.AlreadyAliveException ale) {
         ale.printStackTrace();
       } catch (backtype.storm.generated.InvalidTopologyException ite) {

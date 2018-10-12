@@ -1,5 +1,4 @@
-package org.apache.samoa.topology.impl;
-//package org.apache.samoa.topology.impl;
+package org.apache.samoa.heron.topology.impl;
 
 /*
  * #%L

@@ -1,4 +1,4 @@
-package org.apache.samoa.topology.impl;
+package org.apache.samoa.heron.topology.impl;
 
 /*
  * #%L
@@ -31,7 +31,7 @@ import backtype.storm.tuple.Values;
  * @author Arinto Murdopo
  * 
  */
-class StormBoltStream extends StormStream {
+class HeronBoltStream extends HeronStream {
 
   /**
 	 * 
@@ -40,7 +40,7 @@ class StormBoltStream extends StormStream {
 
   private OutputCollector outputCollector;
 
-  StormBoltStream(String stormComponentId) {
+  HeronBoltStream(String stormComponentId) {
     super(stormComponentId);
   }
 

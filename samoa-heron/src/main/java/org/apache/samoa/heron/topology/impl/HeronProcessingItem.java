@@ -1,4 +1,4 @@
-package org.apache.samoa.topology.impl;
+package org.apache.samoa.heron.topology.impl;
 
 /*
  * #%L
@@ -30,7 +30,7 @@ import org.apache.samoa.core.Processor;
 import org.apache.samoa.topology.AbstractProcessingItem;
 import org.apache.samoa.topology.ProcessingItem;
 import org.apache.samoa.topology.Stream;
-import org.apache.samoa.topology.impl.StormStream.InputStreamId;
+import org.apache.samoa.heron.topology.impl.HeronStream.InputStreamId;
 import org.apache.samoa.utils.PartitioningScheme;
 
 import backtype.storm.task.OutputCollector;
@@ -43,12 +43,12 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 
 /**
- * ProcessingItem implementation for Storm.
+ * ProcessingItem implementation for Heron.
  * 
  * @author Arinto Murdopo
  * 
  */
-class StormProcessingItem extends AbstractProcessingItem implements StormTopologyNode {
+public class HeronProcessingItem extends AbstractProcessingItem implements HeronTopologyNode {
   private final ProcessingItemBolt piBolt;
   private BoltDeclarer piBoltDeclarer;
 
@@ -56,11 +56,11 @@ class StormProcessingItem extends AbstractProcessingItem implements StormTopolog
   // imo, parallelism hint only declared when we add this PI in the topology
   // open for dicussion :p
 
-  StormProcessingItem(Processor processor, int parallelismHint) {
+  HeronProcessingItem(Processor processor, int parallelismHint) {
     this(processor, UUID.randomUUID().toString(), parallelismHint);
   }
 
-  StormProcessingItem(Processor processor, String friendlyId, int parallelismHint) {
+  HeronProcessingItem(Processor processor, String friendlyId, int parallelismHint) {
     super(processor, parallelismHint);
     this.piBolt = new ProcessingItemBolt(processor);
     this.setName(friendlyId);
@@ -68,7 +68,7 @@ class StormProcessingItem extends AbstractProcessingItem implements StormTopolog
 
   @Override
   protected ProcessingItem addInputStream(Stream inputStream, PartitioningScheme scheme) {
-    StormStream stormInputStream = (StormStream) inputStream;
+    HeronStream stormInputStream = (HeronStream) inputStream;
     InputStreamId inputId = stormInputStream.getInputId();
 
     switch (scheme) {
@@ -79,7 +79,7 @@ class StormProcessingItem extends AbstractProcessingItem implements StormTopolog
       piBoltDeclarer.fieldsGrouping(
           inputId.getComponentId(),
           inputId.getStreamId(),
-          new Fields(StormSamoaUtils.KEY_FIELD));
+          new Fields(HeronSamoaUtils.KEY_FIELD));
       break;
     case BROADCAST:
       piBoltDeclarer.allGrouping(
@@ -91,18 +91,18 @@ class StormProcessingItem extends AbstractProcessingItem implements StormTopolog
   }
 
   @Override
-  public void addToTopology(StormTopology topology, int parallelismHint) {
+  public void addToTopology(HeronTopology topology, int parallelismHint) {
     if (piBoltDeclarer != null) {
       // throw exception that one PI only belong to one topology
     } else {
-      TopologyBuilder stormBuilder = topology.getStormBuilder();
-      this.piBoltDeclarer = stormBuilder.setBolt(this.getName(),
+      TopologyBuilder heronBuilder = topology.getHeronBuilder();
+      this.piBoltDeclarer = heronBuilder.setBolt(this.getName(),
           this.piBolt, parallelismHint);
     }
   }
 
   @Override
-  public StormStream createStream() {
+  public HeronStream createStream() {
     return piBolt.createStream(this.getName());
   }
 
@@ -122,13 +122,13 @@ class StormProcessingItem extends AbstractProcessingItem implements StormTopolog
 
     private static final long serialVersionUID = -6637673741263199198L;
 
-    private final Set<StormBoltStream> streams;
+    private final Set<HeronBoltStream> streams;
     private final Processor processor;
 
     private OutputCollector collector;
 
     ProcessingItemBolt(Processor processor) {
-      this.streams = new HashSet<StormBoltStream>();
+      this.streams = new HashSet<HeronBoltStream>();
       this.processor = processor;
     }
 
@@ -137,7 +137,7 @@ class StormProcessingItem extends AbstractProcessingItem implements StormTopolog
         OutputCollector collector) {
       this.collector = collector;
       // Processor and this class share the same instance of stream
-      for (StormBoltStream stream : streams) {
+      for (HeronBoltStream stream : streams) {
         stream.setCollector(this.collector);
       }
 
@@ -153,15 +153,14 @@ class StormProcessingItem extends AbstractProcessingItem implements StormTopolog
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-      for (StormStream stream : streams) {
+      for (HeronStream stream : streams) {
         declarer.declareStream(stream.getOutputId(),
-            new Fields(StormSamoaUtils.CONTENT_EVENT_FIELD,
-                StormSamoaUtils.KEY_FIELD));
+            new Fields(HeronSamoaUtils.CONTENT_EVENT_FIELD,
+                HeronSamoaUtils.KEY_FIELD));
       }
     }
 
-    StormStream createStream(String piId) {
-      StormBoltStream stream = new StormBoltStream(piId);
+    HeronStream createStream(String piId) { HeronBoltStream stream = new HeronBoltStream(piId);
       streams.add(stream);
       return stream;
     }

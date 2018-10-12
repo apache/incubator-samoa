@@ -1,4 +1,4 @@
-package org.apache.samoa.topology.impl;
+package org.apache.samoa.heron.topology.impl;
 
 /*
  * #%L
@@ -38,14 +38,14 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 /**
- * Utility class for samoa-storm project. It is used by StormDoTask to process its arguments.
+ * Utility class for samoa-heron project. It is used by HeronDoTask to process its arguments.
  * 
  * @author Arinto Murdopo
  * 
  */
-public class StormSamoaUtils {
+public class HeronSamoaUtils {
 
-  private static final Logger logger = LoggerFactory.getLogger(StormSamoaUtils.class);
+  private static final Logger logger = LoggerFactory.getLogger(HeronSamoaUtils.class);
 
   static final String KEY_FIELD = "key";
   static final String CONTENT_EVENT_FIELD = "content_event";
@@ -54,7 +54,7 @@ public class StormSamoaUtils {
     Properties props = new Properties();
     InputStream is;
 
-    File f = new File("src/main/resources/samoa-storm-cluster.properties"); // FIXME it does not exist anymore
+    File f = new File("src/main/resources/samoa-heron-cluster.properties"); // FIXME it does not exist anymore
     is = new FileInputStream(f);
 
     try {
@@ -69,7 +69,7 @@ public class StormSamoaUtils {
     return props;
   }
 
-  public static StormTopology argsToTopology(String[] args) {
+  public static HeronTopology argsToTopology(String[] args) {
     StringBuilder cliString = new StringBuilder();
     for (String arg : args) {
       cliString.append(" ").append(arg);
@@ -79,10 +79,10 @@ public class StormSamoaUtils {
     Task task = getTask(cliString.toString());
 
     // TODO: remove setFactory method with DynamicBinding
-    task.setFactory(new StormComponentFactory());
+    task.setFactory(new HeronComponentFactory());
     task.init();
 
-    return (StormTopology) task.getTopology();
+    return (HeronTopology) task.getTopology();
   }
 
   public static int numWorkers(List<String> tmpArgs) {

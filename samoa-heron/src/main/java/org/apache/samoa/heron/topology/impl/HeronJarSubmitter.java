@@ -1,4 +1,4 @@
-package org.apache.samoa.topology.impl;
+package org.apache.samoa.heron.topology.impl;
 
 /*
  * #%L
@@ -36,7 +36,7 @@ import backtype.storm.utils.Utils;
  * @author Arinto Murdopo
  * 
  */
-public class StormJarSubmitter {
+public class HeronJarSubmitter {
 
   public final static String UPLOADED_JAR_LOCATION_KEY = "UploadedJarLocation";
 
@@ -63,8 +63,8 @@ public class StormJarSubmitter {
     System.out.println("Uploaded jar file location: ");
     System.out.println(uploadedJarLocation);
 
-    Properties props = StormSamoaUtils.getProperties();
-    props.setProperty(StormJarSubmitter.UPLOADED_JAR_LOCATION_KEY, uploadedJarLocation);
+    Properties props = HeronSamoaUtils.getProperties();
+    props.setProperty(HeronJarSubmitter.UPLOADED_JAR_LOCATION_KEY, uploadedJarLocation);
 
     File f = new File("src/main/resources/samoa-storm-cluster.properties");
     f.createNewFile();

@@ -1,4 +1,4 @@
-package org.apache.samoa.topology.impl;
+package org.apache.samoa.heron.topology.impl;
 
 /*
  * #%L
@@ -26,11 +26,11 @@ package org.apache.samoa.topology.impl;
  * @author Arinto Murdopo
  * 
  */
-interface StormTopologyNode {
+interface HeronTopologyNode {
 
-  void addToTopology(StormTopology topology, int parallelismHint);
+  void addToTopology(HeronTopology topology, int parallelismHint);
 
-  StormStream createStream();
+  HeronStream createStream();
 
   String getId();
 

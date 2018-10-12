@@ -1,7 +1,5 @@
-package org.apache.samoa;
-
-/*
- * #%L
+package org.apache.samoa.heron;
+ /* #%L
  * SAMOA
  * %%
  * Copyright (C) 2014 - 2015 Apache Software Foundation
@@ -23,8 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.samoa.topology.impl.StormSamoaUtils;
-import org.apache.samoa.topology.impl.StormTopology;
+import org.apache.samoa.heron.topology.impl.HeronSamoaUtils;
+import org.apache.samoa.heron.topology.impl.HeronTopology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.configuration.Configuration;
@@ -33,16 +31,16 @@ import backtype.storm.Config;
 import backtype.storm.utils.Utils;
 
 /**
- * The main class to execute a SAMOA task in LOCAL mode in Storm.
+ * The main class to execute a SAMOA task in LOCAL mode in Heron.
  * 
  * @author Arinto Murdopo
  * 
  */
-public class LocalStormDoTask {
+public class LocalHeronDoTask {
 
-  private static final Logger logger = LoggerFactory.getLogger(LocalStormDoTask.class);
+  private static final Logger logger = LoggerFactory.getLogger(LocalHeronDoTask.class);
   private static final String EXECUTION_DURATION_KEY ="samoa.storm.local.mode.execution.duration";
-  private static final String SAMOA_STORM_PROPERTY_FILE_LOC ="samoa-storm.properties";
+  private static final String SAMOA_STORM_PROPERTY_FILE_LOC ="samoa-heron.properties";
   /**
    * The main method.
    * 
@@ -53,13 +51,13 @@ public class LocalStormDoTask {
 
     List<String> tmpArgs = new ArrayList<String>(Arrays.asList(args));
 
-    int numWorker = StormSamoaUtils.numWorkers(tmpArgs);
+    int numWorker = HeronSamoaUtils.numWorkers(tmpArgs);
 
     args = tmpArgs.toArray(new String[0]);
 
-    // convert the arguments into Storm topology
-    StormTopology stormTopo = StormSamoaUtils.argsToTopology(args);
-    String topologyName = stormTopo.getTopologyName();
+    // convert the arguments into Heron topology
+    HeronTopology heronTopo = HeronSamoaUtils.argsToTopology(args);
+    String topologyName = heronTopo.getTopologyName();
 
     Config conf = new Config();
     // conf.putAll(Utils.readStormConfig());
@@ -69,11 +67,11 @@ public class LocalStormDoTask {
     conf.setMaxTaskParallelism(numWorker);
 
     backtype.storm.LocalCluster cluster = new backtype.storm.LocalCluster();
-    cluster.submitTopology(topologyName, conf, stormTopo.getStormBuilder().createTopology());
+    cluster.submitTopology(topologyName, conf, heronTopo.getHeronBuilder().createTopology());
 
     // Read local mode execution duration from property file
-    Configuration stormConfig = StormSamoaUtils.getPropertyConfig(LocalStormDoTask.SAMOA_STORM_PROPERTY_FILE_LOC);
-    long executionDuration= stormConfig.getLong(LocalStormDoTask.EXECUTION_DURATION_KEY);
+    Configuration stormConfig = HeronSamoaUtils.getPropertyConfig(LocalHeronDoTask.SAMOA_STORM_PROPERTY_FILE_LOC);
+    long executionDuration= stormConfig.getLong(LocalHeronDoTask.EXECUTION_DURATION_KEY);
     backtype.storm.utils.Utils.sleep(executionDuration * 1000);
 
     cluster.killTopology(topologyName);

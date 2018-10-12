@@ -1,4 +1,4 @@
-package org.apache.samoa.topology.impl;
+package org.apache.samoa.heron.topology.impl;
 
 /*
  * #%L
@@ -31,7 +31,7 @@ import org.apache.samoa.topology.Stream;
  * @author Arinto Murdopo
  * 
  */
-abstract class StormStream implements Stream, java.io.Serializable {
+abstract class HeronStream implements Stream, java.io.Serializable {
 
   /**
 	 * 
@@ -40,7 +40,7 @@ abstract class StormStream implements Stream, java.io.Serializable {
   protected final String outputStreamId;
   protected final InputStreamId inputStreamId;
 
-  public StormStream(String stormComponentId) {
+  public HeronStream(String stormComponentId) {
     this.outputStreamId = UUID.randomUUID().toString();
     this.inputStreamId = new InputStreamId(stormComponentId, this.outputStreamId);
   }

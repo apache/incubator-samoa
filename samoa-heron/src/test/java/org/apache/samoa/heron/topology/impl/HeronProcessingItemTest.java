@@ -1,4 +1,4 @@
-package org.apache.samoa.topology.impl;
+package org.apache.samoa.heron.topology.impl;
 
 /*
  * #%L
@@ -28,42 +28,42 @@ import mockit.Tested;
 import mockit.Verifications;
 
 import org.apache.samoa.core.Processor;
-import org.apache.samoa.topology.impl.StormProcessingItem;
-import org.apache.samoa.topology.impl.StormTopology;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.samoa.heron.topology.impl.HeronProcessingItem;
 
 import backtype.storm.topology.BoltDeclarer;
 import backtype.storm.topology.IRichBolt;
 import backtype.storm.topology.TopologyBuilder;
 
-public class StormProcessingItemTest {
+public class HeronProcessingItemTest {
   private static final int PARRALLELISM_HINT_2 = 2;
   private static final int PARRALLELISM_HINT_4 = 4;
   private static final String ID = "id";
   @Tested
-  private StormProcessingItem pi;
+  private HeronProcessingItem pi;
   @Mocked
   private Processor processor;
   @Mocked
-  private StormTopology topology;
+  private HeronTopology topology;
   @Mocked
-  private TopologyBuilder stormBuilder = new TopologyBuilder();
+  private TopologyBuilder heronBuilder = new TopologyBuilder();
 
   @Before
   public void setUp() {
-    pi = new StormProcessingItem(processor, ID, PARRALLELISM_HINT_2);
+    pi = new HeronProcessingItem(processor, ID, PARRALLELISM_HINT_2);
   }
 
   @Test
   public void testAddToTopology() {
     new Expectations() {
       {
-        topology.getStormBuilder();
-        result = stormBuilder;
+        topology.getHeronBuilder();
+        result = heronBuilder;
 
-        stormBuilder.setBolt(ID, (IRichBolt) any, anyInt);
+        heronBuilder.setBolt(ID, (IRichBolt) any, anyInt);
         result = new MockUp<BoltDeclarer>() {
         }.getMockInstance();
       }
