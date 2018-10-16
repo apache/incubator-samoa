@@ -9,9 +9,9 @@ package org.apache.samoa.heron.topology.impl;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,54 +37,54 @@ import org.apache.samoa.topology.Topology;
  */
 public final class HeronComponentFactory implements ComponentFactory {
 
-  private final Map<String, Integer> processorList;
+    private final Map<String, Integer> processorList;
 
-  public HeronComponentFactory() {
-    processorList = new HashMap<>();
-  }
-
-  @Override
-  public ProcessingItem createPi(Processor processor) {
-    return new HeronProcessingItem(processor, this.getComponentName(processor.getClass()), 1);
-  }
-
-  @Override
-  public EntranceProcessingItem createEntrancePi(EntranceProcessor processor) {
-    return new HeronEntranceProcessingItem(processor, this.getComponentName(processor.getClass()));
-  }
-
-  @Override
-  public Stream createStream(IProcessingItem sourcePi) {
-    HeronTopologyNode stormCompatiblePi = (HeronTopologyNode) sourcePi;
-    return stormCompatiblePi.createStream();
-  }
-
-  @Override
-  public Topology createTopology(String topoName) {
-    return new HeronTopology(topoName);
-  }
-
-  private String getComponentName(Class<? extends Processor> clazz) {
-    StringBuilder componentName = new StringBuilder(clazz.getCanonicalName());
-    String key = componentName.toString();
-    Integer index;
-
-    if (!processorList.containsKey(key)) {
-      index = 1;
-    } else {
-      index = processorList.get(key) + 1;
+    public HeronComponentFactory() {
+        processorList = new HashMap<>();
     }
 
-    processorList.put(key, index);
+    @Override
+    public ProcessingItem createPi(Processor processor) {
+        return new HeronProcessingItem(processor, this.getComponentName(processor.getClass()), 1);
+    }
 
-    componentName.append('_');
-    componentName.append(index);
+    @Override
+    public EntranceProcessingItem createEntrancePi(EntranceProcessor processor) {
+        return new HeronEntranceProcessingItem(processor, this.getComponentName(processor.getClass()));
+    }
 
-    return componentName.toString();
-  }
+    @Override
+    public Stream createStream(IProcessingItem sourcePi) {
+        HeronTopologyNode stormCompatiblePi = (HeronTopologyNode) sourcePi;
+        return stormCompatiblePi.createStream();
+    }
 
-  @Override
-  public ProcessingItem createPi(Processor processor, int parallelism) {
-    return new HeronProcessingItem(processor, this.getComponentName(processor.getClass()), parallelism);
-  }
+    @Override
+    public Topology createTopology(String topoName) {
+        return new HeronTopology(topoName);
+    }
+
+    private String getComponentName(Class<? extends Processor> clazz) {
+        StringBuilder componentName = new StringBuilder(clazz.getCanonicalName());
+        String key = componentName.toString();
+        Integer index;
+
+        if (!processorList.containsKey(key)) {
+            index = 1;
+        } else {
+            index = processorList.get(key) + 1;
+        }
+
+        processorList.put(key, index);
+
+        componentName.append('_');
+        componentName.append(index);
+
+        return componentName.toString();
+    }
+
+    @Override
+    public ProcessingItem createPi(Processor processor, int parallelism) {
+        return new HeronProcessingItem(processor, this.getComponentName(processor.getClass()), parallelism);
+    }
 }

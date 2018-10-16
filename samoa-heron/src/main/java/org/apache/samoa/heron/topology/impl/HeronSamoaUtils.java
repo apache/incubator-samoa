@@ -9,9 +9,9 @@ package org.apache.samoa.heron.topology.impl;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,92 +39,89 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 
 /**
  * Utility class for samoa-heron project. It is used by HeronDoTask to process its arguments.
- * 
+ *
  * @author Arinto Murdopo
- * 
  */
 public class HeronSamoaUtils {
 
-  private static final Logger logger = LoggerFactory.getLogger(HeronSamoaUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(HeronSamoaUtils.class);
 
-  static final String KEY_FIELD = "key";
-  static final String CONTENT_EVENT_FIELD = "content_event";
+    static final String KEY_FIELD = "key";
+    static final String CONTENT_EVENT_FIELD = "content_event";
 
-  static Properties getProperties() throws IOException {
-    Properties props = new Properties();
-    InputStream is;
+    static Properties getProperties() throws IOException {
+        Properties props = new Properties();
+        InputStream is;
 
-    File f = new File("src/main/resources/samoa-heron-cluster.properties"); // FIXME it does not exist anymore
-    is = new FileInputStream(f);
+        File f = new File("src/main/resources/samoa-heron-cluster.properties"); // FIXME it does not exist anymore
+        is = new FileInputStream(f);
 
-    try {
-      props.load(is);
-    } catch (IOException e1) {
-      System.out.println("Fail to load property file");
-      return null;
-    } finally {
-      is.close();
+        try {
+            props.load(is);
+        } catch (IOException e1) {
+            System.out.println("Fail to load property file");
+            return null;
+        } finally {
+            is.close();
+        }
+
+        return props;
     }
 
-    return props;
-  }
+    public static HeronTopology argsToTopology(String[] args) {
+        StringBuilder cliString = new StringBuilder();
+        for (String arg : args) {
+            cliString.append(" ").append(arg);
+        }
+        logger.debug("Command line string = {}", cliString.toString());
 
-  public static HeronTopology argsToTopology(String[] args) {
-    StringBuilder cliString = new StringBuilder();
-    for (String arg : args) {
-      cliString.append(" ").append(arg);
-    }
-    logger.debug("Command line string = {}", cliString.toString());
+        Task task = getTask(cliString.toString());
 
-    Task task = getTask(cliString.toString());
+        // TODO: remove setFactory method with DynamicBinding
+        task.setFactory(new HeronComponentFactory());
+        task.init();
 
-    // TODO: remove setFactory method with DynamicBinding
-    task.setFactory(new HeronComponentFactory());
-    task.init();
-
-    return (HeronTopology) task.getTopology();
-  }
-
-  public static int numWorkers(List<String> tmpArgs) {
-    int position = tmpArgs.size() - 1;
-    int numWorkers;
-
-    try {
-      numWorkers = Integer.parseInt(tmpArgs.get(position));
-      tmpArgs.remove(position);
-    } catch (NumberFormatException e) {
-      numWorkers = 4;
+        return (HeronTopology) task.getTopology();
     }
 
-    return numWorkers;
-  }
+    public static int numWorkers(List<String> tmpArgs) {
+        int position = tmpArgs.size() - 1;
+        int numWorkers;
 
-  public static Task getTask(String cliString) {
-    Task task = null;
-    try {
-      logger.debug("Providing task [{}]", cliString);
-      task = ClassOption.cliStringToObject(cliString, Task.class, null);
-    } catch (Exception e) {
-      logger.warn("Fail in initializing the task!");
-      e.printStackTrace();
+        try {
+            numWorkers = Integer.parseInt(tmpArgs.get(position));
+            tmpArgs.remove(position);
+        } catch (NumberFormatException e) {
+            numWorkers = 4;
+        }
+
+        return numWorkers;
     }
-    return task;
-  }
 
- public static Configuration getPropertyConfig(String configPropertyPath){
-     Configuration config = null;
-	try {
-	config = new PropertiesConfiguration(configPropertyPath);
-	  if (null == config || config.isEmpty()) {
-	     logger.error("Configuration is null or empty at file  = {}",configPropertyPath);
-	     throw new RuntimeException("Configuration is null or empty : " + configPropertyPath);       	    
-	     }
-	}
-	catch(ConfigurationException configurationException)
-	{
-	     logger.error("ConfigurationException while reading property file = {}",configurationException);
-	     throw new RuntimeException("ConfigurationException while reading property file : " + configPropertyPath);
-	}
-	return config;
-	}
+    public static Task getTask(String cliString) {
+        Task task = null;
+        try {
+            logger.debug("Providing task [{}]", cliString);
+            task = ClassOption.cliStringToObject(cliString, Task.class, null);
+        } catch (Exception e) {
+            logger.warn("Fail in initializing the task!");
+            e.printStackTrace();
+        }
+        return task;
+    }
+
+    public static Configuration getPropertyConfig(String configPropertyPath) {
+        Configuration config = null;
+        try {
+            config = new PropertiesConfiguration(configPropertyPath);
+            if (null == config || config.isEmpty()) {
+                logger.error("Configuration is null or empty at file  = {}", configPropertyPath);
+                throw new RuntimeException("Configuration is null or empty : " + configPropertyPath);
+            }
+        } catch (ConfigurationException configurationException) {
+            logger.error("ConfigurationException while reading property file = {}", configurationException);
+            throw new RuntimeException("ConfigurationException while reading property file : " + configPropertyPath);
+        }
+        return config;
+    }
 }
