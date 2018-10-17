@@ -19,7 +19,8 @@
   #L%
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <name>Apache SAMOA</name>
@@ -72,6 +73,15 @@
                 <module>samoa-instances</module>
                 <module>samoa-api</module>
                 <module>samoa-storm</module>
+                <module>samoa-test</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>heron</id>
+            <modules>
+                <module>samoa-instances</module>
+                <module>samoa-api</module>
+                <module>samoa-heron</module>
                 <module>samoa-test</module>
             </modules>
         </profile>
@@ -210,7 +220,8 @@
                     <nohelp>true</nohelp>
                     <header>Apache SAMOA ${project.version}</header>
                     <footer>Scalable Advanced Massive Online Analysis,
-                        ${project.version}</footer>
+                        ${project.version}
+                    </footer>
                     <doctitle>Apache SAMOA API ${project.version}</doctitle>
                     <links>
                         <link>http://samoa.incubator.apache.org/docs/api/</link>
@@ -282,7 +293,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore />
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>

@@ -9,9 +9,9 @@ package org.apache.samoa.heron.topology.impl;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,60 +27,59 @@ import org.apache.samoa.topology.Stream;
 
 /**
  * Abstract class to implement Storm Stream
- * 
+ *
  * @author Arinto Murdopo
- * 
  */
 abstract class HeronStream implements Stream, java.io.Serializable {
 
-  /**
-	 * 
-	 */
-  private static final long serialVersionUID = 281835563756514852L;
-  protected final String outputStreamId;
-  protected final InputStreamId inputStreamId;
-
-  public HeronStream(String stormComponentId) {
-    this.outputStreamId = UUID.randomUUID().toString();
-    this.inputStreamId = new InputStreamId(stormComponentId, this.outputStreamId);
-  }
-
-  @Override
-  public abstract void put(ContentEvent contentEvent);
-
-  String getOutputId() {
-    return this.outputStreamId;
-  }
-
-  InputStreamId getInputId() {
-    return this.inputStreamId;
-  }
-
-  final static class InputStreamId implements java.io.Serializable {
-
     /**
-		 * 
-		 */
-    private static final long serialVersionUID = -7457995634133691295L;
-    private final String componentId;
-    private final String streamId;
+     *
+     */
+    private static final long serialVersionUID = 281835563756514852L;
+    protected final String outputStreamId;
+    protected final InputStreamId inputStreamId;
 
-    InputStreamId(String componentId, String streamId) {
-      this.componentId = componentId;
-      this.streamId = streamId;
+    public HeronStream(String stormComponentId) {
+        this.outputStreamId = UUID.randomUUID().toString();
+        this.inputStreamId = new InputStreamId(stormComponentId, this.outputStreamId);
     }
 
-    String getComponentId() {
-      return componentId;
+    @Override
+    public abstract void put(ContentEvent contentEvent);
+
+    String getOutputId() {
+        return this.outputStreamId;
     }
 
-    String getStreamId() {
-      return streamId;
+    InputStreamId getInputId() {
+        return this.inputStreamId;
     }
-  }
 
-  @Override
-  public void setBatchSize(int batchSize) {
-    // Ignore batch size
-  }
+    final static class InputStreamId implements java.io.Serializable {
+
+        /**
+         *
+         */
+        private static final long serialVersionUID = -7457995634133691295L;
+        private final String componentId;
+        private final String streamId;
+
+        InputStreamId(String componentId, String streamId) {
+            this.componentId = componentId;
+            this.streamId = streamId;
+        }
+
+        String getComponentId() {
+            return componentId;
+        }
+
+        String getStreamId() {
+            return streamId;
+        }
+    }
+
+    @Override
+    public void setBatchSize(int batchSize) {
+        // Ignore batch size
+    }
 }
