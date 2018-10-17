@@ -36,19 +36,20 @@
         <version>0.5.0-incubating-SNAPSHOT</version>
     </parent>
 
-    <repositories>
-        <repository>
-            <id>mvnrepository</id>
-            <name>Maven repository</name>
-            <url>https://mvnrepository.com/artifact/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+
+  <repositories>
+    <repository>
+      <id>mvnrepository</id>
+      <name>Mvn repository</name>
+      <url>https://mvnrepository.com/artifact/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 
     <dependencies>
         <dependency>
@@ -93,58 +94,77 @@
             <version>0.11.0</version>
         </dependency>
     </dependencies>
+    <dependency>
+      <groupId>com.twitter.heron</groupId>
+      <artifactId>heron-storm</artifactId>
+      <version>${heron.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.zookeeper</groupId>
+      <artifactId>zookeeper</artifactId>
+      <version>${zookeeper.heron.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>${slf4j-log4j12.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
-    <build>
-        <plugins>
-            <!-- SAMOA assembly -->
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>${maven-assembly-plugin.version}</version>
-                <configuration>
-                    <finalName>SAMOA-heron-${project.version}</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <attach>false</attach>
-                    <outputDirectory>../target</outputDirectory>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifestEntries>
-                            <Bundle-Version>${parsedVersion.osgiVersion}</Bundle-Version>
-                            <Bundle-Description>${project.description}</Bundle-Description>
-                            <Implementation-Version>${project.version}</Implementation-Version>
-                            <Implementation-Vendor>Yahoo Labs</Implementation-Vendor>
-                            <Implementation-Vendor-Id>SAMOA</Implementation-Vendor-Id>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <argLine>-Xmx1G</argLine>
-                    <redirectTestOutputToFile>false</redirectTestOutputToFile>
-                </configuration>
-            </plugin>
-        </plugins>
-        <testResources>
-            <testResource>
-                <directory>${project.basedir}/../bin</directory>
-                <includes>
-                    <include>*heron.properties</include>
-                </includes>
-            </testResource>
-        </testResources>
-    </build>
+  <build>
+    <plugins>
+      <!-- SAMOA assembly -->
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>${maven-assembly-plugin.version}</version>
+        <configuration>
+          <finalName>SAMOA-heron-${project.version}</finalName>
+          <appendAssemblyId>false</appendAssemblyId>
+          <attach>false</attach>
+          <outputDirectory>../target</outputDirectory>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <manifestEntries>
+              <Bundle-Version>${parsedVersion.osgiVersion}</Bundle-Version>
+              <Bundle-Description>${project.description}</Bundle-Description>
+              <Implementation-Version>${project.version}</Implementation-Version>
+              <Implementation-Vendor>Yahoo Labs</Implementation-Vendor>
+              <Implementation-Vendor-Id>SAMOA</Implementation-Vendor-Id>
+            </manifestEntries>
+          </archive>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id> <!-- this is used for inheritance merges -->
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
+        <configuration>
+          <argLine>-Xmx1G</argLine>
+          <redirectTestOutputToFile>false</redirectTestOutputToFile>
+        </configuration>
+      </plugin>
+    </plugins>
+   <testResources>
+      <testResource>
+	<directory>${project.basedir}/../bin</directory>
+	<includes>
+	<include>*heron.properties</include>
+	</includes>
+      </testResource>
+   </testResources>
+  </build>
 </project>
