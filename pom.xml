@@ -77,15 +77,6 @@
             </modules>
         </profile>
         <profile>
-            <id>heron</id>
-            <modules>
-                <module>samoa-instances</module>
-                <module>samoa-api</module>
-                <module>samoa-heron</module>
-                <module>samoa-test</module>
-            </modules>
-        </profile>
-        <profile>
             <id>apex</id>
             <modules>
                 <module>samoa-instances</module>
