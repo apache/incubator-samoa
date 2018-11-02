@@ -51,49 +51,20 @@
     </repository>
   </repositories>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.samoa</groupId>
-            <artifactId>samoa-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.samoa</groupId>
-            <artifactId>samoa-test</artifactId>
-            <type>test-jar</type>
-            <classifier>test-jar-with-dependencies</classifier>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.twitter.heron</groupId>
-            <artifactId>heron-storm</artifactId>
-            <version>${heron.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.zookeeper</groupId>
-            <artifactId>zookeeper</artifactId>
-            <version>${zookeeper.heron.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j-log4j12.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.thrift</groupId>
-            <artifactId>libthrift</artifactId>
-            <version>0.11.0</version>
-        </dependency>
-    </dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.samoa</groupId>
+      <artifactId>samoa-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.samoa</groupId>
+      <artifactId>samoa-test</artifactId>
+      <type>test-jar</type>
+      <classifier>test-jar-with-dependencies</classifier>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>com.twitter.heron</groupId>
       <artifactId>heron-storm</artifactId>
@@ -111,6 +82,16 @@
       <artifactId>slf4j-log4j12</artifactId>
       <version>${slf4j-log4j12.version}</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.googlecode.json-simple</groupId>
+      <artifactId>json-simple</artifactId>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.thrift</groupId>
+      <artifactId>libthrift</artifactId>
+      <version>0.11.0</version>
     </dependency>
   </dependencies>
 
@@ -159,12 +140,12 @@
       </plugin>
     </plugins>
    <testResources>
-      <testResource>
-	<directory>${project.basedir}/../bin</directory>
-	<includes>
-	<include>*heron.properties</include>
-	</includes>
-      </testResource>
+    <testResource>
+      <directory>${project.basedir}/../bin</directory>
+      <includes>
+        <include>*heron.properties</include>
+      </includes>
+    </testResource>
    </testResources>
   </build>
 </project>
