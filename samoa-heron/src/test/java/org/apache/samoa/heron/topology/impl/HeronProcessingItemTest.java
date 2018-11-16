@@ -35,9 +35,9 @@ import org.junit.Test;
 
 import org.apache.samoa.heron.topology.impl.HeronProcessingItem;
 
-import backtype.storm.topology.BoltDeclarer;
-import backtype.storm.topology.IRichBolt;
-import backtype.storm.topology.TopologyBuilder;
+import com.twitter.heron.api.bolt.IRichBolt;
+import com.twitter.heron.api.topology.BoltDeclarer;
+import com.twitter.heron.api.topology.TopologyBuilder;
 
 public class HeronProcessingItemTest {
     private static final int PARRALLELISM_HINT_2 = 2;

@@ -29,13 +29,13 @@ import org.apache.samoa.topology.AbstractEntranceProcessingItem;
 import org.apache.samoa.topology.EntranceProcessingItem;
 import org.apache.samoa.topology.Stream;
 
-import org.apache.storm.spout.SpoutOutputCollector;
-import org.apache.storm.task.TopologyContext;
-import org.apache.storm.topology.OutputFieldsDeclarer;
-import org.apache.storm.topology.base.BaseRichSpout;
-import org.apache.storm.tuple.Fields;
-import org.apache.storm.tuple.Values;
-import org.apache.storm.utils.Utils;
+import com.twitter.heron.api.spout.BaseRichSpout;
+import com.twitter.heron.api.spout.SpoutOutputCollector;
+import com.twitter.heron.api.topology.TopologyContext;
+import com.twitter.heron.api.topology.OutputFieldsDeclarer;
+import com.twitter.heron.api.tuple.Fields;
+import com.twitter.heron.api.tuple.Values;
+import com.twitter.heron.api.utils.Utils;
 
 /**
  * EntranceProcessingItem implementation for Heron.

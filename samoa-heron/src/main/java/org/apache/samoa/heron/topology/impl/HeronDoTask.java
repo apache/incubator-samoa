@@ -27,13 +27,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.storm.Config;
-import org.apache.storm.utils.Utils;
-import org.apache.storm.StormSubmitter;
-import org.apache.storm.LocalCluster;
-import org.apache.storm.generated.AlreadyAliveException;
-import org.apache.storm.generated.InvalidTopologyException;
-import org.apache.storm.generated.NotAliveException;
+import com.twitter.heron.api.Config;
+import com.twitter.heron.api.HeronSubmitter;
+import com.twitter.heron.api.exception.AlreadyAliveException;
+import com.twitter.heron.api.exception.InvalidTopologyException;
+//import com.twitter.heron.api.exception.NotAliveException;
+import com.twitter.heron.api.utils.Utils;
+import com.twitter.heron.simulator.Simulator;
 
 /**
  * The main class that used by samoa script to execute SAMOA task.
@@ -50,7 +50,7 @@ public class HeronDoTask {
      *
      * @param args the arguments
      */
-    public static void main(String[] args) throws AlreadyAliveException, NotAliveException {
+    public static void main(String[] args) throws AlreadyAliveException {
 
         List<String> tmpArgs = new ArrayList<String>(Arrays.asList(args));
 
@@ -70,16 +70,16 @@ public class HeronDoTask {
         try {
             if (isLocal) {
                 // local mode
-                conf.setMaxTaskParallelism(numWorker);
-                LocalCluster cluster = new LocalCluster();
+                //conf.setMaxTaskParallelism(numWorker);
+                Simulator cluster = new Simulator();
                 cluster.submitTopology(topologyName, conf, heronTopo.getHeronBuilder().createTopology());
                 backtype.storm.utils.Utils.sleep(600 * 1000);
                 cluster.killTopology(topologyName);
                 cluster.shutdown();
             } else {
                 // cluster mode
-                conf.setNumWorkers(numWorker);
-                StormSubmitter.submitTopology(topologyName, conf,
+                conf.setNumStmgrs(numWorker);
+                HeronSubmitter.submitTopology(topologyName, conf,
                         heronTopo.getHeronBuilder().createTopology());
 
             }
@@ -87,8 +87,6 @@ public class HeronDoTask {
             aae.printStackTrace();
         } catch (InvalidTopologyException ite) {
             ite.printStackTrace();
-        } catch (NotAliveException nae) {
-            nae.printStackTrace();
         }
     }
 

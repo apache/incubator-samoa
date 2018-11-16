@@ -22,7 +22,8 @@ package org.apache.samoa.heron.topology.impl;
 
 import org.apache.samoa.topology.AbstractTopology;
 import org.apache.samoa.topology.IProcessingItem;
-import org.apache.storm.topology.TopologyBuilder;
+
+import com.twitter.heron.api.topology.TopologyBuilder;
 
 /**
  * Adaptation of SAMOA topology in samoa-heron
