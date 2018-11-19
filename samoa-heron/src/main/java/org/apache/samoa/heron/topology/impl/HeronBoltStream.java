@@ -22,8 +22,8 @@ package org.apache.samoa.heron.topology.impl;
 
 import org.apache.samoa.core.ContentEvent;
 
-import org.apache.storm.task.OutputCollector;
-import org.apache.storm.tuple.Values;
+import com.twitter.heron.api.bolt.OutputCollector;
+import com.twitter.heron.api.tuple.Values;
 
 /**
  * Storm Stream that connects into Bolt. It wraps Storm's outputCollector class

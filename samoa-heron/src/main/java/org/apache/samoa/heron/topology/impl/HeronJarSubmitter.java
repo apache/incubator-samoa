@@ -28,9 +28,9 @@ import java.util.Properties;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.apache.storm.Config;
-import org.apache.storm.StormSubmitter;
-import org.apache.storm.utils.Utils;
+import com.twitter.heron.api.Config;
+import com.twitter.heron.api.HeronSubmitter;
+import com.twitter.heron.api.utils.Utils;
 
 /**
  * Utility class to submit samoa-storm jar to a Heron cluster.

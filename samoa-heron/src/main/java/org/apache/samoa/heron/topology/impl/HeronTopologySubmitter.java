@@ -34,15 +34,15 @@ import org.json.simple.JSONValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.storm.StormSubmitter;
-import org.apache.storm.Config;
-import org.apache.storm.generated.AlreadyAliveException;
-import org.apache.storm.generated.InvalidTopologyException;
-import org.apache.storm.utils.Utils;
+import com.twitter.heron.api.HeronSubmitter;
+import com.twitter.heron.api.Config;
+import com.twitter.heron.api.exception.AlreadyAliveException;
+import com.twitter.heron.api.exception.InvalidTopologyException;
+import com.twitter.heron.api.utils.Utils;
 
 /**
- * Helper class to submit SAMOA task into Storm without the need of submitting the jar file. The jar file must be
- * submitted first using StormJarSubmitter class.
+ * Helper class to submit SAMOA task into heron without the need of submitting the jar file. The jar file must be
+ * submitted first using HeronJarSubmitter class.
  *
  * @author Arinto Murdopo
  */
@@ -72,7 +72,7 @@ public class HeronTopologySubmitter {
         //conf.putAll(Utils.readStormConfig());
         conf.putAll(Utils.readCommandLineOpts());
         conf.setDebug(false);
-        conf.setNumWorkers(numWorkers);
+        conf.setNumStmgrs(numWorkers);
 
         String profilerOption =
                 props.getProperty(HeronTopologySubmitter.YJP_OPTIONS_KEY);
@@ -100,7 +100,7 @@ public class HeronTopologySubmitter {
 
             System.out.println("Submitting topology with name: "
                     + topologyName);
-            StormSubmitter.submitTopology(topologyName, conf, heronTopo.getHeronBuilder().createTopology());
+            HeronSubmitter.submitTopology(topologyName, conf, heronTopo.getHeronBuilder().createTopology());
             System.out.println(topologyName + " is successfully submitted");
         } catch (IOException e) {
             System.out.println("Error in writing JSONString");
