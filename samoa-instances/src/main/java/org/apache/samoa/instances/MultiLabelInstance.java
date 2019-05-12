@@ -20,6 +20,9 @@ package org.apache.samoa.instances;
  * #L%
  */
 
+/**
+ * The Interface MultiLabelInstance.
+ */
 public interface MultiLabelInstance extends Instance {
 
 }

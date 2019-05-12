@@ -21,47 +21,40 @@ package org.apache.samoa.instances;
  */
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class MultiLabelPrediction implements Prediction, Serializable {
-  protected ArrayList< ArrayList<Double> > prediction;
+  protected DoubleVector[] prediction;
 
   public MultiLabelPrediction() {
     this(0);
   }
 
   public MultiLabelPrediction(int numOutputAttributes) {
-    prediction = new ArrayList< ArrayList<Double> >();
-    for (int i=0; i<numOutputAttributes;i++)
-      prediction.add(new ArrayList<Double>());
+    prediction = new DoubleVector[numOutputAttributes];
+    for (int i = 0; i < numOutputAttributes; i++)
+      prediction[i] = new DoubleVector();
   }
 
   @Override
   public int numOutputAttributes() {
-    return prediction.size();
+    return prediction.length;
   }
 
   @Override
   public int numClasses(int outputAttributeIndex) {
     int ret = 0;
-    if (prediction.size() > outputAttributeIndex) {
-      ret =  prediction.get(outputAttributeIndex).size();
+    if (prediction.length > outputAttributeIndex) {
+      ret = prediction[outputAttributeIndex].numValues();
     }
     return ret;
   }
 
   @Override
   public double[] getVotes(int outputAttributeIndex) {
-    int s = prediction.get(outputAttributeIndex).size();
     double ret[] = null;
-    if (prediction.size() > outputAttributeIndex) {
-      ArrayList<Double> aux = prediction.get(outputAttributeIndex);
-      ret = new double[s];
-      for (int i =0;i < s;i++) {
-        ret[i] = aux.get(i).doubleValue();
-      }
+    if (prediction.length > outputAttributeIndex) {
+      ret = prediction[outputAttributeIndex].getArrayCopy();
     }
-
     return ret;
   }
 
@@ -71,54 +64,38 @@ public class MultiLabelPrediction implements Prediction, Serializable {
   }
 
   @Override
+  public void setVotes(double[] votes) {
+    setVotes(0, votes);
+  }
+
+  @Override
   public double getVote(int outputAttributeIndex, int classIndex) {
     double ret = 0.0;
-    if (prediction.size() > outputAttributeIndex) {
-      ret = (classIndex >= 0 && classIndex < prediction.get(outputAttributeIndex).size()) ?
-          prediction.get(outputAttributeIndex).get(classIndex) : 0;
+    if (prediction.length > outputAttributeIndex) {
+      ret = prediction[outputAttributeIndex].getValue(classIndex);
     }
     return ret;
   }
 
   @Override
   public void setVotes(int outputAttributeIndex, double[] votes) {
-    for(int i=0; i<votes.length; i++) {
-      if (i >= prediction.get(outputAttributeIndex).size()) {
-        prediction.get(outputAttributeIndex).ensureCapacity(i+1);
-        while (prediction.get(outputAttributeIndex).size() < i+1) {
-          prediction.get(outputAttributeIndex).add(0.0);
-        }
-      }
-
-      prediction.get(outputAttributeIndex).set(i,votes[i]);
-    }
-  }
-
-  @Override
-  public void setVotes(double[] votes) {
-    setVotes(0, votes);
+    for (int i = 0; i < votes.length; i++)
+      prediction[outputAttributeIndex].setValue(i, votes[i]);
   }
 
   @Override
   public void setVote(int outputAttributeIndex, int classIndex, double vote) {
-    if (outputAttributeIndex >= prediction.get(outputAttributeIndex).size()) {
-      prediction.get(outputAttributeIndex).ensureCapacity(classIndex+1);
-      while (prediction.get(outputAttributeIndex).size() < classIndex+1) {
-        prediction.get(outputAttributeIndex).add(0.0);
-      }
-    }
+    prediction[outputAttributeIndex].setValue(classIndex, vote);
 
-    prediction.get(outputAttributeIndex).set(classIndex, vote);
   }
 
   @Override
-  public String toString(){
-    StringBuffer sb= new StringBuffer();
-    for (int i=0; i<prediction.size(); i++){
+  public String toString() {
+    StringBuffer sb = new StringBuffer();
+    for (int i = 0; i < prediction.length; i++) {
       sb.append("Out " + i + ": ");
-      for (int c=0; c<prediction.get(i).size(); c++)
-      {
-        sb.append(((int)(prediction.get(i).get(c)*1000)/1000.0)+ " ");
+      for (int c = 0; c < prediction[i].numValues(); c++) {
+        sb.append(((int) (prediction[i].getValue(c) * 1000) / 1000.0) + " ");
       }
     }
     return sb.toString();
@@ -126,14 +103,82 @@ public class MultiLabelPrediction implements Prediction, Serializable {
 
   @Override
   public boolean hasVotesForAttribute(int outputAttributeIndex) {
-    if(prediction.size()<(outputAttributeIndex+1))
+    if (prediction.length < (outputAttributeIndex + 1))
       return false;
-    return (prediction.get(outputAttributeIndex).size()==0) ? false : true;
+    return (prediction[outputAttributeIndex].numValues() == 0) ? false : true;
   }
 
   @Override
   public int size() {
-    return prediction.size();
+    return prediction.length;
+  }
+
+  protected class DoubleVector implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    protected double[] array;
+
+    public DoubleVector() {
+      this.array = new double[0];
+    }
+
+    public DoubleVector(double[] toCopy) {
+      this.array = new double[toCopy.length];
+      System.arraycopy(toCopy, 0, this.array, 0, toCopy.length);
+    }
+
+    public int numValues() {
+      return this.array.length;
+    }
+
+    public void setValue(int i, double v) {
+      if (i >= this.array.length) {
+        setArrayLength(i + 1);
+      }
+      this.array[i] = v;
+    }
+
+    public void addToValue(int i, double v) {
+      if (i >= this.array.length) {
+        setArrayLength(i + 1);
+      }
+      this.array[i] += v;
+    }
+
+    // returns 0.0 for values outside of range
+    public double getValue(int i) {
+      return ((i >= 0) && (i < this.array.length)) ? this.array[i] : 0.0;
+    }
+
+
+    public int maxIndex() {
+      int max = -1;
+      for (int i = 0; i < this.array.length; i++) {
+        if ((max < 0) || (this.array[i] > this.array[max])) {
+          max = i;
+        }
+      }
+      return max;
+    }
+
+    public double[] getArrayCopy() {
+      double[] aCopy = new double[this.array.length];
+      System.arraycopy(this.array, 0, aCopy, 0, this.array.length);
+      return aCopy;
+    }
+
+    protected void setArrayLength(int l) {
+      double[] newArray = new double[l];
+      int numToCopy = this.array.length;
+      if (numToCopy > l) {
+        numToCopy = l;
+      }
+      System.arraycopy(this.array, 0, newArray, 0, numToCopy);
+      this.array = newArray;
+    }
+
+
   }
 
 }

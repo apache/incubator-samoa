@@ -22,6 +22,9 @@ package org.apache.samoa.instances;
 
 import java.text.SimpleDateFormat;
 
+/**
+ * Implementation of Instance.
+ */
 public class InstanceImpl implements MultiLabelInstance {
 
   /**
@@ -52,6 +55,7 @@ public class InstanceImpl implements MultiLabelInstance {
   }
 
   //Dense
+
   /**
    * Instantiates a new instance.
    *
@@ -66,6 +70,7 @@ public class InstanceImpl implements MultiLabelInstance {
   }
 
   //Sparse
+
   /**
    * Instantiates a new instance.
    *
@@ -247,6 +252,19 @@ public class InstanceImpl implements MultiLabelInstance {
   }
 
   /**
+   * Value.
+   *
+   * @param attribute
+   *          the attribute
+   * @return the double
+   */
+  @Override
+  public double value(Attribute attribute) {
+    int index = this.instanceHeader.indexOf(attribute);
+    return value(index);
+  }
+
+  /**
    * String value.
    *
    * @param i
@@ -299,7 +317,6 @@ public class InstanceImpl implements MultiLabelInstance {
   @Override
   public int classIndex() {
     int classIndex = instanceHeader.classIndex();
-    //return classIndex != Integer.MAX_VALUE ? classIndex : 0;
     // return  ? classIndex : 0;
     if (classIndex == Integer.MAX_VALUE)
       if (this.instanceHeader.instanceInformation.range != null)
@@ -379,7 +396,11 @@ public class InstanceImpl implements MultiLabelInstance {
    */
   @Override
   public void setDataset(Instances dataset) {
-    this.instanceHeader = new InstancesHeader(dataset);
+    if (dataset instanceof InstancesHeader) {
+      this.instanceHeader = (InstancesHeader) dataset;
+    } else {
+      this.instanceHeader = new InstancesHeader(dataset);
+    }
   }
 
   /**
@@ -476,19 +497,6 @@ public class InstanceImpl implements MultiLabelInstance {
   @Override
   public void setMissing(int instAttIndex) {
     this.setValue(instAttIndex, Double.NaN);
-  }
-
-  /**
-   * Value.
-   *
-   * @param attribute
-   *          the attribute
-   * @return the double
-   */
-  @Override
-  public double value(Attribute attribute) {
-    int index = this.instanceHeader.indexOf(attribute);
-    return value(index);
   }
 
   @Override

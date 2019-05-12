@@ -23,6 +23,19 @@ package org.apache.samoa.instances;
 public class SparseInstanceData implements InstanceData {
 
   /**
+   * The attribute values.
+   */
+  protected double[] attributeValues;
+  /**
+   * The index values.
+   */
+  protected int[] indexValues;
+  /**
+   * The number of attributes.
+   */
+  protected int numberAttributes;
+
+  /**
    * Instantiates a new sparse instance data.
    *
    * @param attributeValues
@@ -48,11 +61,6 @@ public class SparseInstanceData implements InstanceData {
     this.attributeValues = new double[length];
     this.indexValues = new int[length];
   }
-
-  /**
-   * The attribute values.
-   */
-  protected double[] attributeValues;
 
   /**
    * Gets the attribute values.
@@ -110,16 +118,6 @@ public class SparseInstanceData implements InstanceData {
   public void setNumberAttributes(int numberAttributes) {
     this.numberAttributes = numberAttributes;
   }
-
-  /**
-   * The index values.
-   */
-  protected int[] indexValues;
-
-  /**
-   * The number of attributes.
-   */
-  protected int numberAttributes;
 
   /**
    * Gets the number of attributes.
@@ -313,7 +311,7 @@ public class SparseInstanceData implements InstanceData {
   public void insertAttributeAt(int position) {
     if ((position < 0) || (position > numAttributes())) {
       throw new IllegalArgumentException("Can't insert attribute: index out "
-          + "of range");
+              + "of range");
     }
     int index = locateIndex(position);
 

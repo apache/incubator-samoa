@@ -20,6 +20,9 @@ package org.apache.samoa.instances;
  * #L%
  */
 
+ /**
+ * Class that stores an instance that uses a dense representation.
+ */
 public class DenseInstance extends InstanceImpl {
 
   /**

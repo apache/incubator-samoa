@@ -30,6 +30,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Class Instances that stores a set of instances and their structure.
+ */
 public class Instances implements Serializable {
 
   /**
@@ -65,6 +68,16 @@ public class Instances implements Serializable {
 
   transient protected Loader loader;
 
+/**
+   * Indices of relevant features.
+   */
+  protected int[] indicesRelevants;
+
+  /**
+   * Indices of irrelevant features.
+   */
+  protected int[] indicesIrrelevants;
+
   /**
    * Instantiates a new instances.
    *
@@ -73,6 +86,11 @@ public class Instances implements Serializable {
   public Instances(Instances chunk) {
     this(chunk, chunk.numInstances());
     chunk.copyInstances(0, this, chunk.numInstances());
+    this.computeAttributesIndices();
+    if(chunk.indicesRelevants != null) {
+        this.indicesRelevants = chunk.indicesRelevants.clone();
+        this.indicesIrrelevants = chunk.indicesIrrelevants.clone();
+    }
   }
 
   /**
@@ -92,6 +110,7 @@ public class Instances implements Serializable {
     this.loader = new ArffLoader(reader, 0, classAttribute);
     this.instanceInformation = loader.getStructure();
     this.instances = new ArrayList<Instance>();
+    this.computeAttributesIndices();
   }
 
   /**
@@ -101,9 +120,10 @@ public class Instances implements Serializable {
    * @param range
    */
   public Instances(Reader reader, Range range) {
-    this.loader = new ArffLoader(reader, 0, classAttribute);//new MultiTargetArffLoader(reader, range);
+    this.loader = new MultiTargetArffLoader(reader, range); //new ArffLoader(reader, 0, classAttribute);
     this.instanceInformation = loader.getStructure();
     this.instances = new ArrayList<Instance>();
+    this.computeAttributesIndices();
   }
 
   public Instances(InputStream inputStream, int classAttribute, String encodingFormat) {
@@ -130,6 +150,24 @@ public class Instances implements Serializable {
       capacity = 0;
     }
     this.instances = new ArrayList<Instance>(capacity);
+    this.computeAttributesIndices();
+    if(chunk.indicesRelevants != null) {
+        this.indicesRelevants = chunk.indicesRelevants.clone();
+        this.indicesIrrelevants = chunk.indicesIrrelevants.clone();
+    }
+  }
+
+    /**
+     * Instantiates a new instances.
+     *
+     * @param st the st
+     * @param v the v
+     * @param capacity the capacity
+     */
+    public Instances(String st, Attribute[] v, int capacity) {
+      this.instanceInformation = new InstanceInformation(st, v);
+      this.instances = new ArrayList<Instance>(capacity);
+      this.computeAttributesIndices();
   }
 
   /**
@@ -140,8 +178,13 @@ public class Instances implements Serializable {
    * @param capacity the capacity
    */
   public Instances(String st, List<Attribute> v, int capacity) {
-    this.instanceInformation = new InstanceInformation(st, v);
+    Attribute[] attributes = new Attribute[v.size()];
+    for (int i = 0; i < v.size(); i++) {
+        attributes[i]= v.get(i);
+    }
+    this.instanceInformation = new InstanceInformation(st, attributes);
     this.instances = new ArrayList<Instance>(capacity);
+    this.computeAttributesIndices();
   }
 
   /**
@@ -160,6 +203,7 @@ public class Instances implements Serializable {
           + "of range");
     }
     chunk.copyInstances(first, this, toCopy);
+    this.computeAttributesIndices();
   }
 
   /**
@@ -170,6 +214,7 @@ public class Instances implements Serializable {
    */
   public Instances(StringReader st, int capacity) {
     this.instances = new ArrayList<Instance>(capacity);
+    this.computeAttributesIndices();
   }
 
   //Information Instances
@@ -253,20 +298,31 @@ public class Instances implements Serializable {
    */
   public void deleteAttributeAt(Integer integer) {
     this.instanceInformation.deleteAttributeAt(integer);
+    for (int i = 0; i < numInstances(); i++) {
+      instance(i).setDataset(null);
+      instance(i).deleteAttributeAt(integer);
+      instance(i).setDataset(this);
+  }
   }
 
   /**
-   * Insert attribute at.
-   *
-   * @param attribute the attribute
-   * @param i the i
-   */
-  public void insertAttributeAt(Attribute attribute, int i) {
-    if (this.instanceInformation == null) {
-      this.instanceInformation = new InstanceInformation();
-    }
-    this.instanceInformation.insertAttributeAt(attribute, i);
+     * Insert attribute at.
+     *
+     * @param attribute the attribute
+     * @param position the position
+     */
+    public void insertAttributeAt(Attribute attribute, int position) {
+      if (this.instanceInformation == null) {
+          this.instanceInformation = new InstanceInformation();
+      }
+      this.instanceInformation.insertAttributeAt(attribute, position);
+      for (int i = 0; i < numInstances(); i++) {
+          instance(i).setDataset(null);
+          instance(i).insertAttributeAt(i);
+          instance(i).setDataset(this);
+      }
   }
+
 
   //List of Instances
   /**
@@ -525,20 +581,31 @@ public class Instances implements Serializable {
 
   }
 
-  public void setAttributes(List<Attribute> v) {
+ public void setAttributes(Attribute[] v) {
     if (this.instanceInformation == null) {
-      this.instanceInformation = new InstanceInformation();
+        this.instanceInformation = new InstanceInformation();
     }
     this.instanceInformation.setAttributes(v);
-  }
+}
 
-  public void setAttributes(List<Attribute> v, List<Integer> indexValues) {
+public void setAttributes(Attribute[] v, int[] indexValues) {
     if (this.instanceInformation == null) {
       this.instanceInformation = new InstanceInformation();
     }
     this.instanceInformation.setAttributes(v, indexValues);
   }
 
+  public void setAttributes(List<Attribute> v, List<Integer> indexValues) {
+    int[] ret = new int[indexValues.size()];
+    for(int i = 0;i < ret.length;i++)
+        ret[i] = indexValues.get(i);
+    Attribute[] attributes = new Attribute[v.size()];
+    for (int i = 0; i < v.size(); i++) {
+        attributes[i]= v.get(i);
+    }
+    setAttributes(attributes, ret);
+  }
+  
   /**
    * Returns the dataset as a string in ARFF format. Strings are quoted if
    * they contain whitespace characters, or if they are a question mark.
@@ -625,5 +692,49 @@ public class Instances implements Serializable {
     for (int i = 0; i < this.numAttributes(); i++) {
       hsAttributesIndices.put(this.attribute(i).name(), i);
     }
+  }
+
+    /**
+     * Returns the indices of the relevant features indicesRelevants.
+     * @return indicesRelevants
+     */
+    public int[] getIndicesRelevants() {
+      return indicesRelevants;
+  }
+
+  /**
+   * Returns the indices of the irrelevant features indicesIrrelevants.
+   * @return indicesIrrelevants
+   */
+  public int[] getIndicesIrrelevants() {
+      return indicesIrrelevants;
+  }
+
+  /**
+   * Sets the indices of relevant features.
+   * This method also sets the irrelevant ones since
+   * it is the set complement.
+   *
+   * @param indicesRelevants
+   */
+  public void setIndicesRelevants(int[] indicesRelevants) {
+      this.indicesRelevants = indicesRelevants;
+      // -1 to skip the class attribute
+      int numIrrelevantFeatures = this.numAttributes() - this.indicesRelevants.length - 1;
+      this.indicesIrrelevants = new int[numIrrelevantFeatures];
+
+      // Infers and sets the set of irrelevant features
+      int index = 0;
+      int indexRel = 0;
+      for(int i = 0; i < numAttributes(); i++){
+          if(i != classIndex()) {
+              while (indexRel < indicesRelevants.length - 1 &&
+                      i > indicesRelevants[indexRel]) indexRel++;
+              if (indicesRelevants[indexRel] != i){
+                  indicesIrrelevants[index] = i;
+                  index++;
+              }
+          }
+      }
   }
 }

@@ -23,6 +23,9 @@ package org.apache.samoa.instances;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * The Class InstanceInformation.
+ */
 public class InstanceInformation implements Serializable {
 
   /**
@@ -42,14 +45,6 @@ public class InstanceInformation implements Serializable {
    */
   protected Range range;
 
-  public Attribute inputAttribute(int w) {
-    return this.attributesInformation.attribute(inputAttributeIndex(w));
-  }
-
-  public Attribute outputAttribute(int w) {
-    return this.attributesInformation.attribute(outputAttributeIndex(w));
-  }
-
   /**
    * Instantiates a new instance information.
    *
@@ -60,6 +55,18 @@ public class InstanceInformation implements Serializable {
     this.relationName = chunk.relationName;
     this.attributesInformation = chunk.attributesInformation;
     this.classIndex = chunk.classIndex;
+    this.range = chunk.range;
+  }
+
+  /**
+   * Instantiates a new instance information.
+   *
+   * @param st    the st
+   * @param input the input
+   */
+  public InstanceInformation(String st, Attribute[] input) {
+    this.relationName = st;
+    this.attributesInformation = new AttributesInformation(input, input.length);
   }
 
   /**
@@ -83,78 +90,62 @@ public class InstanceInformation implements Serializable {
     this.attributesInformation = null;
   }
 
-  //Information Instances
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#setRelationName(java.lang.String)
-   */
-  public void setRelationName(String string) {
-    this.relationName = string;
+  public Attribute inputAttribute(int w) {
+    return this.attributesInformation.attribute(inputAttributeIndex(w));
   }
 
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#getRelationName()
-   */
+  public Attribute outputAttribute(int w) {
+    return this.attributesInformation.attribute(outputAttributeIndex(w));
+  }
+
+
   public String getRelationName() {
     return this.relationName;
   }
 
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#classIndex()
-   */
+  public void setRelationName(String string) {
+    this.relationName = string;
+  }
+
   public int classIndex() {
     return this.classIndex;
   }
 
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#setClassIndex(int)
-   */
   public void setClassIndex(int classIndex) {
     this.classIndex = classIndex;
   }
 
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#classAttribute()
-   */
   public Attribute classAttribute() {
     return this.attribute(this.classIndex());
   }
 
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#numAttributes()
-   */
   public int numAttributes() {
     return this.attributesInformation.numberAttributes;
   }
 
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#attribute(int)
-   */
   public Attribute attribute(int w) {
     return this.attributesInformation.attribute(w);
   }
 
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#numClasses()
-   */
   public int numClasses() {
     return this.attributesInformation.attribute(classIndex()).numValues();
   }
 
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#deleteAttributeAt(java.lang.Integer)
-   */
-  public void deleteAttributeAt(Integer integer) {
+  public void deleteAttributeAt(int integer) {
     this.attributesInformation.deleteAttributeAt(integer);
+    if (this.classIndex > integer) {
+      this.classIndex--;
+    }
   }
 
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#insertAttributeAt(com.yahoo.labs.samoa.instances.Attribute, int)
-   */
   public void insertAttributeAt(Attribute attribute, int i) {
     this.attributesInformation.insertAttributeAt(attribute, i);
+    if (this.classIndex >= i) {
+      this.classIndex++;
+    }
   }
 
-  public void setAttributes(List<Attribute> v) {
+  public void setAttributes(Attribute[] v) {
     if (this.attributesInformation == null)
       this.attributesInformation = new AttributesInformation();
     this.attributesInformation.setAttributes(v);
@@ -209,7 +200,7 @@ public class InstanceInformation implements Serializable {
     this.range = range;
   }
 
-  public void setAttributes(List<Attribute> v, List<Integer> indexValues) {
+  public void setAttributes(Attribute[] v, int[] indexValues) {
     if (this.attributesInformation == null)
       this.attributesInformation = new AttributesInformation();
     this.attributesInformation.setAttributes(v, indexValues);

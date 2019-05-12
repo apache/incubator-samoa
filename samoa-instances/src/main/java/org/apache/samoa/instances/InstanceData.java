@@ -22,6 +22,9 @@ package org.apache.samoa.instances;
 
 import java.io.Serializable;
 
+/**
+ * The Interface InstanceData.
+ */
 public interface InstanceData extends Serializable {
 
   /**
