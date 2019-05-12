@@ -24,6 +24,9 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * Class that keeps all information needed to describe a feature or attribute.
+ */
 public class Attribute implements Serializable {
 
   /** The keyword used to denote the start of an arff attribute declaration */
@@ -68,8 +71,8 @@ public class Attribute implements Serializable {
    */
   protected boolean isDate;
 
-  /** 
-   * Date format specification for date attributes 
+  /**
+   * Date format specification for date attributes
    */
   protected SimpleDateFormat m_DateFormat;
 
@@ -122,7 +125,7 @@ public class Attribute implements Serializable {
    * @param dateFormat the format of the date used
    */
   public Attribute(String attributeName, String dateFormat) {
-    this.name = attributeName;        
+    this.name = attributeName;
     this.valuesStringAttribute = null;
     this.isDate = true;
 
@@ -244,7 +247,10 @@ public class Attribute implements Serializable {
     }
     Integer val = (Integer) this.valuesStringAttribute.get(value);
     if (val == null) {
-      return -1;
+      int currentValueCount=this.valuesStringAttribute.size();
+      this.valuesStringAttribute.put(value,currentValueCount);
+      this.attributeValues.add(value);
+      return currentValueCount;
     } else {
       return val.intValue();
     }

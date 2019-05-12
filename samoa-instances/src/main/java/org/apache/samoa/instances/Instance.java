@@ -22,6 +22,9 @@ package org.apache.samoa.instances;
 
 import java.io.Serializable;
 
+/**
+ * The Interface Instance.
+ */
 public interface Instance extends Serializable {
 
   /**
@@ -47,6 +50,14 @@ public interface Instance extends Serializable {
   public Attribute attribute(int instAttIndex);
 
   /**
+   * Index of an Attribute.
+   *
+   * @param attribute, the attribute to be found.
+   * @return the index of an attribute
+   */
+  public int indexOfAttribute(Attribute attribute);
+
+  /**
    * Delete attribute at.
    *
    * @param i the index
@@ -70,8 +81,8 @@ public interface Instance extends Serializable {
   /**
    * Adds the sparse values.
    *
-   * @param indexValues the index values
-   * @param attributeValues the attribute values
+   * @param indexValues      the index values
+   * @param attributeValues  the attribute values
    * @param numberAttributes the number attributes
    */
   public void addSparseValues(int[] indexValues, double[] attributeValues, int numberAttributes);
@@ -100,19 +111,44 @@ public interface Instance extends Serializable {
   public double value(int instAttIndex);
 
   /**
+   * Gets the value of an attribute, given the attribute.
+   *
+   * @param attribute the attribute
+   * @return the double
+   */
+  public double value(Attribute attribute);
+
+  /**
    * Sets an attribute as missing
    *
-   * @param instAttIndex, the attribute's index     
+   * @param instAttIndex, the attribute's index
    */
-  public void setMissing(int instAttIndex);        
+  public void setMissing(int instAttIndex);
+
+
+  /**
+   * Sets an attribute as missing
+   *
+   * @param attribute, the Attribute
+   */
+  public void setMissing(Attribute attribute);
 
   /**
    * Sets the value of an attribute.
    *
    * @param instAttIndex the index
-   * @param value the value
+   * @param value        the value
    */
   public void setValue(int instAttIndex, double value);
+
+
+  /**
+   * Sets the value of an attribute.
+   *
+   * @param attribute, the Attribute
+   * @param value      the value
+   */
+  public void setValue(Attribute attribute, double value);
 
   /**
    * Checks if an attribute is missing.
@@ -121,6 +157,14 @@ public interface Instance extends Serializable {
    * @return true, if is missing
    */
   public boolean isMissing(int instAttIndex);
+
+  /**
+   * Checks if an attribute is missing.
+   *
+   * @param attribute, the Attribute
+   * @return true, if is missing
+   */
+  public boolean isMissing(Attribute attribute);
 
   /**
    * Gets the index of the attribute given the index of the array in a sparse
@@ -250,7 +294,7 @@ public interface Instance extends Serializable {
   /**
    * Sets the value of an output attribute.
    *
-   * @param indexClass the output attribute index
+   * @param indexClass     the output attribute index
    * @param valueAttribute the value of the attribute
    */
   public void setClassValue(int indexClass, double valueAttribute);
@@ -286,46 +330,5 @@ public interface Instance extends Serializable {
    * @return the value
    */
   public double valueOutputAttribute(int attributeIndex);
-
-  /**
-   * Index of an Attribute.
-   *
-   * @param attribute, the attribute to be found.
-   * @return the index of an attribute
-   */
-  public int indexOfAttribute(Attribute attribute);
-
-  /**
-   * Gets the value of an attribute, given the attribute.
-   *
-   * @param attribute the attribute
-   * @return the double
-   */
-  public double value(Attribute attribute);
-
-  /**
-   * Sets an attribute as missing
-   *
-   * @param attribute, the Attribute
-   */
-  public void setMissing(Attribute attribute);
-
-  /**
-   * Sets the value of an attribute.
-   *
-   * @param attribute, the Attribute
-   * @param value the value
-   */
-  public void setValue(Attribute attribute, double value);
-
-  /**
-   * Checks if an attribute is missing.
-   *
-   * @param attribute, the Attribute
-   * @return true, if is missing
-   */
-  public boolean isMissing(Attribute attribute);
-
-
 
 }

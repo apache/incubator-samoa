@@ -23,10 +23,23 @@ package org.apache.samoa.instances;
 public class SparseInstanceData implements InstanceData {
 
   /**
+   * The attribute values.
+   */
+  protected double[] attributeValues;
+  /**
+   * The index values.
+   */
+  protected int[] indexValues;
+  /**
+   * The number of attributes.
+   */
+  protected int numberAttributes;
+
+  /**
    * Instantiates a new sparse instance data.
    *
-   * @param attributeValues the attribute values
-   * @param indexValues the index values
+   * @param attributeValues  the attribute values
+   * @param indexValues      the index values
    * @param numberAttributes the number attributes
    */
   public SparseInstanceData(double[] attributeValues, int[] indexValues, int numberAttributes) {
@@ -44,11 +57,6 @@ public class SparseInstanceData implements InstanceData {
     this.attributeValues = new double[length];
     this.indexValues = new int[length];
   }
-
-  /**
-   * The attribute values.
-   */
-  protected double[] attributeValues;
 
   /**
    * Gets the attribute values.
@@ -103,16 +111,6 @@ public class SparseInstanceData implements InstanceData {
   public void setNumberAttributes(int numberAttributes) {
     this.numberAttributes = numberAttributes;
   }
-
-  /**
-   * The index values.
-   */
-  protected int[] indexValues;
-
-  /**
-   * The number of attributes.
-   */
-  protected int numberAttributes;
 
   /**
    * Gets the number of attributes.
@@ -214,7 +212,7 @@ public class SparseInstanceData implements InstanceData {
    * Sets the value.
    *
    * @param attributeIndex the attribute index
-   * @param d the d
+   * @param d              the d
    */
   @Override
   public void setValue(int attributeIndex, double d) {
@@ -261,7 +259,7 @@ public class SparseInstanceData implements InstanceData {
 
   /**
    * Deletes an attribute at the given position (0 to numAttributes() - 1).
-   * 
+   *
    * @param pos the attribute's position
    */
   @Override
@@ -296,8 +294,46 @@ public class SparseInstanceData implements InstanceData {
   }
 
   @Override
+  public void insertAttributeAt(int position) {
+    if ((position < 0) || (position > numAttributes())) {
+      throw new IllegalArgumentException("Can't insert attribute: index out "
+              + "of range");
+    }
+    int index = locateIndex(position);
+
+    this.numberAttributes++;
+    if ((index >= 0) && (indexValues[index] == position)) {
+      int[] tempIndices = new int[indexValues.length + 1];
+      double[] tempValues = new double[attributeValues.length + 1];
+      System.arraycopy(indexValues, 0, tempIndices, 0, index);
+      System.arraycopy(attributeValues, 0, tempValues, 0, index);
+      tempIndices[index] = position;
+      tempValues[index] = Double.NaN; //Missing Value
+      for (int i = index; i < indexValues.length; i++) {
+        tempIndices[i + 1] = indexValues[i] + 1;
+        tempValues[i + 1] = attributeValues[i];
+      }
+      indexValues = tempIndices;
+      attributeValues = tempValues;
+    } else {
+      int[] tempIndices = new int[indexValues.length + 1];
+      double[] tempValues = new double[attributeValues.length + 1];
+      System.arraycopy(indexValues, 0, tempIndices, 0, index + 1);
+      System.arraycopy(attributeValues, 0, tempValues, 0, index + 1);
+      tempIndices[index + 1] = position;
+      tempValues[index + 1] = Double.NaN; //Missing Value
+      for (int i = index + 1; i < indexValues.length; i++) {
+        tempIndices[i + 1] = indexValues[i] + 1;
+        tempValues[i + 1] = attributeValues[i];
+      }
+      indexValues = tempIndices;
+      attributeValues = tempValues;
+    }
+  }
+
+  @Override
   public InstanceData copy() {
-    return new SparseInstanceData(this.attributeValues,this.indexValues,this.numberAttributes);
+    return new SparseInstanceData(this.attributeValues, this.indexValues, this.numberAttributes);
   }
 
 

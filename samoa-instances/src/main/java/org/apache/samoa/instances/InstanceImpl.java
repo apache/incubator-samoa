@@ -22,6 +22,9 @@ package org.apache.samoa.instances;
 
 import java.text.SimpleDateFormat;
 
+/**
+ * Implementation of Instance.
+ */
 public class InstanceImpl implements MultiLabelInstance {
 
   /**
@@ -51,11 +54,12 @@ public class InstanceImpl implements MultiLabelInstance {
   }
 
   //Dense
+
   /**
    * Instantiates a new instance.
    *
    * @param weight the weight
-   * @param res the res
+   * @param res    the res
    */
   public InstanceImpl(double weight, double[] res) {
     this.weight = weight;
@@ -63,12 +67,13 @@ public class InstanceImpl implements MultiLabelInstance {
   }
 
   //Sparse
+
   /**
    * Instantiates a new instance.
    *
-   * @param weight the weight
-   * @param attributeValues the attribute values
-   * @param indexValues the index values
+   * @param weight           the weight
+   * @param attributeValues  the attribute values
+   * @param indexValues      the index values
    * @param numberAttributes the number attributes
    */
   public InstanceImpl(double weight, double[] attributeValues, int[] indexValues, int numberAttributes) {
@@ -79,7 +84,7 @@ public class InstanceImpl implements MultiLabelInstance {
   /**
    * Instantiates a new instance.
    *
-   * @param weight the weight
+   * @param weight       the weight
    * @param instanceData the instance data
    */
   public InstanceImpl(double weight, InstanceData instanceData) {
@@ -128,7 +133,7 @@ public class InstanceImpl implements MultiLabelInstance {
     return this.instanceHeader.attribute(instAttIndex);
   }
 
-  public int indexOfAttribute(Attribute attribute){
+  public int indexOfAttribute(Attribute attribute) {
     return this.instanceHeader.indexOf(attribute);
   }
 
@@ -149,7 +154,7 @@ public class InstanceImpl implements MultiLabelInstance {
    */
   @Override
   public void insertAttributeAt(int i) {
-    throw new UnsupportedOperationException("Not yet implemented");
+    this.instanceData.insertAttributeAt(i);
   }
 
   /**
@@ -228,6 +233,18 @@ public class InstanceImpl implements MultiLabelInstance {
   }
 
   /**
+   * Value.
+   *
+   * @param attribute the attribute
+   * @return the double
+   */
+  @Override
+  public double value(Attribute attribute) {
+    int index = this.instanceHeader.indexOf(attribute);
+    return value(index);
+  }
+
+  /**
    * String value.
    *
    * @param i the i
@@ -252,7 +269,7 @@ public class InstanceImpl implements MultiLabelInstance {
    * Sets the value.
    *
    * @param numAttribute the num attribute
-   * @param d the d
+   * @param d            the d
    */
   @Override
   public void setValue(int numAttribute, double d) {
@@ -277,13 +294,12 @@ public class InstanceImpl implements MultiLabelInstance {
   @Override
   public int classIndex() {
     int classIndex = instanceHeader.classIndex();
-    //return classIndex != Integer.MAX_VALUE ? classIndex : 0;
     // return  ? classIndex : 0;
-    if(classIndex == Integer.MAX_VALUE)
-      if(this.instanceHeader.instanceInformation.range!=null)
-        classIndex=instanceHeader.instanceInformation.range.getStart();
+    if (classIndex == Integer.MAX_VALUE)
+      if (this.instanceHeader.instanceInformation.range != null)
+        classIndex = instanceHeader.instanceInformation.range.getStart();
       else
-        classIndex=0;
+        classIndex = 0;
     return classIndex;
   }
 
@@ -355,14 +371,18 @@ public class InstanceImpl implements MultiLabelInstance {
    */
   @Override
   public void setDataset(Instances dataset) {
-    this.instanceHeader = new InstancesHeader(dataset);
+    if (dataset instanceof InstancesHeader) {
+      this.instanceHeader = (InstancesHeader) dataset;
+    } else {
+      this.instanceHeader = new InstancesHeader(dataset);
+    }
   }
 
   /**
    * Adds the sparse values.
    *
-   * @param indexValues the index values
-   * @param attributeValues the attribute values
+   * @param indexValues      the index values
+   * @param attributeValues  the attribute values
    * @param numberAttributes the number attributes
    */
   @Override
@@ -449,18 +469,6 @@ public class InstanceImpl implements MultiLabelInstance {
   @Override
   public void setMissing(int instAttIndex) {
     this.setValue(instAttIndex, Double.NaN);
-  }
-
-  /**
-   * Value.
-   *
-   * @param attribute the attribute
-   * @return the double
-   */
-  @Override
-  public double value(Attribute attribute) {
-    int index = this.instanceHeader.indexOf(attribute);
-    return value(index);
   }
 
   @Override

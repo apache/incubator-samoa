@@ -22,6 +22,9 @@ package org.apache.samoa.instances;
 
 import java.io.Serializable;
 
+/**
+ * The Interface InstanceData.
+ */
 public interface InstanceData extends Serializable {
 
   /**
@@ -89,7 +92,7 @@ public interface InstanceData extends Serializable {
    * Sets the value.
    *
    * @param m_numAttributes the m_num attributes
-   * @param d the d
+   * @param d               the d
    */
   public void setValue(int m_numAttributes, double d);
 
@@ -102,8 +105,15 @@ public interface InstanceData extends Serializable {
   public void deleteAttributeAt(int index);
 
   /**
-   * Produces a shallow copy of this instance data. 
-   * 
+   * Inserts an attribute.
+   *
+   * @param index the indes
+   */
+  public void insertAttributeAt(int index);
+
+  /**
+   * Produces a shallow copy of this instance data.
+   *
    * @return the shallow copy
    */
   public InstanceData copy();

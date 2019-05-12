@@ -23,6 +23,9 @@ package org.apache.samoa.instances;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * The Class InstanceInformation.
+ */
 public class InstanceInformation implements Serializable {
 
   /**
@@ -42,14 +45,6 @@ public class InstanceInformation implements Serializable {
    */
   protected Range range;
 
-  public Attribute inputAttribute(int w) {
-    return this.attributesInformation.attribute(inputAttributeIndex(w));
-  }
-
-  public Attribute outputAttribute(int w) {
-    return this.attributesInformation.attribute(outputAttributeIndex(w));
-  }
-
   /**
    * Instantiates a new instance information.
    *
@@ -59,13 +54,25 @@ public class InstanceInformation implements Serializable {
     this.relationName = chunk.relationName;
     this.attributesInformation = chunk.attributesInformation;
     this.classIndex = chunk.classIndex;
+    this.range = chunk.range;
   }
 
   /**
    * Instantiates a new instance information.
    *
-   * @param st the st
-   * @param v the v
+   * @param st    the st
+   * @param input the input
+   */
+  public InstanceInformation(String st, Attribute[] input) {
+    this.relationName = st;
+    this.attributesInformation = new AttributesInformation(input, input.length);
+  }
+
+  /**
+   * Instantiates a new instance information.
+   *
+   * @param st    the st
+   * @param input the input
    */
   public InstanceInformation(String st, List<Attribute> input) {
     this.relationName = st;
@@ -80,90 +87,74 @@ public class InstanceInformation implements Serializable {
     this.attributesInformation = null;
   }
 
-  //Information Instances
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#setRelationName(java.lang.String)
-   */
-  public void setRelationName(String string) {
-    this.relationName = string;
+  public Attribute inputAttribute(int w) {
+    return this.attributesInformation.attribute(inputAttributeIndex(w));
   }
 
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#getRelationName()
-   */
+  public Attribute outputAttribute(int w) {
+    return this.attributesInformation.attribute(outputAttributeIndex(w));
+  }
+
+
   public String getRelationName() {
     return this.relationName;
   }
 
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#classIndex()
-   */
+  public void setRelationName(String string) {
+    this.relationName = string;
+  }
+
   public int classIndex() {
     return this.classIndex;
   }
 
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#setClassIndex(int)
-   */
   public void setClassIndex(int classIndex) {
     this.classIndex = classIndex;
   }
 
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#classAttribute()
-   */
   public Attribute classAttribute() {
     return this.attribute(this.classIndex());
   }
 
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#numAttributes()
-   */
   public int numAttributes() {
     return this.attributesInformation.numberAttributes;
   }
 
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#attribute(int)
-   */
   public Attribute attribute(int w) {
     return this.attributesInformation.attribute(w);
   }
 
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#numClasses()
-   */
   public int numClasses() {
     return this.attributesInformation.attribute(classIndex()).numValues();
   }
 
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#deleteAttributeAt(java.lang.Integer)
-   */
-  public void deleteAttributeAt(Integer integer) {
-    throw new UnsupportedOperationException("Not yet implemented");
+  public void deleteAttributeAt(int integer) {
+    this.attributesInformation.deleteAttributeAt(integer);
+    if (this.classIndex > integer) {
+      this.classIndex--;
+    }
   }
 
-  /* (non-Javadoc)
-   * @see com.yahoo.labs.samoa.instances.InstanceInformationInterface#insertAttributeAt(com.yahoo.labs.samoa.instances.Attribute, int)
-   */
   public void insertAttributeAt(Attribute attribute, int i) {
-    throw new UnsupportedOperationException("Not yet implemented");
+    this.attributesInformation.insertAttributeAt(attribute, i);
+    if (this.classIndex >= i) {
+      this.classIndex++;
+    }
   }
 
-  public void setAttributes(List<Attribute> v) {
-    if(this.attributesInformation==null)
-      this.attributesInformation= new AttributesInformation();
+  public void setAttributes(Attribute[] v) {
+    if (this.attributesInformation == null)
+      this.attributesInformation = new AttributesInformation();
     this.attributesInformation.setAttributes(v);
   }
 
   public int inputAttributeIndex(int index) {
     int ret = 0;
     if (classIndex == Integer.MAX_VALUE) {//Multi Label
-      if(index<range.getStart())//JD
-        ret= index;
-      else 
-        ret= index+range.getSelectionLength();
+      if (index < range.getStart())//JD
+        ret = index;
+      else
+        ret = index + range.getSelectionLength();
 
     } else { //Single Label
       ret = classIndex() > index ? index : index + 1;
@@ -174,7 +165,7 @@ public class InstanceInformation implements Serializable {
   public int outputAttributeIndex(int attributeIndex) {
     int ret = 0;
     if (classIndex == Integer.MAX_VALUE) {//Multi Label
-      ret=attributeIndex+range.getStart(); //JD - Range should be a "block"
+      ret = attributeIndex + range.getStart(); //JD - Range should be a "block"
     } else { //Single Label
       ret = classIndex;
     }
@@ -184,7 +175,7 @@ public class InstanceInformation implements Serializable {
   public int numInputAttributes() {
     int ret = 0;
     if (classIndex == Integer.MAX_VALUE) {//Multi Label
-      ret=this.numAttributes()-range.getSelectionLength(); //JD
+      ret = this.numAttributes() - range.getSelectionLength(); //JD
     } else { //Single Label
       ret = this.numAttributes() - 1;
     }
@@ -194,7 +185,7 @@ public class InstanceInformation implements Serializable {
   public int numOutputAttributes() {
     int ret = 0;
     if (classIndex == Integer.MAX_VALUE) {//Multi Label
-      ret=range.getSelectionLength(); //JD
+      ret = range.getSelectionLength(); //JD
     } else { //Single Label
       ret = 1;
     }
@@ -206,10 +197,10 @@ public class InstanceInformation implements Serializable {
     this.range = range;
   }
 
-  public void setAttributes(List<Attribute> v, List<Integer> indexValues) {
-    if(this.attributesInformation==null)
-      this.attributesInformation= new AttributesInformation();
-    this.attributesInformation.setAttributes(v,indexValues);
+  public void setAttributes(Attribute[] v, int[] indexValues) {
+    if (this.attributesInformation == null)
+      this.attributesInformation = new AttributesInformation();
+    this.attributesInformation.setAttributes(v, indexValues);
 
   }
 
