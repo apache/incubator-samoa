@@ -31,7 +31,7 @@
   <parent>
     <groupId>org.apache.samoa</groupId>
     <artifactId>samoa</artifactId>
-    <version>0.5.0-incubating-SNAPSHOT</version>
+    <version>0.5.0-incubating</version>
   </parent>
 
   <repositories>
