@@ -199,3 +199,16 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+================================================================================
+
+This product includes software developed at Yahoo! Inc. (www.yahoo.com)
+Copyright (C) 2013-2014 Yahoo! Inc.
+
+================================================================================
+
+This product bundles MOA version 13.08 (redistributed under the Apache License
+v2 with consent of the copyright holders).
+Copyright (C) 2007 University of Waikato. Library for data stream mining.
+Only a small subset of the original library is bundled with Apache SAMOA.
+http://moa.cms.waikato.ac.nz
