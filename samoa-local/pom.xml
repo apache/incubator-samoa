@@ -30,7 +30,7 @@
   <parent>
     <groupId>org.apache.samoa</groupId>
     <artifactId>samoa</artifactId>
-    <version>0.5.0-incubating</version>
+    <version>X.Y.Z-incubating-SNAPSHOT</version>
   </parent>
 
   <dependencies>
