@@ -229,24 +229,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>net.nicoulaj.maven.plugins</groupId>
-                <artifactId>checksum-maven-plugin</artifactId>
-                <version>1.8</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>artifacts</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <algorithms>
-                        <algorithm>SHA-512</algorithm>
-                    </algorithms>
-                    <attachChecksums>true</attachChecksums>
-                </configuration>
-            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
