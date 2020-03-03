@@ -68,6 +68,18 @@ cd incubator-samoa
 mvn -Papex package
 ```
 
+### Heron mode
+
+Simply clone the repository and install SAMOA.
+
+```bash
+git clone http://git.apache.org/incubator-samoa.git
+cd incubator-samoa
+mvn -Pheron package
+```
+
+The deployable jar for SAMOA will be in `target/SAMOA-Heron-0.5.0-SNAPSHOT.jar`.
+
 ### Local mode
 
 If you want to test SAMOA in a local environment, simply clone the repository and install SAMOA.
