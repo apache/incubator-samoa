@@ -37,7 +37,7 @@
   <repositories>
     <repository> <!-- repository for Storm -->
       <id>clojars</id>
-      <url>http://clojars.org/repo/</url>
+      <url>https://clojars.org/repo/</url>
     </repository>
   </repositories>
 
