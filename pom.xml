@@ -129,7 +129,7 @@
         <javacliparser.version>0.5.0</javacliparser.version>
         <jcip-annotations.version>1.0</jcip-annotations.version>
         <jmockit.version>1.13</jmockit.version>
-        <junit.version>4.10</junit.version>
+        <junit.version>4.13.1</junit.version>
         <kafka.version>0.10.2.0</kafka.version>
         <kryo.version>2.21</kryo.version>
         <metrics-core.version>2.2.0</metrics-core.version>
